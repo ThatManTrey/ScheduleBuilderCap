@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<body>
+<body class="bg-light">
     <div>
         <nav class="navbar navbar-expand-md navbar-light bg-primary bg-gradient">
             <div class="container-fluid">
@@ -33,12 +33,8 @@
             </div>
         </nav>
     </div>
-    <div class="container-fluid bg-light">
-        <div class="row">
-            <div class="col-lg-10 col-md-11 col-sm-12 horizontal-center bg-white shadow-lg">
-                {% block content %}{% endblock %}
-            </div>
-        </div>
+    <div class="container bg-white">
+        {% block content %}{% endblock %}
     </div>
 
 </body>

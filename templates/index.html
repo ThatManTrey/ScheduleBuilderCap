@@ -1,62 +1,100 @@
 {% extends "/base_templates/nav_base.html" %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col" style="margin-top: 1rem;">
-            <div class="dropdown" style="display: inline-block; margin-right: 10px;">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    Select a program
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
-            <div class="dropdown" style="display: inline-block; margin-right: 10px;">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false" disabled>
-                    Select a concentration
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
-            <div class="dropdown" style="display: inline-block;">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false" disabled>
-                    sort courses
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
-            <hr>
+<div class="row">
+    <div class="col" style="margin-top: 1rem;">
+        <div class="dropdown" style="display: inline-block; margin-right: 10px;">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Select a program
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            {% for value in values %}
-            <div class="card" style="width: 18rem; display: inline-block; margin-right: 10px; margin-bottom: 10px;">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-            {% endfor %}
+        <div class="dropdown" style="display: inline-block; margin-right: 10px;">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                Select a concentration
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
         </div>
+        <div class="dropdown" style="display: inline-block;">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                sort courses
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+        <hr>
     </div>
 </div>
+<div class="row">
+    <div class="col">
+        {% for value in values %}
+        <div class="card" style="width: 18rem; display:inline-block; margin-right: 15px; margin-bottom: 15px;">
+            <div class="card-body container-fluid">
+                <div class="row">
+                    <h5 class="card-title">Computer Science IA: Procedural Programming</h5> 
 
-<div class="container-fluid semester-bar bg-secondary">
-    Semesters
+                </div>
+                <div class="row mb-1">
+                    <span class="badge rounded-pill bg-primary" style="width: 30%; margin-left: 0.5rem;">3 Credits</span>
+                    <span class="badge rounded-pill bg-primary" style="width: 30%; margin-left: 0.5rem;">CS Core</span>
+                </div>
+                <div class="row mb-3">
+                    <p class="card-text">Computer science concepts, including algorithm development and
+                        problem-solving strategies focused on programming and etc etc etc... <a href="#">View more</a> </p>
+                        
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a href="#"><i class="far fa-star fa-lg"></i></a>
+                    </div>
+                    <div class="col" style="text-align: right;">
+                        <a href="#"><i class="fas fa-plus-circle fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- ensures all the courses can be seen when schedule is collapsed -->
+<br><br><br>
+
+<div class="semester-bar bg-light">
+    <div class="accordion" id="accordionExample" style="width: 100vw;">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne" style="padding-right: 2rem;">
+                    My Schedule
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong>This is the first item's accordion body.</strong> It is hidden by default, until the
+                    collapse plugin adds the appropriate classes that we use to style each element. These classes
+                    control the overall appearance, as well as the showing and hiding via CSS transitions. You can
+                    modify any of this with custom CSS or overriding our default variables. It's also worth noting that
+                    just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit
+                    overflow.
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
