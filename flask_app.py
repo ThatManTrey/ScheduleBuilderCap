@@ -6,7 +6,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Hello from Flask!'
+    values = []
+    for i in range(24):
+        values.append(i)
+    return render_template('index.html', values=values)
 
 @app.route('/login')
 def login():
