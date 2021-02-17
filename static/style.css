@@ -1,0 +1,56 @@
+/*
+    site wide stuff
+*/
+html {
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.vertical-center {
+  min-height: 100%;  
+  min-height: 100vh; 
+
+  display: flex;
+  align-items: center;
+}
+
+.horizontal-center {
+  margin: auto;
+}
+
+/*
+    landing page (login/register)
+*/
+.landing-page-background { 
+  background-image: linear-gradient(315deg, #2a2a72 0%, #009ffd 74%);
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+}
+
+.signup-box-container {
+  width: 30%;
+  width: 30vw;
+ }
+
+ .signup-box {
+   width: 100%;
+   width: 100vw;
+
+   border-radius: 1rem !important;
+   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5) !important;
+ }
+
+ .slogan-subtext {
+    text-align: right;
+    margin-left: 1rem;
+    color: grey;
+    font-size: 0.9rem;
+ }
+
+
