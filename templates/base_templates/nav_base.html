@@ -7,7 +7,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-primary bg-gradient">
             <div class="container-fluid">
                 <!-- Put logo here -->
-                <a class="navbar-brand text-white" href="#">KSU Course Planner</a>
+                <a class="navbar-brand text-white" href="{{ url_for('index') }}">KSU Course Planner</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -16,13 +16,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active text-white" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active text-white" aria-current="page" href="{{ url_for('index') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">Favorites</a>
+                            <a class="nav-link text-white" href="{{ url_for('favorites') }}">Favorites</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="#">About</a>
+                            <a class="nav-link text-white" href="{{ url_for('about') }}">About</a>
                         </li>
                     </ul>
                     <div class="d-flex">
