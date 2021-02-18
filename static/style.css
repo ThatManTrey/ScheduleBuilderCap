@@ -38,8 +38,8 @@ a {
 }
 
 .signin-box-container {
-  width: 30%;
-  width: 30vw;
+  width: 30% !important;
+  width: 30vw !important;
 }
 
 .signin-box {
@@ -54,6 +54,15 @@ a {
   margin-right: 2rem;
   color: grey;
   font-size: 0.9rem;
+}
+
+/* makes button look like link */
+.open-pass-modal {
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+  color: #0d6efd;
+  cursor: pointer;
 }
 
 /*
