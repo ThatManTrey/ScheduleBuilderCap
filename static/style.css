@@ -20,10 +20,6 @@ a {
   align-items: center;
 }
 
-.horizontal-center {
-  margin: auto;
-}
-
 /*
  *  Login and Register
  */
@@ -66,7 +62,7 @@ a {
 }
 
 /*
- *  Pages with navbar
+ *  Home page
  */
 
 .semester-bar {
@@ -76,4 +72,26 @@ a {
   bottom: 0;
   right: 0;
   padding: 0;
+}
+
+.course-search {
+  max-width: 30rem;
+  display: inline-block;
+  position: relative;
+  top: 0.1rem;
+}
+
+.course-dropdown {
+  display: inline-block; 
+  margin-right: 1rem;
+}
+
+.course-container {
+  margin-right: 1rem !important; 
+  margin-left: 1rem !important;
+}
+
+.course-badge {
+  width: 30% !important; 
+  margin-left: 0.5rem;
 }
