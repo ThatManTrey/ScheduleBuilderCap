@@ -2,35 +2,33 @@
 
 {% block content %}
 <div class="container mb-3">
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success" role="alert" hidden>
         Your password has been succesfully reset! Check your email for a link.
     </div>
 
     <form>
         <div class="mb-3">
             <label for="userEmail" class="form-label">Email Address</label>
-            <input type="email" class="form-control" id="userEmail">
+            <input type="email" class="form-control" id="userEmail" aria-describedby="passHelp">
+            <div id="passHelp" class="form-text">
+                <a href="{{ url_for('register') }}">Don't have an account? Register here!</a>
+            </div>
         </div>
         <div class="mb-3">
             <label for="userPass" class="form-label">Password</label>
-            <input type="password" class="form-control" id="userPass">
-        </div>
-        <div class="mb-3 text-center">
-            <p style="font-size: 0.9rem;">
+            <input type="password" class="form-control" id="userPass" aria-describedby="passHelp">
+            <div id="passHelp" class="form-text">
                 <button type="button" class="open-pass-modal" data-bs-toggle="modal"
                     data-bs-target="#resetPasswordModal">
                     Forgot your password?
                 </button>
-                &nbsp; &#8226; &nbsp;
-                <a href="{{ url_for('register') }}">Don't have an account?</a>
-            </p>
+            </div>
         </div>
         <div class="mb-3 text-center">
             <!-- <button type="submit" class="btn btn-primary">Log in</button> -->
             <a class="btn btn-primary" href="{{ url_for('index') }}" role="button">Log In</a>
         </div>
     </form>
-
 </div>
 
 <div class="accordion" id="accordionExample">
