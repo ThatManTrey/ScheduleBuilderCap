@@ -5,11 +5,16 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
+@app.route('/home')
 def index():
-    values = []
-    for i in range(24):
-        values.append(i)
-    return render_template('index.html', values=values)
+    cs_core = []
+    for i in range(8):
+        cs_core.append(i)
+
+    cs_electives = []
+    for i in range(4):
+        cs_electives.append(i)
+    return render_template('index.html', cs_core=cs_core, cs_electives=cs_electives)
 
 @app.route('/login')
 def login():
@@ -26,3 +31,7 @@ def favorites():
 @app.route('/about')
 def about():
     return render_template('about.html', title='About')
+
+@app.route('/schedule')
+def schedule():
+    return render_template('schedule.html', title='My Schedule')
