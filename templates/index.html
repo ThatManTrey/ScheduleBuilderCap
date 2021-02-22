@@ -2,10 +2,10 @@
 
 {% block content %}
 <!-- Select program/search bar -->
-<div class="row">
-    <div class="col" style="margin-top: 1rem;">
+<div class="row mt-3">
+    <div class="col">
         <div class="dropdown course-dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            <button class="btn btn-theme-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Select a program
             </button>
@@ -16,19 +16,19 @@
             </ul>
         </div>
         <div class="dropdown course-dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                data-bs-toggle="dropdown" aria-expanded="false" disabled>
+            <button class="btn btn-theme-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
                 Select a concentration
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">Computer Science (B. S.)</a></li>
+                <li><a class="dropdown-item" href="#">Biology (B. S.)</a></li>
+                <li><a class="dropdown-item" href="#">English (B. A.)</a></li>
             </ul>
         </div>
         <div class="dropdown course-dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                data-bs-toggle="dropdown" aria-expanded="false" disabled>
+            <button class="btn btn-theme-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
                 Sort Courses
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -39,68 +39,68 @@
         </div>
         <div class="course-search">
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" disabled>
-                <button class="btn btn-primary" type="submit" disabled>Search</button>
+                <input class="form-control theme-search me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-theme-primary type=" submit">Search</button>
             </form>
         </div>
-        <hr>
+        <hr class="bg-theme-dark-gray">
     </div>
 </div>
 <!-- Course cards -->
 <div class="row course-container">
     {% for course in cs_core %}
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3">
-        <div class="card justify-content-center">
-            <div class="card-body container-fluid">
-                <div class="row">
-                    <h5 class="card-title">Computer Science IA: Procedural Programming</h5>
+        <div class="card justify-content-center bg-theme-blacker course-card ">
+            <div class="card-body container-fluid text-theme-whiter">
+                <div class="row text-theme-whitest">
+                    <h4 class="course-card-title">Computer Science IA: Procedural Programming</h4>
                 </div>
                 <div class="row mb-1">
-                    <span class="badge rounded-pill bg-primary course-badge">CS Core</span>
-                    <span class="badge rounded-pill bg-secondary course-badge">3 Credits</span>      
+                    <span class="badge rounded-pill course-badge">CS</span>
+                    <span class="badge rounded-pill course-badge">3 Credits</span>
                 </div>
                 <div class="row mb-3">
-                    <p class="card-text">Computer science concepts, including algorithm development and
+                    <p class="course-card-text">Computer science concepts, including algorithm development and
                         problem-solving strategies focused on programming and etc etc etc...
                         <a href="#">View more</a>
                     </p>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <a href="#"><i class="far fa-star fa-lg"></i></a>
+                        <a href="#"><i class="far fa-star fa-lg text-theme-secondary"></i></a>
                     </div>
                     <div class="col" style="text-align: right;">
-                        <a href="#"><i class="fas fa-plus-circle fa-lg"></i></a>
+                        <a href="#"><i class="fas fa-plus-circle fa-lg text-theme-confirm"></i></a>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     {% endfor %}
 
-    {% for course in cs_electives %}
+    {% for course in extra_courses %}
     <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3">
-        <div class="card justify-content-center">
-            <div class="card-body container-fluid">
-                <div class="row">
-                    <h5 class="card-title">Big Data Analytics</h5>
+        <div class="card justify-content-center bg-theme-blacker course-card">
+            <div class="card-body container-fluid text-theme-whiter">
+                <div class="row text-theme-whitest">
+                    <h4 class="course-card-title">Analytic Geometry And Calculus I</h4>
                 </div>
                 <div class="row mb-1">
-                    <span class="badge rounded-pill bg-success course-badge">CS Elective</span>
-                    <span class="badge rounded-pill bg-secondary course-badge">4 Credits</span>
+                    <span class="badge rounded-pill course-badge">MATH</span>
+                    <span class="badge rounded-pill course-badge">4 Credits</span>
                 </div>
                 <div class="row mb-3">
-                    <p class="card-text">This course will introduce the state-of-art computing platforms with the focus on how to utilize them in processing (managing and analyzing) massive datasets...
+                    <p class="card-text">This course will introduce the state-of-art computing platforms with the focus
+                        on how to utilize them in processing (managing and analyzing) massive datasets...
                         <a href="#">View more</a>
                     </p>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <a href="#"><i class="far fa-star fa-lg"></i></a>
+                        <a href="#"><i class="far fa-star fa-lg text-theme-secondary"></i></a>
                     </div>
                     <div class="col" style="text-align: right;">
-                        <a href="#"><i class="fas fa-plus-circle fa-lg"></i></a>
+                        <a href="#"><i class="fas fa-plus-circle fa-lg text-theme-confirm"></i></a>
                     </div>
                 </div>
             </div>
@@ -111,7 +111,7 @@
 </div>
 
 <!-- Additional requirements -->
-<div class="row course-container">
+<div class="row course-container" hidden>
     <div class="accordion" id="accordionExample">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
@@ -125,50 +125,50 @@
                 <div class="accordion-body">
                     <table class="table">
                         <thead>
-                          <tr>
-                            <th scope="col">Add</th>
-                            <th scope="col">Category</th>
-                            <th class="text-center" scope="col">Credits Needed</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">Add</th>
+                                <th scope="col">Category</th>
+                                <th class="text-center" scope="col">Credits Needed</th>
+                            </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-                            <td>Foreign Language</td>
-                            <td class="text-center">8</td>
-                          </tr>
-                          <tr>
-                            <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-                            <td>Kent Core Composition</td>
-                            <td class="text-center">6</td>
-                          </tr>
-                          <tr>
-                            <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-                            <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
-                            <td class="text-center">9</td>
-                          </tr>
-                          <tr>
-                            <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-                            <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
-                            <td class="text-center">9</td>
-                          </tr>
-                          <tr>
-                            <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-                            <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
-                            <td class="text-center">9</td>
-                          </tr>
-                          <tr>
-                            <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-                            <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
-                            <td class="text-center">9</td>
-                          </tr>
-                          <tr>
-                            <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
-                            <td>Computer Science (CS) Upper-Division Electives (30000 or 40000 level)</td>
-                            <td class="text-center">6</td>
-                          </tr>
+                            <tr>
+                                <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+                                <td>Foreign Language</td>
+                                <td class="text-center">8</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+                                <td>Kent Core Composition</td>
+                                <td class="text-center">6</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+                                <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
+                                <td class="text-center">9</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+                                <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
+                                <td class="text-center">9</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+                                <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
+                                <td class="text-center">9</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+                                <td>Kent Core Humanities and Fine Arts (minimum one course from each)</td>
+                                <td class="text-center">9</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#"><i class="fas fa-plus-circle fa-lg"></i></a></td>
+                                <td>Computer Science (CS) Upper-Division Electives (30000 or 40000 level)</td>
+                                <td class="text-center">6</td>
+                            </tr>
                         </tbody>
-                      </table>
+                    </table>
                 </div>
             </div>
         </div>

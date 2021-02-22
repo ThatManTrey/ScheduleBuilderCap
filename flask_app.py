@@ -11,10 +11,10 @@ def index():
     for i in range(8):
         cs_core.append(i)
 
-    cs_electives = []
+    extra_courses = []
     for i in range(4):
-        cs_electives.append(i)
-    return render_template('index.html', cs_core=cs_core, cs_electives=cs_electives)
+        extra_courses.append(i)
+    return render_template('index.html', cs_core=cs_core, extra_courses=extra_courses)
 
 @app.route('/login')
 def login():
@@ -35,3 +35,28 @@ def about():
 @app.route('/schedule')
 def schedule():
     return render_template('schedule.html', title='My Schedule')
+    
+@app.route('/color')
+def color():
+    neutral_colors = {
+        "blackest": "navbars",
+        "blacker": "cards, main ui elements",
+        "black": "cards, ui elements",
+        "darkest-gray": "cards, ui elements",
+        "dark-gray": "extra color",
+        "light-gray" : "extra color",
+        "lightest-gray": "text, small ui elements",
+        "white": "text",
+        "whiter": "text",
+        "whitest": "titles/high contrast text",
+    }
+
+    accent_colors = {
+        "primary": "most buttons",
+        "secondary": "important buttons, favorites",
+        "warning": "deleting, errors, warnings",
+        "confirm": "confirming, adding, success",
+        "extra": "course badges, links",
+    }
+
+    return render_template('color_test.html', neutral_colors=neutral_colors, accent_colors=accent_colors)
