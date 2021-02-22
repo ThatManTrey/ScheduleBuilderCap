@@ -158,7 +158,12 @@
 /* course cards */
 
 .course-card {
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.4) !important;
+  
+}
+
+div.course-card:hover {
+  background-color: var(--theme-black) !important;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.75) !important;
 }
 
 .course-desc {
@@ -166,8 +171,8 @@
 }
 
 .course-badge {
-  color: var(--theme-white) !important;
-  background-color: var(--theme-black) !important;
+  color: var(--theme-whiter) !important;
+  background-color: var(--theme-darkest-gray) !important;
   width: 30% !important;
   margin-left: 0.5rem;
 }
