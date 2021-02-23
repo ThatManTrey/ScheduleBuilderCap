@@ -1,0 +1,392 @@
+/*
+ *   Theme Colors
+ */
+
+/* color scheme */
+
+:root {
+  --theme-blackest: #181818;
+  --theme-blacker: #242424;
+  --theme-black: #343434;
+  --theme-darkest-gray: #4F4F4F;
+  --theme-dark-gray: #666666;
+  --theme-light-gray: #848484;
+  --theme-lightest-gray: #9D9D9D;
+  --theme-white: #B6B6B6;
+  --theme-whiter: #CECECE;
+  --theme-whitest: #E2E2E2;
+  --theme-primary: #5b3996;
+  --theme-secondary: #d18018;
+  --theme-warning: #791a1a;
+  --theme-confirm: #02a191;
+  --theme-extra-light: #7182ef;
+  --theme-extra-dark: #28337d;
+}
+
+/* background colors */
+
+.bg-theme-blackest {
+  background-color: var(--theme-blackest) !important;
+}
+
+.bg-theme-blacker {
+  background-color: var(--theme-blacker) !important;
+}
+
+.bg-theme-black {
+  background-color: var(--theme-black) !important;
+}
+
+.bg-theme-darkest-gray {
+  background-color: var(--theme-darkest-gray) !important;
+}
+
+.bg-theme-dark-gray {
+  background-color: var(--theme-dark-gray) !important;
+}
+
+.bg-theme-light-gray {
+  background-color: var(--theme-light-gray) !important;
+}
+
+.bg-theme-lightest-gray {
+  background-color: var(--theme-lightest-gray) !important;
+}
+
+.bg-theme-white {
+  background-color: var(--theme-white) !important;
+}
+
+.bg-theme-whiter {
+  background-color: var(--theme-whiter) !important;
+}
+
+.bg-theme-whitest {
+  background-color: var(--theme-whitest) !important;
+}
+
+.bg-theme-confirm {
+  background-color: var(--theme-confirm) !important;
+}
+
+.bg-theme-secondary {
+  background-color: var(--theme-secondary) !important;
+}
+
+.bg-theme-primary {
+  background-color: var(--theme-primary) !important;
+}
+
+.bg-theme-warning {
+  background-color: var(--theme-warning) !important;
+}
+
+.bg-theme-extra-dark {
+  background-color: var(--theme-extra-dark) !important;
+}
+
+/* text colors */
+
+.text-theme-blackest {
+  color: var(--theme-blackest) !important;
+}
+
+.text-theme-blacker {
+  color: var(--theme-blacker) !important;
+}
+
+.text-theme-black {
+  color: var(--theme-black) !important;
+}
+
+.text-theme-darkest-gray {
+  color: var(--theme-darkest-gray) !important;
+}
+
+.text-theme-dark-gray {
+  color: var(--theme-dark-gray) !important;
+}
+
+.text-theme-light-gray {
+  color: var(--theme-light-gray) !important;
+}
+
+.text-theme-lightest-gray {
+  color: var(--theme-lightest-gray) !important;
+}
+
+.text-theme-white {
+  color: var(--theme-white) !important;
+}
+
+.text-theme-whiter {
+  color: var(--theme-whiter) !important;
+}
+
+.text-theme-whitest {
+  color: var(--theme-whitest) !important;
+}
+
+.text-theme-confirm {
+  color: var(--theme-confirm) !important;
+}
+
+.text-theme-warning {
+  color: var(--theme-warning) !important;
+}
+
+.text-theme-primary {
+  color: var(--theme-primary) !important;
+}
+
+.text-theme-secondary {
+  color: var(--theme-secondary) !important;
+}
+
+.text-theme-extra-light {
+  color: var(--theme-extra-light) !important;
+}
+
+.text-theme-extra-dark {
+  color: var(--theme-extra-dark) !important;
+}
+
+/* 
+ *  Theme Components
+ */
+
+/* course cards */
+
+div.course-card {
+  transition: transform .2s;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1) !important;
+}
+
+div.course-card:hover {
+  background-color: var(--theme-black) !important;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.75) !important;
+  transform: scale(1.05);
+}
+
+.course-desc {
+  min-height: 5rem;
+}
+
+.course-badge {
+  color: var(--theme-whiter) !important;
+  background-color: var(--theme-darkest-gray) !important;
+  width: 30% !important;
+  margin-left: 0.5rem;
+}
+
+.course-card-title {
+  font-family: 'Source Sans Pro';
+}
+
+/* modals */
+
+.theme-modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: var(--theme-blacker);
+  color: var(--theme-white);
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: .3rem;
+  outline: 0;
+}
+
+.theme-modal-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  color: var(--theme-whitest);
+}
+
+.theme-modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+  background-color: var(--theme-black);
+}
+
+.theme-modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+  padding: .75rem;
+}
+
+.theme-modal-footer button {
+  margin: 0.25rem;
+}
+
+/* accordions */
+
+/* buttons */
+
+.btn-theme-primary {
+  background-color: var(--theme-primary) !important;
+  color: var(--theme-whitest) !important;
+}
+
+.btn-theme-secondary {
+  background-color: var(--theme-secondary) !important;
+  color: var(--theme-blackest) !important;
+  font-weight: 500 !important;
+}
+
+.btn-theme-warning {
+  background-color: var(--theme-warning) !important;
+  color: var(--theme-whiter) !important;
+}
+
+.btn-theme-confirm {
+  background-color: var(--theme-confirm) !important;
+  color: var(--theme-blackest) !important;
+}
+
+.btn-theme-dark {
+  background-color: var(--theme-black) !important;
+  color: var(--theme-whiter) !important;
+}
+
+/* alerts */
+
+/*
+ *  Theme test page
+ */
+
+.color-test {
+  border: 1px solid black;
+  border-radius: 1rem;
+  height: 3rem;
+}
+
+/*
+ *  Misc Site Wide Stuff
+ */
+
+html, body {
+  max-width: 100%;
+  max-width: 100vw;
+  min-height: 100%;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none !important;
+  color: var(--theme-extra-light) !important;
+  font-weight: 500;
+}
+
+.vertical-center {
+  min-height: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.bg-blue-gradient {
+  background-image: linear-gradient(315deg, #09152b 0%, #122b54 74%);
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+  background-repeat: no-repeat;
+}
+
+.theme-search {
+  background-color: var(--theme-black) !important;
+  color: var(--theme-whiter) !important;
+  border: 1px solid rgba(0, 0, 0, 0.25) !important;
+}
+
+/*
+ *  Login and Register
+ */
+
+.signin-box {
+  width: 100%;
+  width: 100vw;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  border-radius: 1rem !important;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5) !important;
+}
+
+.slogan-subtext {
+  text-align: right;
+  margin-right: 2rem;
+  color: grey;
+  font-size: 0.9rem;
+}
+
+/* makes button look like link */
+
+.button-as-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+/*
+ *  Navbar
+ */
+
+.nav-link i {
+  margin-right: .25rem;
+}
+
+.nav-active {
+  border-bottom: 1px solid var(--theme-secondary);
+}
+
+/*
+ *  Home page
+ */
+
+#app-nav {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.page-container {
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  margin-bottom: 5rem;
+}
+
+.semester-bar {
+  width: 100%;
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+}
+
+.course-search {
+  max-width: 30rem;
+  display: inline-block;
+  position: relative;
+  top: 0.1rem;
+}
+
+.course-dropdown {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.course-container {
+  margin-right: 1rem !important;
+  margin-left: 1rem !important;
+}

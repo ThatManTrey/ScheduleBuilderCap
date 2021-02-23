@@ -1,0 +1,29 @@
+{% extends "/base_templates/signin_base.html" %}
+
+{% block content %}
+<div class="container mb-3">
+    <form>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" aria-describedby="passHelp">
+            <div id="passHelp" class="form-text">Passwords must be more than x characters long.</div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Re-enter Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3 text-center">
+            <p style="font-size: 0.9rem;">
+                <a href="{{ url_for('login') }}">Return to login</a>
+            </p>
+        </div>
+        <div class="mb-3 text-center">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
