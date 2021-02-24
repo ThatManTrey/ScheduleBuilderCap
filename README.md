@@ -38,7 +38,7 @@ This should be all you need to run Vue. If you're getting package errors, try ma
 
 If you're getting a bunch of annoying warnings while running the app, they're usually formatting related and you can just do ```npm run lint``` to get rid of them. I think there's a way to have it automatically format Vue files whenever you save, but I haven't looked into it.
 
-Test to make sure everythings working correctly by going to: http://localhost:8080/ping
+Test to make sure everythings working correctly by going to: http://localhost:8080/#/ping
 
 
 
