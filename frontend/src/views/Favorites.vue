@@ -11,7 +11,7 @@
 import ThemeNavBar from '../components/ThemeNavBar.vue';
 
 export default {
-    name: 'about',
+    name: 'favorites',
     props: [],
     components: {
         ThemeNavBar,      
