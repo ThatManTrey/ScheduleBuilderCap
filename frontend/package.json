@@ -2,26 +2,32 @@
   "name": "planner",
   "version": "0.1.0",
   "private": true,
+  "description": "## Project setup ``` npm install ```",
+  "author": "",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "main": "babel.config.js",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@popperjs/core": "^2.6.0",
     "bootstrap": "^5.0.0-beta2",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "^4.5.11",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "vue-template-compiler": "^2.6.11"
+    "vue-loader": "^15.9.6",
+    "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
     "root": true,
@@ -42,8 +48,5 @@
     "last 2 versions",
     "not dead"
   ],
-  "description": "## Project setup ``` npm install ```",
-  "main": "babel.config.js",
-  "author": "",
   "license": "ISC"
 }
