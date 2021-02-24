@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <ThemeNavBar></ThemeNavBar>
-    <div class="container">
+    <div class="container mt-3">
       <div class="row course-container">
         <h3 class="text-theme-whitest">Theme guide</h3>
         <br /><br />
@@ -233,41 +233,44 @@
           </div>
         </div>
 
-        <!-- <div class="row justify-content-center">
-                    <div class="col-sm-12 col-md-10 col-lg-8 mb-3">
-                        <div class="container-fluid mb-3">
-                            <h5 class="text-theme-whitest">Main (neutral) colors</h5>
-                            <br> {% for color in neutral_colors %}
-                            <div class="row text-theme-whitest">
-                                <div class="col-2">
-                                    {{ color }} &nbsp;
-                                </div>
-                                <div class="col-6 bg-theme-{{ color }} color-test"></div>
-                                <div class="col-4">
-                                    &nbsp; {{ neutral_colors[color] }}
-                                </div>
-                            </div>
-                            {% endfor %}
-    
-                        </div>
-    
-                        <div class="container-fluid">
-                            <h5 class="text-theme-whitest">Accent colors</h5>
-                            <br> {% for color in accent_colors %}
-                            <div class="row text-theme-whitest">
-                                <div class="col-2">
-                                    {{ color }} &nbsp;
-                                </div>
-                                <div class="col-6 bg-theme-{{ color }} color-test"></div>
-                                <div class="col-4">
-                                    &nbsp; {{ accent_colors[color] }}
-                                </div>
-                            </div>
-                            {% endfor %}
-    
-                        </div>
-                    </div>
-                </div> -->
+        <div class="row justify-content-center">
+          <div class="col-sm-12 col-md-10 col-lg-8 mb-3">
+            <div class="container-fluid mb-3 text-white">
+              <h5 class="text-theme-whitest">Main (neutral) colors</h5>
+              <br />
+              <div></div>
+              <div
+                class="row text-theme-whitest"
+                v-for="(color, index) in primaryColors"
+                :key="index"
+              >
+                <div class="col-2">{{ color.name }} &nbsp;</div>
+                <div
+                  class="col-6 color-test"
+                  :class="'bg-theme-' + color.name"
+                ></div>
+                <div class="col-4">&nbsp; {{ color.uses }}</div>
+              </div>
+            </div>
+
+            <div class="container-fluid">
+              <h5 class="text-theme-whitest">Accent colors</h5>
+              <br />
+              <div
+                class="row text-theme-whitest"
+                v-for="(color, index) in accentColors"
+                :key="index"
+              >
+                <div class="col-2">{{ color.name }} &nbsp;</div>
+                <div
+                  class="col-6 color-test"
+                  :class="'bg-theme-' + color.name"
+                ></div>
+                <div class="col-4">&nbsp; {{ color.uses }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- modals -->
         <div
@@ -358,14 +361,45 @@
 
 <script lang="js">
 import ThemeNavBar from '../components/ThemeNavBar.vue';
+import axios from 'axios';
 
 export default {
-    name: 'theme',
-    props: [],
-    components: {
-        ThemeNavBar,
+    name: 'Theme',
+    data() {
+        return {
+            primaryColors: [],
+            accentColors: []
+        };
     },
-}
+    components: {
+        ThemeNavBar
+    },
+    methods: {
+        getColors() {
+            const path = 'http://localhost:5000/api/colors';
+            // AJAX request
+            axios.get(path + "/primary")
+                .then((res) => {
+                    this.primaryColors = res.data;
+                })
+                .catch((error) => {
+                    // eslint-disable-next-line
+                    console.error(error);
+                });
+            axios.get(path + "/accent")
+                .then((res) => {
+                    this.accentColors = res.data;
+                })
+                .catch((error) => {
+                    // eslint-disable-next-line
+                    console.error(error);
+                });
+        },
+    },
+    created() {
+        this.getColors();
+    },
+};
 </script>
 
 <style scoped></style>

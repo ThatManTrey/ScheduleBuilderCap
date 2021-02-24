@@ -7,6 +7,7 @@ import Schedule from "../views/Schedule.vue";
 import Theme from "../views/Theme.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Ping from "../views/Ping.vue";
 
 Vue.use(VueRouter);
 
@@ -50,6 +51,11 @@ const routes = [
     path: "/register",
     name: "Register",
     component: Register
+  },
+  {
+    path: "/ping",
+    name: "Ping",
+    component: Ping
   }
 ];
 
