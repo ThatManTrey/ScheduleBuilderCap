@@ -21,7 +21,9 @@
                                         <label for="userEmail" class="form-label">Email Address</label>
                                         <input type="email" class="form-control" id="userEmail" aria-describedby="passHelp">
                                         <div id="passHelp" class="form-text">
-                                            <a href="#">Don't have an account? Register here!</a>
+                                            <router-link class="dropdown-item" to="register">
+                                                Don't have an account? Register here!
+                                              </router-link>
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -35,7 +37,7 @@
                                     </div>
                                     <div class="mb-3 text-center">
                                         <!-- <button type="submit" class="btn btn-primary">Log in</button> -->
-                                        <a class="btn btn-primary" href="#" role="button">Log In</a>
+                                        <router-link class="dropdown-item" to="home">Log In</router-link>
                                     </div>
                                 </form>
                             </div>

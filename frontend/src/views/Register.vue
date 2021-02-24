@@ -28,7 +28,7 @@
                                     </div>
                                     <div class="mb-3 text-center">
                                         <p style="font-size: 0.9rem;">
-                                            <a href="#">Return to login</a>
+                                            <router-link class="dropdown-item" to="login">Return to login</router-link>
                                         </p>
                                     </div>
                                     <div class="mb-3 text-center">

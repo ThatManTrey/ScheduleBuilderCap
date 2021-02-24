@@ -20,24 +20,24 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item nav-active">
-            <a class="nav-link text-theme-white" aria-current="page" href="#">
+            <router-link class="nav-link" to="home">
               <i class="fas fa-home text-theme-whitest"></i>Home
-            </a>
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-theme-white" aria-current="page" href="#">
+            <router-link class="nav-link" to="schedule">
               <i class="far fa-calendar text-theme-whitest"></i>My Schedule
-            </a>
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-theme-white" href="#">
+            <router-link class="nav-link" to="favorites">
               <i class="fas fa-star text-theme-whitest"></i>Favorites
-            </a>
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-theme-white" href="#">
+            <router-link class="nav-link" to="about">
               <i class="fas fa-info-circle text-theme-whitest"></i>About
-            </a>
+            </router-link>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -90,9 +90,8 @@
               aria-labelledby="navbarDropdown"
             >
               <li>
-                <a class="dropdown-item text-theme-whiter" href="#"
-                  >Theme page</a
-                >
+                <router-link class="dropdown-item" to="theme">
+                  Theme page</router-link>
               </li>
               <li>
                 <a
@@ -115,17 +114,13 @@
         </ul>
         <div class="d-flex">
           <!-- <button type="submit" class="btn btn-primary">Logout</button> -->
-          <a
-            class="btn bg-theme-blacker text-theme-white"
-            href="#"
-            role="button"
-          >
+          <router-link class="dropdown-item bg-theme-black" to="login">
             Logout
             <i
               class="fas fa-sign-out-alt text-theme-whitest"
               style="margin-left: 0.25rem;"
             ></i>
-          </a>
+          </router-link>
         </div>
       </div>
     </div>
