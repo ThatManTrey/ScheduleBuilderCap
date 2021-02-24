@@ -91,7 +91,8 @@
             >
               <li>
                 <router-link class="dropdown-item" to="theme">
-                  Theme page</router-link>
+                  Theme page</router-link
+                >
               </li>
               <li>
                 <a

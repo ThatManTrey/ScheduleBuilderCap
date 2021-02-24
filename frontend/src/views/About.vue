@@ -1,10 +1,8 @@
 <template lang="html">
-    <div>
-        <ThemeNavBar></ThemeNavBar>
-        <div class="container">
-    
-        </div>
-    </div>
+  <div>
+    <ThemeNavBar></ThemeNavBar>
+    <div class="container"></div>
+  </div>
 </template>
 
 <script lang="js">
@@ -14,11 +12,9 @@ export default {
     name: 'about',
     props: [],
     components: {
-        ThemeNavBar,      
+        ThemeNavBar,
     },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
