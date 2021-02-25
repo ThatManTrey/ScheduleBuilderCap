@@ -1,7 +1,7 @@
 <template lang="html">
   <nav
     class="navbar navbar-expand-md navbar-light bg-theme-blackest"
-    id="app-nav"
+    id="app-nav" style="z-index: 1;"
   >
     <div class="container-fluid">
       <!-- Put logo here -->
