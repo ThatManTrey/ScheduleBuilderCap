@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="card justify-content-center bg-theme-blacker course-card" 
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModalTwo" >
+                data-bs-target="#course-info-modal" >
     <div class="card-body container-fluid text-theme-whiter">
       <div class="row text-theme-whitest">
         <h4 class="course-card-title">Analytic Geometry And Calculus I</h4>
@@ -32,7 +32,7 @@
 
     <div
           class="modal fade"
-          id="exampleModalTwo"
+          id="course-info-modal"
           tabindex="-1"
           aria-labelledby="exampleModalLabelTwo"
           aria-hidden="true"
