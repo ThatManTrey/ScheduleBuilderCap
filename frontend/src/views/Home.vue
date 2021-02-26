@@ -83,6 +83,9 @@
         </div>
       </div>
     </div>
+    
+    <CourseInfoModal></CourseInfoModal>
+    <AddToSemesterModal></AddToSemesterModal>
 
     <!-- Additional requirements -->
     <div class="row course-container" hidden>
@@ -219,15 +222,33 @@
 <script lang="js">
 import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
+import CourseInfoModal from '../components/CourseInfoModal.vue';
+import AddToSemesterModal from '../components/AddToSemesterModal.vue'
 
 export default {
     name: 'home',
     props: [],
     components: {
         ThemeNavBar,
-        CourseCard
+        CourseCard,
+        CourseInfoModal,
+        AddToSemesterModal
     },
-}
+
+    data () {
+      return {
+        isModalVisible: false,
+      };
+    },
+      methods: {
+        showCourseInfoModal () {
+            this.modalVisible = true;
+        },
+        showAddToSemesterModal () {
+            this.modalVisible = true;
+        }
+      },
+};
 </script>
 
 <style scoped></style>

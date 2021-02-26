@@ -13,7 +13,7 @@
           This course will introduce the state-of-art computing platforms with
           the focus on how to utilize them in processing (managing and
           analyzing) massive datasets...
-          <a data-bs-toggle="modal" data-bs-target="#course-info-modal" href="#course-info-modal">View more</a>
+          <a data-bs-toggle="modal" data-bs-target="#course-info-modal" @click="showCourseInfoModal">View more</a>
         </p>
       </div>
       <div class="row">
@@ -21,13 +21,13 @@
           <a href="#"><i class="far fa-star fa-lg text-theme-secondary"></i></a>
         </div>
         <div class="col" style="text-align: right;">
-          <a data-bs-toggle="modal" data-bs-target="#add-to-semester-modal" href="#add-to-semester-modal"
+          <a data-bs-toggle="modal" data-bs-target="#add-to-semester-modal" @click="showAddToSemesterModal"
             ><i class="fas fa-plus-circle fa-lg text-theme-confirm"></i
           ></a>
         </div>
       </div>
     </div>
-
+<!--
     <div
           class="modal fade"
           id="course-info-modal"
@@ -113,9 +113,9 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
-    <div
+   <!-- <div
           class="modal fade"
           id="add-to-semester-modal"
           data-backdrop="false">
@@ -166,7 +166,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
 
   </div>
