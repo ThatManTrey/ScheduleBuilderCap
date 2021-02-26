@@ -1,9 +1,14 @@
 <template lang="html">
-    <transition name="spinnerfade">
-        <div v-if="showSpinner" class="spinner-border text-theme-primary" v-bind:style="styleObject" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </transition>
+  <transition name="spinnerfade">
+    <div
+      v-if="showSpinner"
+      class="spinner-border text-theme-primary"
+      v-bind:style="styleObject"
+      role="status"
+    >
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </transition>
 </template>
 
 <script lang="js">
@@ -19,15 +24,14 @@ export default {
     data() {
         return {
             styleObject: {
-                height: "",
-                width: ""
+                height: this.sizeInRem,
+                width: this.sizeInRem
             }
         }
     },
     created() {
-        console.log(this.sizeInRem);
-        this.styleObject.height = this.sizeInRem;
-        this.styleObject.width = this.sizeInRem;
+        //this.styleObject.height = this.sizeInRem;
+        //this.styleObject.width = this.sizeInRem;
     }
 }
 </script>
@@ -35,11 +39,11 @@ export default {
 <style scoped lang="scss">
 .spinnerfade-enter-active,
 .spinnerfade-leave-active {
-    transition: opacity .75s;
+  transition: opacity 0.75s;
 }
 
 .spinnerfade-enter,
 .spinnerfade-leave-to {
-    opacity: 0;
+  opacity: 0;
 }
 </style>

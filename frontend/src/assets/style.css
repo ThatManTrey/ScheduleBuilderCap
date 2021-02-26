@@ -283,7 +283,10 @@ html, body {
 
 a {
   text-decoration: none !important;
-  color: var(--theme-extra-light) !important;
+}
+
+.link {
+  color: var(--theme-extra-light);
   font-weight: 500;
 }
 
@@ -339,50 +342,28 @@ a {
   cursor: pointer;
 }
 
-/*
- *  Navbar
- */
-
-.nav-link i {
-  margin-right: .25rem;
-}
-
-.nav-active {
-  border-bottom: 1px solid var(--theme-secondary);
-}
 
 /*
  *  Home page
  */
 
-#app-nav {
-  font-family: 'Source Sans Pro', sans-serif;
+
+
+/* don't move this */
+ul.dropdown-menu {
+  background-color: var(--theme-black);
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-.page-container {
-  border-bottom-right-radius: 1rem;
-  border-bottom-left-radius: 1rem;
-  margin-bottom: 5rem;
+a.dropdown-item {
+  color: var(--theme-whiter);
 }
 
-.semester-bar {
-  width: 100%;
-  width: 100vw;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 0;
+a.dropdown-item:hover {
+  background-color: var(--theme-darkest-gray);
+  color: var(--theme-whitest);
 }
 
-.course-search {
-  max-width: 30rem;
-  display: inline-block;
-  position: relative;
-  top: 0.1rem;
+i {
+  color: var(--theme-whitest);
 }
-
-.course-dropdown {
-  display: inline-block;
-  margin-right: 1rem;
-}
-
