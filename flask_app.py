@@ -1,6 +1,20 @@
 # A very simple Flask Hello World app for you to get started with...
 
+#------------------------------------------------------------------------------
+# imports
+
+# scraper
+from scraper import start_scraper
+
+# flask
 from flask import Flask, render_template
+
+#------------------------------------------------------------------------------
+# scheduling
+start_scraper()
+
+#------------------------------------------------------------------------------
+# routing
 
 app = Flask(__name__)
 
@@ -60,3 +74,5 @@ def color():
     }
 
     return render_template('color_test.html', neutral_colors=neutral_colors, accent_colors=accent_colors)
+
+#------------------------------------------------------------------------------
