@@ -36,15 +36,14 @@ for course in classes:
     courseLink = course.find('a')
     if courseLink:
         code = courseLink.text
-        code = code.replace("&nbsp;", "")
-        print(code)
-        if code == "CS 23001":
+        code = code.replace("&nbsp;", "")   # THIS DOESN'T WORK
+        if code == "CS 23001":              # FOR SOME REASON
             print("this is the class!")
             break
         else:
            courseLink = []
 
-# Step 5: go to class page
+# Step 5: go to class page (didn't verify)
 if courseLink:
     requests.get('http://catalog.kent.edu' + courseLink['href'])
 else:
