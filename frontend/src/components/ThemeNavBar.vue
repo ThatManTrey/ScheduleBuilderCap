@@ -1,5 +1,5 @@
 <template lang="html">
-  <nav class="navbar navbar-expand-md bg-theme-blackest" id="app-nav">
+  <nav class="navbar navbar-expand-lg bg-theme-blackest" id="app-nav">
     <div class="container-fluid">
       <!-- Put logo here -->
 
@@ -21,7 +21,7 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
-          <li class="nav-item col-6 col-md-auto">
+          <li class="nav-item col-6 col-lg-auto">
             <router-link
               class="nav-link"
               to="Home"
@@ -31,7 +31,7 @@
             </router-link>
           </li>
 
-          <li class="nav-item col-6 col-md-auto">
+          <li class="nav-item col-6 col-lg-auto">
             <router-link
               class="nav-link"
               to="schedule"
@@ -41,7 +41,7 @@
             </router-link>
           </li>
 
-          <li class="nav-item col-6 col-md-auto">
+          <li class="nav-item col-6 col-lg-auto">
             <router-link
               class="nav-link"
               to="favorites"
@@ -51,7 +51,7 @@
             </router-link>
           </li>
 
-          <li class="nav-item col-6 col-md-auto">
+          <li class="nav-item col-6 col-lg-auto">
             <router-link
               class="nav-link"
               to="about"
@@ -61,7 +61,7 @@
             </router-link>
           </li>
 
-          <li class="nav-item col-6 col-md-auto dropdown">
+          <li class="nav-item col-6 col-lg-auto dropdown">
             <a
               class="nav-link dropdown-toggle "
               href="#"
@@ -88,7 +88,7 @@
             </ul>
           </li>
 
-          <li class="nav-item col-6 col-md-auto dropdown">
+          <li class="nav-item col-6 col-lg-auto dropdown">
             <a
               class="nav-link dropdown-toggle "
               href="#"
@@ -133,7 +133,11 @@
         </ul>
 
         <div class="d-flex">
-          <button v-on:click="logout" type="submit" class="btn btn-theme-dark">
+          <button
+            v-on:click="logout"
+            type="submit"
+            class="btn btn-theme-blacker"
+          >
             Logout
             <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
           </button>

@@ -28,10 +28,6 @@ export default {
                 width: this.sizeInRem
             }
         }
-    },
-    created() {
-        //this.styleObject.height = this.sizeInRem;
-        //this.styleObject.width = this.sizeInRem;
     }
 }
 </script>
