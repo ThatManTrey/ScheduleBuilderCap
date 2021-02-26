@@ -228,6 +228,28 @@ div.course-card:hover {
   margin: 0.25rem;
 }
 
+
+/* list group */
+
+.list-group {
+  margin: 1rem 0 1rem 0;
+}
+
+li.list-group-item {
+  background-color: var(--theme-white) !important;
+  color: var(--theme-blackest)!important;
+  font-weight: bold;
+}
+
+
+.course-badge.small {
+  background-color: var(--theme-confirm) !important;
+  color: var(--theme-blackest);
+  width: 10% !important;
+  float: right;
+}
+
+
 /* accordions */
 
 /* buttons */
