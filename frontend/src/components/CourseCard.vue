@@ -13,7 +13,9 @@
           This course will introduce the state-of-art computing platforms with
           the focus on how to utilize them in processing (managing and
           analyzing) massive datasets...
-          <a data-bs-toggle="modal" data-bs-target="#course-info-modal" @click="showCourseInfoModal">View more</a>
+          <a data-bs-toggle="modal" data-bs-target="#course-info-modal" @click="showCourseInfoModal"
+            style="cursor: pointer"
+          >View more</a>
         </p>
       </div>
       <div class="row">
@@ -22,6 +24,7 @@
         </div>
         <div class="col" style="text-align: right;">
           <a data-bs-toggle="modal" data-bs-target="#add-to-semester-modal" @click="showAddToSemesterModal"
+            style="cursor: pointer"
             ><i class="fas fa-plus-circle fa-lg text-theme-confirm"></i
           ></a>
         </div>

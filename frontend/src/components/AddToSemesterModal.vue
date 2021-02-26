@@ -3,7 +3,6 @@
 <div
           class="modal fade"
           id="add-to-semester-modal"
-          data-backdrop="false">
           tabindex="-1"
           aria-labelledby="add-to-semester-modal"
           aria-hidden="true"

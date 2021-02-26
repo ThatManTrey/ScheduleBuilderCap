@@ -78,8 +78,8 @@
                   </div>
                 <div class="col" style="text-align: right;">
                   <a data-bs-toggle="modal" data-bs-target="#add-to-semester-modal" @click="showCourseInfoModal"
-                      data-bs-dismiss="modal">
-                    <i class="fas fa-plus-circle fa-lg text-theme-confirm"></i></a>
+                      data-bs-dismiss="modal" style="cursor: pointer">
+                    <i class="fas fa-plus-circle fa-lg text-theme-confirm" ></i></a>
                 </div>
               </div>
             </div>
