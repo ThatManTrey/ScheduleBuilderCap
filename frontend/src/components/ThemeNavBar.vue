@@ -1,11 +1,10 @@
 <template lang="html">
-  <nav
-    class="navbar navbar-expand-md navbar-light bg-theme-blackest"
-    id="app-nav"
-  >
+  <nav class="navbar navbar-expand-lg bg-theme-blackest" id="app-nav">
     <div class="container-fluid">
       <!-- Put logo here -->
-      <a class="navbar-brand text-theme-whitest" href="#">KSU COURSE PLANNER</a>
+
+      <a class="navbar-brand" href="#">KSU COURSE PLANNER</a>
+
       <button
         class="navbar-toggler"
         type="button"
@@ -15,33 +14,56 @@
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon"></span>
+        <i class="fas fa-bars"></i>
+
+        <!-- <span class="navbar-toggler-icon"></span> -->
       </button>
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item nav-active">
-            <router-link class="nav-link" to="home">
-              <i class="fas fa-home text-theme-whitest"></i>Home
+        <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
+          <li class="nav-item col-6 col-lg-auto">
+            <router-link
+              class="nav-link"
+              to="Home"
+              v-bind:class="{ 'nav-active': isCurrentRoute('Home') }"
+            >
+              <i class="fas fa-home"></i>Home
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="schedule">
-              <i class="far fa-calendar text-theme-whitest"></i>My Schedule
+
+          <li class="nav-item col-6 col-lg-auto">
+            <router-link
+              class="nav-link"
+              to="schedule"
+              v-bind:class="{ 'nav-active': isCurrentRoute('Schedule') }"
+            >
+              <i class="far fa-calendar "></i>My Schedule
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="favorites">
-              <i class="fas fa-star text-theme-whitest"></i>Favorites
+
+          <li class="nav-item col-6 col-lg-auto">
+            <router-link
+              class="nav-link"
+              to="favorites"
+              v-bind:class="{ 'nav-active': isCurrentRoute('Favorites') }"
+            >
+              <i class="fas fa-star "></i>Favorites
             </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="about">
-              <i class="fas fa-info-circle text-theme-whitest"></i>About
+
+          <li class="nav-item col-6 col-lg-auto">
+            <router-link
+              class="nav-link"
+              to="about"
+              v-bind:class="{ 'nav-active': isCurrentRoute('About') }"
+            >
+              <i class="fas fa-info-circle "></i>About
             </router-link>
           </li>
-          <li class="nav-item dropdown">
+
+          <li class="nav-item col-6 col-lg-auto dropdown">
             <a
-              class="nav-link dropdown-toggle text-theme-white"
+              class="nav-link dropdown-toggle "
               href="#"
               id="navbarDropdown"
               role="button"
@@ -50,33 +72,25 @@
             >
               More
             </a>
-            <ul
-              class="dropdown-menu bg-theme-black"
-              aria-labelledby="navbarDropdown"
-            >
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
-                <a class="dropdown-item text-theme-whiter" href="#"
-                  >Contact Us</a
-                >
+                <a class="dropdown-item" href="#">Contact Us</a>
               </li>
+
               <li>
-                <a class="dropdown-item text-theme-whiter" href="#"
-                  >Another action</a
-                >
+                <a class="dropdown-item" href="#">Another action</a>
               </li>
+
               <li>
-                <hr class="dropdown-divider text-theme-whiter" />
-              </li>
-              <li>
-                <a class="dropdown-item text-theme-white" href="#"
-                  >Delete My Account</a
-                >
+                <a class="dropdown-item" href="#">Delete My Account</a>
               </li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
+
+          <li class="nav-item col-6 col-lg-auto dropdown">
             <a
-              class="nav-link dropdown-toggle text-theme-white"
+              class="nav-link dropdown-toggle "
               href="#"
               id="navbarDropdown"
               role="button"
@@ -85,26 +99,30 @@
             >
               dev
             </a>
-            <ul
-              class="dropdown-menu bg-theme-black"
-              aria-labelledby="navbarDropdown"
-            >
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
-                <router-link class="dropdown-item" to="theme">
+                <router-link
+                  class="dropdown-item"
+                  to="theme"
+                  v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
+                >
                   Theme page</router-link
                 >
               </li>
+
               <li>
                 <a
-                  class="dropdown-item text-theme-whiter"
+                  class="dropdown-item"
                   href="https://getbootstrap.com/docs/5.0/getting-started/introduction/"
                   target="_blank"
                   >Bootstrap doc</a
                 >
               </li>
+
               <li>
                 <a
-                  class="dropdown-item text-theme-whiter"
+                  class="dropdown-item"
                   href="https://uxdesign.cc/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129"
                   target="_blank"
                   >Theme ref</a
@@ -113,17 +131,78 @@
             </ul>
           </li>
         </ul>
+
         <div class="d-flex">
-          <!-- <button type="submit" class="btn btn-primary">Logout</button> -->
-          <router-link class="dropdown-item bg-theme-black" to="login">
+          <button
+            v-on:click="logout"
+            type="submit"
+            class="btn btn-theme-blacker"
+          >
             Logout
-            <i
-              class="fas fa-sign-out-alt text-theme-whitest"
-              style="margin-left: 0.25rem;"
-            ></i>
-          </router-link>
+            <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
+          </button>
         </div>
       </div>
     </div>
   </nav>
 </template>
+
+<script>
+export default {
+  name: "theme-nav-bar",
+  methods: {
+    logout: function(event) {
+      if (event) {
+        this.$router.push("login");
+      }
+    },
+    isCurrentRoute: function(route) {
+      return this.currentRouteName == route;
+    }
+  },
+  computed: {
+    currentRouteName: function() {
+      return this.$route.name;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+#app-nav {
+  font-family: "Source Sans Pro", sans-serif;
+  z-index: 1;
+}
+
+.nav-link i {
+  margin-right: 0.25rem;
+}
+
+.nav-link {
+  color: var(--theme-white);
+}
+
+.nav-link:hover {
+  color: var(--theme-whitest);
+}
+
+a.navbar-brand {
+  color: var(--theme-whiter);
+}
+
+a.nav-active {
+  color: #d29241;
+}
+
+a.nav-active:hover {
+  color: #d29241;
+}
+
+.navbar-toggler i {
+  font-size: 1.75rem;
+  color: var(--theme-light-gray);
+}
+
+ul.navbar-nav {
+}
+</style>

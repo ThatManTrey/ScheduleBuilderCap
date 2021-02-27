@@ -5,10 +5,12 @@
         <div
           class="col-10 col-sm-8 col-md-6 col-lg-5 col-xl-4 vertical-center justify-content-center"
         >
-          <div class="card signin-box">
+          <div class="card signin-box bg-theme-blacker">
             <div class="card-body">
               <div>
-                <h2 class="text-center">KSU Course Planner</h2>
+                <h2 class="text-center text-theme-whitest">
+                  KSU Course Planner
+                </h2>
                 <p class="slogan-subtext">A better way to plan your degree</p>
                 <!-- put logo here maybe? -->
               </div>
@@ -20,7 +22,7 @@
                 </div>
 
                 <form>
-                  <div class="mb-3">
+                  <div class="mb-3 text-theme-white">
                     <label for="userEmail" class="form-label"
                       >Email Address</label
                     >
@@ -36,7 +38,7 @@
                       </router-link>
                     </div>
                   </div>
-                  <div class="mb-3">
+                  <div class="mb-3 text-theme-white">
                     <label for="userPass" class="form-label">Password</label>
                     <input
                       type="password"

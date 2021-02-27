@@ -1,3 +1,5 @@
+/* Only put styles used on multiple pages here */
+
 /*
  *   Theme Colors
  */
@@ -19,8 +21,10 @@
   --theme-secondary: #d18018;
   --theme-warning: #791a1a;
   --theme-confirm: #02a191;
-  --theme-extra-light: #7182ef;
-  --theme-extra-dark: #28337d;
+  --theme-success: #155d26;
+  --theme-extra: #7182ef;
+
+  --btn-transparency: 0.9;
 }
 
 /* background colors */
@@ -81,8 +85,12 @@
   background-color: var(--theme-warning) !important;
 }
 
-.bg-theme-extra-dark {
-  background-color: var(--theme-extra-dark) !important;
+.bg-theme-extra {
+  background-color: var(--theme-extra) !important;
+}
+
+.bg-theme-success {
+  background-color: var(--theme-success) !important;
 }
 
 /* text colors */
@@ -143,47 +151,88 @@
   color: var(--theme-secondary) !important;
 }
 
-.text-theme-extra-light {
-  color: var(--theme-extra-light) !important;
+.text-theme-extra {
+  color: var(--theme-extra) !important;
 }
 
-.text-theme-extra-dark {
-  color: var(--theme-extra-dark) !important;
+.text-theme-success {
+  color: var(--theme-success) !important;
+}
+
+/* Theme buttons */
+
+button.btn:hover {
+  color: var(--theme-whiter);
+}
+
+button.btn-theme-primary {
+  background-color: var(--theme-primary);
+  color: var(--theme-whitest);
+}
+
+button.btn-theme-primary:hover {
+  /* lower background-color opacity */
+  background-color: rgba(91, 57, 150, var(--btn-transparency))
+}
+
+button.btn-theme-secondary {
+  background-color: var(--theme-secondary);
+  color: var(--theme-blackest);
+  font-weight: 500;
+}
+
+button.btn-theme-secondary:hover {
+  /* lower background-color opacity */
+  background-color: rgba(209, 128, 24, .75);
+  color: var(--theme-blackest);
+}
+
+button.btn-theme-warning {
+  background-color: var(--theme-warning);
+  color: var(--theme-whiter);
+}
+
+button.btn-theme-warning:hover {
+  /* lower background-color opacity */
+  background-color: rgba(121, 26, 26, var(--btn-transparency))
+}
+
+button.btn-theme-confirm {
+  background-color: var(--theme-confirm);
+  color: var(--theme-blackest);
+}
+
+button.btn-theme-confirm:hover {
+  /* lower background-color opacity */
+  background-color: rgba(2, 161, 145, var(--btn-transparency));
+  color: var(--theme-blackest);
+}
+
+button.btn-theme-blacker {
+  background-color: var(--theme-blacker);
+  color: var(--theme-whitest);
+}
+
+button.btn-theme-blacker:hover {
+  /* lower background-color opacity */
+  background-color: rgba(36, 36, 36, var(--btn-transparency))
+}
+
+button.btn-theme-black {
+  background-color: var(--theme-black);
+  color: var(--theme-whiter);
+}
+
+button.btn-theme-black:hover {
+  /* lower background-color opacity */
+  background-color: rgba(52, 52, 52, var(--btn-transparency))
 }
 
 /* 
- *  Theme Components
+ *  Bootstrap Component Overrrides
  */
 
-/* course cards */
-
-div.course-card {
-  transition: transform .2s;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1) !important;
-}
-
-div.course-card:hover {
-  background-color: var(--theme-black) !important;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.75) !important;
-  transform: scale(1.05);
-}
-
-.course-desc {
-  min-height: 5rem;
-}
-
-.course-badge {
-  color: var(--theme-whiter) !important;
-  background-color: var(--theme-darkest-gray) !important;
-  width: 30% !important;
-  margin-left: 0.5rem;
-}
-
-.course-card-title {
-  font-family: 'Source Sans Pro';
-}
-
-/* modals */
+/* TODO redo: modals */
 
 .theme-modal-content {
   position: relative;
@@ -228,7 +277,6 @@ div.course-card:hover {
   margin: 0.25rem;
 }
 
-
 /* list group */
 
 .list-group {
@@ -241,7 +289,6 @@ li.list-group-item {
   font-weight: bold;
 }
 
-
 .course-badge.small {
   background-color: var(--theme-confirm) !important;
   color: var(--theme-blackest);
@@ -249,51 +296,52 @@ li.list-group-item {
   float: right;
 }
 
+/* bootstrap dropdown overrides */
 
-/* accordions */
-
-/* buttons */
-
-.btn-theme-primary {
-  background-color: var(--theme-primary) !important;
-  color: var(--theme-whitest) !important;
+ul.dropdown-menu {
+  background-color: var(--theme-black);
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-.btn-theme-secondary {
-  background-color: var(--theme-secondary) !important;
-  color: var(--theme-blackest) !important;
-  font-weight: 500 !important;
+a.dropdown-item {
+  color: var(--theme-whiter);
 }
 
-.btn-theme-warning {
-  background-color: var(--theme-warning) !important;
-  color: var(--theme-whiter) !important;
+a.dropdown-item:hover {
+  background-color: var(--theme-darkest-gray);
+  color: var(--theme-whitest);
 }
 
-.btn-theme-confirm {
-  background-color: var(--theme-confirm) !important;
-  color: var(--theme-blackest) !important;
+/* Form input override  */
+
+input.form-control {
+  background-color: var(--theme-black);
+  color: var(--theme-whiter);
+  border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-.btn-theme-dark {
-  background-color: var(--theme-black) !important;
-  color: var(--theme-whiter) !important;
+input.form-control:focus {
+  background-color: var(--theme-black);
+  color: var(--theme-whiter);
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
-/* alerts */
+input[type="search"]::-webkit-search-cancel-button{
+  /* Remove default */
+  -webkit-appearance: none;
+}
+
+/* override toast background color */
+div.v-toast__item--error {
+  background-color: var(--theme-warning);
+}
+
+div.v-toast__item--success {
+  background-color: var(--theme-success);
+}
 
 /*
- *  Theme test page
- */
-
-.color-test {
-  border: 1px solid black;
-  border-radius: 1rem;
-  height: 3rem;
-}
-
-/*
- *  Misc Site Wide Stuff
+ *  Global base element styling, override if needed
  */
 
 html, body {
@@ -301,12 +349,30 @@ html, body {
   max-width: 100vw;
   min-height: 100%;
   min-height: 100vh;
+  color: var(--theme-white)
 }
 
 a {
   text-decoration: none !important;
-  color: var(--theme-extra-light) !important;
+}
+
+i {
+  color: var(--theme-whitest);
+}
+
+/* 
+ * Global classes, use when needed 
+ */
+
+/* use to replace default link styling */
+
+a.link, button.link {
+  color: var(--theme-extra);
   font-weight: 500;
+}
+
+a.link:hover, button.link:hover {
+  color: rgba(113, 130, 239, 0.7)
 }
 
 .vertical-center {
@@ -315,6 +381,8 @@ a {
   display: flex;
   align-items: center;
 }
+
+/* site background */
 
 .bg-blue-gradient {
   background-image: linear-gradient(315deg, #09152b 0%, #122b54 74%);
@@ -325,11 +393,17 @@ a {
   background-repeat: no-repeat;
 }
 
-.theme-search {
-  background-color: var(--theme-black) !important;
-  color: var(--theme-whiter) !important;
-  border: 1px solid rgba(0, 0, 0, 0.25) !important;
+/* makes button look like a link */
+
+.button-as-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
 }
+
+/* TODO: add class that makes a link look like a button */
 
 /*
  *  Login and Register
@@ -349,66 +423,4 @@ a {
   margin-right: 2rem;
   color: grey;
   font-size: 0.9rem;
-}
-
-/* makes button look like link */
-
-.button-as-link {
-  background: none;
-  border: none;
-  padding: 0;
-  color: inherit;
-  cursor: pointer;
-}
-
-/*
- *  Navbar
- */
-
-.nav-link i {
-  margin-right: .25rem;
-}
-
-.nav-active {
-  border-bottom: 1px solid var(--theme-secondary);
-}
-
-/*
- *  Home page
- */
-
-#app-nav {
-  font-family: 'Source Sans Pro', sans-serif;
-}
-
-.page-container {
-  border-bottom-right-radius: 1rem;
-  border-bottom-left-radius: 1rem;
-  margin-bottom: 5rem;
-}
-
-.semester-bar {
-  width: 100%;
-  width: 100vw;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 0;
-}
-
-.course-search {
-  max-width: 30rem;
-  display: inline-block;
-  position: relative;
-  top: 0.1rem;
-}
-
-.course-dropdown {
-  display: inline-block;
-  margin-right: 1rem;
-}
-
-.course-container {
-  margin-right: 1rem !important;
-  margin-left: 1rem !important;
 }
