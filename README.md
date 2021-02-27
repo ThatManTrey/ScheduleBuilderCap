@@ -25,6 +25,9 @@ You can see whatever JSON data Flask is returning by typing in the api route dir
 put db setup info here
 
 ### Frontend (Vue.js)
+
+Install Node.js first if you haven't yet.
+
 From the project root, type in one of the terminals:
 ``` 
 $ cd frontend

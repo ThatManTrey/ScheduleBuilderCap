@@ -85,10 +85,13 @@
             :key="n"
           >
             <CourseCard></CourseCard>
-          </div>
+        </div>
         </div>
       </transition>
     </div>
+    
+    <CourseInfoModal></CourseInfoModal>
+    <AddToSemesterModal></AddToSemesterModal>
   </div>
 </template>
 
@@ -96,27 +99,40 @@
 import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
 import PageSpinner from '../components/PageSpinner.vue';
+import CourseInfoModal from '../components/CourseInfoModal.vue';
+import AddToSemesterModal from '../components/AddToSemesterModal.vue'
 
 export default {
     name: 'home',
     props: [],
     data() {
         return {
-            hasLoadedCourses: false
+            hasLoadedCourses: false,
+            isModalVisible: false,
         }
     },
     components: {
         ThemeNavBar,
         CourseCard,
+        CourseInfoModal,
+        AddToSemesterModal,
         PageSpinner
     },
     created() {
         // loading test
         setTimeout(() => {
             this.hasLoadedCourses = true;
-        }, 2000);
-    }
-}
+        }, 2000);      
+    },
+      methods: {
+        showCourseInfoModal () {
+            this.modalVisible = true;
+        },
+        showAddToSemesterModal () {
+            this.modalVisible = true;
+        }
+      },
+};
 </script>
 
 <style scoped>
