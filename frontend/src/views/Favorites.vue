@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    
+
     <CourseInfoModal></CourseInfoModal>
     <AddToSemesterModal></AddToSemesterModal>
 

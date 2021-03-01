@@ -81,15 +81,15 @@
         <div v-show="hasLoadedCourses" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-            v-for="n in 12"
+            v-for="n in 100"
             :key="n"
           >
             <CourseCard></CourseCard>
-        </div>
+          </div>
         </div>
       </transition>
     </div>
-    
+
     <CourseInfoModal></CourseInfoModal>
     <AddToSemesterModal></AddToSemesterModal>
   </div>
@@ -122,7 +122,7 @@ export default {
         // loading test
         setTimeout(() => {
             this.hasLoadedCourses = true;
-        }, 2000);      
+        }, 2000);
     },
       methods: {
         showCourseInfoModal () {
@@ -137,7 +137,7 @@ export default {
 
 <style scoped>
 .coursefade-enter-active {
-  transition: opacity 2s;
+  transition: opacity 1.5s;
 }
 
 .coursefade-enter,

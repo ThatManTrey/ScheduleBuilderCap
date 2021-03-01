@@ -1,155 +1,177 @@
 <template lang="html">
-  <nav class="navbar navbar-expand-lg bg-theme-blackest" id="app-nav">
-    <div class="container-fluid">
-      <!-- Put logo here -->
+  <div>
+    <nav class="navbar navbar-expand-lg bg-theme-blackest" id="app-nav">
+      <div class="container-fluid">
+        <!-- Put logo here -->
 
-      <a class="navbar-brand" href="#">KSU COURSE PLANNER</a>
+        <a class="navbar-brand" href="#">KSU COURSE PLANNER</a>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-bars"></i>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
 
-        <!-- <span class="navbar-toggler-icon"></span> -->
-      </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
+            <li class="nav-item col-6 col-lg-auto">
+              <router-link
+                class="nav-link"
+                to="Home"
+                v-bind:class="{ 'nav-active': isCurrentRoute('Home') }"
+              >
+                <i class="fas fa-home"></i>Home
+              </router-link>
+            </li>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
-          <li class="nav-item col-6 col-lg-auto">
-            <router-link
-              class="nav-link"
-              to="Home"
-              v-bind:class="{ 'nav-active': isCurrentRoute('Home') }"
+            <li class="nav-item col-6 col-lg-auto">
+              <router-link
+                class="nav-link"
+                to="schedule"
+                v-bind:class="{ 'nav-active': isCurrentRoute('Schedule') }"
+              >
+                <i class="far fa-calendar "></i>My Schedule
+              </router-link>
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <router-link
+                class="nav-link"
+                to="favorites"
+                v-bind:class="{ 'nav-active': isCurrentRoute('Favorites') }"
+              >
+                <i class="fas fa-star "></i>Favorites
+              </router-link>
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto">
+              <router-link
+                class="nav-link"
+                to="about"
+                v-bind:class="{ 'nav-active': isCurrentRoute('About') }"
+              >
+                <i class="fas fa-info-circle "></i>About
+              </router-link>
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto dropdown">
+              <a
+                class="nav-link dropdown-toggle "
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                More
+              </a>
+
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <a class="dropdown-item" href="#">Contact Us</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="#">Another action</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="#">Delete My Account</a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="nav-item col-6 col-lg-auto dropdown">
+              <a
+                class="nav-link dropdown-toggle "
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                dev
+              </a>
+
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <router-link
+                    class="dropdown-item"
+                    to="theme"
+                    v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
+                  >
+                    Theme page</router-link
+                  >
+                </li>
+
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="https://getbootstrap.com/docs/5.0/getting-started/introduction/"
+                    target="_blank"
+                    >Bootstrap doc</a
+                  >
+                </li>
+
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="https://uxdesign.cc/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129"
+                    target="_blank"
+                    >Theme ref</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <div class="d-flex">
+            <button
+              v-on:click="logout"
+              type="submit"
+              class="btn btn-theme-blacker"
             >
-              <i class="fas fa-home"></i>Home
-            </router-link>
-          </li>
+              Logout
 
-          <li class="nav-item col-6 col-lg-auto">
-            <router-link
-              class="nav-link"
-              to="schedule"
-              v-bind:class="{ 'nav-active': isCurrentRoute('Schedule') }"
-            >
-              <i class="far fa-calendar "></i>My Schedule
-            </router-link>
-          </li>
-
-          <li class="nav-item col-6 col-lg-auto">
-            <router-link
-              class="nav-link"
-              to="favorites"
-              v-bind:class="{ 'nav-active': isCurrentRoute('Favorites') }"
-            >
-              <i class="fas fa-star "></i>Favorites
-            </router-link>
-          </li>
-
-          <li class="nav-item col-6 col-lg-auto">
-            <router-link
-              class="nav-link"
-              to="about"
-              v-bind:class="{ 'nav-active': isCurrentRoute('About') }"
-            >
-              <i class="fas fa-info-circle "></i>About
-            </router-link>
-          </li>
-
-          <li class="nav-item col-6 col-lg-auto dropdown">
-            <a
-              class="nav-link dropdown-toggle "
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              More
-            </a>
-
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <a class="dropdown-item" href="#">Contact Us</a>
-              </li>
-
-              <li>
-                <a class="dropdown-item" href="#">Another action</a>
-              </li>
-
-              <li>
-                <a class="dropdown-item" href="#">Delete My Account</a>
-              </li>
-            </ul>
-          </li>
-
-          <li class="nav-item col-6 col-lg-auto dropdown">
-            <a
-              class="nav-link dropdown-toggle "
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              dev
-            </a>
-
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link
-                  class="dropdown-item"
-                  to="theme"
-                  v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
-                >
-                  Theme page</router-link
-                >
-              </li>
-
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="https://getbootstrap.com/docs/5.0/getting-started/introduction/"
-                  target="_blank"
-                  >Bootstrap doc</a
-                >
-              </li>
-
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="https://uxdesign.cc/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129"
-                  target="_blank"
-                  >Theme ref</a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="d-flex">
-          <button
-            v-on:click="logout"
-            type="submit"
-            class="btn btn-theme-blacker"
-          >
-            Logout
-            <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
-          </button>
+              <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+
+    <transition name="fade">
+      <div v-if="showScrollToTopButton" id="scroll-to-top">
+        <a class="align-middle" href="#">
+          <i class="fas fa-chevron-up fa-lg"></i>
+        </a>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
+import * as Constants from "@/const.js";
+
 export default {
   name: "theme-nav-bar",
+  props: {
+    useScrollToTopButton: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data() {
+    return {
+      showScrollToTopButton: false
+    };
+  },
   methods: {
     logout: function(event) {
       if (event) {
@@ -158,17 +180,40 @@ export default {
     },
     isCurrentRoute: function(route) {
       return this.currentRouteName == route;
+    },
+    checkScroll: function() {
+      // shows scroll to top button when
+      if (
+        document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
+        document.documentElement.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX
+      ) {
+        this.showScrollToTopButton = true;
+      } else {
+        this.showScrollToTopButton = false;
+      }
     }
   },
   computed: {
     currentRouteName: function() {
       return this.$route.name;
     }
+  },
+  created() {
+    if (this.useScrollToTopButton) {
+      window.addEventListener("scroll", this.checkScroll);
+    }
+  },
+  destroyed() {
+    if (this.useScrollToTopButton) {
+      window.removeEventListener("scroll", this.checkScroll);
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+/* navbar */
+
 #app-nav {
   font-family: "Source Sans Pro", sans-serif;
   z-index: 1;
@@ -203,6 +248,39 @@ a.nav-active:hover {
   color: var(--theme-light-gray);
 }
 
-ul.navbar-nav {
+/* scroll to top button */
+
+#scroll-to-top {
+  $radius: 2.5rem;
+  $bottomRightOffset: 1.5rem;
+  height: $radius;
+  width: $radius;
+  bottom: $bottomRightOffset;
+  right: $bottomRightOffset;
+  position: fixed;
+  z-index: 99;
+}
+
+#scroll-to-top a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  border-radius: 50%;
+  background-color: var(--theme-primary);
+}
+
+#scroll-to-top a i {
+  position: relative;
+  top: 7px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
