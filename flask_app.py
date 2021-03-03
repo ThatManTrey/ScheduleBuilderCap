@@ -7,7 +7,8 @@
 from scraper import start_scraper
 
 # flask
-from flask import Flask, render_template
+from flask import Flask, jsonify
+from flask_cors import CORS
 
 #------------------------------------------------------------------------------
 # scheduling
@@ -16,63 +17,95 @@ start_scraper()
 #------------------------------------------------------------------------------
 # routing
 
+# A very simple Flask Hello World app for you to get started with...
+
 app = Flask(__name__)
 
-@app.route('/')
-@app.route('/home')
-def index():
-    cs_core = []
-    for i in range(8):
-        cs_core.append(i)
+# enable CORS
+CORS(app, resources={r'/*': {'origins': '*'}})
 
-    extra_courses = []
-    for i in range(4):
-        extra_courses.append(i)
-    return render_template('index.html', cs_core=cs_core, extra_courses=extra_courses)
+neutral_colors = [
+    {
+        'name': 'blackest',
+        'uses': 'navbars'
+    },
+    {
+        'name': 'blacker',
+        'uses': 'cards, main ui elements'
+    },
+    {
+        'name': 'black',
+        'uses': 'cards, ui elements'
+    },
+    {
+        'name': 'darkest-gray',
+        'uses': 'ui elements'
+    },
+    {
+        'name': 'dark-gray',
+        'uses': 'ui elements'
+    },
+    {
+        'name': 'light-gray',
+        'uses': 'extra color'
+    },
+    {
+        'name': 'lightest-gray',
+        'uses': 'text w/ less contrast'
+    },
+    {
+        'name': 'white',
+        'uses': 'text'
+    },
+    {
+        'name': 'whiter',
+        'uses': 'text'
+    },
+    {
+        'name': 'whitest',
+        'uses': 'titles/high contrast text'
+    },
+]
 
-@app.route('/login')
-def login():
-    return render_template('login.html', title="Login")
-
-@app.route('/register')
-def register():
-    return render_template('register.html', title="Register")
-
-@app.route('/favorites')
-def favorites():
-    return render_template('favorites.html', title="Favorites")
-
-@app.route('/about')
-def about():
-    return render_template('about.html', title='About')
-
-@app.route('/schedule')
-def schedule():
-    return render_template('schedule.html', title='My Schedule')
-    
-@app.route('/color')
-def color():
-    neutral_colors = {
-        "blackest": "navbars",
-        "blacker": "cards, main ui elements",
-        "black": "cards, ui elements",
-        "darkest-gray": "cards, ui elements",
-        "dark-gray": "extra color",
-        "light-gray" : "extra color",
-        "lightest-gray": "text, small ui elements",
-        "white": "text",
-        "whiter": "text",
-        "whitest": "titles/high contrast text",
+accent_colors = [
+    {
+        'name': 'primary',
+        'uses': 'most buttons'
+    },
+    {
+        'name': 'secondary',
+        'uses': 'important buttons, favorites'
+    },
+    {
+        'name': 'warning',
+        'uses': 'deleting, errors, warnings'
+    },
+    {
+        'name': 'confirm',
+        'uses': 'confirming, adding, success'
+    },
+    {
+        'name': 'extra',
+        'uses': 'links'
     }
+]
 
-    accent_colors = {
-        "primary": "most buttons",
-        "secondary": "important buttons, favorites",
-        "warning": "deleting, errors, warnings",
-        "confirm": "confirming, adding, success",
-        "extra": "course badges, links",
-    }
+# sanity check route
+@app.route('/ping', methods=['GET'])
+def ping_pong():
+    return jsonify('test data')
 
-    return render_template('color_test.html', neutral_colors=neutral_colors, accent_colors=accent_colors)
+# example api endpoints
+# look at Theme.vue script for frontend example
+@app.route('/api/colors/primary', methods=['GET'])
+def get_primary_colors():
+    return jsonify(neutral_colors)
+
+@app.route('/api/colors/accent', methods=['GET'])
+def get_accent_colors():
+    return jsonify(accent_colors)
+
+
+
 
 #------------------------------------------------------------------------------
