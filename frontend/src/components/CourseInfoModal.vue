@@ -75,7 +75,7 @@
         <div class="row" style="margin:1rem">
           <div class="col">
             <a href="#"
-              ><i class="far fa-star fa-lg text-theme-secondary"></i
+              ><i class="far fa-star fa-lg star-unfilled-icon"></i
             ></a>
           </div>
           <div class="col" style="text-align: right;">
@@ -86,7 +86,7 @@
               data-bs-dismiss="modal"
               style="cursor: pointer"
             >
-              <i class="fas fa-plus-circle fa-lg text-theme-confirm"></i
+              <i class="fas fa-plus-circle fa-lg plus-add-icon"></i
             ></a>
           </div>
         </div>

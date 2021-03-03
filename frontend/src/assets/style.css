@@ -24,7 +24,7 @@
   --theme-success: #155d26;
   --theme-extra: #7182ef;
 
-  --btn-transparency: 0.9;
+  --btn-transparency: 0.8;
 }
 
 /* background colors */
@@ -159,6 +159,23 @@
   color: var(--theme-success) !important;
 }
 
+/* icon buttons */
+i.plus-add-icon {
+  color: var(--theme-confirm);
+}
+
+i.plus-add-icon:hover {
+  color: rgba(2, 161, 145, var(--btn-transparency));
+}
+
+i.star-unfilled-icon {
+  color: var(--theme-secondary);
+}
+
+i.star-unfilled-icon:hover {
+  color: rgba(209, 128, 24, var(--btn-transparency));
+}
+
 /* Theme buttons */
 
 button.btn:hover {
@@ -183,7 +200,7 @@ button.btn-theme-secondary {
 
 button.btn-theme-secondary:hover {
   /* lower background-color opacity */
-  background-color: rgba(209, 128, 24, .75);
+  background-color: rgba(209, 128, 24, var(--btn-transparency));
   color: var(--theme-blackest);
 }
 
@@ -228,12 +245,14 @@ button.btn-theme-black:hover {
   background-color: rgba(52, 52, 52, var(--btn-transparency))
 }
 
+
+
 /* 
  *  Bootstrap Component Overrrides
  */
 
-/* TODO redo: modals */
-
+ /* modals */
+ 
 .theme-modal-content {
   position: relative;
   display: flex;
@@ -315,13 +334,13 @@ a.dropdown-item:hover {
 /* Form input override  */
 
 input.form-control {
-  background-color: var(--theme-black);
+  background-color: var(--theme-blacker);
   color: var(--theme-whiter);
   border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 input.form-control:focus {
-  background-color: var(--theme-black);
+  background-color: var(--theme-blacker);
   color: var(--theme-whiter);
   border-color: rgba(0, 0, 0, 0.25);
 }
@@ -329,6 +348,10 @@ input.form-control:focus {
 input[type="search"]::-webkit-search-cancel-button{
   /* Remove default */
   -webkit-appearance: none;
+}
+
+div.form-text {
+  color: var(--theme-white);
 }
 
 /* override toast background color */
@@ -361,23 +384,22 @@ i {
   color: var(--theme-whitest);
 }
 
-/* scrollbar styling */
-::-webkit-scrollbar-track
-{
+/* scrollbar styling 
+   taken directly from style of a list of scrollbars 
+   on  https://css-tricks.com/the-current-state-of-styling-scrollbars/ */
+::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   border-radius: 10px;
   background-color: var(--theme-blackest);
 }
 
-::-webkit-scrollbar
-{
+::-webkit-scrollbar {
   width: 1rem;
   background-color: var(--theme-blackest);
 }
 
-::-webkit-scrollbar-thumb
-{
+::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,.3);

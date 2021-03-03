@@ -30,7 +30,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +40,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -60,7 +60,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto dropdown">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-lg-auto dropdown">
               <a
                 class="nav-link dropdown-toggle "
                 href="#"
@@ -133,6 +133,7 @@
 
           <div class="d-flex">
             <button
+              v-if="isLoggedIn"
               v-on:click="logout"
               type="submit"
               class="btn btn-theme-blacker"
@@ -141,10 +142,28 @@
 
               <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
             </button>
+            <button
+              v-if="!isLoggedIn"
+              type="submit"
+              class="btn btn-theme-blacker me-3"
+              @click="$refs.signInModal.openModal()"
+            >
+              Sign In
+            </button>
+            <button
+              v-if="!isLoggedIn"
+              v-on:click="logout"
+              type="submit"
+              class="btn btn-theme-primary"
+            >
+              Create An Account
+            </button>
           </div>
         </div>
       </div>
     </nav>
+
+    <SignInModal ref="signInModal" @signIn="signIn"></SignInModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -158,31 +177,37 @@
 
 <script>
 import * as Constants from "@/const.js";
+import SignInModal from "./SignInModal.vue";
 
 export default {
   name: "theme-nav-bar",
   props: {
     useScrollToTopButton: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
+
+  components: {
+    SignInModal,
+  },
+
   data() {
     return {
-      showScrollToTopButton: false
+      showScrollToTopButton: false,
+      isLoggedIn: false,
+      showSignInModal: false,
+      test: false,
     };
   },
+
   methods: {
-    logout: function(event) {
-      if (event) {
-        this.$router.push("login");
-      }
-    },
-    isCurrentRoute: function(route) {
+    isCurrentRoute: function (route) {
       return this.currentRouteName == route;
     },
-    checkScroll: function() {
-      // shows scroll to top button when
+
+    checkScroll: function () {
+      // shows scroll to top button past a certain number of px from the top
       if (
         document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
         document.documentElement.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX
@@ -191,23 +216,39 @@ export default {
       } else {
         this.showScrollToTopButton = false;
       }
-    }
+    },
+
+    signIn() {
+      this.isLoggedIn = true;
+      this.$emit('isLoggedIn', this.isLoggedIn);
+    },
+
+    logout: function (event) {
+      if (event) {
+        this.isLoggedIn = false;
+        this.$emit('isLoggedIn', this.isLoggedIn);
+      }
+    },
   },
+
   computed: {
-    currentRouteName: function() {
+    currentRouteName: function () {
       return this.$route.name;
-    }
+    },
   },
+
   created() {
+    this.$emit('isLoggedIn', this.isLoggedIn);
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }
   },
+
   destroyed() {
     if (this.useScrollToTopButton) {
       window.removeEventListener("scroll", this.checkScroll);
     }
-  }
+  },
 };
 </script>
 
@@ -277,7 +318,7 @@ a.nav-active:hover {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.2s;
 }
 .fade-enter,
 .fade-leave-to {

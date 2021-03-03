@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
+    <ThemeNavBar @isLoggedIn="isLoggedInUpdate"></ThemeNavBar>
     <PageSpinner
       v-if="!hasLoadedCourses"
       :showSpinner="!hasLoadedCourses"
@@ -77,17 +77,20 @@
           <hr class="bg-theme-dark-gray" />
         </div>
       </div>
-      <transition name="coursefade">
+
+                      <transition name="coursefade">
         <div v-show="hasLoadedCourses" class="row mx-3">
+
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-            v-for="n in 100"
+            v-for="n in 12"
             :key="n"
           >
             <CourseCard></CourseCard>
           </div>
+                
         </div>
-      </transition>
+        </transition>
     </div>
 
     <CourseInfoModal></CourseInfoModal>
@@ -100,7 +103,7 @@ import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
 import PageSpinner from '../components/PageSpinner.vue';
 import CourseInfoModal from '../components/CourseInfoModal.vue';
-import AddToSemesterModal from '../components/AddToSemesterModal.vue'
+import AddToSemesterModal from '../components/AddToSemesterModal.vue';
 
 export default {
     name: 'home',
@@ -109,6 +112,7 @@ export default {
         return {
             hasLoadedCourses: false,
             isModalVisible: false,
+            isLoggedIn: false
         }
     },
     components: {
@@ -130,6 +134,9 @@ export default {
         },
         showAddToSemesterModal () {
             this.modalVisible = true;
+        },
+        isLoggedInUpdate(data){
+          this.isLoggedIn = data;
         }
       },
 };
