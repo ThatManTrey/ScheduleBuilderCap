@@ -167,7 +167,7 @@
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
-        <a class="align-middle" href="#">
+        <a class="align-middle" @click="scrollToTop">
           <i class="fas fa-chevron-up fa-lg"></i>
         </a>
       </div>
@@ -177,19 +177,19 @@
 
 <script>
 import * as Constants from "@/const.js";
-import SignInModal from "./SignInModal.vue";
+import SignInModal from "./modals/SignInModal.vue";
 
 export default {
   name: "theme-nav-bar",
   props: {
     useScrollToTopButton: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
 
   components: {
-    SignInModal,
+    SignInModal
   },
 
   data() {
@@ -197,16 +197,16 @@ export default {
       showScrollToTopButton: false,
       isLoggedIn: false,
       showSignInModal: false,
-      test: false,
+      test: false
     };
   },
 
   methods: {
-    isCurrentRoute: function (route) {
+    isCurrentRoute: function(route) {
       return this.currentRouteName == route;
     },
 
-    checkScroll: function () {
+    checkScroll: function() {
       // shows scroll to top button past a certain number of px from the top
       if (
         document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
@@ -217,28 +217,31 @@ export default {
         this.showScrollToTopButton = false;
       }
     },
+    scrollToTop() {
+      window.scroll(0, 0);
+    },
 
     signIn() {
       this.isLoggedIn = true;
-      this.$emit('isLoggedIn', this.isLoggedIn);
+      this.$emit("isLoggedIn", this.isLoggedIn);
     },
 
-    logout: function (event) {
+    logout: function(event) {
       if (event) {
         this.isLoggedIn = false;
-        this.$emit('isLoggedIn', this.isLoggedIn);
+        this.$emit("isLoggedIn", this.isLoggedIn);
       }
-    },
+    }
   },
 
   computed: {
-    currentRouteName: function () {
+    currentRouteName: function() {
       return this.$route.name;
-    },
+    }
   },
 
   created() {
-    this.$emit('isLoggedIn', this.isLoggedIn);
+    this.$emit("isLoggedIn", this.isLoggedIn);
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }
@@ -248,7 +251,7 @@ export default {
     if (this.useScrollToTopButton) {
       window.removeEventListener("scroll", this.checkScroll);
     }
-  },
+  }
 };
 </script>
 

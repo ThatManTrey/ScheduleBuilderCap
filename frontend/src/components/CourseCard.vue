@@ -21,10 +21,8 @@
         <p class="card-text">
           This course will introduce the state-of-art computing platforms with
           the focus on how to utilize them in processing (managing and
-          analyzing) massive datasets...
+          analyzing) massive...
           <a
-            data-bs-toggle="modal"
-            data-bs-target="#course-info-modal"
             @click="showCourseInfoModal"
             class="link"
             >View more</a
@@ -39,10 +37,7 @@
 
         <div class="col" style="text-align: right;">
           <a
-            data-bs-toggle="modal"
-            data-bs-target="#add-to-semester-modal"
             @click="showAddToSemesterModal"
-            style="cursor: pointer"
             ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
           ></a>
         </div>
@@ -50,6 +45,19 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    showAddToSemesterModal() {
+      this.$emit("openAddSemesterModal");
+    },
+    showCourseInfoModal() {
+      this.$emit("openCourseInfoModal");
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 div.course-card {

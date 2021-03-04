@@ -2,6 +2,7 @@
 
 /*
  *   Theme Colors
+ *      inspired by https://uxdesign.cc/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129
  */
 
 /* color scheme */
@@ -22,7 +23,7 @@
   --theme-warning: #791a1a;
   --theme-confirm: #02a191;
   --theme-success: #155d26;
-  --theme-extra: #7182ef;
+  --theme-extra: #c6a5ff;
 
   --btn-transparency: 0.8;
 }
@@ -217,6 +218,7 @@ button.btn-theme-warning:hover {
 button.btn-theme-confirm {
   background-color: var(--theme-confirm);
   color: var(--theme-blackest);
+  font-weight: 500;
 }
 
 button.btn-theme-confirm:hover {
@@ -245,75 +247,9 @@ button.btn-theme-black:hover {
   background-color: rgba(52, 52, 52, var(--btn-transparency))
 }
 
-
-
 /* 
  *  Bootstrap Component Overrrides
  */
-
- /* modals */
- 
-.theme-modal-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  pointer-events: auto;
-  background-color: var(--theme-blacker);
-  color: var(--theme-white);
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, .2);
-  border-radius: .3rem;
-  outline: 0;
-}
-
-.theme-modal-header {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1rem;
-  color: var(--theme-whitest);
-}
-
-.theme-modal-body {
-  position: relative;
-  flex: 1 1 auto;
-  padding: 1rem;
-  background-color: var(--theme-black);
-}
-
-.theme-modal-footer {
-  display: flex;
-  flex-wrap: wrap;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: flex-end;
-  padding: .75rem;
-}
-
-.theme-modal-footer button {
-  margin: 0.25rem;
-}
-
-/* list group */
-
-.list-group {
-  margin: 1rem 0 1rem 0;
-}
-
-li.list-group-item {
-  background-color: var(--theme-white) !important;
-  color: var(--theme-blackest)!important;
-  font-weight: bold;
-}
-
-.course-badge.small {
-  background-color: var(--theme-confirm) !important;
-  color: var(--theme-blackest);
-  width: 10% !important;
-  float: right;
-}
 
 /* bootstrap dropdown overrides */
 
@@ -334,20 +270,15 @@ a.dropdown-item:hover {
 /* Form input override  */
 
 input.form-control {
-  background-color: var(--theme-blacker);
+  background-color: var(--theme-blackest);
   color: var(--theme-whiter);
   border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 input.form-control:focus {
-  background-color: var(--theme-blacker);
+  background-color: var(--theme-blackest);
   color: var(--theme-whiter);
   border-color: rgba(0, 0, 0, 0.25);
-}
-
-input[type="search"]::-webkit-search-cancel-button{
-  /* Remove default */
-  -webkit-appearance: none;
 }
 
 div.form-text {
@@ -376,17 +307,34 @@ html, body {
   scroll-behavior: smooth;
 }
 
+/* site wide blue gradient background */
+body {
+  background-image: linear-gradient(315deg, #09152b 0%, #122b54 74%);
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+  background-repeat: no-repeat;
+}
+
 a {
   text-decoration: none !important;
+  cursor: pointer;
 }
 
 i {
   color: var(--theme-whitest);
 }
 
+hr {
+  height: 3px !important;
+}
+
 /* scrollbar styling 
-   taken directly from style of a list of scrollbars 
-   on  https://css-tricks.com/the-current-state-of-styling-scrollbars/ */
+
+   taken directly from style 1 of a list of scrollbars 
+   here: https://css-tricks.com/the-current-state-of-styling-scrollbars/ */
+
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -407,7 +355,7 @@ i {
 }
 
 /* 
- * Global classes, use when needed 
+ * Global styling classes, use when needed 
  */
 
 /* use to replace default link styling */
@@ -422,24 +370,6 @@ a.link:hover, button.link:hover {
   color: rgba(113, 130, 239, 0.7)
 }
 
-.vertical-center {
-  min-height: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-}
-
-/* site background */
-
-.bg-blue-gradient {
-  background-image: linear-gradient(315deg, #09152b 0%, #122b54 74%);
-  -webkit-background-size: cover !important;
-  -moz-background-size: cover !important;
-  -o-background-size: cover !important;
-  background-size: cover !important;
-  background-repeat: no-repeat;
-}
-
 /* makes button look like a link */
 
 .button-as-link {
@@ -448,25 +378,5 @@ a.link:hover, button.link:hover {
   padding: 0;
   color: inherit;
   cursor: pointer;
-}
-
-/*
- *  Login and Register
- */
-
-.signin-box {
-  width: 100%;
-  width: 100vw;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  border-radius: 1rem !important;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5) !important;
-}
-
-.slogan-subtext {
-  text-align: right;
-  margin-right: 2rem;
-  color: grey;
-  font-size: 0.9rem;
 }
 

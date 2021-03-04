@@ -78,32 +78,30 @@
         </div>
       </div>
 
-                      <transition name="coursefade">
+      <transition name="coursefade">
         <div v-show="hasLoadedCourses" class="row mx-3">
-
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="n in 12"
             :key="n"
           >
-            <CourseCard></CourseCard>
+            <CourseCard @openAddSemesterModal="showAddToSemesterModal" @openCourseInfoModal="showCourseInfoModal"></CourseCard>
           </div>
-                
         </div>
-        </transition>
+      </transition>
     </div>
 
-    <CourseInfoModal></CourseInfoModal>
-    <AddToSemesterModal></AddToSemesterModal>
+    <CourseInfoModal @openAddSemesterModal="showAddToSemesterModal" ref="courseInfoModalHome"></CourseInfoModal>
+    <AddToSemesterModal ref="addToSemesterModalHome"></AddToSemesterModal>
   </div>
 </template>
 
 <script lang="js">
 import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
-import PageSpinner from '../components/PageSpinner.vue';
-import CourseInfoModal from '../components/CourseInfoModal.vue';
-import AddToSemesterModal from '../components/AddToSemesterModal.vue';
+import PageSpinner from '../components/spinners/PageSpinner.vue';
+import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
+import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 
 export default {
     name: 'home',
@@ -111,7 +109,6 @@ export default {
     data() {
         return {
             hasLoadedCourses: false,
-            isModalVisible: false,
             isLoggedIn: false
         }
     },
@@ -130,10 +127,10 @@ export default {
     },
       methods: {
         showCourseInfoModal () {
-            this.modalVisible = true;
+            this.$refs.courseInfoModalHome.openModal();
         },
         showAddToSemesterModal () {
-            this.modalVisible = true;
+            this.$refs.addToSemesterModalHome.openModal();
         },
         isLoggedInUpdate(data){
           this.isLoggedIn = data;
