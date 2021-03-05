@@ -142,10 +142,12 @@ export default {
   from {
     margin-left: -100%;
     width: 100%;
+    opacity: 25%;
   }
   to {
     margin-left: 0%;
     width: 14rem;
+    opacity: 100%;
   }
 }
 
@@ -187,6 +189,10 @@ export default {
   padding-bottom: 1rem;
   margin-bottom: 1.25rem;
   border-bottom: solid 0.25pt var(--theme-secondary);
+}
+
+.about-block h5 {
+  text-align: center;
 }
 
 td {
