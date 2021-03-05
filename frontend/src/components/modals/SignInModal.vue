@@ -1,14 +1,26 @@
 <template>
   <Modal ref="signInBaseModalRef">
-    <template v-slot:header> Sign In </template>
+    <template v-slot:header>
+      <span v-if="!isResettingPassword">Sign In</span>
+      <span v-else>Reset My Password</span>
+    </template>
 
     <template v-slot:body>
-      <form>
+      <!-- Login -->
+
+      <div v-if="isPasswordReset" class="alert bg-theme-success text-theme-blackest" role="alert">
+        <i class="fas fa-check-circle fa-lg"></i> &nbsp;
+        Your password has been succesfully reset! Check your email for a link.
+      </div>
+
+      <form v-if="!isResettingPassword">
         <div class="mb-3 text-theme-white">
           <label for="userSignInEmail" class="form-label">
             <h6>Email Address</h6>
           </label>
-          <span class="form-input-icon" hidden><i class="fas fa-envelope"></i></span>
+          <span class="form-input-icon" hidden
+            ><i class="fas fa-envelope"></i
+          ></span>
           <input
             type="email"
             class="form-control"
@@ -31,19 +43,58 @@
             aria-describedby="userSignInPassHelp"
           />
           <div id="userSignInPassHelp" class="form-text">
-            <a class="link">Forgot your password?</a>
+            <a class="link" @click="isResettingPassword = true"
+              >Forgot your password?</a
+            >
           </div>
         </div>
       </form>
+
+      <!-- Password reset -->
+      <form v-else>
+        <p>Enter your email below and we'll send you a link to reset your password.</p>
+
+        <label for="userResetPassEmail" class="form-label">
+            <h6>Email Address</h6>
+          </label>
+          <span class="form-input-icon" hidden
+            ><i class="fas fa-envelope"></i
+          ></span>
+          <input
+            type="email"
+            class="form-control"
+            id="userResetPassEmail"
+            aria-describedby="userResetPassEmailHelp"
+          />
+          <div id="userResetPassEmailHelp" class="form-text">
+            Please enter a valid email
+          </div>
+
+      </form>
+
     </template>
     <template v-slot:footer>
-      <button type="button" class="btn btn-theme-blacker" @click="closeModal">
-        Close
-      </button>
+      <!-- Login -->
+      <div v-if="!isResettingPassword">
+        <button type="button" class="btn btn-theme-blacker" @click="closeModal">
+          Close
+        </button>
 
-      <button type="button" class="btn btn-theme-primary" @click="signIn">
-        Continue
-      </button>
+        <button type="button" class="btn btn-theme-primary ms-2" @click="signIn">
+          Continue
+        </button>
+      </div>
+
+      <!-- Password reset -->
+      <div v-else>
+        <button type="button" class="btn btn-theme-blacker" @click="isResettingPassword = false">
+          Cancel
+        </button>
+
+        <button type="button" class="btn btn-theme-primary ms-2" @click="resetPassword()">
+          Reset My Password
+        </button>
+      </div>
     </template>
   </Modal>
 </template>
@@ -52,6 +103,13 @@
 import Modal from "./Modal.vue";
 
 export default {
+  data() {
+    return {
+      isResettingPassword: false,
+      isPasswordReset: false
+    }
+  },
+
   components: {
     Modal
   },
@@ -68,8 +126,13 @@ export default {
     signIn() {
       this.$emit("signIn");
       this.closeModal();
+    },
+
+    resetPassword() {
+      this.isResettingPassword = false;
+      this.isPasswordReset = true;
     }
-  }
+  },
 };
 </script>
 

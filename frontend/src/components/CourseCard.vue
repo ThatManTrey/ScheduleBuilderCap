@@ -67,7 +67,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 div.course-card {
   background-color: var(--theme-blacker);
   transition: transform 0.2s;
