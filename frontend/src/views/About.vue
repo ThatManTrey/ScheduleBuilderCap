@@ -28,16 +28,24 @@
           </div>
           <div class="row about-block" id="about">
             <h3 class="text-theme-white">About Us</h3>
-            <p class="text-theme-light-gray"> words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words </p>
-          </div>
+            <p class="text-theme-light-gray">The KSU Course Planner provides a convenient and easy-to-use application for Kent State University (KSU) students to plan 
+              their future course work at the university. The application provides a rating system, providing insight into the course's quality and difficulty.</p>
+            <p class="text-theme-light-gray">This application was created for CS49999 Capstone Project at Kent State University.</p>
+            <div class="text-theme-white table-responsive">
+            <table class="creator-info">
+              <tr>
+                <td colspan=2>This application was created by:</td>
+              <tr>
+                <td>Jaimie Bowen</td>
+                <td>Jaden Kandel</td>
+              </tr>
+              <tr>  
+                <td>Trey Phillips</td>
+                <td>Daniel Stephan</td>
+              </tr>
+              </table>
+            </div>
+          </div> 
           <div class="row about-block" id="contact-us">
            <h3 class="text-theme-white">Contact Us</h3>
             <p class="text-theme-light-gray"> words words words words words words words words words words words words words words words words 
@@ -53,7 +61,7 @@
         </div>
       </div>
 
-
+    
     </div>
   </div>
 </template>
@@ -82,7 +90,7 @@ export default {
   background-color: var(--theme-blacker);
   overflow-x: hidden;
   padding-top: 4rem;
-  border-right: solid 1pt var(--theme-secondary);
+  border-right: solid 1pt var(--theme-darkest-gray);
 }
 
 #sidenav a {
@@ -110,7 +118,20 @@ export default {
 
 .about-block h3 {
   text-align: center;
-  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  border-bottom: solid 0.25pt var(--theme-secondary);
+}
+
+td {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.creator-info {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
 
 </style>
