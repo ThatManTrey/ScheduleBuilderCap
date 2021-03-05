@@ -339,6 +339,7 @@ input.form-control {
   border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
+
 input.form-control:focus {
   background-color: var(--theme-blacker);
   color: var(--theme-whiter);
@@ -348,6 +349,18 @@ input.form-control:focus {
 input[type="search"]::-webkit-search-cancel-button{
   /* Remove default */
   -webkit-appearance: none;
+}
+
+textarea.form-control {
+  background-color: var(--theme-blacker);
+  color: var(--theme-whiter);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+textarea.form-control:focus {
+  background-color: var(--theme-blacker);
+  color: var(--theme-whiter);
+  border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 div.form-text {

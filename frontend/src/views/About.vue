@@ -48,15 +48,59 @@
           </div> 
           <div class="row about-block" id="contact-us">
            <h3 class="text-theme-white">Contact Us</h3>
-            <p class="text-theme-light-gray"> words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words words 
-            words words words words words words words words words words words words words words words words words </p>
+           <p class="text-theme-light-gray" style="text-align:center">Complete the form below and one of our representatives will be in touch.</p>
+            <form method="post" action="#">
+              <div class="mb-3 text-theme-white">
+                <label for="contactName" class="form-label">
+                  <h6>Name:</h6>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="contactName"
+                  aria-describedby="contactName"
+                />
+              </div>
+              <div class="mb-3 text-theme-white">
+                <label for="contactEmail" class="form-label">
+                  <h6>Email Address:</h6>
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="contactEmail"
+                  aria-describedby="contactEmail"
+                />
+              </div>
+              <div class="mb-3 text-theme-white">
+                <label for="contactMessage" class="form-label">
+                  <h6>Message:</h6>
+                </label>
+                <textarea
+                  type="text"
+                  class="form-control"
+                  id="contactMessage"
+                  aria-describedby="contactMessage"
+                  rows="3"
+                />
+              </div>
+              <div>
+                <button
+                  type="reset"
+                  class="btn btn-theme-blacker"
+                >
+                  Reset
+                </button>
+
+                <button
+                  type="submit"
+                  class="btn btn-theme-primary"
+                  style="float:right"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
