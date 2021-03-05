@@ -79,7 +79,10 @@
           v-for="n in 8"
           :key="n"
         >
-          <CourseCard @openAddSemesterModal="showAddToSemesterModal" @openCourseInfoModal="showCourseInfoModal"></CourseCard>
+          <CourseCard
+            @openAddSemesterModal="showAddToSemesterModal"
+            @openCourseInfoModal="showCourseInfoModal"
+          ></CourseCard>
         </div>
       </div>
     </div>
@@ -112,7 +115,7 @@ data () {
     },
       methods: {
         showCourseInfoModal () {
-            this.$refs.courseInfoModalFavorites.openModal();        
+            this.$refs.courseInfoModalFavorites.openModal();
         },
         showAddToSemesterModal () {
             this.$refs.addToSemesterModalFavorites.openModal();

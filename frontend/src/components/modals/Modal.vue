@@ -6,7 +6,7 @@
     aria-hidden="true"
     ref="modalRef"
   >
-    <div class="modal-dialog" :class="{ 'modal-lg': useLargeModal }">
+    <div class="modal-dialog" :class="{ 'modal-lg': useLargeModal, 'modal-dialog-centered': centerVertically }">
       <div class="modal-content">
         <div class="modal-header">
           <h4
@@ -17,7 +17,12 @@
             <slot name="header" />
           </h4>
 
-          <button id="close-modal-icon" type="button" class="button-as-link" data-bs-dismiss="modal">
+          <button
+            id="close-modal-icon"
+            type="button"
+            class="button-as-link"
+            data-bs-dismiss="modal"
+          >
             <i class="fas fa-times fa-lg text-theme-lightest-gray"></i>
           </button>
         </div>
@@ -51,6 +56,10 @@ export default {
     useLargeModal: {
       type: Boolean,
       default: false
+    }, 
+    centerVertically: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -78,7 +87,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 /* allows the header title to be centered */
 #close-modal-icon {
   position: absolute;

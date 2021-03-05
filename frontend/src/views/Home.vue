@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <ThemeNavBar @isLoggedIn="isLoggedInUpdate"></ThemeNavBar>
+    <ThemeNavBar></ThemeNavBar>
     <PageSpinner
       v-if="!hasLoadedCourses"
       :showSpinner="!hasLoadedCourses"
@@ -82,16 +82,22 @@
         <div v-show="hasLoadedCourses" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-            v-for="n in 12"
+            v-for="n in 20"
             :key="n"
           >
-            <CourseCard @openAddSemesterModal="showAddToSemesterModal" @openCourseInfoModal="showCourseInfoModal"></CourseCard>
+            <CourseCard
+              @openAddSemesterModal="showAddToSemesterModal"
+              @openCourseInfoModal="showCourseInfoModal"
+            ></CourseCard>
           </div>
         </div>
       </transition>
     </div>
 
-    <CourseInfoModal @openAddSemesterModal="showAddToSemesterModal" ref="courseInfoModalHome"></CourseInfoModal>
+    <CourseInfoModal
+      @openAddSemesterModal="showAddToSemesterModal"
+      ref="courseInfoModalHome"
+    ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalHome"></AddToSemesterModal>
   </div>
 </template>
@@ -132,9 +138,6 @@ export default {
         showAddToSemesterModal () {
             this.$refs.addToSemesterModalHome.openModal();
         },
-        isLoggedInUpdate(data){
-          this.isLoggedIn = data;
-        }
       },
 };
 </script>

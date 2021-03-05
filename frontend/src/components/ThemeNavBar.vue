@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <nav class="navbar navbar-expand-lg bg-theme-blackest" id="app-nav">
+    <nav class="navbar navbar-expand-lg" id="app-nav">
       <div class="container-fluid">
         <!-- Put logo here -->
 
@@ -152,9 +152,9 @@
             </button>
             <button
               v-if="!isLoggedIn"
-              v-on:click="logout"
               type="submit"
               class="btn btn-theme-primary"
+              @click="$refs.registerModal.openModal()"
             >
               Create An Account
             </button>
@@ -164,6 +164,7 @@
     </nav>
 
     <SignInModal ref="signInModal" @signIn="signIn"></SignInModal>
+    <RegisterModal ref="registerModal" @register="register"></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -178,6 +179,7 @@
 <script>
 import * as Constants from "@/const.js";
 import SignInModal from "./modals/SignInModal.vue";
+import RegisterModal from "./modals/RegisterModal.vue";
 
 export default {
   name: "theme-nav-bar",
@@ -189,7 +191,8 @@ export default {
   },
 
   components: {
-    SignInModal
+    SignInModal,
+    RegisterModal
   },
 
   data() {
@@ -224,6 +227,10 @@ export default {
     signIn() {
       this.isLoggedIn = true;
       this.$emit("isLoggedIn", this.isLoggedIn);
+    },
+
+    register() {
+      console.log("registered");
     },
 
     logout: function(event) {
@@ -261,6 +268,12 @@ export default {
 #app-nav {
   font-family: "Source Sans Pro", sans-serif;
   z-index: 1;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  background-color: #070707;
 }
 
 .nav-link i {
@@ -311,7 +324,7 @@ a.nav-active:hover {
   width: 100%;
   text-align: center;
   border-radius: 50%;
-  background-color: var(--theme-primary);
+  background-color: #3f256d;
 }
 
 #scroll-to-top a i {

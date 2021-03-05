@@ -1,30 +1,44 @@
 <template lang="html">
   <Modal :useLargeModal="true" ref="courseInfoBaseModalRef">
-    <template v-slot:header>MATH 13013 - Analytic Geometry And Calculus I</template>
+    <template v-slot:header
+      >MATH 13013 - Analytic Geometry And Calculus I</template
+    >
 
     <template v-slot:body>
       <div class="container-fluid">
         <div class="row">
-                  <h5><strong>Description</strong></h5>
-        <p>
-          Concepts of limit, continuity and derivative, and the indefinite and definite integral for functions of one real variable. Maximization, related rates, fundamental theorem of calculus. No credit earned toward a degree for this course if the student already earned credit for MATH 12011 and MATH 12012.
-        </p>
-          </div>
-                <div class="row">
-                    <p><strong>Prerequisite</strong>: Minimum 78 ALEKS math score; or MATH 11022 with a minimum C grade.</p>
-        <p><strong>Attributes</strong>: Kent Core Mathematics and Critical Reasoning, Transfer Module Mathematics</p>
+          <h5><strong>Description</strong></h5>
+          <p>
+            Concepts of limit, continuity and derivative, and the indefinite and
+            definite integral for functions of one real variable. Maximization,
+            related rates, fundamental theorem of calculus. No credit earned
+            toward a degree for this course if the student already earned credit
+            for MATH 12011 and MATH 12012.
+          </p>
+        </div>
+        <div class="row">
+          <p>
+            <strong>Prerequisite</strong>: Minimum 78 ALEKS math score; or MATH
+            11022 with a minimum C grade.
+          </p>
+          <p>
+            <strong>Attributes</strong>: Kent Core Mathematics and Critical
+            Reasoning, Transfer Module Mathematics
+          </p>
         </div>
         <div class="row">
           <div class="col-6">
-                      <p><strong>Credits</strong>: <span id="creditHours">5</span> Credit Hours</p>       
-          <p><strong>Schedule Type</strong>: Lecture</p>
+            <p>
+              <strong>Credits</strong>: <span id="creditHours">5</span> Credit
+              Hours
+            </p>
+            <p><strong>Schedule Type</strong>: Lecture</p>
           </div>
           <div class="col-6">
-                      <p><strong>Contact Hours</strong>: 5 lecture</p>
-          <p><strong>Grade Mode</strong>: Standard Letter</p>
+            <p><strong>Contact Hours</strong>: 5 lecture</p>
+            <p><strong>Grade Mode</strong>: Standard Letter</p>
           </div>
         </div>
-
 
         <div class="row" style="text-align: center">
           <hr />
@@ -56,10 +70,10 @@
     <!-- ignore this error lol -->
     <template v-slot:footer>
       <div class="d-flex" id="course-info-footer">
-          <a href="#"><i class="far fa-star fa-lg star-unfilled-icon"></i></a>
-          <a class="ms-auto" @click="openAddToSemesterModal">
-             <i class="fas fa-plus-circle fa-lg plus-add-icon"></i>
-          </a>
+        <a href="#"><i class="far fa-star fa-lg star-unfilled-icon"></i></a>
+        <a class="ms-auto" @click="openAddToSemesterModal">
+          <i class="fas fa-plus-circle fa-lg plus-add-icon"></i>
+        </a>
       </div>
     </template>
   </Modal>
@@ -88,14 +102,13 @@ export default {
       /* needed to prevent scroll bar from showing when switching modals, idk why */
       setTimeout(() => {
         this.$emit("openAddSemesterModal");
-      }, 320)
+      }, 320);
     }
   }
 };
 </script>
 
 <style scoped>
-
 strong {
   color: var(--theme-whitest);
 }
@@ -113,5 +126,4 @@ p {
   width: 100%;
   font-size: 1.15rem;
 }
-
 </style>

@@ -34,7 +34,10 @@
             :key="n"
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
           >
-            <CourseCard></CourseCard>
+            <CourseCard
+              @openAddSemesterModal="showAddToSemesterModal"
+              @openCourseInfoModal="showCourseInfoModal"
+            ></CourseCard>
           </div>
         </div>
       </div>
@@ -51,7 +54,15 @@ export default {
       targetName: String
     },
     components: {
-      CourseCard
+      CourseCard,
+    },
+    methods: {
+        showCourseInfoModal () {
+            this.$emit("showCourseInfoModal");
+        },
+        showAddToSemesterModal () {
+            this.$emit("showAddToSemesterModal")
+        },
     }
 }
 </script>

@@ -1,12 +1,12 @@
 <template lang="html">
-  <div class="card justify-content-center bg-theme-blacker course-card">
+  <div class="card justify-content-center course-card">
     <div class="card-body container-fluid text-theme-whiter">
       <div class="row text-theme-whitest">
         <h4 class="course-card-title m-1">Analytic Geometry And Calculus I</h4>
       </div>
 
-      <div class="row mb-2">
-        <div class="p-0">
+      <div class="row" :class="{ 'mb-2': !showSmallCard }">
+        <div class="col-10 p-0">
           <span class="badge rounded-pill course-badge">
             <button class="button-as-link">MATH 13013</button>
           </span>
@@ -15,29 +15,30 @@
             <button class="button-as-link">4 Credits</button>
           </span>
         </div>
+
+        <div v-if="showSmallCard" class="col-2 text-end">
+          <a tabindex="0" class="link" @keyup.enter="showCourseInfoModal" @click="showCourseInfoModal">
+            <i class="fas fa-lg fa-info-circle"></i>
+          </a>
+        </div>
       </div>
 
-      <div class="row mb-3">
+      <div v-if="!showSmallCard" class="row mb-3">
         <p class="card-text">
           This course will introduce the state-of-art computing platforms with
           the focus on how to utilize them in processing (managing and
           analyzing) massive...
-          <a
-            @click="showCourseInfoModal"
-            class="link"
-            >View more</a
-          >
+          <a tabindex="0" @keyup.enter="showCourseInfoModal" @click="showCourseInfoModal" class="link">View more</a>
         </p>
       </div>
 
-      <div class="row">
+      <div v-if="!showSmallCard" class="row">
         <div class="col">
-          <a href="#"><i class="far fa-star fa-lg star-unfilled-icon"></i></a>
+          <a tabindex="0"><i class="far fa-star fa-lg star-unfilled-icon"></i></a>
         </div>
 
         <div class="col" style="text-align: right;">
-          <a
-            @click="showAddToSemesterModal"
+          <a tabindex="0" @keyup.enter="showAddToSemesterModal" @click="showAddToSemesterModal"
             ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
           ></a>
         </div>
@@ -48,6 +49,13 @@
 
 <script>
 export default {
+  props: {
+    showSmallCard: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   methods: {
     showAddToSemesterModal() {
       this.$emit("openAddSemesterModal");
@@ -56,18 +64,24 @@ export default {
       this.$emit("openCourseInfoModal");
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
 div.course-card {
+  background-color: var(--theme-blacker);
   transition: transform 0.2s;
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1);
 }
 
-div.course-card:hover {
+div.course-card:hover, div.course-card:focus-within {
   background-color: var(--theme-black);
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.75);
+
+  /* shadow taken from dark mode gmail hover styling */
+  box-shadow: inset 1px 0 0 rgb(255 255 255 / 20%),
+    inset -1px 0 0 rgb(255 255 255 / 20%), 0 0 4px 0 rgb(95 99 104 / 60%),
+    0 0 6px 2px rgb(95 99 104 / 60%);
+  z-index: 1;
   transform: scale(1.05);
 }
 
@@ -87,5 +101,11 @@ span.course-badge {
 
 .course-card-title {
   font-family: "Source Sans Pro";
+}
+
+i.fa-info-circle {
+  color: inherit;
+  position: relative;
+  top: 3px;
 }
 </style>

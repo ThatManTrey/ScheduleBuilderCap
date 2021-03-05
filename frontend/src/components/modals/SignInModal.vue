@@ -5,34 +5,33 @@
     <template v-slot:body>
       <form>
         <div class="mb-3 text-theme-white">
-          <label for="userEmail" class="form-label">
+          <label for="userSignInEmail" class="form-label">
             <h6>Email Address</h6>
           </label>
+          <span class="form-input-icon" hidden><i class="fas fa-envelope"></i></span>
           <input
             type="email"
             class="form-control"
-            id="userEmail"
-            aria-describedby="passHelp"
+            id="userSignInEmail"
+            aria-describedby="userSignInEmailHelp"
           />
-          <div id="passHelp" class="form-text">
-            Don't have an account?
-            <a class="link">Register here!</a>
+          <div id="userSignInEmailHelp" class="form-text">
+            Please enter a valid email
           </div>
         </div>
         <div class="mb-3 text-theme-white">
-          <label for="userPass" class="form-label">
+          <label for="userSignInPass" class="form-label">
             <h6>Password</h6>
           </label>
+          <span class="form-input-icon"><i class="fas fa-key" hidden></i></span>
           <input
             type="password"
             class="form-control"
-            id="userPass"
-            aria-describedby="passHelp"
+            id="userSignInPass"
+            aria-describedby="userSignInPassHelp"
           />
-          <div id="passHelp" class="form-text">
-            <a class="link"
-              >Forgot your password?</a
-            >
+          <div id="userSignInPassHelp" class="form-text">
+            <a class="link">Forgot your password?</a>
           </div>
         </div>
       </form>
@@ -42,11 +41,7 @@
         Close
       </button>
 
-      <button
-        type="button"
-        class="btn btn-theme-primary"
-        @click="signIn"
-      >
+      <button type="button" class="btn btn-theme-primary" @click="signIn">
         Continue
       </button>
     </template>
@@ -77,3 +72,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* 
+.form-input-icon {
+  position: absolute;
+  top: 56px;
+  left: 30px;
+  font-size: 1.25rem;
+} */
+</style>
