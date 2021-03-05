@@ -88,6 +88,7 @@
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
+              :showSmallCard="true"
             ></CourseCard>
           </div>
         </div>

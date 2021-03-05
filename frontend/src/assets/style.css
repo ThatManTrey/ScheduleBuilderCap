@@ -177,6 +177,15 @@ i.star-unfilled-icon:hover {
   color: rgba(209, 128, 24, var(--btn-transparency));
 }
 
+i.remove-icon {
+  color: var(--theme-white);
+}
+
+i.remove-icon:hover,
+i.remove-icon:focus {
+  color: #d54040;
+}
+
 /* Theme buttons */
 
 button.btn:hover {
@@ -250,6 +259,12 @@ button.btn-theme-black:hover {
 /* 
  *  Bootstrap Component Overrrides
  */
+
+/* makes modal dropdown darker */ 
+
+div.modal-backdrop.show {
+  opacity: .75;
+}
 
 /* bootstrap dropdown overrides */
 

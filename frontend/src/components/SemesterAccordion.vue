@@ -3,12 +3,10 @@
     <div class="semester-accordion mb-3">
       <div class="semester-header">
         <div class="semester-title align-middle">
-          <i class="fas fa-edit text-theme-extra-light edit-semester-icon"></i>
-          &nbsp;
-          <h2 class="text-theme-whitest m-0">Fall 2021</h2>
-          <span class="badge bg-theme-black text-theme-white"
-            >16 credit hours</span
-          >
+          <a tabindex="0" @click="removeSemester()" @keyup.enter="removeSemester()">
+            <i class="fas fa-times-circle fa-lg remove-icon"></i>
+          </a>
+          <h2 class="text-theme-whitest m-0">Fall 2021 (<span class="text-theme-secondary">16</span>)</h2>
           <button
             class="btn btn-theme-primary float-end"
             type="button"
@@ -26,7 +24,7 @@
       </div>
     </div>
 
-    <div class="semester-body collapse mb-3" :id="targetName">
+    <div class="semester-body collapse show mb-3" :id="targetName">
       <div class="container">
         <div class="row">
           <div
@@ -37,6 +35,7 @@
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
+              :isRemovingCourse="true"
             ></CourseCard>
           </div>
         </div>
@@ -47,6 +46,7 @@
 
 <script lang="js">
 import CourseCard from '../components/CourseCard.vue';
+import * as Toast from '../toast.js';
 
 export default {
     name: 'semester-accordion',
@@ -63,6 +63,17 @@ export default {
         showAddToSemesterModal () {
             this.$emit("showAddToSemesterModal")
         },
+
+        removeSemester() {
+      var removePromptResult = confirm(
+        "Are you sure you want to remove this semester and all its courses?"
+      );
+      if (removePromptResult == true) {
+        Toast.showSuccessMessage(
+          "Semester was removed successfully."
+        );
+      }
+    },
     }
 }
 </script>
@@ -82,9 +93,10 @@ export default {
   width: 100%;
 }
 
-.edit-semester-icon {
+i.remove-icon {
   position: relative;
-  top: 2px;
+  top: 3px;
+  margin-right: 1rem;
 }
 
 .semester-header h4,
@@ -93,4 +105,5 @@ i {
   display: inline-block;
   vertical-align: middle;
 }
+
 </style>

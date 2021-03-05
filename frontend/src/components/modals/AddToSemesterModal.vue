@@ -23,7 +23,7 @@
       >
         <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
         <i
-          class="fas fa-times-circle"
+          class="fas fa-times-circle remove-icon"
           tabindex="0"
           @keyup.enter.stop
           @keyup.enter="removeSemester(n)"
@@ -172,17 +172,6 @@ div.list-group-item i {
   background-color: var(--theme-primary);
   color: var(--theme-whitest);
   float: right;
-}
-
-/* remove semester icon */
-
-i.fa-times-circle {
-  color: var(--theme-white);
-}
-
-i.fa-times-circle:hover,
-i.fa-times-circle:focus {
-  color: #d54040;
 }
 
 /* add semester link */

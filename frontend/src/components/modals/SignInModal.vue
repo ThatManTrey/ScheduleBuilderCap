@@ -8,9 +8,15 @@
     <template v-slot:body>
       <!-- Login -->
 
-      <div v-if="isPasswordReset" class="alert bg-theme-success text-theme-blackest" role="alert">
-        <i class="fas fa-check-circle fa-lg"></i> &nbsp;
-        Your password has been succesfully reset! Check your email for a link.
+      <div v-if="isPasswordReset" class="alert container bg-theme-success text-theme-whitest" role="alert">
+        <div class="row">
+          <div class="col-1">
+            <i class="fas fa-check-circle fa-lg" style="vertical-align: -webkit-baseline-middle;"></i>
+          </div>
+          <div class="col-11">
+            Your password has been succesfully reset! Check your email for a link.
+          </div>
+        </div>
       </div>
 
       <form v-if="!isResettingPassword">
@@ -18,9 +24,6 @@
           <label for="userSignInEmail" class="form-label">
             <h6>Email Address</h6>
           </label>
-          <span class="form-input-icon" hidden
-            ><i class="fas fa-envelope"></i
-          ></span>
           <input
             type="email"
             class="form-control"
@@ -57,9 +60,6 @@
         <label for="userResetPassEmail" class="form-label">
             <h6>Email Address</h6>
           </label>
-          <span class="form-input-icon" hidden
-            ><i class="fas fa-envelope"></i
-          ></span>
           <input
             type="email"
             class="form-control"
@@ -131,17 +131,16 @@ export default {
     resetPassword() {
       this.isResettingPassword = false;
       this.isPasswordReset = true;
+    },
+
+    created(){
+      this.isResettingPassword = false;
+      this.isPasswordReset = false;
     }
   },
 };
 </script>
 
 <style scoped>
-/* 
-.form-input-icon {
-  position: absolute;
-  top: 56px;
-  left: 30px;
-  font-size: 1.25rem;
-} */
+
 </style>

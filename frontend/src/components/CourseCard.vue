@@ -17,7 +17,7 @@
         </div>
 
         <div v-if="showSmallCard" class="col-2 text-end">
-          <a tabindex="0" class="link" @keyup.enter="showCourseInfoModal" @click="showCourseInfoModal">
+          <a tabindex="0" @keyup.enter="showCourseInfoModal()" @click="showCourseInfoModal()">
             <i class="fas fa-lg fa-info-circle"></i>
           </a>
         </div>
@@ -28,7 +28,7 @@
           This course will introduce the state-of-art computing platforms with
           the focus on how to utilize them in processing (managing and
           analyzing) massive...
-          <a tabindex="0" @keyup.enter="showCourseInfoModal" @click="showCourseInfoModal" class="link">View more</a>
+          <a tabindex="0" @keyup.enter="showCourseInfoModal()" @click="showCourseInfoModal()" class="link">View more</a>
         </p>
       </div>
 
@@ -38,8 +38,12 @@
         </div>
 
         <div class="col" style="text-align: right;">
-          <a tabindex="0" @keyup.enter="showAddToSemesterModal" @click="showAddToSemesterModal"
+          <a v-if="!isRemovingCourse" tabindex="0" @keyup.enter="showAddToSemesterModal()" @click="showAddToSemesterModal()"
             ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
+          ></a>
+
+          <a v-if="isRemovingCourse" tabindex="0" @keyup.enter="removeFromSemester()" @click="removeFromSemester()"
+            ><i class="fas fa-times-circle fa-lg remove-icon"></i
           ></a>
         </div>
       </div>
@@ -53,6 +57,12 @@ export default {
     showSmallCard: {
       type: Boolean,
       default: false
+    },
+
+    /* true replaces the add semester button with a remove button (used on schedule page) */
+    isRemovingCourse: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -62,16 +72,20 @@ export default {
     },
     showCourseInfoModal() {
       this.$emit("openCourseInfoModal");
+    },
+
+    removeFromSemester() {
+      confirm("Are you sure you want to remove this course?")
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+
 div.course-card {
   background-color: var(--theme-blacker);
   transition: transform 0.2s;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1);
 }
 
 div.course-card:hover, div.course-card:focus-within {
@@ -82,6 +96,7 @@ div.course-card:hover, div.course-card:focus-within {
     inset -1px 0 0 rgb(255 255 255 / 20%), 0 0 4px 0 rgb(95 99 104 / 60%),
     0 0 6px 2px rgb(95 99 104 / 60%);
   z-index: 1;
+
   transform: scale(1.05);
 }
 
