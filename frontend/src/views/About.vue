@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <ThemeNavBar></ThemeNavBar>
-    <div class="container">
+    <div class="container" id="display-block">
       <div class="row">
           <nav id="sidenav" class="col-md-3 col-lg-2 d-md-block bg-theme-blacker sidebar collapse">
             <div class="position-sticky pt-3">
@@ -135,6 +135,18 @@ export default {
   overflow-x: hidden;
   padding-top: 4rem;
   border-right: solid 1pt var(--theme-darkest-gray);
+  animation: slidein 3s;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: -100%;
+    width: 100%;
+  }
+  to {
+    margin-left: 0%;
+    width: 14rem;
+  }
 }
 
 #sidenav a {
@@ -158,6 +170,16 @@ export default {
   padding: 2rem;
   margin: 2rem;
   border: 0.25pt solid var(--theme-darkest-gray);
+  animation: fade 3s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1
+  }
 }
 
 .about-block h3 {
