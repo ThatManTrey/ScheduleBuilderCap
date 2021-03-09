@@ -6,7 +6,13 @@
     aria-hidden="true"
     ref="modalRef"
   >
-    <div class="modal-dialog" :class="{ 'modal-lg': useLargeModal, 'modal-dialog-centered': centerVertically }">
+    <div
+      class="modal-dialog"
+      :class="{
+        'modal-lg': useLargeModal,
+        'modal-dialog-centered': centerVertically
+      }"
+    >
       <div class="modal-content">
         <div class="modal-header">
           <h4
@@ -56,7 +62,7 @@ export default {
     useLargeModal: {
       type: Boolean,
       default: false
-    }, 
+    },
     centerVertically: {
       type: Boolean,
       default: false

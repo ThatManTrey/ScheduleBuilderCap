@@ -7,77 +7,79 @@
   >
     <template v-slot:header>Add Course to Semester</template>
     <template v-slot:body>
-  <div>
-    <h6 class="text-center">
-      Select the semester you would like to add MATH 13013 to:
-    </h6>
-    <div class="list-group mt-3">
-      <!-- list of semesters -->
-      <div
-        tabindex="0"
-        class="list-group-item add-course"
-        @click="addCourse()"
-        @keyup.enter="addCourse()"
-        v-for="n in semesters"
-        :key="n"
-      >
-        <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
-        <i
-          class="fas fa-times-circle remove-icon"
-          tabindex="0"
-          @keyup.enter.stop
-          @keyup.enter="removeSemester(n)"
-          @click.stop
-          @click="removeSemester(n)"
-        ></i>
-        Semester {{ n }}
-        <span class="badge rounded-pill course-badge small"> 15 Credits</span>
-      </div>
+      <div>
+        <h6 class="text-center">
+          Select the semester you would like to add MATH 13013 to:
+        </h6>
+        <div class="list-group mt-3">
+          <!-- list of semesters -->
+          <div
+            tabindex="0"
+            class="list-group-item add-course"
+            @click="addCourse()"
+            @keyup.enter="addCourse()"
+            v-for="n in semesters"
+            :key="n"
+          >
+            <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
+            <i
+              class="fas fa-times-circle remove-icon"
+              tabindex="0"
+              @keyup.enter.stop
+              @keyup.enter="removeSemester(n)"
+              @click.stop
+              @click="removeSemester(n)"
+            ></i>
+            Semester {{ n }}
+            <span class="badge rounded-pill course-badge small">
+              15 Credits</span
+            >
+          </div>
 
-      <!-- add a new semester -->
-      <div class="list-group-item">
-        <div v-show="isAddingSemester" class="container-fluid">
-          <div class="row">
-            <div class="col-12">
-              <input
-                type="text"
-                id="newSemesterName"
-                class="form-control"
-                placeholder="Enter a semester name..."
-              />
+          <!-- add a new semester -->
+          <div class="list-group-item">
+            <div v-show="isAddingSemester" class="container-fluid">
+              <div class="row">
+                <div class="col-12">
+                  <input
+                    type="text"
+                    id="newSemesterName"
+                    class="form-control"
+                    placeholder="Enter a semester name..."
+                  />
+                </div>
+                <div class="col-6 mt-2">
+                  <button
+                    type="submit"
+                    class="btn btn-theme-confirm btn-sm"
+                    @click="test"
+                  >
+                    Add Semester
+                  </button>
+                  <a
+                    tabindex="0"
+                    @keyup.enter="isAddingSemester = false"
+                    @click="isAddingSemester = false"
+                  >
+                    <i class="fas fa-times" id="cancel-add"></i>
+                  </a>
+                </div>
+              </div>
             </div>
-            <div class="col-6 mt-2">
-              <button
-                type="submit"
-                class="btn btn-theme-confirm btn-sm"
-                @click="test"
-              >
-                Add Semester
-              </button>
+            <div v-show="!isAddingSemester" id="add-semester">
               <a
                 tabindex="0"
-                @keyup.enter="isAddingSemester = false"
-                @click="isAddingSemester = false"
+                @keyup.enter="isAddingSemester = true"
+                @click="isAddingSemester = true"
               >
-                <i class="fas fa-times" id="cancel-add"></i>
+                <i class="fas fa-plus-circle plus-add-icon"></i>
+                <span> Add Another Semester</span>
               </a>
             </div>
           </div>
         </div>
-        <div v-show="!isAddingSemester" id="add-semester">
-          <a
-            tabindex="0"
-            @keyup.enter="isAddingSemester = true"
-            @click="isAddingSemester = true"
-          >
-            <i class="fas fa-plus-circle plus-add-icon"></i>
-            <span> Add Another Semester</span>
-          </a>
-        </div>
       </div>
-    </div>
-  </div>
-</template>
+    </template>
   </Modal>
 </template>
 
@@ -89,12 +91,12 @@ export default {
   data() {
     return {
       isAddingSemester: false,
-      semesters: 4,
+      semesters: 4
     };
   },
 
   components: {
-    Modal,
+    Modal
   },
 
   methods: {
@@ -125,8 +127,8 @@ export default {
     addCourse() {
       Toast.showSuccessMessage("Course added successfully.");
       this.closeModal();
-    },
-  },
+    }
+  }
 };
 </script>
 
