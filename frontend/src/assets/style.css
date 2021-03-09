@@ -290,6 +290,7 @@ input.form-control {
   border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
+
 input.form-control:focus {
   background-color: var(--theme-blackest);
   color: var(--theme-whiter);
