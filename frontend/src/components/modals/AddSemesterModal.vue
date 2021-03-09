@@ -13,7 +13,7 @@
           <div class="col mx-auto">
             <input
               type="text"
-              id="newSemesterName"
+              id="newSemesterName2"
               class="form-control"
               placeholder="Enter a semester name..."
             />
