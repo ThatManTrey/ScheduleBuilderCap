@@ -40,7 +40,7 @@
           </div>
         </div>
 
-        <div class="row" style="text-align: center">
+        <div class="row text-center">
           <hr />
           <div class="col">
             Course Quality:
@@ -55,11 +55,10 @@
             </h1>
           </div>
         </div>
-        <div style="text-align: center">
+        <div class="text-center">
           <button
             type="button"
-            class="btn btn-theme-secondary"
-            style="justify-content: center"
+            class="btn btn-theme-primary"
           >
             Add My Rating
           </button>

@@ -140,7 +140,7 @@
             >
               Logout
 
-              <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
+              <i class="fas fa-sign-out-alt ms-1"></i>
             </button>
             <button
               v-if="!isLoggedIn"

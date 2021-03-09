@@ -19,7 +19,7 @@
           </button>
         </div>
         <div class="semester-divider">
-          <hr class="bg-theme-dark-gray" style="height: 3px;" />
+          <hr class="bg-theme-dark-gray" size="3px" />
         </div>
       </div>
     </div>

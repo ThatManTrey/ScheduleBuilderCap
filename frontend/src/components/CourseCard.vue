@@ -37,7 +37,7 @@
           <a tabindex="0"><i class="far fa-star fa-lg star-unfilled-icon"></i></a>
         </div>
 
-        <div class="col" style="text-align: right;">
+        <div class="col text-end">
           <a v-if="!isRemovingCourse" tabindex="0" @keyup.enter="showAddToSemesterModal()" @click="showAddToSemesterModal()"
             ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
           ></a>
