@@ -3,10 +3,16 @@
     <div class="semester-accordion mb-3">
       <div class="semester-header">
         <div class="semester-title align-middle">
-          <a tabindex="0" @click="removeSemester()" @keyup.enter="removeSemester()">
+          <a
+            tabindex="0"
+            @click="removeSemester()"
+            @keyup.enter="removeSemester()"
+          >
             <i class="fas fa-times-circle fa-lg remove-icon"></i>
           </a>
-          <h2 class="text-theme-whitest m-0">Fall 2021 (<span class="text-theme-secondary">16</span>)</h2>
+          <h2 class="text-theme-whitest m-0">
+            Fall 2021 (<span class="text-theme-secondary">16</span>)
+          </h2>
           <button
             class="btn btn-theme-primary float-end"
             type="button"
@@ -105,5 +111,4 @@ i {
   display: inline-block;
   vertical-align: middle;
 }
-
 </style>

@@ -9,28 +9,28 @@
     <template v-slot:header>Add a Semester</template>
     <template v-slot:body>
       <div class="container">
-          <div class="row">
-            <div class="col mx-auto">
-              <input
-                type="text"
-                id="newSemesterName"
-                class="form-control"
-                placeholder="Enter a semester name..."
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col mt-2 mx-auto">
-              <button
-                type="submit"
-                class="btn btn-theme-confirm btn-sm"
-                style="width: 100%;"
-              >
-                Add Semester
-              </button>
-            </div>
+        <div class="row">
+          <div class="col mx-auto">
+            <input
+              type="text"
+              id="newSemesterName2"
+              class="form-control"
+              placeholder="Enter a semester name..."
+            />
           </div>
         </div>
+        <div class="row">
+          <div class="col mt-2 mx-auto">
+            <button
+              type="submit"
+              class="btn btn-theme-confirm btn-sm"
+              style="width: 100%;"
+            >
+              Add Semester
+            </button>
+          </div>
+        </div>
+      </div>
     </template>
   </Modal>
 </template>
@@ -40,7 +40,7 @@ import Modal from "./Modal.vue";
 
 export default {
   components: {
-    Modal,
+    Modal
   },
 
   methods: {
@@ -50,8 +50,7 @@ export default {
     },
     closeModal() {
       this.$refs.addSemesterBaseModalRef.closeModal();
-    },
-
-  },
+    }
+  }
 };
 </script>

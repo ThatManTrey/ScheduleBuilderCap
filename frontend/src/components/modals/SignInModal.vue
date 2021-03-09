@@ -8,13 +8,21 @@
     <template v-slot:body>
       <!-- Login -->
 
-      <div v-if="isPasswordReset" class="alert container bg-theme-success text-theme-whitest" role="alert">
+      <div
+        v-if="isPasswordReset"
+        class="alert container bg-theme-success text-theme-whitest"
+        role="alert"
+      >
         <div class="row">
           <div class="col-1">
-            <i class="fas fa-check-circle fa-lg" style="vertical-align: -webkit-baseline-middle;"></i>
+            <i
+              class="fas fa-check-circle fa-lg"
+              style="vertical-align: -webkit-baseline-middle;"
+            ></i>
           </div>
           <div class="col-11">
-            Your password has been succesfully reset! Check your email for a link.
+            Your password has been succesfully reset! Check your email for a
+            link.
           </div>
         </div>
       </div>
@@ -55,23 +63,24 @@
 
       <!-- Password reset -->
       <form v-else>
-        <p>Enter your email below and we'll send you a link to reset your password.</p>
+        <p>
+          Enter your email below and we'll send you a link to reset your
+          password.
+        </p>
 
         <label for="userResetPassEmail" class="form-label">
-            <h6>Email Address</h6>
-          </label>
-          <input
-            type="email"
-            class="form-control"
-            id="userResetPassEmail"
-            aria-describedby="userResetPassEmailHelp"
-          />
-          <div id="userResetPassEmailHelp" class="form-text">
-            Please enter a valid email
-          </div>
-
+          <h6>Email Address</h6>
+        </label>
+        <input
+          type="email"
+          class="form-control"
+          id="userResetPassEmail"
+          aria-describedby="userResetPassEmailHelp"
+        />
+        <div id="userResetPassEmailHelp" class="form-text">
+          Please enter a valid email
+        </div>
       </form>
-
     </template>
     <template v-slot:footer>
       <!-- Login -->
@@ -80,18 +89,30 @@
           Close
         </button>
 
-        <button type="button" class="btn btn-theme-primary ms-2" @click="signIn">
+        <button
+          type="button"
+          class="btn btn-theme-primary ms-2"
+          @click="signIn"
+        >
           Continue
         </button>
       </div>
 
       <!-- Password reset -->
       <div v-else>
-        <button type="button" class="btn btn-theme-blacker" @click="isResettingPassword = false">
+        <button
+          type="button"
+          class="btn btn-theme-blacker"
+          @click="isResettingPassword = false"
+        >
           Cancel
         </button>
 
-        <button type="button" class="btn btn-theme-primary ms-2" @click="resetPassword()">
+        <button
+          type="button"
+          class="btn btn-theme-primary ms-2"
+          @click="resetPassword()"
+        >
           Reset My Password
         </button>
       </div>
@@ -107,7 +128,7 @@ export default {
     return {
       isResettingPassword: false,
       isPasswordReset: false
-    }
+    };
   },
 
   components: {
@@ -133,14 +154,12 @@ export default {
       this.isPasswordReset = true;
     },
 
-    created(){
+    created() {
       this.isResettingPassword = false;
       this.isPasswordReset = false;
     }
-  },
+  }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

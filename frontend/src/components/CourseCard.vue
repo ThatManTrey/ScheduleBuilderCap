@@ -17,7 +17,11 @@
         </div>
 
         <div v-if="showSmallCard" class="col-2 text-end">
-          <a tabindex="0" @keyup.enter="showCourseInfoModal()" @click="showCourseInfoModal()">
+          <a
+            tabindex="0"
+            @keyup.enter="showCourseInfoModal()"
+            @click="showCourseInfoModal()"
+          >
             <i class="fas fa-lg fa-info-circle"></i>
           </a>
         </div>
@@ -28,21 +32,37 @@
           This course will introduce the state-of-art computing platforms with
           the focus on how to utilize them in processing (managing and
           analyzing) massive...
-          <a tabindex="0" @keyup.enter="showCourseInfoModal()" @click="showCourseInfoModal()" class="link">View more</a>
+          <a
+            tabindex="0"
+            @keyup.enter="showCourseInfoModal()"
+            @click="showCourseInfoModal()"
+            class="link"
+            >View more</a
+          >
         </p>
       </div>
 
       <div v-if="!showSmallCard" class="row">
         <div class="col">
-          <a tabindex="0"><i class="far fa-star fa-lg star-unfilled-icon"></i></a>
+          <a tabindex="0"
+            ><i class="far fa-star fa-lg star-unfilled-icon"></i
+          ></a>
         </div>
 
         <div class="col text-end">
-          <a v-if="!isRemovingCourse" tabindex="0" @keyup.enter="showAddToSemesterModal()" @click="showAddToSemesterModal()"
+          <a
+            v-if="!isRemovingCourse"
+            tabindex="0"
+            @keyup.enter="showAddToSemesterModal()"
+            @click="showAddToSemesterModal()"
             ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
           ></a>
 
-          <a v-if="isRemovingCourse" tabindex="0" @keyup.enter="removeFromSemester()" @click="removeFromSemester()"
+          <a
+            v-if="isRemovingCourse"
+            tabindex="0"
+            @keyup.enter="removeFromSemester()"
+            @click="removeFromSemester()"
             ><i class="fas fa-times-circle fa-lg remove-icon"></i
           ></a>
         </div>
@@ -75,20 +95,20 @@ export default {
     },
 
     removeFromSemester() {
-      confirm("Are you sure you want to remove this course?")
+      confirm("Are you sure you want to remove this course?");
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
-
 div.course-card {
   background-color: var(--theme-blacker);
   transition: transform 0.2s;
 }
 
-div.course-card:hover, div.course-card:focus-within {
+div.course-card:hover,
+div.course-card:focus-within {
   background-color: var(--theme-black);
 
   /* shadow taken from dark mode gmail hover styling */

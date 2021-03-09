@@ -7,9 +7,9 @@
     ></PageSpinner>
 
     <div class="container">
-        <FilterCoursesBar></FilterCoursesBar>
-        
-        <transition name="coursefade">
+      <FilterCoursesBar></FilterCoursesBar>
+
+      <transition name="coursefade">
         <div v-show="hasLoadedCourses" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
@@ -84,5 +84,4 @@ export default {
 .coursefade-leave-to {
   opacity: 0;
 }
-
 </style>

@@ -56,10 +56,7 @@
           </div>
         </div>
         <div class="text-center">
-          <button
-            type="button"
-            class="btn btn-theme-primary"
-          >
+          <button type="button" class="btn btn-theme-primary">
             Add My Rating
           </button>
         </div>

@@ -12,8 +12,13 @@
 
       <div class="row mt-3">
         <div class="col text-center">
-          <button type="button" class="btn btn-theme-confirm" @click="showAddSemesterModal()">
-            <i class="fas fa-plus-circle text-theme-blackest"></i> Add Another Semester
+          <button
+            type="button"
+            class="btn btn-theme-confirm"
+            @click="showAddSemesterModal()"
+          >
+            <i class="fas fa-plus-circle text-theme-blackest"></i> Add Another
+            Semester
           </button>
         </div>
       </div>
