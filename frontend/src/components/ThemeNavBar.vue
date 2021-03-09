@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <nav class="navbar navbar-expand-lg bg-theme-blackest" id="app-nav">
+    <nav class="navbar navbar-expand-lg" id="app-nav">
       <div class="container-fluid">
         <!-- Put logo here -->
 
@@ -140,7 +140,7 @@
             >
               Logout
 
-              <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
+              <i class="fas fa-sign-out-alt ms-1"></i>
             </button>
             <button
               v-if="!isLoggedIn"
@@ -152,9 +152,9 @@
             </button>
             <button
               v-if="!isLoggedIn"
-              v-on:click="logout"
               type="submit"
               class="btn btn-theme-primary"
+              @click="$refs.registerModal.openModal()"
             >
               Create An Account
             </button>
@@ -164,10 +164,11 @@
     </nav>
 
     <SignInModal ref="signInModal" @signIn="signIn"></SignInModal>
+    <RegisterModal ref="registerModal" @register="register"></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
-        <a class="align-middle" href="#">
+        <a class="align-middle" @click="scrollToTop">
           <i class="fas fa-chevron-up fa-lg"></i>
         </a>
       </div>
@@ -177,19 +178,21 @@
 
 <script>
 import * as Constants from "@/const.js";
-import SignInModal from "./SignInModal.vue";
+import SignInModal from "./modals/SignInModal.vue";
+import RegisterModal from "./modals/RegisterModal.vue";
 
 export default {
   name: "theme-nav-bar",
   props: {
     useScrollToTopButton: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
 
   components: {
     SignInModal,
+    RegisterModal
   },
 
   data() {
@@ -197,16 +200,16 @@ export default {
       showScrollToTopButton: false,
       isLoggedIn: false,
       showSignInModal: false,
-      test: false,
+      test: false
     };
   },
 
   methods: {
-    isCurrentRoute: function (route) {
+    isCurrentRoute: function(route) {
       return this.currentRouteName == route;
     },
 
-    checkScroll: function () {
+    checkScroll: function() {
       // shows scroll to top button past a certain number of px from the top
       if (
         document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
@@ -217,28 +220,35 @@ export default {
         this.showScrollToTopButton = false;
       }
     },
+    scrollToTop() {
+      window.scroll(0, 0);
+    },
 
     signIn() {
       this.isLoggedIn = true;
-      this.$emit('isLoggedIn', this.isLoggedIn);
+      this.$emit("isLoggedIn", this.isLoggedIn);
     },
 
-    logout: function (event) {
+    register() {
+      console.log("registered");
+    },
+
+    logout: function(event) {
       if (event) {
         this.isLoggedIn = false;
-        this.$emit('isLoggedIn', this.isLoggedIn);
+        this.$emit("isLoggedIn", this.isLoggedIn);
       }
-    },
+    }
   },
 
   computed: {
-    currentRouteName: function () {
+    currentRouteName: function() {
       return this.$route.name;
-    },
+    }
   },
 
   created() {
-    this.$emit('isLoggedIn', this.isLoggedIn);
+    this.$emit("isLoggedIn", this.isLoggedIn);
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }
@@ -248,7 +258,7 @@ export default {
     if (this.useScrollToTopButton) {
       window.removeEventListener("scroll", this.checkScroll);
     }
-  },
+  }
 };
 </script>
 
@@ -258,6 +268,12 @@ export default {
 #app-nav {
   font-family: "Source Sans Pro", sans-serif;
   z-index: 1;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  background-color: #070707;
 }
 
 .nav-link i {
@@ -308,7 +324,7 @@ a.nav-active:hover {
   width: 100%;
   text-align: center;
   border-radius: 50%;
-  background-color: var(--theme-primary);
+  background-color: #3f256d;
 }
 
 #scroll-to-top a i {

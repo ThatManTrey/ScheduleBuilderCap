@@ -6,24 +6,27 @@
       <div class="row course-container">
         <div
           class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-          v-for="n in 2"
+          v-for="n in 8"
           :key="n"
         >
-          <CourseCard></CourseCard>
+          <CourseCard
+            @openAddSemesterModal="showAddToSemesterModal"
+            @openCourseInfoModal="showCourseInfoModal"
+          ></CourseCard>
         </div>
       </div>
     </div>
 
-    <CourseInfoModal></CourseInfoModal>
-    <AddToSemesterModal></AddToSemesterModal>
+    <CourseInfoModal ref="courseInfoModalFavorites"></CourseInfoModal>
+    <AddToSemesterModal ref="addToSemesterModalFavorites"></AddToSemesterModal>
   </div>
 </template>
 
 <script lang="js">
 import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
-import CourseInfoModal from '../components/CourseInfoModal.vue';
-import AddToSemesterModal from '../components/AddToSemesterModal.vue'
+import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
+import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue'
 import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 
 export default {
@@ -44,10 +47,10 @@ data () {
     },
       methods: {
         showCourseInfoModal () {
-            this.modalVisible = true;
+            this.$refs.courseInfoModalFavorites.openModal();
         },
         showAddToSemesterModal () {
-            this.modalVisible = true;
+            this.$refs.addToSemesterModalFavorites.openModal();
         }
       },
 };

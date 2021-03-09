@@ -306,7 +306,7 @@
 
 <script lang="js">
 import ThemeNavBar from '../components/ThemeNavBar.vue';
-import Spinner from '../components/Spinner.vue';
+import Spinner from '../components/spinners/Spinner.vue';
 import * as Toast from '../toast.js';
 import axios from 'axios';
 
