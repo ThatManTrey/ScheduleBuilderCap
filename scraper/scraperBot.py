@@ -1,4 +1,4 @@
-# 
+# https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 
 #------------------------------------------------------------------------------
 # modules
@@ -11,6 +11,7 @@ import requests # for http request
 from bs4 import BeautifulSoup   # for html parsing
 
 from datetime import datetime
+
 
 #------------------------------------------------------------------------------
 # scraper setup and scheduling
@@ -30,6 +31,7 @@ def scrape():
     
     getAllCourses()
     getAllPrograms()
+
 
 #------------------------------------------------------------------------------
 # data retrieval
@@ -130,24 +132,45 @@ def getAllPrograms():
     
     # open each program <a> tag to get courses from that dept
     for program in programList:
-        getProgramConcentrations(program)
+        getProgramDegrees(program)
 
 
-# I AM HERE gets all courses in dept page, adds each to database
+# gets all program degrees, add each to database
 # given <a href="/colleges/COLLEGE/DEPT-SCHOOL/">PROGRAM_NAME</a>
-def getProgramConcentrations(program):
+def getProgramDegrees(program):
     # get dept courses page data
-    programCoursesSite = getSiteData('http://catalog.kent.edu' + program.get('href') + "#programrequirementstext")
+    programCoursesSite = getSiteData('http://catalog.kent.edu' + program.get('href') + "#roadmapstext")
 
-    # get main text
-    deptContent = deptCoursesSite.find('div', class_="sc_sccoursedescs")
+    # get all course lists
+    degreeLists = programCoursesSite.find_all('table', class_='sc_plangrid')
 
-    # get courses list
-    courses = deptContent.find_all('div', class_="courseblock")
+    # iterate through first list: major reqs
+    for degree in degreeLists:
+        # find header for degree
+        # NEED TO TEST
+        DegreeName = degree.find_parent('h3').get_text()
+        DegreeID = addProgram(DegreeName)
 
-    # get data for each concentration, 
-    for course in courses:
-        getCourseData(course)
+        # get the degree requirements biiiitch
+        getDegreeReqs(degree, DegreeID)
+
+
+# gets all requirements for degree, add each to database
+# given <table ... class="sc_plangrid">...</table>
+# and DegreeID (from db)
+def getDegreeReqs(degree, DegreeID)
+    # iterate through course table
+    rows = concentration.find_all('tr', class_='even') + concentration.find_all('tr', class_='odd')
+    for row in rows:
+        codecol = row.find('td', class_='codecol')
+        if codecol != "None":  # course code found
+            # add course to reqs
+            # NEED TO ACCOUNT FOR &S + ORS (like CS1)
+            CourseID = codecol.find('a', class_="code").get_text()
+            CreditHours = codecol.find_next_sibling('td', class_='hourscol').get_text()
+            addProgramReq(DegreeID, CreditHours)
+        else:   # not a course code
+            # check if core or elective
 
 
 #------------------------------------------------------------------------------
@@ -155,9 +178,18 @@ def getProgramConcentrations(program):
 
 # adds course record in db
 def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours, GradeType, CourseID_Type, KentCore):
-    
+    print()
 
-def addProgram():
+def addProgram(DegreeName):
+    print()
+    return DegreeID
+
+def addProgramReq(DegreeID, CourseID, CreditHours):
+    # me thinks this function doesnt need
+    # RequirementID, Paired
+    # change getProgramReqs if not
+    print()
+
 
 #------------------------------------------------------------------------------
 # misc
@@ -168,5 +200,6 @@ def getSiteData(link):
     page = response.text # get html
     parsedPage = BeautifulSoup(page, 'html.parser')   # parse html
     return parsedPage
+
 
 #------------------------------------------------------------------------------
