@@ -85,7 +85,6 @@ accent_colors = [
 
 # if on pythonanywhere
 if __name__ != '__main__':
-    print("not main")
 
     @app.route('/')
     def index():
@@ -94,25 +93,25 @@ if __name__ != '__main__':
         except:
             return "There is not currently a /frontend/dist folder for the built frontend files. Type <b>npm run build</b> under /frontend to create it"
 
-    @app.route('/js/<path:path>')
-    def send_js(path):
-        return app.send_static_file(os.path.join('js', path).replace('\\', '/'))
+    # @app.route('/js/<path:path>')
+    # def send_js(path):
+    #     return app.send_static_file(os.path.join('js', path).replace('\\', '/'))
 
-    @app.route('/css/<path:path>')
-    def send_css(path):
-        return app.send_static_file(os.path.join('css', path).replace('\\', '/'))
+    # @app.route('/css/<path:path>')
+    # def send_css(path):
+    #     return app.send_static_file(os.path.join('css', path).replace('\\', '/'))
 
-    @app.route('/img/<path:path>')
-    def send_img(path):
-        return app.send_static_file(os.path.join('img', path).replace('\\', '/'))
+    # @app.route('/img/<path:path>')
+    # def send_img(path):
+    #     return app.send_static_file(os.path.join('img', path).replace('\\', '/'))
 
-    @app.route('/fonts/<path:path>')
-    def send_fonts(path):
-        return app.send_static_file(os.path.join('fonts', path).replace('\\', '/'))
+    # @app.route('/fonts/<path:path>')
+    # def send_fonts(path):
+    #     return app.send_static_file(os.path.join('fonts', path).replace('\\', '/'))
 
-    @app.route('/favicon.ico')
-    def send_favicon():
-        return app.send_static_file('favicon.ico')
+    # @app.route('/favicon.ico')
+    # def send_favicon():
+    #     return app.send_static_file('favicon.ico')
 
 #
 # API endpoints
