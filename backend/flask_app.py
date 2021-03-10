@@ -1,13 +1,11 @@
 # A very simple Flask Hello World app for you to get started with...
 
-import os
-from flask import Flask, jsonify, render_template, send_from_directory
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 
 # points to the built files folder for Vue
 app = Flask(__name__,
-            template_folder="../frontend/dist/",
-            static_folder="../frontend/dist/",
+            template_folder="../frontend/dist/"
             )
 
 # enable CORS
