@@ -1,6 +1,6 @@
 # ScheduleBuilderCap
 
-## Project Setup
+## Local Project Setup 
 
 ### Backend
 
