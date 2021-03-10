@@ -1,10 +1,13 @@
 # A very simple Flask Hello World app for you to get started with...
 
-from flask import Flask, jsonify
+import os
+from flask import Flask, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__)
-
+app = Flask(__name__,
+    template_folder="../frontend/dist/",
+    static_folder="../frontend/dist/",
+)
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
@@ -73,6 +76,43 @@ accent_colors = [
         'uses': 'links'
     }
 ]
+
+#
+# Initial page rendering for PythonAnywhere
+# renders index.html and all the static files needed to start Vue
+# requires npm run build to be run in /frontend first
+#
+
+@app.route('/')
+def index():
+    try:
+        return render_template('index.html')
+    except:
+        return "There is not currently a /frontend/dist folder for the built frontend files. Type <b>npm run build</b> under /frontend to create it"
+
+@app.route('/js/<path:path>')
+def send_js(path):
+    return app.send_static_file(os.path.join('js', path).replace('\\','/'))
+
+@app.route('/css/<path:path>')
+def send_css(path):
+    return app.send_static_file(os.path.join('css', path).replace('\\','/'))
+
+@app.route('/img/<path:path>')
+def send_img(path):
+    return app.send_static_file(os.path.join('img', path).replace('\\','/'))
+
+@app.route('/fonts/<path:path>')
+def send_fonts(path):
+    return app.send_static_file(os.path.join('fonts', path).replace('\\','/'))
+
+@app.route('/favicon.ico')
+def send_favicon():
+    return app.send_static_file('favicon.ico')
+
+#
+# API endpoints
+#
 
 # sanity check route
 @app.route('/ping', methods=['GET'])
