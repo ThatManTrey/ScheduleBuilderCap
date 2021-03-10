@@ -325,9 +325,10 @@ export default {
     },
     methods: {
         getColors() {
-            const path = 'http://localhost:5000/api/colors';
+            var baseUrl = process.env.VUE_APP_API_URL + "/colors";
+            
             // AJAX request
-            axios.get(path + "/primary")
+            axios.get(baseUrl + "/primary")
                 .then((res) => {
                     this.primaryColors = res.data;
                 })
@@ -335,7 +336,7 @@ export default {
                     // eslint-disable-next-line
                     console.error(error);
                 });
-            axios.get(path + "/accent")
+            axios.get(baseUrl + "/accent")
                 .then((res) => {
                     this.accentColors = res.data;
                     Toast.showSuccessMessage("This is a success message");

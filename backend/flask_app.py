@@ -96,17 +96,11 @@ if __name__ != '__main__':
 # API endpoints
 #
 
-# sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('test data')
-
 # example api endpoints
 # look at Theme.vue script for frontend example
 @app.route('/api/colors/primary', methods=['GET'])
 def get_primary_colors():
     return jsonify(neutral_colors)
-
 
 @app.route('/api/colors/accent', methods=['GET'])
 def get_accent_colors():
