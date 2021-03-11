@@ -45,6 +45,8 @@
       <div v-if="!showSmallCard" class="row">
         <div class="col">
           <a tabindex="0"
+            data-tooltip="Favorite Course"
+            data-tooltip-location="bottom"
             ><i class="far fa-star fa-lg star-unfilled-icon"></i
           ></a>
         </div>
@@ -55,6 +57,8 @@
             tabindex="0"
             @keyup.enter="showAddToSemesterModal()"
             @click="showAddToSemesterModal()"
+            data-tooltip="Add to Semester"
+            data-tooltip-location="bottom"
             ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
           ></a>
 
@@ -63,6 +67,8 @@
             tabindex="0"
             @keyup.enter="removeFromSemester()"
             @click="removeFromSemester()"
+            data-tooltip="Remove from Semester"
+            data-tooltip-location="bottom"
             ><i class="fas fa-times-circle fa-lg remove-icon"></i
           ></a>
         </div>

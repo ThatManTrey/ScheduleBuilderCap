@@ -7,6 +7,8 @@
             tabindex="0"
             @click="removeSemester()"
             @keyup.enter="removeSemester()"
+            data-tooltip="Remove Semester"
+            data-tooltip-location="bottom"
           >
             <i class="fas fa-times-circle fa-lg remove-icon"></i>
           </a>
