@@ -8,7 +8,6 @@ app = Flask(__name__,
             template_folder="../frontend/dist/"
             )
 
-# enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 neutral_colors = [
@@ -96,8 +95,7 @@ if __name__ != '__main__':
 # API endpoints
 #
 
-# example api endpoints
-# look at Theme.vue script for frontend example
+# endpoint example, look at Theme.vue script for frontend example
 @app.route('/api/colors/primary', methods=['GET'])
 def get_primary_colors():
     return jsonify(neutral_colors)
@@ -105,6 +103,7 @@ def get_primary_colors():
 @app.route('/api/colors/accent', methods=['GET'])
 def get_accent_colors():
     return jsonify(accent_colors)
+
 
 # run server only when local
 if __name__ == '__main__':

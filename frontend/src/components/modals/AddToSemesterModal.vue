@@ -43,7 +43,7 @@
                 <div class="col-12">
                   <input
                     type="text"
-                    id="newSemesterName1" 
+                    id="newSemesterName1"
                     class="form-control"
                     placeholder="Enter a semester name..."
                   />

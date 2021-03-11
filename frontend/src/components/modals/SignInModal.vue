@@ -10,7 +10,7 @@
 
       <div
         v-if="isPasswordReset"
-        class="alert container bg-theme-success text-theme-whitest"
+        class="alert container bg-theme-success text-theme-whitest container"
         role="alert"
       >
         <div class="row">
