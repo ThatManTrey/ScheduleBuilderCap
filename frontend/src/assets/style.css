@@ -518,3 +518,15 @@ a.link:hover, button.link:hover {
 [data-tooltip-location="bottom"]:hover:after {
   transform: translateY(50%) scaleX(1);
 }
+
+
+/* 
+ * Editable Content
+ */
+
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus{
+  border: none;
+  outline: none;
+  background: rgb(8,16,59);
+}
