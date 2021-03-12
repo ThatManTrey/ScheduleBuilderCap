@@ -44,9 +44,7 @@
 
       <div v-if="!showSmallCard" class="row">
         <div class="col">
-          <a tabindex="0"
-            ><i class="far fa-star fa-lg star-unfilled-icon"></i
-          ></a>
+          <a tabindex="0"><i class="far fa-star fa-lg"></i></a>
         </div>
 
         <div class="col text-end">
@@ -55,7 +53,7 @@
             tabindex="0"
             @keyup.enter="showAddToSemesterModal()"
             @click="showAddToSemesterModal()"
-            ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
+            ><i class="fas fa-plus-circle fa-lg"></i
           ></a>
 
           <a
@@ -63,7 +61,7 @@
             tabindex="0"
             @keyup.enter="removeFromSemester()"
             @click="removeFromSemester()"
-            ><i class="fas fa-times-circle fa-lg remove-icon"></i
+            ><i class="fas fa-times-circle fa-lg"></i
           ></a>
         </div>
       </div>

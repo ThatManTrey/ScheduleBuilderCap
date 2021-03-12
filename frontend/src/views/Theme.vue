@@ -9,14 +9,19 @@
         <br /><br />
 
         <div class="row">
-          <div class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker text-theme-whitest">
+          <div
+            class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker text-theme-whitest"
+          >
             <br />
 
             <h5 class="text-theme-whitest">Alerts/Modals</h5>
 
             <br />
 
-            <p>Use alerts in modals when a success/error message is needed after hitting an API endpoint</p>
+            <p>
+              Use alerts in modals when a success/error message is needed after
+              hitting an API endpoint
+            </p>
 
             <!-- turn these alerts into a component -->
             <div
@@ -25,9 +30,7 @@
             >
               <div class="row">
                 <div class="col-1">
-                  <i
-                    class="fas fa-check-circle fa-lg"
-                  ></i>
+                  <i class="fas fa-check-circle fa-lg"></i>
                 </div>
                 <div class="col-11">
                   Your password has been succesfully reset! Check your email for
@@ -42,9 +45,7 @@
             >
               <div class="row">
                 <div class="col-1">
-                  <i
-                    class="fas fa-times-circle fa-lg"
-                  ></i>
+                  <i class="fas fa-times-circle fa-lg"></i>
                 </div>
                 <div class="col-11">
                   An error occured oh no aaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -52,74 +53,87 @@
               </div>
             </div>
 
-            <br>
+            <br />
 
-            <p> Use toast messages outside of modals after hitting an API endpoint. </p>
+            <p>
+              Use toast messages outside of modals after hitting an API
+              endpoint.
+            </p>
 
-            <button type="button" class="btn btn-theme-warning-dark" @click="error()">
-                Error toast message
-              </button>
-              &nbsp;
-              <button type="button" class="btn btn-theme-confirm" @click="success()">
-                Success toast message
-              </button>
+            <button
+              type="button"
+              class="btn btn-theme-warning-dark"
+              @click="error()"
+            >
+              Error toast message
+            </button>
+            &nbsp;
+            <button
+              type="button"
+              class="btn btn-theme-confirm"
+              @click="success()"
+            >
+              Success toast message
+            </button>
 
-            <br>
+            <br />
           </div>
 
-          <div class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker text-theme-whitest">
+          <div
+            class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker text-theme-whitest"
+          >
             <br />
             <h5>Icons</h5>
             <br />
-            
-            <i class="fas fa-plus-circle fa-lg text-theme-confirm"></i> &nbsp;
-            Adding
-            <br>
-            
-            <i class="far fa-star fa-lg text-theme-secondary"></i> &nbsp;
-            Favorites 
-            <br>
-            
-            <i class="fas fa-star fa-lg text-theme-secondary"></i> &nbsp;
-            Favorites
-            <br>
-            
-            <i class="fas fa-info-circle fa-lg text-theme-primary-light"></i> &nbsp;
-            More info
-            <br>
-         
-            <i class="fas fa-times-circle fa-lg text-theme-warning-dark"></i> &nbsp;
-            Remove/error
-            <br>
+            <i class="fas fa-plus-circle fa-lg text-theme-confirm"></i>
+            &nbsp; Adding
+            <br />
 
-            <i class="fas fa-question-circle fa-lg text-theme-primary-light"></i>
-            Help
-            &nbsp; 
-            <br>          
-          
+            <i class="far fa-star fa-lg text-theme-secondary"></i>
+            &nbsp; Favorites
+            <br />
+
+            <a>
+              <i class="fas fa-star fa-lg text-theme-secondary"></i>
+            </a>
+            &nbsp; Favorites
+            <br />
+
+            <i class="fas fa-info-circle fa-lg text-theme-primary-light"></i>
+            &nbsp; More info
+            <br />
+
+            <i class="fas fa-times-circle fa-lg text-theme-warning-dark"></i>
+            &nbsp; Remove/error
+            <br />
+
+            <i
+              class="fas fa-question-circle fa-lg text-theme-primary-light"
+            ></i>
+            Help &nbsp;
+            <br />
+
             <i class="fas fa-check-circle fa-lg text-theme-success"></i> &nbsp;
             Success
-            <br>
+            <br />
 
-            <i class="fas fa-key fa-lg text-theme-whitest"></i> &nbsp;
-            Password 
-            <br>
+            <i class="fas fa-key fa-lg text-theme-whitest"></i> &nbsp; Password
+            <br />
 
             <i class="fas fa-envelope fa-lg text-theme-whitest"></i> &nbsp;
-            email 
-            <br>
+            email
+            <br />
 
             <i class="fas fa-sort-alpha-up fa-lg text-theme-whitest"></i> &nbsp;
             Sorting (if needed)
-            <br>
+            <br />
 
-            <i class="fas fa-times fa-lg text-theme-whitest"></i> &nbsp;
-            Cancel
-            <br>
+            <i class="fas fa-times fa-lg text-theme-whitest"></i> &nbsp; Cancel
+            <br />
 
             <i class="fas fa-search fa-lg text-theme-whitest"></i>
             Search (if needed)
-            <br>
+            <br />
           </div>
         </div>
 
@@ -132,8 +146,6 @@
             <br />
 
             <div class="mb-3">
-
-
               <button type="button" class="btn btn-theme-black">
                 Less important button
               </button>
@@ -142,8 +154,8 @@
                 Less important button
               </button>
 
-              <br>
-              <br>
+              <br />
+              <br />
 
               <button type="button" class="btn btn-theme-primary-dark">
                 Somewhat important button
@@ -153,8 +165,8 @@
                 Very Important button
               </button>
 
-              <br>
-              <br>
+              <br />
+              <br />
 
               <button type="button" class="btn btn-theme-warning-dark">
                 Delete something

@@ -47,7 +47,11 @@
         Close
       </button>
 
-      <button type="button" class="btn btn-theme-primary-dark" @click="register">
+      <button
+        type="button"
+        class="btn btn-theme-primary-dark"
+        @click="register"
+      >
         Sign Up
       </button>
     </template>

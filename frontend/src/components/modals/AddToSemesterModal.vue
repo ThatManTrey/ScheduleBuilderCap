@@ -22,14 +22,15 @@
             :key="n"
           >
             <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
-            <i
-              class="fas fa-times-circle remove-icon"
+            <a
               tabindex="0"
               @keyup.enter.stop
               @keyup.enter="removeSemester(n)"
               @click.stop
               @click="removeSemester(n)"
-            ></i>
+            >
+              <i class="fas fa-trash"></i>
+            </a>
             Semester {{ n }}
             <span class="badge rounded-pill course-badge small">
               15 Credits</span
@@ -73,7 +74,7 @@
                 @click="isAddingSemester = true"
               >
                 <i class="fas fa-plus-circle plus-add-icon"></i>
-                <span> Add Another Semester</span>
+                <span> Add Semester</span>
               </a>
             </div>
           </div>
@@ -91,7 +92,7 @@ export default {
   data() {
     return {
       isAddingSemester: false,
-      semesters: 4
+      semesters: 0
     };
   },
 

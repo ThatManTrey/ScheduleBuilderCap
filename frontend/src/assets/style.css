@@ -183,31 +183,34 @@
   color: var(--theme-success) !important;
 }
 
-/* icon buttons REDO */
-i.plus-add-icon {
+/* icon buttons */
+
+a .fa-plus-circle {
   color: var(--theme-confirm);
 }
 
-i.plus-add-icon:hover {
+a .fa-plus-circle:hover {
   color: rgba(2, 161, 145, var(--btn-transparency));
 }
 
-i.star-unfilled-icon {
+a .fa-star {
   color: var(--theme-secondary);
 }
 
-i.star-unfilled-icon:hover {
+a .fa-star:hover {
   color: rgba(209, 128, 24, var(--btn-transparency));
 }
 
-i.remove-icon {
+a .fa-trash, a .fa-times-circle  {
   color: var(--theme-white);
 }
 
-i.remove-icon:hover,
-i.remove-icon:focus {
+a .fa-trash:hover,
+a .fa-trash:focus,
+a .fa-times-circle:hover,
+a .fa-times-circle:focus {
   color: var(--theme-warning-light);
-}
+} 
 
 /* Theme buttons */
 

@@ -3,12 +3,8 @@
     <div class="semester-accordion mb-3">
       <div class="semester-header">
         <div class="semester-title align-middle">
-          <a
-            tabindex="0"
-            @click="removeSemester()"
-            @keyup.enter="removeSemester()"
-          >
-            <i class="fas fa-times-circle fa-lg remove-icon"></i>
+          <a @click="removeSemester()" @keyup.enter="removeSemester()">
+            <i class="fas fa-trash fa-lg"></i>
           </a>
           <h2 class="text-theme-whitest m-0">
             Fall 2021 (<span class="text-theme-secondary">16</span>)
@@ -99,10 +95,11 @@ export default {
   width: 100%;
 }
 
-i.remove-icon {
+i.fa-trash {
   position: relative;
-  top: 3px;
+  top: 2px;
   margin-right: 1rem;
+  font-size: 1.2rem;
 }
 
 .semester-header h4,
