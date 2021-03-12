@@ -31,7 +31,7 @@
         <div class="course-search">
           <input type="text" class="form-control" id="search" placeholder="Search">
         </div>
-        <button class="btn-sm btn-theme-primary" type="submit">
+        <button class="btn-sm btn-theme-primary-dark" type="submit">
           Search
         </button>
       </form>

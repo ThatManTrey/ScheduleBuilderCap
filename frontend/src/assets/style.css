@@ -354,8 +354,8 @@ select.theme-secondary {
 }
 
 select.theme-primary {
-  background-color: var(--theme-primary);
-  border-color: var(--theme-primary);
+  background-color: var(--theme-primary-dark);
+  border-color: var(--theme-primary-dark);
   color: var(--theme-white);
   font-weight: 500;
   text-overflow: hidden;
@@ -515,7 +515,7 @@ a.link:hover, button.link:hover {
   width: -moz-max-content;
   border-radius: 6px;
   font-size: 14px;
-  background-color: var(--theme-primary);
+  background-color: var(--theme-primary-dark);
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
   color: #fff;
   text-align: center;
