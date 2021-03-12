@@ -22,17 +22,18 @@
             :key="n"
           >
             <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
-            <i
-              class="fas fa-times-circle remove-icon"
+            <a
               tabindex="0"
               @keyup.enter.stop
               @keyup.enter="removeSemester(n)"
               @click.stop
               @click="removeSemester(n)"
-            ></i>
+            >
+              <i class="fas fa-trash"></i>
+            </a>
             Semester {{ n }}
-            <span class="badge rounded-pill course-badge small">
-              15 Credits</span
+            <span class="badge rounded-pill">
+              1{{n}} Credits</span
             >
           </div>
 
@@ -43,12 +44,12 @@
                 <div class="col-12">
                   <input
                     type="text"
-                    id="newSemesterName1" 
+                    id="newSemesterName1"
                     class="form-control"
                     placeholder="Enter a semester name..."
                   />
                 </div>
-                <div class="col-6 mt-2">
+                <div class="col-12 mt-2">
                   <button
                     type="submit"
                     class="btn btn-theme-confirm btn-sm"
@@ -73,7 +74,7 @@
                 @click="isAddingSemester = true"
               >
                 <i class="fas fa-plus-circle plus-add-icon"></i>
-                <span> Add Another Semester</span>
+                <span> Add Semester</span>
               </a>
             </div>
           </div>
@@ -91,7 +92,7 @@ export default {
   data() {
     return {
       isAddingSemester: false,
-      semesters: 4
+      semesters: 0
     };
   },
 
@@ -170,9 +171,9 @@ div.list-group-item i {
   margin-right: 0.25rem;
 }
 
-.course-badge.small {
-  background-color: var(--theme-primary);
-  color: var(--theme-whitest);
+span.badge {
+  background-color: var(--theme-secondary);
+  color: var(--theme-blackest);
   float: right;
 }
 

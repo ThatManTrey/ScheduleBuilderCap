@@ -3,21 +3,16 @@
     <div class="semester-accordion mb-3">
       <div class="semester-header">
         <div class="semester-title align-middle">
-          <a
-            tabindex="0"
-            @click="removeSemester()"
-            @keyup.enter="removeSemester()"
-            data-tooltip="Remove Semester"
-            data-tooltip-location="bottom"
-          >
-            <i class="fas fa-times-circle fa-lg remove-icon"></i>
+          <a @click="removeSemester()" @keyup.enter="removeSemester()" data-tooltip="Remove Semester"
+            data-tooltip-location="bottom">
+            <i class="fas fa-trash fa-lg"></i>
           </a>
           <h2 class="text-theme-whitest m-0">
             <span contenteditable="true">Fall 2021</span> 
             (<span class="text-theme-secondary">16</span>)
           </h2>
           <button
-            class="btn btn-theme-primary float-end"
+            class="btn btn-theme-primary-dark float-end"
             type="button"
             data-bs-toggle="collapse"
             :data-bs-target="'#' + targetName"
@@ -28,7 +23,7 @@
           </button>
         </div>
         <div class="semester-divider">
-          <hr class="bg-theme-dark-gray" size="3px" />
+          <hr class="bg-theme-darkest-gray" size="5" />
         </div>
       </div>
     </div>
@@ -102,10 +97,11 @@ export default {
   width: 100%;
 }
 
-i.remove-icon {
+i.fa-trash {
   position: relative;
-  top: 3px;
+  top: 2px;
   margin-right: 1rem;
+  font-size: 1.2rem;
 }
 
 .semester-header h4,

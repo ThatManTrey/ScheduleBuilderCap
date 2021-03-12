@@ -47,7 +47,7 @@
           <a tabindex="0"
             data-tooltip="Favorite Course"
             data-tooltip-location="bottom"
-            ><i class="far fa-star fa-lg star-unfilled-icon"></i
+            ><i class="far fa-star fa-lg"></i
           ></a>
         </div>
 
@@ -59,9 +59,9 @@
             @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
             data-tooltip-location="bottom"
-            ><i class="fas fa-plus-circle fa-lg plus-add-icon"></i
-          ></a>
-
+            >
+            <i class="fas fa-plus-circle fa-lg"></i>
+            </a>
           <a
             v-if="isRemovingCourse"
             tabindex="0"
@@ -69,7 +69,7 @@
             @click="removeFromSemester()"
             data-tooltip="Remove from Semester"
             data-tooltip-location="bottom"
-            ><i class="fas fa-times-circle fa-lg remove-icon"></i
+            ><i class="fas fa-times-circle fa-lg"></i
           ></a>
         </div>
       </div>

@@ -60,74 +60,14 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-lg-auto dropdown">
-              <a
-                class="nav-link dropdown-toggle "
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+            <li class="nav-item col-6 col-lg-auto">
+              <router-link
+                class="nav-link"
+                to="theme"
+                v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
               >
-                More
-              </a>
-
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a class="dropdown-item" href="#">Contact Us</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="#">Another action</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="#">Delete My Account</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item col-6 col-lg-auto dropdown">
-              <a
-                class="nav-link dropdown-toggle "
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+                <i class="fas fa-question-circle"></i>Theme ref</router-link
               >
-                dev
-              </a>
-
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <router-link
-                    class="dropdown-item"
-                    to="theme"
-                    v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
-                  >
-                    Theme page</router-link
-                  >
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="https://getbootstrap.com/docs/5.0/getting-started/introduction/"
-                    target="_blank"
-                    >Bootstrap doc</a
-                  >
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="https://uxdesign.cc/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129"
-                    target="_blank"
-                    >Theme ref</a
-                  >
-                </li>
-              </ul>
             </li>
           </ul>
 
@@ -153,7 +93,7 @@
             <button
               v-if="!isLoggedIn"
               type="submit"
-              class="btn btn-theme-primary"
+              class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
             >
               Create An Account
@@ -280,6 +220,10 @@ export default {
   margin-right: 0.25rem;
 }
 
+i.fa-star {
+  color: var(--theme-whitest);
+}
+
 .nav-link {
   color: var(--theme-white);
 }
@@ -330,6 +274,7 @@ a.nav-active:hover {
 #scroll-to-top a i {
   position: relative;
   top: 7px;
+  color: var(--theme-white);
 }
 
 .fade-enter-active,

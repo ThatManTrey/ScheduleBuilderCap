@@ -5,7 +5,7 @@
       <div class="row">
         <nav
           id="sidenav"
-          class="col-md-3 col-lg-2 d-md-block bg-theme-blacker sidebar collapse"
+          class="col-md-3 col-lg-2 d-md-block bg-theme-blackest sidebar collapse"
         >
           <div class="position-sticky pt-3">
             <ul class="nav flex-column">
@@ -18,26 +18,26 @@
 
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="row about-block" id="instructions">
-            <h3 class="text-theme-white">How-To Use</h3>
-            <p class="text-theme-light-gray">This is how to use the app:</p>
+            <h3 class="text-theme-whitest">How To Use</h3>
+            <p class="text-theme-white">This is how to use the app:</p>
           </div>
           <div class="row about-block" id="about">
-            <h3 class="text-theme-white">About Us</h3>
-            <p class="text-theme-light-gray">
+            <h3 class="text-theme-whitest">About Us</h3>
+            <p class="text-theme-white">
               The KSU Course Planner provides a convenient and easy-to-use
               application for Kent State University (KSU) students to plan their
               future course work at the university. The application provides a
               rating system, providing insight into the course's quality and
               difficulty.
             </p>
-            <p class="text-theme-light-gray">
+            <p class="text-theme-white">
               This application was created for CS49999 Capstone Project at Kent
               State University.
             </p>
-            <div class="text-theme-white table-responsive">
+            <div class="text-theme-whiter table-responsive">
               <table class="creator-info">
                 <tr>
-                  <td colspan="2">This application was created by:</td>
+                  <td colspan="2"><b>This application was created by</b>:</td>
                 </tr>
 
                 <tr>
@@ -52,8 +52,8 @@
             </div>
           </div>
           <div class="row about-block" id="contact-us">
-            <h3 class="text-theme-white">Contact Us</h3>
-            <p class="text-theme-light-gray" style="text-align:center">
+            <h3 class="text-theme-whitest">Contact Us</h3>
+            <p class="text-theme-white" style="text-align:center">
               Complete the form below and one of our representatives will be in
               touch.
             </p>
@@ -93,12 +93,12 @@
                 />
               </div>
               <div>
-                <button type="reset" class="btn btn-theme-blacker">
+                <button type="reset" class="btn btn-theme-black">
                   Reset
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-theme-primary"
+                  class="btn btn-theme-primary-dark"
                   style="float:right"
                 >
                   Submit
@@ -136,7 +136,7 @@ export default {
   overflow-x: hidden;
   padding-top: 4rem;
   border-right: solid 1pt var(--theme-darkest-gray);
-  animation: slidein 3s;
+  animation: slidein 2s;
 }
 
 @keyframes slidein {
@@ -156,7 +156,7 @@ export default {
   padding: 1rem 1rem 1rem 2rem;
   text-decoration: none;
   font-size: 1.2rem;
-  color: var(--theme-light-gray);
+  color: var(--theme-whiter);
   display: block;
 }
 
@@ -169,11 +169,12 @@ export default {
 }
 
 .about-block {
-  background: var(--theme-black);
+  background: var(--theme-blacker);
   padding: 2rem;
   margin: 2rem;
   border: 0.25pt solid var(--theme-darkest-gray);
   animation: fade 3s ease;
+  border-radius: 0.5rem;
 }
 
 @keyframes fade {

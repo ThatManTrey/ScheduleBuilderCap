@@ -1,33 +1,35 @@
 # A very simple Flask Hello World app for you to get started with...
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 
-app = Flask(__name__)
+# points to the built files folder for Vue
+app = Flask(__name__,
+            template_folder="../frontend/dist/"
+            )
 
-# enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 neutral_colors = [
     {
         'name': 'blackest',
-        'uses': 'navbars'
+        'uses': 'main ui elements'
     },
     {
         'name': 'blacker',
-        'uses': 'cards, main ui elements'
+        'uses': 'ui elements'
     },
     {
         'name': 'black',
-        'uses': 'cards, ui elements'
+        'uses': 'ui elements'
     },
     {
         'name': 'darkest-gray',
-        'uses': 'ui elements'
+        'uses': 'small ui elements'
     },
     {
         'name': 'dark-gray',
-        'uses': 'ui elements'
+        'uses': 'extra color'
     },
     {
         'name': 'light-gray',
@@ -53,34 +55,55 @@ neutral_colors = [
 
 accent_colors = [
     {
-        'name': 'primary',
-        'uses': 'most buttons'
+        'name': 'primary-dark',
+        'uses': 'main accent color, somewhat important buttons'
+    },
+    {
+        'name': 'primary-light',
+        'uses': 'accent color for text/icons on dark background'
     },
     {
         'name': 'secondary',
-        'uses': 'important buttons, favorites'
+        'uses': 'very important buttons, favorites'
     },
     {
-        'name': 'warning',
-        'uses': 'deleting, errors, warnings'
+        'name': 'warning-dark',
+        'uses': 'deleting, errors, warnings (buttons/backgrounds)'
+    },
+    {
+        'name': 'warning-light',
+        'uses': 'deleting, errors, warnings (text/icons)'
     },
     {
         'name': 'confirm',
-        'uses': 'confirming, adding, success'
+        'uses': 'confirming, add buttons/icons'
     },
     {
-        'name': 'extra',
-        'uses': 'links'
-    }
+        'name': 'success',
+        'uses': 'success message background'
+    },
 ]
 
-# sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('test data')
+# Initial page rendering for PythonAnywhere
+# renders index.html, static files are served by PythonAnywhere's
+# web server (under the Web > static files tab)
+# requires npm run build to be run in /frontend first
 
-# example api endpoints
-# look at Theme.vue script for frontend example
+# if on pythonanywhere
+if __name__ != '__main__':
+
+    @app.route('/')
+    def index():
+        try:
+            return render_template('index.html')
+        except:
+            return "There is not currently a /frontend/dist folder for the built frontend files. Type <b>npm run build</b> under /frontend to create it"
+
+#
+# API endpoints
+#
+
+# endpoint example, look at Theme.vue script for frontend example
 @app.route('/api/colors/primary', methods=['GET'])
 def get_primary_colors():
     return jsonify(neutral_colors)
@@ -90,3 +113,6 @@ def get_accent_colors():
     return jsonify(accent_colors)
 
 
+# run server only when local
+if __name__ == '__main__':
+    app.run()

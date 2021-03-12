@@ -1,7 +1,5 @@
 <template lang="html">
-
   <div class="row mt-3"> 
-    
       <form class="center" method="#" action="#">
         <div class="course-dropdown">
           <select class="form-control theme-secondary" id="selectProgram">
@@ -39,7 +37,6 @@
       </form>
 
       <hr class="bg-theme-dark-gray" />
-
   </div>
 </template>
 

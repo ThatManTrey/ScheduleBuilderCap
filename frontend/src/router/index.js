@@ -5,7 +5,6 @@ import About from "../views/About.vue";
 import Favorites from "../views/Favorites.vue";
 import Schedule from "../views/Schedule.vue";
 import Theme from "../views/Theme.vue";
-import Ping from "../views/Ping.vue";
 
 Vue.use(VueRouter);
 
@@ -38,11 +37,6 @@ const routes = [
     path: "/theme",
     name: "Theme",
     component: Theme
-  },
-  {
-    path: "/ping",
-    name: "Ping",
-    component: Ping
   }
 ];
 

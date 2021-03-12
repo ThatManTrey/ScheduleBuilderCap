@@ -12,7 +12,7 @@ import router from "./router";
 Vue.config.productionTip = false;
 
 Vue.use(VueToast, {
-  position: "top-right",
+  position: "top",
   duration: 10000
 });
 
