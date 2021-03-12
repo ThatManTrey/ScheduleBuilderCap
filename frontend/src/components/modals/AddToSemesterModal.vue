@@ -32,8 +32,8 @@
               <i class="fas fa-trash"></i>
             </a>
             Semester {{ n }}
-            <span class="badge rounded-pill course-badge small">
-              15 Credits</span
+            <span class="badge rounded-pill">
+              1{{n}} Credits</span
             >
           </div>
 
@@ -49,7 +49,7 @@
                     placeholder="Enter a semester name..."
                   />
                 </div>
-                <div class="col-6 mt-2">
+                <div class="col-12 mt-2">
                   <button
                     type="submit"
                     class="btn btn-theme-confirm btn-sm"
@@ -171,9 +171,9 @@ div.list-group-item i {
   margin-right: 0.25rem;
 }
 
-.course-badge.small {
-  background-color: var(--theme-primary-dark);
-  color: var(--theme-whitest);
+span.badge {
+  background-color: var(--theme-secondary);
+  color: var(--theme-blackest);
   float: right;
 }
 
