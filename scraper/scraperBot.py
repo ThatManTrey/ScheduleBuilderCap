@@ -1,11 +1,13 @@
-# https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+# Beautiful Soup: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+# $$$ means not tested
+
 
 #------------------------------------------------------------------------------
 # modules
 
-# scheduler
-from rq import Queue
-from rq_scheduler import Scheduler
+# scheduling
+#from redis import Redis
+#from rq_scheduler import Scheduler
 
 import requests # for http request 
 from bs4 import BeautifulSoup   # for html parsing
@@ -14,107 +16,101 @@ from datetime import datetime
 
 
 #------------------------------------------------------------------------------
-# scraper setup and scheduling
+# todo: scraper setup
 
-# need to work on
+# sets up schedule for scraper
+# need to figure out scheduling shit
 def start_scraper():
-    scheduler.schedule(
-        scheduled_time=datetime.utcnow()+60,
-        func=scrape,
-        interval=86400  # once a day
-    )
+    # scheduler = Scheduler(connection=Redis())
+    # scheduler.schedule(
+    #     scheduled_time=datetime.utcnow(),   # first exec time
+    #     func=tester,    # function to be invoked
+    #     interval=5  # time interval in seconds
+    # )
+    print("coming soon on dvd and video: scheduled scraper")
     scrape()
 
-
+# $$$finds all data for db
 def scrape():
-    #delete tables?
-    
-    getAllCourses()
-    getAllPrograms()
+    #reset tables?
+    getCourses()
+    #getAllPrograms()
 
+def tester():
+    print("yuh")
 
 #------------------------------------------------------------------------------
 # data retrieval
 
-# get all courses, add each to database
-def getAllCourses():
-    # get courses page data
-    coursesSite = getSiteData('http://catalog.kent.edu/coursesaz/')
-    
-    #find the meat of the page #atozindex
-    atozIndex = coursesSite.find(id="atozindex")
+# COURSE STUFF
 
-    # find all lettered lists as <ul>
-    letterList = atozIndex.find_all('ul')
-    
-    # get lists of depts as <a> tags
-    deptList=[]
-    for letter in letterList:
-        deptList.append(letter.find_all('a'))
-    
-    # open each dept <a> tag to get courses from that dept
-    for dept in deptList:
-        getdeptCourses(dept)
-
-
-# gets all courses in dept page, adds each to database
-# given <a href="/coursesaz/DEPT/">DEPT_NAME (ABBREVIATION)</a>
-def getDeptCourses(dept):
-    # get dept courses page data
-    deptCoursesSite = getSiteData('http://catalog.kent.edu' + dept.get('href'))
+# gets all courses, adds each to db seeall
+def getCourses():
+    coursesSite = getSiteData('http://catalog.kent.edu/coursesaz/seeall/')
 
     # get main text
-    deptContent = deptCoursesSite.find('div', class_="sc_sccoursedescs")
+    content = coursesSite.find('div', class_="sc_sccoursedescs")
 
     # get courses list
-    courses = deptContent.find_all('div', class_="courseblock")
+    courses = content.find_all('div', class_="courseblock")
 
     # get data for each course, 
     for course in courses:
         getCourseData(course)
 
 
-# NEED TO DO CORE PART
 # takes in html class "courseblock" inside html class "sc_sccoursedescs"
 # http://catalog.kent.edu/coursesaz/acct/
 def getCourseData(course):
     # get all <p> tags
-    attributes = course.find_all('p')
+    attribute = course.find('p', class_="noindent")
     
-    # title (need to account for cores in name)
-    # see http://catalog.kent.edu/coursesaz/hist/
-    titleText = attributes[0].find('strong').get_text().split(" ")
-    CourseID_Type = titleText[0]
-    CourseID = CourseID_Type + " " + titleText[1]
-    
+    # CourseName, CourseID, CourseID_Type, CreditHours_Min, CreditHours_Max
+    # CourseID, CourseID_Type
+    titleText = attribute.find('strong').text.split(" ")
+    CourseIDParts = titleText[0].split(u'\xa0')  #&nbsp;
+    CourseID = CourseIDParts[0] + " " + CourseIDParts[1]
+    CourseID_Type = CourseIDParts[0]
+    # CreditHours_Min, CreditHours_Max
+    CreditHours = titleText[len(titleText)-3]
+    MinandMax = CreditHours.split('-')
+    if len(MinandMax) > 1:  # range
+        CreditHours_Min = MinandMax[0]
+        CreditHours_Max = MinandMax[1]
+    else:   # not a range
+        CreditHours_Min = MinandMax[0]
+        CreditHours_Max = MinandMax[0]
+    # CourseName
     CourseName = ""
     for word in range(2, len(titleText)-3):
-        CourseName = CourseName + word + " "
+        CourseName = CourseName + titleText[word] + " "
+    attribute = attribute.find_next('p', class_="noindent")
     
-    # description (might need to account for '"'?)
-    CourseDesc = attributes[1].get_text()
-    firstPar = CourseDesc.find("(")
-    secondPar = CourseDesc.find(")")
-    for i in range(firstPar, secondPar+1)
-        del CourseDesc[i]
+    # description
+    CourseDesc = attribute.text
+    lastIndex = CourseDesc.find("Prerequisite:") - 1
+    CourseDesc = CourseDesc[1:lastIndex]
     
-    # course type (might need to account for '"'?)
-    attributes[3].find('strong').clear()
-    CourseType = attributes[3].get_text()
-
-    # credit hours
-    attributes[4].find('strong').clear()
-    CreditHours = attributes[4].get_text()[0]
+    # course type
+    # use this while loop to get next attribute
+    while attribute.find('strong').text != "Schedule Type: ":
+        attribute = attribute.find_next('p', class_="noindent")
+    attribute.find('strong').clear()
+    CourseType = attribute.text
 
     # grade type
-    attributes[5].find('strong').clear()
-    GradeType = attributes[5].get_text()
+    while attribute.find('strong').text != "Grade Mode: ":
+        attribute = attribute.find_next('p', class_="noindent")
+    attribute.find('strong').clear()
+    GradeType = attribute.text
 
     # insert into db
-    addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours, GradeType, CourseID_Type, KentCore)
+    addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, CreditHours_Max, GradeType, CourseID_Type, None)
 
 
-# get all programs, add each to database
+# PROGRAM STUFF (still in development)
+
+# $$$get all programs, add each to database
 def getAllPrograms():
     # get program page data
     programsSite = getSiteData('http://catalog.kent.edu/programsaz/')
@@ -135,7 +131,7 @@ def getAllPrograms():
         getProgramDegrees(program)
 
 
-# gets all program degrees, add each to database
+# $$$gets all program degrees, add each to database
 # given <a href="/colleges/COLLEGE/DEPT-SCHOOL/">PROGRAM_NAME</a>
 def getProgramDegrees(program):
     # get dept courses page data
@@ -147,7 +143,6 @@ def getProgramDegrees(program):
     # iterate through first list: major reqs
     for degree in degreeLists:
         # find header for degree
-        # NEED TO TEST
         DegreeName = degree.find_parent('h3').get_text()
         DegreeID = addProgram(DegreeName)
 
@@ -155,38 +150,69 @@ def getProgramDegrees(program):
         getDegreeReqs(degree, DegreeID)
 
 
-# gets all requirements for degree, add each to database
+# $$$gets all requirements for degree, add each to database
 # given <table ... class="sc_plangrid">...</table>
 # and DegreeID (from db)
-def getDegreeReqs(degree, DegreeID)
-    # iterate through course table
+def getDegreeReqs(degree, DegreeID):
+    # find all tables rows, iterate through course table
     rows = concentration.find_all('tr', class_='even') + concentration.find_all('tr', class_='odd')
+    RequirementID = 0
     for row in rows:
+        # see if there is CourseID present
         codecol = row.find('td', class_='codecol')
+        
         if codecol != "None":  # course code found
-            # add course to reqs
-            # NEED TO ACCOUNT FOR &S + ORS (like CS1)
-            CourseID = codecol.find('a', class_="code").get_text()
-            CreditHours = codecol.find_next_sibling('td', class_='hourscol').get_text()
-            addProgramReq(DegreeID, CreditHours)
-        else:   # not a course code
+            #start RequirementID at 1, increment throughout
+            RequirementID = RequirementID + 1
+            
+            # see if there are additional courses
+            additionalCourses = codecol.find_all(class_='blockindent')
+            
+            if additionalCourses !="None":  # one course
+                # add course to reqs
+                CourseID = codecol.find('a', class_="code").get_text()
+                addProgramReq(DegreeID, CourseID, RequirementID, None)
+            
+            else:   # multiple courses
+                # add first course
+                Paired = 1
+                CourseID = codecol.find('a', class_="code").get_text()
+                addProgramReq(DegreeID, CourseID, RequirementID, Paired)
+
+                # iterate through req courses
+                for course in additionalCourses:
+                    if course.get_text()[0] == "&": # add to previous
+                        CourseID = course.find('a', class_="code").get_text()
+                        addProgramReq(DegreeID, CourseID, RequirementID, Paired)
+                    elif course.get_text()[0:2] == "or": # add to previous
+                        Paired = Paired + 1
+                        CourseID = course.find('a', class_="code").get_text()
+                        addProgramReq(DegreeID, CourseID, RequirementID, Paired)
+        
+        #else:   # not found
             # check if core or elective
+
+
+# $$$CORE STUFF (havent started)
+# http://catalog.kent.edu/undergraduate-university-requirements/kent-core/
+def addCoreParts():
+    print()
 
 
 #------------------------------------------------------------------------------
 # database shit
 
-# adds course record in db
-def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours, GradeType, CourseID_Type, KentCore):
-    print()
+# $$$adds course record in db
+def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, CreditHours_Max, GradeType, CourseID_Type, KentCore):
+    print(CourseID + "\n" + CourseName + "\n" + CourseDesc + "\n" + CourseType + "\n" + CreditHours_Min + "\n" + CreditHours_Max + "\n" + GradeType + "\n" + CourseID_Type)
 
+# $$$
 def addProgram(DegreeName):
     print()
     return DegreeID
 
-def addProgramReq(DegreeID, CourseID, CreditHours):
-    # me thinks this function doesnt need
-    # RequirementID, Paired
+# $$$needs to get credit hours from courseID
+def addProgramReq(DegreeID, CourseID, RequirementID, Paired):
     # change getProgramReqs if not
     print()
 

@@ -1,7 +1,27 @@
 # A very simple Flask Hello World app for you to get started with...
 
+
+#------------------------------------------------------------------------------
+# imports
+
+# flask
 from flask import Flask, jsonify
 from flask_cors import CORS
+
+# scraper
+from scraperBot import start_scraper
+
+
+#------------------------------------------------------------------------------
+# scheduling
+
+start_scraper()
+
+
+#------------------------------------------------------------------------------
+# routing
+
+# A very simple Flask Hello World app for you to get started with...
 
 app = Flask(__name__)
 
@@ -90,3 +110,4 @@ def get_accent_colors():
     return jsonify(accent_colors)
 
 
+#------------------------------------------------------------------------------
