@@ -1,86 +1,68 @@
 <template lang="html">
-  <div class="row mt-3">
-    <div class="col">
-      <div class="dropdown course-dropdown">
-        <button
-          class="btn btn-theme-secondary dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton1"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Select a program
+  <div class="row mt-3"> 
+      <form class="center" method="#" action="#">
+        <div class="course-dropdown">
+          <select class="form-control theme-secondary" id="selectProgram">
+            <option selected>Select a Program</option>
+            <option>Computer Science (B.S.)</option>
+            <option>Biology (B.S.)</option>
+            <option>English (B.A.)</option>
+          </select>
+          <i class="fas fa-chevron-down fa-sm text-theme-blackest icon-css"></i>
+        </div>
+        <div class="course-dropdown">
+          <select class="form-control theme-primary" id="selectConcentration">
+            <option selected>Select a Concentration</option>
+            <option>Computer Science (B.S.)</option>
+            <option>Biology (B.S.)</option>
+            <option>English (B.A.)</option>
+          </select>
+          <i class="fas fa-chevron-down fa-sm text-theme-whiter icon-css"></i>
+        </div>
+        <div class="course-dropdown">
+          <select class="form-control theme-primary" id="selectSort">
+            <option selected>Sort Courses</option>
+            <option>Action</option>
+            <option>Another Action</option>
+            <option>Something else here</option>
+          </select>
+          <i class="fas fa-chevron-down fa-sm text-theme-whiter icon-css"></i>
+        </div>
+        <div class="course-search">
+          <input type="text" class="form-control" id="search" placeholder="Search">
+        </div>
+        <button class="btn-sm btn-theme-primary" type="submit">
+          Search
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li>
-            <a class="dropdown-item" href="#">Computer Science (B. S.)</a>
-          </li>
-          <li><a class="dropdown-item" href="#">Biology (B. S.)</a></li>
-          <li><a class="dropdown-item" href="#">English (B. A.)</a></li>
-        </ul>
-      </div>
-      <div class="dropdown course-dropdown">
-        <button
-          class="btn btn-theme-primary-dark dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton1"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Select a concentration
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li>
-            <a class="dropdown-item" href="#">Computer Science (B. S.)</a>
-          </li>
-          <li><a class="dropdown-item" href="#">Biology (B. S.)</a></li>
-          <li><a class="dropdown-item" href="#">English (B. A.)</a></li>
-        </ul>
-      </div>
-      <div class="dropdown course-dropdown">
-        <button
-          class="btn btn-theme-primary-dark dropdown-toggle"
-          type="button"
-          id="dropdownMenuButton1"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Sort Courses
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
-      <div class="course-search">
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-theme-primary-dark" type="submit">
-            Search
-          </button>
-        </form>
-      </div>
-      <hr class="bg-theme-darkest-gray" size="5" />
-    </div>
+      </form>
+
+      <hr class="bg-theme-dark-gray" />
   </div>
 </template>
 
 <style scoped>
 .course-search {
-  max-width: 30rem;
+  width: 18rem;
   display: inline-block;
-  position: relative;
-  top: 0.1rem;
+  margin-left: 0.5rem;
+  margin-right: 1rem;
 }
 
 .course-dropdown {
   display: inline-block;
-  margin-right: 1rem;
+  margin: 0.5rem;
+  margin-top: 0;
+  width: 15rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.icon-css {
+  position: relative;
+  float: right;
+  top: -23px;
+  left: -14px;
 }
 </style>

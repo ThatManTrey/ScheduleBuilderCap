@@ -44,7 +44,11 @@
 
       <div v-if="!showSmallCard" class="row">
         <div class="col">
-          <a tabindex="0"><i class="far fa-star fa-lg"></i></a>
+          <a tabindex="0"
+            data-tooltip="Favorite Course"
+            data-tooltip-location="bottom"
+            ><i class="far fa-star fa-lg"></i
+          ></a>
         </div>
 
         <div class="col text-end">
@@ -53,14 +57,18 @@
             tabindex="0"
             @keyup.enter="showAddToSemesterModal()"
             @click="showAddToSemesterModal()"
-            ><i class="fas fa-plus-circle fa-lg"></i
-          ></a>
-
+            data-tooltip="Add to Semester"
+            data-tooltip-location="bottom"
+            >
+            <i class="fas fa-plus-circle fa-lg"></i>
+            </a>
           <a
             v-if="isRemovingCourse"
             tabindex="0"
             @keyup.enter="removeFromSemester()"
             @click="removeFromSemester()"
+            data-tooltip="Remove from Semester"
+            data-tooltip-location="bottom"
             ><i class="fas fa-times-circle fa-lg"></i
           ></a>
         </div>

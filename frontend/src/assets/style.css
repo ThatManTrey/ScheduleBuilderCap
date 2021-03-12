@@ -282,6 +282,11 @@ button.btn-theme-black:hover {
   background-color: rgba(52, 52, 52, var(--btn-transparency))
 }
 
+button.btn-sm {
+  border: none;
+  margin-bottom: 1rem;
+}
+
 /* 
  *  Bootstrap Component Overrrides
  */
@@ -336,6 +341,31 @@ input.form-control:focus {
 
 div.form-text {
   color: var(--theme-white);
+}
+
+
+select.theme-secondary {
+  background-color: var(--theme-secondary);
+  border-color: var(--theme-secondary);
+  color: var(--theme-blackest);
+  font-weight: 500;
+  text-overflow: hidden;
+  border: var(--theme-blackest) 1pt bold;
+}
+
+select.theme-primary {
+  background-color: var(--theme-primary);
+  border-color: var(--theme-primary);
+  color: var(--theme-white);
+  font-weight: 500;
+  text-overflow: hidden;
+  border: var(--theme-blackest) 1pt bold;
+}
+
+select.form-control:focus {
+  background-color: var(--theme-blacker);
+  color: var(--theme-whiter);
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 /*  https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/
@@ -452,3 +482,107 @@ a.link:hover, button.link:hover {
   cursor: pointer;
 }
 
+/*
+ * Tool Tips 
+ * referenced from: https://codepen.io/reiinii1/pen/aPGXEa 
+ */
+
+[data-tooltip] {
+  position: relative;
+  z-index: 10;
+}
+
+/* Positioning and Visibility */
+[data-tooltip]:before,
+[data-tooltip]:after {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  left: 50%;
+  bottom: calc(100% + 5px);
+  pointer-events: none;
+  transition: 0.2s;
+  will-change: transform;
+}
+
+/* Tooltip Box */
+[data-tooltip]:before {
+  content: attr(data-tooltip);
+  padding: 5px 16px;
+  min-width: 50px;
+  max-width: 300px;
+  width: max-content;
+  width: -moz-max-content;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: var(--theme-primary);
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-align: center;
+  white-space: pre-wrap;
+  transform: translate(-50%, -5px) scale(0.5);
+}
+
+/* Arrow */
+[data-tooltip]:after {
+  content: '';
+  border-style: solid;
+  border-width: 5px 5px 0px 5px; 
+  border-color: rgba(55, 64, 70, 0.9) transparent transparent transparent;
+  transition-duration: 0s; 
+  transform-origin: top;   
+  transform: translateX(-50%) scaleY(0);
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  opacity: 1;
+}
+
+[data-tooltip]:hover:before {
+  transition-delay: 1.5s;
+  transform: translate(-50%, -5px) scale(1);
+}
+
+[data-tooltip]:hover:after {
+  transition-delay: 1.5s; 
+  transition-duration: 0.2s;
+  transform: translateX(-50%) scaleY(1);
+}
+
+/* BOTTOM styling */
+[data-tooltip-location="bottom"]:before,
+[data-tooltip-location="bottom"]:after {
+  top: calc(100% + 5px);
+  bottom: auto;
+}
+
+[data-tooltip-location="bottom"]:before {
+  transform: translate(-50%, 5px) scale(0.5);
+}
+[data-tooltip-location="bottom"]:hover:before {
+  transform: translate(-50%, 5px) scale(1);
+}
+
+[data-tooltip-location="bottom"]:after {
+  border-width: 0px 5px 5px 5px;
+  border-color: transparent transparent rgba(55, 64, 70, 0.9) transparent;
+  transform-origin: bottom;
+}
+
+[data-tooltip-location="bottom"]:hover:after {
+  transform: translateY(50%) scaleX(1);
+}
+
+
+/* 
+ * Editable Content
+ */
+
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus{
+  border: none;
+  outline: none;
+  background: rgb(8,16,59);
+}
