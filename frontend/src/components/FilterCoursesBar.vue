@@ -21,7 +21,7 @@
       </div>
       <div class="dropdown course-dropdown">
         <button
-          class="btn btn-theme-primary dropdown-toggle"
+          class="btn btn-theme-primary-dark dropdown-toggle"
           type="button"
           id="dropdownMenuButton1"
           data-bs-toggle="dropdown"
@@ -39,7 +39,7 @@
       </div>
       <div class="dropdown course-dropdown">
         <button
-          class="btn btn-theme-primary dropdown-toggle"
+          class="btn btn-theme-primary-dark dropdown-toggle"
           type="button"
           id="dropdownMenuButton1"
           data-bs-toggle="dropdown"
@@ -61,12 +61,12 @@
             placeholder="Search"
             aria-label="Search"
           />
-          <button class="btn btn-theme-primary" type="submit">
+          <button class="btn btn-theme-primary-dark" type="submit">
             Search
           </button>
         </form>
       </div>
-      <hr class="bg-theme-dark-gray" />
+      <hr class="bg-theme-darkest-gray" size="5" />
     </div>
   </div>
 </template>

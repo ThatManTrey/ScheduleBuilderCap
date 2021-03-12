@@ -153,7 +153,7 @@
             <button
               v-if="!isLoggedIn"
               type="submit"
-              class="btn btn-theme-primary"
+              class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
             >
               Create An Account

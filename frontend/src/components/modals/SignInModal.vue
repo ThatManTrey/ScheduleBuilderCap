@@ -91,7 +91,7 @@
 
         <button
           type="button"
-          class="btn btn-theme-primary ms-2"
+          class="btn btn-theme-primary-dark ms-2"
           @click="signIn"
         >
           Continue
@@ -110,7 +110,7 @@
 
         <button
           type="button"
-          class="btn btn-theme-primary ms-2"
+          class="btn btn-theme-primary-dark ms-2"
           @click="resetPassword()"
         >
           Reset My Password

@@ -8,6 +8,7 @@
 /* color scheme */
 
 :root {
+  /* base color scheme */
   --theme-blackest: #181818;
   --theme-blacker: #242424;
   --theme-black: #343434;
@@ -18,18 +19,24 @@
   --theme-white: #B6B6B6;
   --theme-whiter: #CECECE;
   --theme-whitest: #E2E2E2;
-  --theme-primary: #5b3996;
+
+    /* accent/action colors */
+  --theme-primary-dark: #5b3996;
+  --theme-primary-light: #c6a5ff;
   --theme-secondary: #d18018;
-  --theme-warning: #791a1a;
+  --theme-warning-dark: #791a1a;
+  --theme-warning-light: #d54040;
   --theme-confirm: #02a191;
   --theme-success: #155d26;
-  --theme-extra: #c6a5ff;
 
   --btn-transparency: 0.8;
 }
 
-/* background colors */
+/* 
+ *  Background colors
+ */ 
 
+ /* base bg colors */
 .bg-theme-blackest {
   background-color: var(--theme-blackest) !important;
 }
@@ -70,32 +77,41 @@
   background-color: var(--theme-whitest) !important;
 }
 
-.bg-theme-confirm {
-  background-color: var(--theme-confirm) !important;
+/* accent bg colors */
+
+.bg-theme-primary-dark {
+  background-color: var(--theme-primary-dark) !important;
+}
+
+.bg-theme-primary-light {
+  background-color: var(--theme-primary-light) !important;
 }
 
 .bg-theme-secondary {
   background-color: var(--theme-secondary) !important;
 }
 
-.bg-theme-primary {
-  background-color: var(--theme-primary) !important;
+.bg-theme-warning-dark {
+  background-color: var(--theme-warning-dark) !important;
 }
 
-.bg-theme-warning {
-  background-color: var(--theme-warning) !important;
+.bg-theme-warning-light {
+  background-color: var(--theme-warning-light) !important;
 }
 
-.bg-theme-extra {
-  background-color: var(--theme-extra) !important;
+.bg-theme-confirm {
+  background-color: var(--theme-confirm) !important;
 }
 
 .bg-theme-success {
   background-color: var(--theme-success) !important;
 }
 
-/* text colors */
+/* 
+ *   Text colors 
+ */
 
+ /* base text colors */
 .text-theme-blackest {
   color: var(--theme-blackest) !important;
 }
@@ -136,31 +152,38 @@
   color: var(--theme-whitest) !important;
 }
 
-.text-theme-confirm {
-  color: var(--theme-confirm) !important;
+/* accent text colors */
+
+
+.text-theme-primary-dark {
+  color: var(--theme-primary-dark) !important;
 }
 
-.text-theme-warning {
-  color: var(--theme-warning) !important;
-}
-
-.text-theme-primary {
-  color: var(--theme-primary) !important;
+.text-theme-primary-light {
+  color: var(--theme-primary-light) !important;
 }
 
 .text-theme-secondary {
   color: var(--theme-secondary) !important;
 }
 
-.text-theme-extra {
-  color: var(--theme-extra) !important;
+.text-theme-warning-dark {
+  color: var(--theme-warning-dark) !important;
+}
+
+.text-theme-warning-light {
+  color: var(--theme-warning-light) !important;
+}
+
+.text-theme-confirm {
+  color: var(--theme-confirm) !important;
 }
 
 .text-theme-success {
   color: var(--theme-success) !important;
 }
 
-/* icon buttons */
+/* icon buttons REDO */
 i.plus-add-icon {
   color: var(--theme-confirm);
 }
@@ -183,7 +206,7 @@ i.remove-icon {
 
 i.remove-icon:hover,
 i.remove-icon:focus {
-  color: #d54040;
+  color: var(--theme-warning-light);
 }
 
 /* Theme buttons */
@@ -192,12 +215,12 @@ button.btn:hover {
   color: var(--theme-whiter);
 }
 
-button.btn-theme-primary {
-  background-color: var(--theme-primary);
+button.btn-theme-primary-dark {
+  background-color: var(--theme-primary-dark);
   color: var(--theme-whitest);
 }
 
-button.btn-theme-primary:hover {
+button.btn-theme-primary-dark:hover {
   /* lower background-color opacity */
   background-color: rgba(91, 57, 150, var(--btn-transparency))
 }
@@ -214,12 +237,12 @@ button.btn-theme-secondary:hover {
   color: var(--theme-blackest);
 }
 
-button.btn-theme-warning {
-  background-color: var(--theme-warning);
+button.btn-theme-warning-dark {
+  background-color: var(--theme-warning-dark);
   color: var(--theme-whiter);
 }
 
-button.btn-theme-warning:hover {
+button.btn-theme-warning-dark:hover {
   /* lower background-color opacity */
   background-color: rgba(121, 26, 26, var(--btn-transparency))
 }
@@ -314,6 +337,7 @@ div.form-text {
 
 /*  https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/
   Change Autocomplete styles in Chrome
+  not working rn
   */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
@@ -333,8 +357,9 @@ select:-webkit-autofill:focus {
 }
 
 /* override toast background color */
+
 div.v-toast__item--error {
-  background-color: var(--theme-warning);
+  background-color: var(--theme-warning-dark);
 }
 
 div.v-toast__item--success {
@@ -373,10 +398,6 @@ i {
   color: var(--theme-whitest);
 }
 
-hr {
-  height: 3px !important;
-}
-
 /* scrollbar styling 
 
    taken directly from style 1 of a list of scrollbars 
@@ -408,7 +429,7 @@ hr {
 /* use to replace default link styling */
 
 a.link, button.link {
-  color: var(--theme-extra);
+  color: var(--theme-primary-light);
   font-weight: 500;
   cursor: pointer;
 }

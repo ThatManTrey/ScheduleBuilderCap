@@ -14,7 +14,7 @@
             Fall 2021 (<span class="text-theme-secondary">16</span>)
           </h2>
           <button
-            class="btn btn-theme-primary float-end"
+            class="btn btn-theme-primary-dark float-end"
             type="button"
             data-bs-toggle="collapse"
             :data-bs-target="'#' + targetName"
@@ -25,7 +25,7 @@
           </button>
         </div>
         <div class="semester-divider">
-          <hr class="bg-theme-dark-gray" size="3px" />
+          <hr class="bg-theme-darkest-gray" size="5" />
         </div>
       </div>
     </div>

@@ -98,7 +98,7 @@
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-theme-primary"
+                  class="btn btn-theme-primary-dark"
                   style="float:right"
                 >
                   Submit

@@ -13,23 +13,23 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 neutral_colors = [
     {
         'name': 'blackest',
-        'uses': 'navbars'
+        'uses': 'main ui elements'
     },
     {
         'name': 'blacker',
-        'uses': 'cards, main ui elements'
+        'uses': 'ui elements'
     },
     {
         'name': 'black',
-        'uses': 'cards, ui elements'
+        'uses': 'ui elements'
     },
     {
         'name': 'darkest-gray',
-        'uses': 'ui elements'
+        'uses': 'small ui elements'
     },
     {
         'name': 'dark-gray',
-        'uses': 'ui elements'
+        'uses': 'extra color'
     },
     {
         'name': 'light-gray',
@@ -55,25 +55,33 @@ neutral_colors = [
 
 accent_colors = [
     {
-        'name': 'primary',
-        'uses': 'most buttons'
+        'name': 'primary-dark',
+        'uses': 'main accent color, somewhat important buttons'
+    },
+    {
+        'name': 'primary-light',
+        'uses': 'accent color for text/icons on dark background'
     },
     {
         'name': 'secondary',
-        'uses': 'important buttons, favorites'
+        'uses': 'very important buttons, favorites'
     },
     {
-        'name': 'warning',
-        'uses': 'deleting, errors, warnings'
+        'name': 'warning-dark',
+        'uses': 'deleting, errors, warnings (buttons/backgrounds)'
+    },
+    {
+        'name': 'warning-light',
+        'uses': 'deleting, errors, warnings (text/icons)'
     },
     {
         'name': 'confirm',
-        'uses': 'confirming, adding, success'
+        'uses': 'confirming, add buttons/icons'
     },
     {
-        'name': 'extra',
-        'uses': 'links'
-    }
+        'name': 'success',
+        'uses': 'success message background'
+    },
 ]
 
 # Initial page rendering for PythonAnywhere

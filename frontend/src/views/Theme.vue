@@ -37,7 +37,7 @@
             </div>
 
             <div
-              class="alert container bg-theme-warning text-theme-whitest container"
+              class="alert container bg-theme-warning-dark text-theme-whitest container"
               role="alert"
             >
               <div class="row">
@@ -56,7 +56,7 @@
 
             <p> Use toast messages outside of modals after hitting an API endpoint. </p>
 
-            <button type="button" class="btn btn-theme-warning" @click="error()">
+            <button type="button" class="btn btn-theme-warning-dark" @click="error()">
                 Error toast message
               </button>
               &nbsp;
@@ -84,15 +84,15 @@
             Favorites
             <br>
             
-            <i class="fas fa-info-circle fa-lg text-theme-extra"></i> &nbsp;
+            <i class="fas fa-info-circle fa-lg text-theme-primary-light"></i> &nbsp;
             More info
             <br>
          
-            <i class="fas fa-times-circle fa-lg text-theme-warning"></i> &nbsp;
+            <i class="fas fa-times-circle fa-lg text-theme-warning-dark"></i> &nbsp;
             Remove/error
             <br>
 
-            <i class="fas fa-question-circle fa-lg text-theme-extra"></i>
+            <i class="fas fa-question-circle fa-lg text-theme-primary-light"></i>
             Help
             &nbsp; 
             <br>          
@@ -145,7 +145,7 @@
               <br>
               <br>
 
-              <button type="button" class="btn btn-theme-primary">
+              <button type="button" class="btn btn-theme-primary-dark">
                 Somewhat important button
               </button>
               &nbsp;
@@ -156,7 +156,7 @@
               <br>
               <br>
 
-              <button type="button" class="btn btn-theme-warning">
+              <button type="button" class="btn btn-theme-warning-dark">
                 Delete something
               </button>
               &nbsp;
@@ -213,7 +213,7 @@
         </div>
 
         <div class="row justify-content-center">
-          <div class="col-sm-12 col-md-10 col-lg-8 mb-3">
+          <div class="col-md-12 col-lg-10 col-xl-8 mb-3">
             <div class="container-fluid mb-3 text-white">
               <h5 class="text-theme-whitest">Main (neutral) colors</h5>
 
@@ -255,97 +255,6 @@
                 ></div>
 
                 <div class="col-4">&nbsp; {{ color.uses }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- modals -->
-
-        <div
-          class="modal fade"
-          id="exampleModalOne"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabelOne"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="theme-modal-content">
-              <div class="theme-modal-header">
-                <h5 class="modal-title" id="exampleModalLabelOne">
-                  Standard modal
-                </h5>
-
-                <button
-                  type="button"
-                  class="button-as-link"
-                  data-bs-dismiss="modal"
-                >
-                  <i class="fas fa-times fa-lg text-theme-lightest-gray"></i>
-                </button>
-              </div>
-
-              <div class="theme-modal-body">
-                <p>test modal</p>
-              </div>
-
-              <div class="theme-modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-theme-dark"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="button"
-                  class="btn btn-theme-primary"
-                  data-bs-dismiss="modal"
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="modal fade"
-          id="exampleModalTwo"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabelTwo"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="theme-modal-content">
-              <div class="theme-modal-header">
-                <h5 class="modal-title" id="exampleModalLabelOne">
-                  Modal w/ no footer
-                </h5>
-
-                <button
-                  type="button"
-                  class="button-as-link"
-                  data-bs-dismiss="modal"
-                >
-                  <i class="fas fa-times fa-lg text-theme-lightest-gray"></i>
-                </button>
-              </div>
-
-              <div class="theme-modal-body">
-                <h6 class="text-theme-whiter">This modal has a header</h6>
-
-                <p>
-                  orem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                  enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
-                </p>
               </div>
             </div>
           </div>

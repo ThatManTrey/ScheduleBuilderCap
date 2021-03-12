@@ -41,7 +41,7 @@
         </div>
 
         <div class="row text-center">
-          <hr />
+          <hr class="bg-theme-darkest-gray" size="5" />
           <div class="col">
             Course Quality:
             <h1 class="avg-rating">
@@ -56,7 +56,7 @@
           </div>
         </div>
         <div class="text-center">
-          <button type="button" class="btn btn-theme-primary">
+          <button type="button" class="btn btn-theme-primary-dark">
             Add My Rating
           </button>
         </div>

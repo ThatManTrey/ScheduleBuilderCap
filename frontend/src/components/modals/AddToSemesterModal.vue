@@ -171,7 +171,7 @@ div.list-group-item i {
 }
 
 .course-badge.small {
-  background-color: var(--theme-primary);
+  background-color: var(--theme-primary-dark);
   color: var(--theme-whitest);
   float: right;
 }
