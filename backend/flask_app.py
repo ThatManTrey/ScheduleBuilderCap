@@ -8,6 +8,10 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
+# SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+import sshtunnel
+
 # scraper
 from scraperBot import start_scraper
 
@@ -19,11 +23,34 @@ start_scraper()
 
 
 #------------------------------------------------------------------------------
-# routing
-
-# A very simple Flask Hello World app for you to get started with...
+# app
 
 app = Flask(__name__)
+
+
+# db connect
+
+if __name__ == '__main__':
+
+    tunnel = sshtunnel.SSHTunnelForwarder(
+        ('ssh.pythonanywhere.com'), ssh_username='KSUCoursePlanner', ssh_password='N5L3TR8mHq',
+        remote_bind_address=('KSUCoursePlanner.mysql.pythonanywhere-services.com', 3306)
+    )
+
+    tunnel.start()
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KSUCoursePlanner:QMX4e6%nh!5[@127.0.0.1:{}/KSUCoursePlanner$test'.format(tunnel.local_bind_port)
+
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KSUCoursePlanner.mysql.pythonanywhere-services.com'
+
+db = SQLAlchemy(app)
+
+# class Test(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+
+db.commit()
+
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
