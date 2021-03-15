@@ -53,6 +53,7 @@
                   <button
                     type="submit"
                     class="btn btn-theme-confirm btn-sm"
+                    id="add-semeste-btn"
                     @click="test"
                   >
                     Add Semester
@@ -67,7 +68,7 @@
                 </div>
               </div>
             </div>
-            <div v-show="!isAddingSemester" id="add-semester">
+            <div v-show="!isAddingSemester" id="add-semester-link">
               <a
                 tabindex="0"
                 @keyup.enter="isAddingSemester = true"
@@ -172,12 +173,12 @@ div.list-group-item i {
 }
 
 span.badge {
-  background-color: var(--theme-secondary);
-  color: var(--theme-blackest);
+  background-color: var(--theme-dark-gray);
+  color: var(--theme-whitest);
   float: right;
 }
 
-/* add semester link */
+/* add semester */
 
 #cancel-add {
   position: relative;
@@ -186,13 +187,17 @@ span.badge {
   font-size: 1.2rem;
 }
 
-#add-semester {
+#add-semester-link {
   font-weight: 400;
   font-size: 0.9rem;
 }
 
-#add-semester a:hover,
-#add-semester a:focus {
+#add-semester-link a:hover,
+#add-semester-link a:focus {
   color: var(--theme-confirm);
+}
+
+#add-semeste-btn {
+  margin-bottom: 0;
 }
 </style>

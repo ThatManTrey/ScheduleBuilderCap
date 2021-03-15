@@ -20,7 +20,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
-            <li class="nav-item col-6 col-lg-auto">
+            <li class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="Home"
@@ -30,7 +30,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +40,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -50,7 +50,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto">
+            <li class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="about"
@@ -60,7 +60,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto">
+            <li class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="theme"
@@ -274,7 +274,7 @@ a.nav-active:hover {
 #scroll-to-top a i {
   position: relative;
   top: 7px;
-  color: var(--theme-white);
+  color: var(--theme-whiter);
 }
 
 .fade-enter-active,
