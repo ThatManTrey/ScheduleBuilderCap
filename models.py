@@ -6,12 +6,6 @@ class Student(db.model):
 	UserPass = db.Column(db.String(128))
 	dateTime = db.Column(db.String(32))
 	
-class Student(db.model):
-	UserID = db.Column(db.Integer, primary_key=True)
-	UserEmail = db.Column(db.String(64))
-	UserPass = db.Column(db.String(128))
-	dateTime = db.Column(db.String(32))
-	
 class Semesters(db.model):
 	SemesterID = db.Column(db.Integer, primary_key=True)
 	UserID = db.Column(db.Integer, primary_key=True)
