@@ -49,7 +49,7 @@ db = SQLAlchemy(app)
 # class Test(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 
-db.commit()
+# db.commit()
 
 
 # enable CORS
