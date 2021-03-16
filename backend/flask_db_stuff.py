@@ -11,7 +11,7 @@ ssh_username='KSUCoursePlanner', ssh_password='N5L3TR8mHq',
 remote_bind_address=('KSUCoursePlanner.mysql.pythonanywhere-services.com', 3306)
 )
 
-#starts le tunnel
+#starts the tunnel
 tunnel.start()
 
 #config to get in the main frame

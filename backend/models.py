@@ -1,13 +1,11 @@
-#Creates the "student" table... its in undercase not rly sure why... will fix later when not lazy.... 
 class Student(db.Model):
     UserID = db.Column(db.Integer, primary_key=True) 
     UserEmail = db.Column(db.String(64))
     UserPass = db.Column(db.String(128))
     dateTime = db.Column(db.String(32))
 
-#We need to declare these initializers so that we can actually insert values into them... without them we can not.
+
     def __init__(self, UserID, UserEmail, UserPass, dateTime):
-#Setting everything equal to itself :)
         self.UserID = UserID
         self.UserEmail = UserEmail
         self.UserPass = UserPass
@@ -109,7 +107,8 @@ class Course_Attributes(db.Model):
 	
 class Ratings(db.Model):
     RatingID = db.Column(db.Integer, primary_key=True)
-    CourseID = db.Column(db.String(32))
+    CourseID = db.Column(db.String(32), primary_key=True)
+	UserID = db.Column(db.Integer, primary_key=True)
     RatingQuality = db.Column(db.Integer)
     RatingDifficulty = db.Column(db.Integer)
 
