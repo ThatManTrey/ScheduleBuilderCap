@@ -115,5 +115,6 @@ class Ratings(db.Model):
     def __init__(self, RatingID, CourseID, RatingQuality, RatingDifficulty):
         self.RatingID = RatingID
         self.CourseID = CourseID
+		self.UserID = UserID
         self.RatingQuality = RatingQuality
         self.RatingDifficulty = RatingDifficulty
