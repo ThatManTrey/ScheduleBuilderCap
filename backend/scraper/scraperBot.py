@@ -1,4 +1,5 @@
 # Beautiful Soup: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+# APScheduler: https://apscheduler.readthedocs.io/en/stable/#
 # $$$ means not tested
 
 
@@ -6,38 +7,42 @@
 # modules
 
 # scheduling
-#from redis import Redis
-#from rq_scheduler import Scheduler
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+import datetime
 
 import requests # for http request 
 from bs4 import BeautifulSoup   # for html parsing
-
-from datetime import datetime
 
 
 #------------------------------------------------------------------------------
 # todo: scraper setup
 
 # sets up schedule for scraper
-# need to figure out scheduling shit
 def start_scraper():
-    # scheduler = Scheduler(connection=Redis())
-    # scheduler.schedule(
-    #     scheduled_time=datetime.utcnow(),   # first exec time
-    #     func=tester,    # function to be invoked
-    #     interval=5  # time interval in seconds
-    # )
-    print("coming soon on dvd and video: scheduled scraper")
-    scrape()
+    # find next sunday date
+    today = datetime.date.today()
+    idx = 6-today.weekday()
+    sun = today + datetime.timedelta(idx)
+    
+    scheduler = BackgroundScheduler()   # create new schedule for...
+    scheduler.add_job(
+        func=scrape,
+        trigger='date')  # ...now and...
+    scheduler.add_job(
+        func=scrape,
+        trigger='interval',
+        weeks=1,
+        start_date=sun)  # ...weekly on sunday
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
-# $$$finds all data for db
+# finds all data for db
 def scrape():
-    #reset tables?
     getCourses()
     #getAllPrograms()
-
-def tester():
-    print("yuh")
+    
 
 #------------------------------------------------------------------------------
 # data retrieval
@@ -155,7 +160,7 @@ def getProgramDegrees(program):
 # and DegreeID (from db)
 def getDegreeReqs(degree, DegreeID):
     # find all tables rows, iterate through course table
-    rows = concentration.find_all('tr', class_='even') + concentration.find_all('tr', class_='odd')
+    rows = degree.find_all('tr', class_='even') + degree.find_all('tr', class_='odd')
     RequirementID = 0
     for row in rows:
         # see if there is CourseID present
@@ -209,6 +214,7 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, Cre
 # $$$
 def addProgram(DegreeName):
     print()
+    DegreeID = int()
     return DegreeID
 
 # $$$needs to get credit hours from courseID

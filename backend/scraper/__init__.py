@@ -1,0 +1,1 @@
+from .scraperBot import start_scraper

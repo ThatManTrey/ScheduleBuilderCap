@@ -4,6 +4,9 @@
 #------------------------------------------------------------------------------
 # imports
 
+# general
+import sys
+
 # flask
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -17,11 +20,11 @@ from flask_sqlalchemy import SQLAlchemy
 import sshtunnel
 
 # scraper
-from scraperBot import start_scraper
+import scraper
 
 
 #------------------------------------------------------------------------------
-# app
+# app start
 
 app = Flask(__name__)
 
@@ -167,8 +170,8 @@ class Ratings(db.Model):
 
 ##########################  DB END  ######################################################################## 
 
-# start scheduled scraper
-start_scraper()
+# start & schedule scraper
+scraper.start_scraper()
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
