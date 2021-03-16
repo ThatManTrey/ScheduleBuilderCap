@@ -138,7 +138,7 @@ export default {
   data() {
     return {
       showScrollToTopButton: false,
-      isLoggedIn: false,
+      isLoggedIn: true,
       showSignInModal: false,
       test: false
     };
