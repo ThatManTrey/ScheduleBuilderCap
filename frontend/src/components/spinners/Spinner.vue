@@ -2,7 +2,7 @@
   <transition name="spinnerfade">
     <div
       v-if="showSpinner"
-      class="spinner-border text-theme-primary"
+      class="spinner-border text-theme-primary-dark"
       v-bind:style="styleObject"
       role="status"
     >

@@ -9,108 +9,171 @@
         <br /><br />
 
         <div class="row">
-          <div class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker">
+          <div
+            class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker text-theme-whitest"
+          >
             <br />
 
-            <h5 class="text-theme-whitest">Alerts</h5>
+            <h5 class="text-theme-whitest">Alerts/Modals</h5>
 
             <br />
 
-            <div class="alert bg-theme-confirm" role="alert">
-              <i class="fas fa-check-circle fa-lg text-theme-white"></i> &nbsp;
-              Your password has been succesfully reset! Check your email for a
-              link.
+            <p>
+              Use alerts in modals when a success/error message is needed after
+              hitting an API endpoint
+            </p>
+
+            <!-- turn these alerts into a component -->
+            <div
+              class="alert container bg-theme-success text-theme-whitest container"
+              role="alert"
+            >
+              <div class="row">
+                <div class="col-1">
+                  <i class="fas fa-check-circle fa-lg"></i>
+                </div>
+                <div class="col-11">
+                  Your password has been succesfully reset! Check your email for
+                  a link.
+                </div>
+              </div>
             </div>
 
-            <div class="alert bg-theme-warning text-theme-whitest" role="alert">
-              <i class="fas fa-times-circle fa-lg text-theme-white"></i> &nbsp;
-              error error error erororororoor
+            <div
+              class="alert container bg-theme-warning-dark text-theme-whitest container"
+              role="alert"
+            >
+              <div class="row">
+                <div class="col-1">
+                  <i class="fas fa-times-circle fa-lg"></i>
+                </div>
+                <div class="col-11">
+                  An error occured oh no aaaaaaaaaaaaaaaaaaaaaaaaaa
+                </div>
+              </div>
             </div>
+
+            <br />
+
+            <p>
+              Use toast messages outside of modals after hitting an API
+              endpoint.
+            </p>
+
+            <button
+              type="button"
+              class="btn btn-theme-warning-dark"
+              @click="error()"
+            >
+              Error toast message
+            </button>
+            &nbsp;
+            <button
+              type="button"
+              class="btn btn-theme-confirm"
+              @click="success()"
+            >
+              Success toast message
+            </button>
+
+            <br />
           </div>
 
-          <div class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker">
+          <div
+            class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker text-theme-whitest"
+          >
+            <br />
+            <h5>Icons</h5>
+            <br />
+            <i class="fas fa-plus-circle fa-lg text-theme-confirm"></i>
+            &nbsp; Adding
             <br />
 
-            <h5 class="text-theme-whitest">Icons</h5>
-
+            <i class="far fa-star fa-lg text-theme-secondary"></i>
+            &nbsp; Favorites
             <br />
 
-            <i class="fas fa-plus-circle fa-lg text-theme-confirm"></i> &nbsp;
+            <a>
+              <i class="fas fa-star fa-lg text-theme-secondary"></i>
+            </a>
+            &nbsp; Favorites
+            <br />
 
-            <i class="far fa-star fa-lg text-theme-secondary"></i> &nbsp;
+            <i class="fas fa-info-circle fa-lg text-theme-primary-light"></i>
+            &nbsp; More info
+            <br />
 
-            <i class="fas fa-star fa-lg text-theme-secondary"></i> &nbsp;
+            <i class="fas fa-times-circle fa-lg text-theme-warning-dark"></i>
+            &nbsp; Remove/error
+            <br />
 
-            <i class="fas fa-info-circle fa-lg text-theme-primary"></i> &nbsp;
+            <i
+              class="fas fa-question-circle fa-lg text-theme-primary-light"
+            ></i>
+            Help &nbsp;
+            <br />
 
-            <i class="fas fa-times-circle fa-lg text-theme-warning"></i> &nbsp;
+            <i class="fas fa-check-circle fa-lg text-theme-success"></i> &nbsp;
+            Success
+            <br />
 
-            <i class="fas fa-question-circle fa-lg text-theme-primary"></i>
-            &nbsp; <i class="fas fa-home fa-lg text-theme-whitest"></i> &nbsp;
-
-            <i class="far fa-calendar fa-lg text-theme-whitest"></i> &nbsp;
-
-            <i class="fas fa-check-circle fa-lg text-theme-confirm"></i> &nbsp;
-
-            <i class="fas fa-sign-out-alt fa-lg text-theme-whitest"></i> &nbsp;
-
-            <i class="fas fa-key fa-lg text-theme-whitest"></i> &nbsp;
+            <i class="fas fa-key fa-lg text-theme-whitest"></i> &nbsp; Password
+            <br />
 
             <i class="fas fa-envelope fa-lg text-theme-whitest"></i> &nbsp;
+            email
+            <br />
 
             <i class="fas fa-sort-alpha-up fa-lg text-theme-whitest"></i> &nbsp;
+            Sorting (if needed)
+            <br />
 
-            <i class="fas fa-edit fa-lg text-theme-whitest"></i> &nbsp;
-
-            <i class="fas fa-times fa-lg text-theme-whitest"></i> &nbsp;
+            <i class="fas fa-times fa-lg text-theme-whitest"></i> &nbsp; Cancel
+            <br />
 
             <i class="fas fa-search fa-lg text-theme-whitest"></i>
+            Search (if needed)
+            <br />
           </div>
         </div>
 
         <div class="row">
-          <div class="col-sm-12 col-lg-6 mb-3 bg-theme-blacker">
+          <div class="col-sm-12 col-lg-6 mb-3 bg-theme-darkest-gray">
             <br />
 
-            <h5 class="text-theme-whitest">modals/buttons</h5>
+            <h5 class="text-theme-whitest">Buttons</h5>
 
             <br />
 
             <div class="mb-3">
-              <button
-                type="button"
-                class="btn btn-theme-black"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModalOne"
-              >
-                Standard modal
+              <button type="button" class="btn btn-theme-black">
+                Less important button
+              </button>
+              &nbsp;
+              <button type="button" class="btn btn-theme-blacker">
+                Less important button
               </button>
 
-              <button
-                type="button"
-                class="btn btn-theme-black"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModalTwo"
-              >
-                Launch demo modal
+              <br />
+              <br />
+
+              <button type="button" class="btn btn-theme-primary-dark">
+                Somewhat important button
               </button>
-
-              <br /><br />
-
-              <button type="button" class="btn btn-theme-primary">
-                Test button
-              </button>
-
+              &nbsp;
               <button type="button" class="btn btn-theme-secondary">
-                Test button
+                Very Important button
               </button>
 
-              <button type="button" class="btn btn-theme-warning">
-                Test button
-              </button>
+              <br />
+              <br />
 
+              <button type="button" class="btn btn-theme-warning-dark">
+                Delete something
+              </button>
+              &nbsp;
               <button type="button" class="btn btn-theme-confirm">
-                Test button
+                Add something
               </button>
             </div>
           </div>
@@ -162,7 +225,7 @@
         </div>
 
         <div class="row justify-content-center">
-          <div class="col-sm-12 col-md-10 col-lg-8 mb-3">
+          <div class="col-md-12 col-lg-10 col-xl-8 mb-3">
             <div class="container-fluid mb-3 text-white">
               <h5 class="text-theme-whitest">Main (neutral) colors</h5>
 
@@ -208,97 +271,6 @@
             </div>
           </div>
         </div>
-
-        <!-- modals -->
-
-        <div
-          class="modal fade"
-          id="exampleModalOne"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabelOne"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="theme-modal-content">
-              <div class="theme-modal-header">
-                <h5 class="modal-title" id="exampleModalLabelOne">
-                  Standard modal
-                </h5>
-
-                <button
-                  type="button"
-                  class="button-as-link"
-                  data-bs-dismiss="modal"
-                >
-                  <i class="fas fa-times fa-lg text-theme-lightest-gray"></i>
-                </button>
-              </div>
-
-              <div class="theme-modal-body">
-                <p>test modal</p>
-              </div>
-
-              <div class="theme-modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-theme-dark"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="button"
-                  class="btn btn-theme-primary"
-                  data-bs-dismiss="modal"
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="modal fade"
-          id="exampleModalTwo"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabelTwo"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="theme-modal-content">
-              <div class="theme-modal-header">
-                <h5 class="modal-title" id="exampleModalLabelOne">
-                  Modal w/ no footer
-                </h5>
-
-                <button
-                  type="button"
-                  class="button-as-link"
-                  data-bs-dismiss="modal"
-                >
-                  <i class="fas fa-times fa-lg text-theme-lightest-gray"></i>
-                </button>
-              </div>
-
-              <div class="theme-modal-body">
-                <h6 class="text-theme-whiter">This modal has a header</h6>
-
-                <p>
-                  orem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                  enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -306,7 +278,7 @@
 
 <script lang="js">
 import ThemeNavBar from '../components/ThemeNavBar.vue';
-import Spinner from '../components/Spinner.vue';
+import Spinner from '../components/spinners/Spinner.vue';
 import * as Toast from '../toast.js';
 import axios from 'axios';
 
@@ -325,9 +297,10 @@ export default {
     },
     methods: {
         getColors() {
-            const path = 'http://localhost:5000/api/colors';
+            var baseUrl = process.env.VUE_APP_API_URL + "/colors";
+
             // AJAX request
-            axios.get(path + "/primary")
+            axios.get(baseUrl + "/primary")
                 .then((res) => {
                     this.primaryColors = res.data;
                 })
@@ -335,22 +308,26 @@ export default {
                     // eslint-disable-next-line
                     console.error(error);
                 });
-            axios.get(path + "/accent")
+            axios.get(baseUrl + "/accent")
                 .then((res) => {
                     this.accentColors = res.data;
-                    Toast.showSuccessMessage("This is a success message");
                 })
                 .catch((error) => {
                     // eslint-disable-next-line
                     console.error(error);
                 });
+        },
+        error(){
+          Toast.showErrorMessage("Test error message")
+        },
+        success(){
+          Toast.showSuccessMessage("Test success message")
         }
     },
     created() {
         this.getColors();
         setTimeout(() => {
             this.hasLoaded = true;
-            Toast.showErrorMessage("This is an error message");
         }, 5000);
     },
 };
