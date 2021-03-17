@@ -18,7 +18,8 @@ $ .\venv\Scripts\Activate
 ``` 
 Unlike Vue, Flask won't automatically update when you change a file, so you'll have to manually close and restart the server.
 
-Whenever you install a package with pip, remember to type ``` pip freeze > packages.txt ```.
+Whenever you install a package with pip, remember to type 
+``` pip freeze > packages.txt ```.
 
 You can see whatever JSON data Flask is returning by typing in the api route directly, eg: http://localhost:5000/api/colors/primary
 
