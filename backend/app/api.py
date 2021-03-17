@@ -1,6 +1,6 @@
 from flask import jsonify, render_template
-from app import app
-from app.models import Student
+from app import app, db
+from app.models import *
 from app.colors import *
 import datetime
 
@@ -22,7 +22,8 @@ def get_primary_colors():
 def get_accent_colors():
     return jsonify(accent_colors)
 
-@app.route('/model', methods=['GET'])
+@app.route('/query', methods=['GET'])
 def get_model():
-    print(Student(UserID=1, UserEmail="test", UserPass=123, dateTime=datetime.datetime.utcnow()))
-    return "1"
+    student = db.session.query(Student).first()
+    return jsonify(UserID=student.UserID, UserEmail=student.UserEmail)
+    
