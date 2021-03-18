@@ -6,7 +6,7 @@
 </template>
 
 <script lang="js">
-import Spinner from '../components/Spinner.vue';
+import Spinner from './Spinner.vue';
 
 export default {
     name: 'page-spinner',

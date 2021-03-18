@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <nav class="navbar navbar-expand-lg bg-theme-blackest" id="app-nav">
+    <nav class="navbar navbar-expand-lg" id="app-nav">
       <div class="container-fluid">
         <!-- Put logo here -->
 
@@ -20,7 +20,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
-            <li class="nav-item col-6 col-lg-auto">
+            <li class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="Home"
@@ -30,7 +30,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +40,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -50,7 +50,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto">
+            <li class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="about"
@@ -60,95 +60,55 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-lg-auto dropdown">
-              <a
-                class="nav-link dropdown-toggle "
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+            <li class="nav-item col-6 col-md-4 col-lg-auto">
+              <router-link
+                class="nav-link"
+                to="theme"
+                v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
               >
-                More
-              </a>
-
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a class="dropdown-item" href="#">Contact Us</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="#">Another action</a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="#">Delete My Account</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item col-6 col-lg-auto dropdown">
-              <a
-                class="nav-link dropdown-toggle "
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+                <i class="fas fa-question-circle"></i>Theme ref</router-link
               >
-                dev
-              </a>
-
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <router-link
-                    class="dropdown-item"
-                    to="theme"
-                    v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
-                  >
-                    Theme page</router-link
-                  >
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="https://getbootstrap.com/docs/5.0/getting-started/introduction/"
-                    target="_blank"
-                    >Bootstrap doc</a
-                  >
-                </li>
-
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="https://uxdesign.cc/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129"
-                    target="_blank"
-                    >Theme ref</a
-                  >
-                </li>
-              </ul>
             </li>
           </ul>
 
           <div class="d-flex">
             <button
+              v-if="isLoggedIn"
               v-on:click="logout"
               type="submit"
               class="btn btn-theme-blacker"
             >
               Logout
 
-              <i class="fas fa-sign-out-alt " style="margin-left: 0.25rem;"></i>
+              <i class="fas fa-sign-out-alt ms-1"></i>
+            </button>
+            <button
+              v-if="!isLoggedIn"
+              type="submit"
+              class="btn btn-theme-blacker me-3"
+              @click="$refs.signInModal.openModal()"
+            >
+              Sign In
+            </button>
+            <button
+              v-if="!isLoggedIn"
+              type="submit"
+              class="btn btn-theme-primary-dark"
+              @click="$refs.registerModal.openModal()"
+            >
+              Create An Account
             </button>
           </div>
         </div>
       </div>
     </nav>
 
+    <SignInModal ref="signInModal" @signIn="signIn"></SignInModal>
+    <RegisterModal ref="registerModal" @register="register"></RegisterModal>
+
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
-        <a class="align-middle" href="#">
+        <a class="align-middle" @click="scrollToTop">
           <i class="fas fa-chevron-up fa-lg"></i>
         </a>
       </div>
@@ -158,6 +118,8 @@
 
 <script>
 import * as Constants from "@/const.js";
+import SignInModal from "./modals/SignInModal.vue";
+import RegisterModal from "./modals/RegisterModal.vue";
 
 export default {
   name: "theme-nav-bar",
@@ -167,22 +129,28 @@ export default {
       default: true
     }
   },
+
+  components: {
+    SignInModal,
+    RegisterModal
+  },
+
   data() {
     return {
-      showScrollToTopButton: false
+      showScrollToTopButton: false,
+      isLoggedIn: true,
+      showSignInModal: false,
+      test: false
     };
   },
+
   methods: {
-    logout: function(event) {
-      if (event) {
-        this.$router.push("login");
-      }
-    },
     isCurrentRoute: function(route) {
       return this.currentRouteName == route;
     },
+
     checkScroll: function() {
-      // shows scroll to top button when
+      // shows scroll to top button past a certain number of px from the top
       if (
         document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
         document.documentElement.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX
@@ -191,18 +159,41 @@ export default {
       } else {
         this.showScrollToTopButton = false;
       }
+    },
+    scrollToTop() {
+      window.scroll(0, 0);
+    },
+
+    signIn() {
+      this.isLoggedIn = true;
+      this.$emit("isLoggedIn", this.isLoggedIn);
+    },
+
+    register() {
+      console.log("registered");
+    },
+
+    logout: function(event) {
+      if (event) {
+        this.isLoggedIn = false;
+        this.$emit("isLoggedIn", this.isLoggedIn);
+      }
     }
   },
+
   computed: {
     currentRouteName: function() {
       return this.$route.name;
     }
   },
+
   created() {
+    this.$emit("isLoggedIn", this.isLoggedIn);
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }
   },
+
   destroyed() {
     if (this.useScrollToTopButton) {
       window.removeEventListener("scroll", this.checkScroll);
@@ -217,10 +208,20 @@ export default {
 #app-nav {
   font-family: "Source Sans Pro", sans-serif;
   z-index: 1;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  background-color: #070707;
 }
 
 .nav-link i {
   margin-right: 0.25rem;
+}
+
+i.fa-star {
+  color: var(--theme-whitest);
 }
 
 .nav-link {
@@ -267,17 +268,18 @@ a.nav-active:hover {
   width: 100%;
   text-align: center;
   border-radius: 50%;
-  background-color: var(--theme-primary);
+  background-color: #3f256d;
 }
 
 #scroll-to-top a i {
   position: relative;
   top: 7px;
+  color: var(--theme-whiter);
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.2s;
 }
 .fade-enter,
 .fade-leave-to {
