@@ -7,14 +7,19 @@
 # modules
 
 # scheduling
+from apscheduler.schedulers.background import BackgroundScheduler
+
+# schedule helpers
 import time
 import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
 
 import requests # for http request 
 from bs4 import BeautifulSoup   # for html parsing
 
+# database
+from app import db
+from app import models
 
 #------------------------------------------------------------------------------
 # todo: scraper setup
@@ -209,7 +214,52 @@ def addCoreParts():
 
 # $$$adds course record in db
 def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, CreditHours_Max, GradeType, CourseID_Type, KentCore):
-    print(CourseID + "\n" + CourseName + "\n" + CourseDesc + "\n" + CourseType + "\n" + CreditHours_Min + "\n" + CreditHours_Max + "\n" + GradeType + "\n" + CourseID_Type)
+    insertRecord = True
+    
+    # see if record exists
+    existing_course = AllCourse.query.get([CourseID])
+    
+    # if so, check if it needs updated
+    if existing_course:
+        diffFound = False
+
+        # construct search query
+        existing_course = AllCourse.query.filter_by(
+            CourseID = CourseID,
+            CourseName = CourseName,
+            CourseDesc = CourseDesc,
+            CourseType = CourseType,
+            CreditHours_Min = CreditHours_Min,
+            CreditHours_Max = CreditHours_Max, 
+            GradeType = GradeType,
+            CourseID_Type = CourseID_Type,
+            KentCore = KentCore
+        ).first()
+        if existing_course: ## difference found
+            diffFound = True
+        
+        if diffFound: # needs updated, delete record
+            db.session.delete(existing_course)
+        else:   # dont do anything
+            insertRecord = False
+    
+    if insertRecord:    # if were supposed to insert something
+        # prep course object
+        newCourse = AllCourse(
+            CourseID = CourseID,
+            CourseName = CourseName,
+            CourseDesc = CourseDesc,
+            CourseType = CourseType,
+            CreditHours_Min = CreditHours_Min,
+            CreditHours_Max = CreditHours_Max, 
+            GradeType = GradeType,
+            CourseID_Type = CourseID_Type,
+            KentCore = KentCore
+        )
+        
+        # add and commit
+        db.session.add(newCourse)
+        db.session.commit()
 
 # $$$
 def addProgram(DegreeName):
