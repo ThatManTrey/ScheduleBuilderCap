@@ -15,6 +15,10 @@ class AllCourse(Base):
     GradeType = Column(String(24))
     CourseID_Type = Column(String(32))
     KentCore = Column(String(8))
+
+    # converts object to dictionary (used for testing)
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
     
 
 class CourseAttribute(Base):
@@ -23,6 +27,9 @@ class CourseAttribute(Base):
     CourseID = Column(String(32), primary_key=True, nullable=False)
     AttributeID = Column(String(16), primary_key=True, nullable=False)
 
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
+
 
 class Degree(Base):
     __tablename__ = 'degree'
@@ -30,6 +37,9 @@ class Degree(Base):
     DegreeID = Column(INTEGER(11), primary_key=True)
     DegreeName = Column(String(32))
     DegreeType = Column(String(16))
+
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
 
 
 class DegreeRequirement(Base):
@@ -41,6 +51,9 @@ class DegreeRequirement(Base):
     Paired = Column(String(8))
     CreditHours = Column(String(32))
 
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
+
 
 class FavCourse(Base):
     __tablename__ = 'fav__courses'
@@ -48,6 +61,9 @@ class FavCourse(Base):
     CourseID = Column(String(32), primary_key=True, nullable=False)
     UserID = Column(INTEGER(11), primary_key=True, nullable=False)
     dateTime = Column(String(32))
+
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
 
 
 class OtherRequirement(Base):
@@ -58,6 +74,9 @@ class OtherRequirement(Base):
     CourseID = Column(String(32), primary_key=True, nullable=False)
     CreditHours = Column(String(32))
 
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
+
 
 class Rating(Base):
     __tablename__ = 'ratings'
@@ -67,12 +86,18 @@ class Rating(Base):
     RatingQuality = Column(INTEGER(11))
     RatingDifficulty = Column(INTEGER(11))
 
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
+
 
 class SemesterCourse(Base):
     __tablename__ = 'semester__courses'
 
     SemesterID = Column(INTEGER(11), primary_key=True, nullable=False)
     CourseID = Column(String(32), primary_key=True, nullable=False)
+
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
 
 
 class Semester(Base):
@@ -82,6 +107,9 @@ class Semester(Base):
     UserID = Column(INTEGER(11), primary_key=True, nullable=False)
     SemesterName = Column(String(64))
 
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
+
 
 class Student(Base):
     __tablename__ = 'student'
@@ -90,3 +118,6 @@ class Student(Base):
     UserEmail = Column(String(64))
     UserPass = Column(String(128))
     dateTime = Column(String(32))
+
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }

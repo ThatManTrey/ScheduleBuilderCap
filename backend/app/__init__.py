@@ -1,16 +1,21 @@
 # put config/setup stuff here
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy 
 import sshtunnel 
+from flask_jwt_extended import JWTManager
+import os
 
 # points to the built files folder for Vue
-app = Flask(__name__,
-            template_folder="../frontend/dist/"
-            )
+app = Flask(__name__, template_folder="../frontend/dist/")
 
-db = SQLAlchemy(app)
+# disable annoying console warning
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# key to verify JWTs
+# will invalidate existing tokens every time the server is restarted 
+app.config["JWT_SECRET_KEY"] = os.urandom(32)
 
 #the connection stuff here through sshtunnel 
 tunnel = sshtunnel.SSHTunnelForwarder(
@@ -25,9 +30,18 @@ tunnel.start()
 #config to get in the main frame
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KSUCoursePlanner:QMX4e6%nh!5[@127.0.0.1:{}/KSUCoursePlanner$test'.format(tunnel.local_bind_port)
 
-#set keyword db for basically everything (SQLAlchemy connection)
-
-# enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-from app import api
+db = SQLAlchemy(app)
+jwt = JWTManager(app)
+
+# Initial page rendering needed for PythonAnywhere
+# requires npm run build to be run in /frontend first
+@app.route('/')
+def index():
+    try:
+        return render_template('index.html')
+    except:
+        return "There is not currently a /frontend/dist folder for the built frontend files. Type <b>npm run build</b> under /frontend to create it"
+
+from app import auth, api
