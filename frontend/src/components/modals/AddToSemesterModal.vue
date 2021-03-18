@@ -32,9 +32,7 @@
               <i class="fas fa-trash"></i>
             </a>
             Semester {{ n }}
-            <span class="badge rounded-pill">
-              1{{n}} Credits</span
-            >
+            <span class="badge rounded-pill"> 1{{ n }} Credits</span>
           </div>
 
           <!-- add a new semester -->

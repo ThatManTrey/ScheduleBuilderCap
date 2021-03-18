@@ -66,13 +66,19 @@
     <!-- ignore this error lol -->
     <template v-slot:footer>
       <div class="d-flex" id="course-info-footer">
-        <a href="#"
+        <a
+          href="#"
           data-tooltip="Favorite Course"
-          data-tooltip-location="bottom">
-            <i class="far fa-star fa-lg star-unfilled-icon"></i></a>
-        <a class="ms-auto" @click="openAddToSemesterModal"
-            data-tooltip="Add to Semester"
-            data-tooltip-location="bottom">
+          data-tooltip-location="bottom"
+        >
+          <i class="far fa-star fa-lg star-unfilled-icon"></i
+        ></a>
+        <a
+          class="ms-auto"
+          @click="openAddToSemesterModal"
+          data-tooltip="Add to Semester"
+          data-tooltip-location="bottom"
+        >
           <i class="fas fa-plus-circle fa-lg plus-add-icon"></i>
         </a>
       </div>

@@ -30,7 +30,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li hidden class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +40,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li hidden class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -73,7 +73,7 @@
 
           <div class="d-flex">
             <button
-              v-if="isLoggedIn"
+              hidden
               v-on:click="logout"
               type="submit"
               class="btn btn-theme-blacker"
@@ -83,7 +83,6 @@
               <i class="fas fa-sign-out-alt ms-1"></i>
             </button>
             <button
-              v-if="!isLoggedIn"
               type="submit"
               class="btn btn-theme-blacker me-3"
               @click="$refs.signInModal.openModal()"
@@ -91,7 +90,6 @@
               Sign In
             </button>
             <button
-              v-if="!isLoggedIn"
               type="submit"
               class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
@@ -103,8 +101,8 @@
       </div>
     </nav>
 
-    <SignInModal ref="signInModal" @signIn="signIn"></SignInModal>
-    <RegisterModal ref="registerModal" @register="register"></RegisterModal>
+    <SignInModal ref="signInModal"></SignInModal>
+    <RegisterModal ref="registerModal"></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -137,19 +135,16 @@ export default {
 
   data() {
     return {
-      showScrollToTopButton: false,
-      isLoggedIn: true,
-      showSignInModal: false,
-      test: false
+      showScrollToTopButton: false
     };
   },
 
   methods: {
-    isCurrentRoute: function(route) {
+    isCurrentRoute(route) {
       return this.currentRouteName == route;
     },
 
-    checkScroll: function() {
+    checkScroll() {
       // shows scroll to top button past a certain number of px from the top
       if (
         document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
@@ -164,31 +159,18 @@ export default {
       window.scroll(0, 0);
     },
 
-    signIn() {
-      this.isLoggedIn = true;
-      this.$emit("isLoggedIn", this.isLoggedIn);
-    },
-
-    register() {
-      console.log("registered");
-    },
-
-    logout: function(event) {
-      if (event) {
-        this.isLoggedIn = false;
-        this.$emit("isLoggedIn", this.isLoggedIn);
-      }
+    logout() {
+      // remove token in localStorage
     }
   },
 
   computed: {
-    currentRouteName: function() {
+    currentRouteName() {
       return this.$route.name;
     }
   },
 
   created() {
-    this.$emit("isLoggedIn", this.isLoggedIn);
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }

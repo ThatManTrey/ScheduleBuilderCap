@@ -39,6 +39,25 @@
               </div>
             </div>
 
+            <!-- probably wont use this -->
+            <div
+              class="alert container bg-theme-primary-dark text-theme-whitest container"
+              role="alert"
+            >
+              <div class="row">
+                <div class="col-1">
+                  <Spinner
+                    :showSpinner="true"
+                    sizeInRem="1.5rem"
+                    color="white"
+                  ></Spinner>
+                </div>
+                <div class="col-11">
+                  Attempting to login...
+                </div>
+              </div>
+            </div>
+
             <div
               class="alert container bg-theme-warning-dark text-theme-whitest container"
               role="alert"
