@@ -40,7 +40,8 @@ class DegreeRequirement(Base):
     RequirementID = Column(INTEGER(11), primary_key=True, nullable=False)
     CourseID = Column(String(32), primary_key=True, nullable=False)
     Paired = Column(String(8))
-    CreditHours = Column(String(32))
+    CreditHours_Max = Column(String(32))
+    CreditHours_Min = Column(String(32))
 
 
 class FavCourse(Base):
@@ -57,7 +58,8 @@ class OtherRequirement(Base):
     Other_RequirementID = Column(INTEGER(11), primary_key=True, nullable=False)
     KentCore = Column(String(8), primary_key=True, nullable=False)
     CourseID = Column(String(32), primary_key=True, nullable=False)
-    CreditHours = Column(String(32))
+    CreditHours_Max = Column(String(32))
+    CreditHours_Min = Column(String(32))
 
 
 class Rating(Base):
