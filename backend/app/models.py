@@ -16,6 +16,8 @@ class AllCourse(Base):
     GradeType = Column(String(24))
     CourseID_Type = Column(String(32))
     KentCore = Column(String(8))
+    def as_dict(self):
+        return { col.name: getattr(self, col.name) for col in self.__table__.columns }
     
 
 class CourseAttribute(Base):
