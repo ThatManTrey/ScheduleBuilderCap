@@ -8,6 +8,7 @@
     </template>
 
     <template v-slot:body>
+      <!-- alert -->
       <transition name="fade">
         <div class="mb-3" v-if="hasSubmittedForm">
           <div
@@ -43,7 +44,7 @@
         </div>
       </transition>
 
-      <form @submit.prevent="register()">
+      <form>
         <div class="mb-3 text-theme-white">
           <label for="userRegisterEmail" class="form-label">
             <h6>Email Address</h6>
@@ -128,7 +129,7 @@ export default {
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isRegisterSuccessful: null,
-      errorMessage: ""
+      errorMessage: "An error has occurred."
     };
   },
 
@@ -140,6 +141,16 @@ export default {
   methods: {
     /* needed to open/close this modal from parent component */
     openModal() {
+      // reset register variables to default in case the user tries to register,
+      // closes the modal, and then reopens it
+      this.registerForm = {
+        email: "",
+        pass: "",
+        passVerify: ""
+      };
+      (this.isSubmittingForm = false), (this.hasSubmittedForm = false);
+      this.isRegisterSuccessful = null;
+
       this.$refs.registerBaseModalRef.openModal();
     },
     closeModal() {
@@ -147,45 +158,41 @@ export default {
     },
 
     register() {
+      // add client-side validation checks here
+
       this.isSubmittingForm = true;
-      // hide previous alerts
       this.hasSubmittedForm = false;
       this.isRegisterSuccessful = null;
 
       var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
 
-      if (this.registerForm.pass == this.registerForm.passVerify) {
-        axios
-          .post(registerUrl, {
-            email: this.registerForm.email,
-            password: this.registerForm.pass
-          })
-          .then(
-            () => {
-              this.isRegisterSuccessful = true;
-              this.isSubmittingForm = false;
-              this.hasSubmittedForm = true;
-            },
-            error => {
+      axios
+        .post(registerUrl, {
+          email: this.registerForm.email,
+          password: this.registerForm.pass
+        })
+        .then(
+          () => {
+            this.isRegisterSuccessful = true;
+            this.isSubmittingForm = false;
+            this.hasSubmittedForm = true;
+            // nothing else to do here (account info has been created) user closes this modal and opens login modal
+          },
+          error => {
+            try {
+              if (
+                error.response.data.msg != null &&
+                error.response.data.msg != ""
+              )
+                this.errorMessage = error.response.data.msg;
+              // else use default errorMessage defined above
+            } finally {
               this.isRegisterSuccessful = false;
               this.isSubmittingForm = false;
               this.hasSubmittedForm = true;
-              // if the error response does not have a msg attribute, set a default error message
-              try {
-                if (
-                  error.response.data.msg != null &&
-                  error.response.data.msg != ""
-                )
-                  this.errorMessage = error.response.data.msg;
-                else this.errorMessage = "An error has occurred.";
-              } catch (err) {
-                this.errorMessage = "An error has occurred.";
-              }
             }
-          );
-      } else {
-        console.log("Passwords do not match");
-      }
+          }
+        );
     }
   }
 };
