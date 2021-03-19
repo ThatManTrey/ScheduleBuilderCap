@@ -19,7 +19,7 @@ from bs4 import BeautifulSoup   # for html parsing
 
 # database
 from app import db
-from app import models
+from app.models import AllCourse
 
 #------------------------------------------------------------------------------
 # todo: scraper setup
@@ -212,19 +212,17 @@ def addCoreParts():
 #------------------------------------------------------------------------------
 # database shit
 
-# $$$adds course record in db
+# adds course record in db
 def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, CreditHours_Max, GradeType, CourseID_Type, KentCore):
     insertRecord = True
     
     # see if record exists
-    existing_course = AllCourse.query.get([CourseID])
+    existing_course = db.session.query(AllCourse).get([CourseID])
     
     # if so, check if it needs updated
     if existing_course:
-        diffFound = False
-
         # construct search query
-        existing_course = AllCourse.query.filter_by(
+        existing_course = db.session.query(AllCourse).filter_by(
             CourseID = CourseID,
             CourseName = CourseName,
             CourseDesc = CourseDesc,
@@ -235,12 +233,11 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, Cre
             CourseID_Type = CourseID_Type,
             KentCore = KentCore
         ).first()
-        if existing_course: ## difference found
-            diffFound = True
-        
-        if diffFound: # needs updated, delete record
+
+        # check results
+        if existing_course: # difference found, needs updated, delete record
             db.session.delete(existing_course)
-        else:   # dont do anything
+        else:   # dont do anything, call off insertion
             insertRecord = False
     
     if insertRecord:    # if were supposed to insert something
