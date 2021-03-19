@@ -27,27 +27,46 @@
             </div>
         </div>
     </footer>
+
+    <AddSemesterModal ref="addSemesterModalSchedule"></AddSemesterModal>
     </div>
 </template>
 
 <script>
 
 import MiniSemester from '../components/MiniSemester.vue'
+import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
+import * as Toast from '../toast.js';
 
 export default ({
     name: 'semester-bar',
     data() {
         return {
-            isOpen: false
+            isOpen: false,
+            isRemovingCourse: ""
         }
     },
     methods: {
         toggle: function() {
             this.isOpen = !this.isOpen
-        }
+        },
+        showAddSemesterModal () {
+            this.$refs.addSemesterModalSchedule.openModal();
+        },
+        removeSemester() {
+            var removePromptResult = confirm(
+                "Are you sure you want to remove this semester and all its courses?"
+            );
+            if (removePromptResult == true) {
+                Toast.showSuccessMessage(
+                "Semester was removed successfully."
+                );
+            }
+        },
     },
     components: {
-        MiniSemester
+        MiniSemester,
+        AddSemesterModal
     }
 })
 </script>
