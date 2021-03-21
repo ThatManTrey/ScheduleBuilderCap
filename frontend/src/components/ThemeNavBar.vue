@@ -182,11 +182,10 @@ export default {
       this.isLoggedIn = localStorage.getItem("user") != null;
 
       // set auth token for every subsequent request until logout (add check for invalidation later)
-      axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem(
-        "user"
-      );
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + localStorage.getItem("user");
 
-      if (!this.isLoggedIn) { 
+      if (!this.isLoggedIn) {
         axios.defaults.headers.common["Authorization"] = "";
 
         // redirect if anonymous user tries to access favorites/schedule page
@@ -220,7 +219,7 @@ export default {
           console.log(res);
         })
         .catch(error => {
-          if(error.response.status == 401){
+          if (error.response.status == 401) {
             console.log("Request is unauthorized");
           }
           // eslint-disable-next-line

@@ -9,38 +9,13 @@
     </template>
 
     <template v-slot:body>
-      <!-- Login -->
-
-      <!-- alert -->
       <transition name="fade">
-        <div class="mb-3" v-if="hasSubmittedForm">
-          <div
-            class="alert container bg-theme-success text-theme-whitest container"
-            role="alert"
-            v-if="isLoginSuccessful"
-          >
-            <div class="row">
-              <div class="col-1">
-                <i class="fas fa-check-circle fa-lg"></i>
-              </div>
-              <div class="col-11">Login successful! Closing this window...</div>
-            </div>
-          </div>
-
-          <div
-            class="alert container bg-theme-warning-dark text-theme-whitest container"
-            role="alert"
-            v-if="!isLoginSuccessful"
-          >
-            <div class="row">
-              <div class="col-1">
-                <i class="fas fa-times-circle fa-lg"></i>
-              </div>
-              <div class="col-11">
-                {{ errorMessage }}
-              </div>
-            </div>
-          </div>
+        <div v-if="hasSubmittedForm">
+          <Alert
+            :isSuccess="isLoginSuccessful"
+            :errorMessage="errorMessage"
+            successMessage="Login Successful! Closing this window..."
+          ></Alert>
         </div>
       </transition>
 
@@ -75,11 +50,8 @@
             aria-describedby="userSignInEmailHelp"
             placeholder="example@gmail.com"
             :disabled="isSubmittingForm"
-            v-model="loginForm.email"
+            v-model.trim="email"
           />
-          <div id="userSignInEmailHelp" class="form-text">
-            Please enter a valid email
-          </div>
         </div>
 
         <div class="mb-3 text-theme-white">
@@ -94,7 +66,7 @@
             aria-describedby="userSignInPassHelp"
             placeholder="Enter password..."
             :disabled="isSubmittingForm"
-            v-model="loginForm.pass"
+            v-model.trim="pass"
           />
           <!-- <div id="userSignInPassHelp" class="form-text">
             <a class="link" @click="isResettingPassword = true"
@@ -167,26 +139,26 @@
 import Modal from "./Modal.vue";
 import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
+import Alert from "../Alert.vue";
 
 export default {
   data() {
     return {
       // isResettingPassword: false,
       // isPasswordReset: false,
-      loginForm: {
-        email: "",
-        pass: ""
-      },
+      email: "",
+      pass: "",
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isLoginSuccessful: null,
-      errorMessage: "An error has occurred."
+      errorMessage: "An error has occurred.",
     };
   },
 
   components: {
     Modal,
-    Spinner
+    Spinner,
+    Alert,
   },
 
   methods: {
@@ -194,10 +166,8 @@ export default {
     openModal() {
       // reset login variables to default in case the user tries to login,
       // closes the modal, and then reopens it
-      this.loginForm = {
-        email: "",
-        pass: ""
-      };
+      this.email = "";
+      this.pass = "";
       (this.isSubmittingForm = false), (this.hasSubmittedForm = false);
       this.isLoginSuccessful = null;
 
@@ -218,11 +188,11 @@ export default {
 
       axios
         .post(loginUrl, {
-          email: this.loginForm.email,
-          password: this.loginForm.pass
+          email: this.email,
+          password: this.pass,
         })
         .then(
-          response => {
+          (response) => {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
@@ -233,7 +203,7 @@ export default {
               this.closeModal();
             }, 2000);
           },
-          error => {
+          (error) => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -254,7 +224,7 @@ export default {
       localStorage.setItem("user", token);
       // set axios default
       this.$emit("checkAuth");
-    }
+    },
 
     // resetPassword() {
     //   this.isResettingPassword = false;
@@ -265,7 +235,7 @@ export default {
   created() {
     this.isResettingPassword = false;
     this.isPasswordReset = false;
-  }
+  },
 };
 </script>
 

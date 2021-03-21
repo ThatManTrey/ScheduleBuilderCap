@@ -9,17 +9,15 @@ from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_requir
 
 # decorator to check if user making the request is the same as 
 #   the requested user to get information about
-# add to any endpoint that returns user information
-# put @is_current_user after @jwt_required()
+# add @is_current_user to any endpoint that returns user information
 def is_current_user(function):
     def wrapper(user_id):
-        print("jwtId: {} \nUserID: {}".format(get_jwt_identity(), user_id))
         if get_jwt_identity() != user_id:
             return jsonify(msg="You cannot access another user's information."), 403
         return function(user_id)
     return wrapper
 
-# request body must contain 'email' and 'password'
+
 @app.route('/api/auth/register', methods=['POST'])
 def register_user():
     email = request.json.get('email')
@@ -27,24 +25,25 @@ def register_user():
     if db.session.query(Student).filter_by(UserEmail=email).first() is not None:
         return jsonify(msg="That email is already in use."), 400
 
-    student = Student(UserEmail=email, UserPass=generate_password_hash(
-        password), dateTime=datetime.datetime.utcnow())
+    student = Student(UserEmail=email, UserPass=generate_password_hash(password), 
+        dateTime=datetime.datetime.utcnow())
     db.session.add(student)
     db.session.commit()
     return jsonify(id=student.UserID)
 
-# request body must contain 'email' and 'password'
+
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
     student = db.session.query(Student).filter_by(UserEmail=email).first()
-    # check if email or password is incorrect
+
     if student is None or not check_password_hash(student.UserPass, password):
         return jsonify(msg="Incorrect email or password."), 400
 
     access_token = create_access_token(identity=student.UserID)
     return jsonify(access_token=access_token)
+
 
 # protected resource
 @app.route('/api/users/<int:user_id>', methods=['GET'])
@@ -74,7 +73,6 @@ def get_all_users():
 def delete_all_users():
     students = db.session.query(Student).all()
 
-    # convert each object to dict (JSON doesnt like objects)
     for student in students:
         db.session.query(Student).filter_by(UserID=student.UserID).delete()
     

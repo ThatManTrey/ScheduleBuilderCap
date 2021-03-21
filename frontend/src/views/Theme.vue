@@ -40,7 +40,7 @@
             </div>
 
             <!-- probably wont use this -->
-            <div
+            <!-- <div
               class="alert container bg-theme-primary-dark text-theme-whitest container"
               role="alert"
             >
@@ -56,7 +56,7 @@
                   Attempting to login...
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div
               class="alert container bg-theme-warning-dark text-theme-whitest container"
