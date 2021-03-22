@@ -13,21 +13,25 @@
                     </span></li>
 
             <li class="list-group-item course">
+                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
                 <span class="badge rounded-pill course-badge">
                     <button class="button-as-link">MATH 13013</button></span>
                 <span id="courseName">Analytic Geometry...</span></li>
 
             <li class="list-group-item course">
+                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
                 <span class="badge rounded-pill course-badge">
                     <button class="button-as-link">MATH 13013</button></span>
                 <span id="courseName">Analytic Geometry...</span></li>
 
             <li class="list-group-item course">
+                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
                 <span class="badge rounded-pill course-badge">
                     <button class="button-as-link">MATH 13013</button></span>
                 <span id="courseName">Analytic Geometry...</span></li>
 
             <li class="list-group-item course">
+                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
                 <span class="badge rounded-pill course-badge">
                     <button class="button-as-link">MATH 13013</button></span>
                 <span id="courseName">Analytic Geometry...</span></li>
@@ -66,7 +70,7 @@ div.container {
 }
 
 .list-group {
-    width: 15rem;
+    width: 16rem;
  }
 
 .list-group li {
@@ -83,6 +87,7 @@ div.container {
 .list-group-item.header {
     font-size: 12pt;
     color: var(--theme-whitest);
+    background-color: var(--theme-blackest);
 }
 
 #courseName {
@@ -114,6 +119,11 @@ span.course-badge {
 .semester {
     display: inline-block;
     margin-right: 1rem;
+}
+
+#remove {
+    padding-right: 0.5rem;
+    margin-left: -0.25rem;
 }
 
 </style>
