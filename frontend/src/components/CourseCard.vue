@@ -2,17 +2,17 @@
   <div class="card justify-content-center course-card">
     <div class="card-body container-fluid text-theme-whiter">
       <div class="row text-theme-whitest">
-        <h4 class="course-card-title m-1">Analytic Geometry And Calculus I</h4>
+        <h4 class="course-card-title m-1">{{ course.CourseName }}</h4>
       </div>
 
       <div class="row" :class="{ 'mb-2': !showSmallCard }">
         <div class="col-10 p-0">
           <span class="badge rounded-pill course-badge">
-            <button class="button-as-link">MATH 13013</button>
+            <button class="button-as-link">{{ course.CourseID }}</button>
           </span>
 
           <span class="badge rounded-pill course-badge">
-            <button class="button-as-link">4 Credits</button>
+            <button class="button-as-link">{{ course.CreditHours_Max }} Credits</button>
           </span>
         </div>
 
@@ -29,16 +29,7 @@
 
       <div v-if="!showSmallCard" class="row mb-3">
         <p class="card-text">
-          This course will introduce the state-of-art computing platforms with
-          the focus on how to utilize them in processing (managing and
-          analyzing) massive...
-          <a
-            tabindex="0"
-            @keyup.enter="showCourseInfoModal()"
-            @click="showCourseInfoModal()"
-            class="link"
-            >View more</a
-          >
+          {{ course.CourseDesc }}
         </p>
       </div>
 
@@ -50,6 +41,15 @@
             ><i class="far fa-star fa-lg"></i
           ></a>
         </div>
+
+        <div class="col text-center">
+          <a
+            tabindex="0"
+            @keyup.enter="showCourseInfoModal()"
+            @click="showCourseInfoModal()"
+            class="link small"
+            >View more</a>
+          </div>
 
         <div class="col text-end">
           <a
@@ -89,6 +89,10 @@ export default {
     isRemovingCourse: {
       type: Boolean,
       default: false
+    },
+
+    course: {
+      type: Object
     }
   },
 
@@ -130,6 +134,20 @@ div.course-card:focus-within {
   min-height: 5rem;
 }
 
+/*
+  limiting text displayed,
+  referenced from: 
+  https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css
+*/
+.card-text {
+  overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 5; /* number of lines to show */
+   -webkit-box-orient: vertical;
+   min-height: 7.5rem;
+}
+
 span.course-badge {
   color: var(--theme-whiter);
   background-color: var(--theme-darkest-gray);
@@ -148,5 +166,9 @@ i.fa-info-circle {
   color: inherit;
   position: relative;
   top: 3px;
+}
+
+.link.small {
+  font-size: 11pt;
 }
 </style>

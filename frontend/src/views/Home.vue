@@ -15,10 +15,12 @@
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in courses.deptCourses"
             :key="index"
+            
           >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
+              v-bind:course="course"
             ></CourseCard>
           </div>
         </div>
