@@ -13,8 +13,8 @@
         <div v-show="hasLoadedCourses" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-            v-for="n in 20"
-            :key="n"
+            v-for="(course, index) in courses.deptCourses"
+            :key="index"
           >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
@@ -43,12 +43,14 @@ import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 import SemesterBar from '../components/SemesterBar.vue';
+import axios from 'axios';
 
 export default {
     name: 'home',
     props: [],
     data() {
         return {
+            courses: [],
             hasLoadedCourses: false,
             isLoggedIn: false
         }
@@ -64,9 +66,10 @@ export default {
     },
     created() {
         // loading test
-        setTimeout(() => {
+        this.getCourses();
+          setTimeout(() => {
             this.hasLoadedCourses = true;
-        }, 2000);
+        }, 2000)
     },
       methods: {
         showCourseInfoModal () {
@@ -74,6 +77,20 @@ export default {
         },
         showAddToSemesterModal () {
             this.$refs.addToSemesterModalHome.openModal();
+        },
+        getCourses() {
+          var baseUrl = process.env.VUE_APP_API_URL + "/courses"
+
+          //AJAX request
+          axios.get(baseUrl + "/cs")
+            .then((res) => {
+              this.courses = res.data;
+            })
+            .catch((error) => {
+              // eslint-disable-next-line
+              console.error(error);
+            });
+
         },
       },
 };
