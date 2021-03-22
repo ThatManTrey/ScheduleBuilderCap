@@ -2,5 +2,7 @@ __pycache__/
 venv/
 ../vscode/
 
+password.py
+
 *.exe
 *.pyd

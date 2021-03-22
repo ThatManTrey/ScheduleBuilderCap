@@ -1,27 +1,33 @@
 from app import app
 import sshtunnel
+from password import *
 
-# db connect
-if __name__ == '__main__':    # local instance
-    # the connection stuff here through sshtunnel 
+on_pythonanywhere = not (__name__ == '__main__')
+
+print("site pass: ", ACCOUNT_PASS)
+print("db pass: ", DB_PASS)
+
+if on_pythonanywhere:    
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KSUCoursePlanner.mysql.pythonanywhere-services.com'
+    
+# local environment
+else:   
     tunnel = sshtunnel.SSHTunnelForwarder(
         ('ssh.pythonanywhere.com'),
-        ssh_username='KSUCoursePlanner', ssh_password='N5L3TR8mHq',
+        ssh_username='KSUCoursePlanner', ssh_password=DB_PASS,
         remote_bind_address=('KSUCoursePlanner.mysql.pythonanywhere-services.com', 3306)
     )
 
-    # starts the tunnel
     tunnel.start()
 
     # config to get in the main frame
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KSUCoursePlanner:QMX4e6%nh!5[@127.0.0.1:{}/KSUCoursePlanner$test'.format(tunnel.local_bind_port)
-
-else:   # pythonanywhere
-    # connect to mysql
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KSUCoursePlanner.mysql.pythonanywhere-services.com'
+    conn = 'mysql://KSUCoursePlanner:{}@127.0.0.1:{}/KSUCoursePlanner$test'.format(ACCOUNT_PASS, tunnel.local_bind_port)
+    print(conn)
+    app.config['SQLALCHEMY_DATABASE_URI'] = conn
+    
 
 # turn off depreciation warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-if __name__ == '__main__':
+if not on_pythonanywhere:
     app.run()
