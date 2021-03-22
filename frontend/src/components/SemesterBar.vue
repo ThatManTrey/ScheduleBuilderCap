@@ -6,7 +6,7 @@
             <i class="far fa-calendar "></i>
             <!-- My Schedule -->
             </button>
-        <div class="semesterBar-container" v-show="isOpen" >
+        <div class="semesterBar-container" v-show="isOpen">
             <span 
             v-for="n in 4"
             :key="n">
@@ -94,6 +94,18 @@ export default ({
   border-top-left-radius:10px;
   border-top-right-radius:10px;
   border-top: solid 1pt var(--theme-primary-dark);
+  animation: slideup-mini 5s ease;
+}
+
+@keyframes slideup-mini {
+  from {
+    margin-bottom: -100%;
+    opacity: 25%;
+  }
+  to {
+    margin-bottom: 0%;
+    opacity: 100%;
+  }
 }
 
 .semesterBar-container {
@@ -111,6 +123,37 @@ export default ({
   padding: 1rem;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  animation: slideIn 1s ease;
+}
+
+.semesterBar-containter.slideIn {
+    animation: slideIn 1s ease;
+}
+
+.semesterBar-container.slideOut {
+    animation: slideOut 1s ease;
+}
+
+@keyframes slideIn {
+  0% {
+    margin-bottom: -18%;
+    opacity: 100%;
+  }
+    100% {
+    margin-bottom: 0%;
+    opacity: 100%;
+  }
+}
+
+@keyframes slideOut {
+    100% {
+    margin-bottom: 0%;
+    opacity: 100%;
+  }
+    0% {
+    margin-bottom: -18%;
+    opacity: 100%;
+  }
 }
 
 .inline {
@@ -131,7 +174,6 @@ export default ({
   left: 29px;
   bottom: auto;
 }
-
 
 @media only screen and (max-width:1280px) {
     .container {
