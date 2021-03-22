@@ -124,6 +124,15 @@ export default ({
     padding-right: 3rem;
 }
 
+/* Tooltip Styling */ 
+[data-tooltip-location="bottom"]:before,
+[data-tooltip-location="bottom"]:after {
+  top: calc(100% + 95px);
+  left: 29px;
+  bottom: auto;
+}
+
+
 @media only screen and (max-width:1280px) {
     .container {
         display: none;
