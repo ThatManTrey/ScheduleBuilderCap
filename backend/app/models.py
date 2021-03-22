@@ -11,12 +11,12 @@ class AllCourse(Base):
     CourseName = Column(String(32))
     CourseDesc = Column(String(400))
     CourseType = Column(String(32))
-    CreditHours = Column(String(32))
+    CreditHours_Min = Column(String(32))
+    CreditHours_Max = Column(String(32))
     GradeType = Column(String(24))
     CourseID_Type = Column(String(32))
     KentCore = Column(String(8))
 
-    # converts object to dictionary (used for testing)
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
     
@@ -49,7 +49,8 @@ class DegreeRequirement(Base):
     RequirementID = Column(INTEGER(11), primary_key=True, nullable=False)
     CourseID = Column(String(32), primary_key=True, nullable=False)
     Paired = Column(String(8))
-    CreditHours = Column(String(32))
+    CreditHours_Max = Column(String(32))
+    CreditHours_Min = Column(String(32))
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
@@ -72,7 +73,8 @@ class OtherRequirement(Base):
     Other_RequirementID = Column(INTEGER(11), primary_key=True, nullable=False)
     KentCore = Column(String(8), primary_key=True, nullable=False)
     CourseID = Column(String(32), primary_key=True, nullable=False)
-    CreditHours = Column(String(32))
+    CreditHours_Max = Column(String(32))
+    CreditHours_Min = Column(String(32))
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }

@@ -1,34 +1,18 @@
-# put config/setup stuff here
-
-from flask import Flask, render_template
+from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy 
-import sshtunnel 
 from flask_jwt_extended import JWTManager
 import os
 
 # points to the built files folder for Vue
 app = Flask(__name__, template_folder="../frontend/dist/")
-
-# disable annoying console warning
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# key to verify JWTs
-# will invalidate existing tokens every time the server is restarted 
 app.config["JWT_SECRET_KEY"] = os.urandom(32)
 
-#the connection stuff here through sshtunnel 
-tunnel = sshtunnel.SSHTunnelForwarder(
-('ssh.pythonanywhere.com'),
-ssh_username='KSUCoursePlanner', ssh_password='N5L3TR8mHq',
-remote_bind_address=('KSUCoursePlanner.mysql.pythonanywhere-services.com', 3306)
-)
+# set keyword db for basically everything (SQLAlchemy connection)
+db = SQLAlchemy(app)
 
-#starts the tunnel
-tunnel.start()
-
-#config to get in the main frame
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KSUCoursePlanner:QMX4e6%nh!5[@127.0.0.1:{}/KSUCoursePlanner$test'.format(tunnel.local_bind_port)
+from app import scraper
+#scraper.start_scraper()
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 

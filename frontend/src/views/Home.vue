@@ -25,6 +25,8 @@
       </transition>
     </div>
 
+    <SemesterBar></SemesterBar>
+
     <CourseInfoModal
       @openAddSemesterModal="showAddToSemesterModal"
       ref="courseInfoModalHome"
@@ -40,6 +42,7 @@ import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import FilterCoursesBar from '../components/FilterCoursesBar.vue';
+import SemesterBar from '../components/SemesterBar.vue';
 
 export default {
     name: 'home',
@@ -56,7 +59,8 @@ export default {
         CourseInfoModal,
         AddToSemesterModal,
         PageSpinner,
-        FilterCoursesBar
+        FilterCoursesBar,
+        SemesterBar
     },
     created() {
         // loading test
