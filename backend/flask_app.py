@@ -1,6 +1,6 @@
 from app import app
 import sshtunnel
-from password import *
+
 
 on_pythonanywhere = not (__name__ == '__main__')
 
@@ -9,6 +9,8 @@ if on_pythonanywhere:
     
 # local environment
 else:   
+    from password import *
+
     tunnel = sshtunnel.SSHTunnelForwarder(
         ('ssh.pythonanywhere.com'),
         ssh_username='KSUCoursePlanner', ssh_password=ACCOUNT_PASS,
