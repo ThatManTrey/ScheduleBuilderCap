@@ -23,32 +23,46 @@
           <label for="userRegisterEmail" class="form-label">
             <h6>Email Address</h6>
           </label>
+
           <input
             type="email"
             class="form-control"
+            :class="{ 'form-error': emailField.error }"
             id="userRegisterEmail"
             placeholder="example@gmail.com"
             :disabled="isSubmittingForm"
-            v-model="registerForm.email"
+            v-model="emailField.email"
           />
+
+          <transition name="fade">
+            <span v-if="emailField.error" class="form-error-text">
+              <i class="fas fa-times-circle text-theme-warning-light"></i>
+              {{ emailField.error }}
+            </span>
+          </transition>
         </div>
 
         <div class="mb-3 text-theme-white">
           <label for="userRegisterPass" class="form-label">
             <h6>Password</h6>
           </label>
+
           <input
             type="password"
             class="form-control"
+            :class="{ 'form-error': passField.error }"
             id="userRegisterPass"
-            aria-describedby="userRegisterPassHelp"
             placeholder="Enter password..."
             :disabled="isSubmittingForm"
-            v-model="registerForm.pass"
+            v-model="passField.pass"
           />
-          <div id="userRegisterPassHelp" class="invalid-feedback">
-            Passwords must be more than x characters long
-          </div>
+
+          <transition name="fade">
+            <span v-if="passField.error" class="form-error-text">
+              <i class="fas fa-times-circle text-theme-warning-light"></i>
+              {{ passField.error }}
+            </span>
+          </transition>
         </div>
 
         <div class="mb-3 text-theme-white">
@@ -58,15 +72,19 @@
           <input
             type="password"
             class="form-control"
+            :class="{ 'form-error': passVerifyField.error }"
             id="userRegisterRetypePass"
-            aria-describedby="userRegisterRetypePassHelp"
             placeholder="Re-enter password..."
             :disabled="isSubmittingForm"
-            v-model="registerForm.passVerify"
+            v-model="passVerifyField.pass"
           />
-          <div id="userRegisterRetypePassHelp" class="invalid-feedback">
-            Passwords must match
-          </div>
+
+          <transition name="fade">
+            <span v-if="passVerifyField.error" class="form-error-text">
+              <i class="fas fa-times-circle text-theme-warning-light"></i>
+              {{ passVerifyField.error }}
+            </span>
+          </transition>
         </div>
       </form>
     </template>
@@ -84,7 +102,6 @@
         Sign Up
       </button>
     </template>
-
   </Modal>
 </template>
 
@@ -97,16 +114,49 @@ import Alert from "../Alert.vue";
 export default {
   data() {
     return {
-      registerForm: {
+      emailField: {
         email: "",
+        error: null,
+      },
+      passField: {
         pass: "",
-        passVerify: "",
+        error: null,
+      },
+      passVerifyField: {
+        pass: "",
+        error: null,
       },
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isRegisterSuccessful: null,
-      errorMessage: "An error has occurred.",
+      errorMessage: "An error occurred. Please try again.",
     };
+  },
+
+  watch: {
+    "emailField.email": function () {
+      if (this.emailField.email.length === 0)
+        this.emailField.error = "Required field";
+      else if (!this.isEmailValid())
+        this.emailField.error = "Please enter a valid email";
+      else this.emailField.error = null;
+    },
+
+    "passField.pass": function () {
+      if (this.passField.pass.length === 0)
+        this.passField.error = "Required field";
+      else if (this.passField.pass.length < 8)
+        this.passField.error = "Password must be more than 8 characters long.";
+      else this.passField.error = null;
+    },
+
+    "passVerifyField.pass": function () {
+      if (this.passVerifyField.pass.length === 0)
+        this.passVerifyField.error = "Required field";
+      else if (this.passVerifyField.pass != this.passField.pass)
+        this.passVerifyField.error = "Passwords do not match";
+      else this.passVerifyField.error = null;
+    },
   },
 
   components: {
@@ -118,35 +168,58 @@ export default {
   methods: {
     /* needed to open/close this modal from parent component */
     openModal() {
-      // reset register variables to default in case the user tries to register,
-      // closes the modal, and then reopens it
-      this.registerForm = {
-        email: "",
-        pass: "",
-        passVerify: "",
-      };
-      (this.isSubmittingForm = false), (this.hasSubmittedForm = false);
-      this.isRegisterSuccessful = null;
-
       this.$refs.registerBaseModalRef.openModal();
     },
     closeModal() {
       this.$refs.registerBaseModalRef.closeModal();
     },
 
-    register() {
-      // add client-side validation checks here
+    // https://masteringjs.io/tutorials/fundamentals/email-validation
+    // checks if email follows pattern xx@yy.zz
+    isEmailValid() {
+      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.emailField.email);
+    },
 
+    areFieldsValid() {
+      // "Required field" and password not matching errors will 
+      // not be shown until user starts typing
+      // set errors here if nothing has been entered yet
+      if (this.passVerifyField.pass != this.passField.pass)
+        this.passVerifyField.error = "Passwords do not match";
+
+      if (this.emailField.email.length === 0)
+        this.emailField.error = "Required field";
+      if (this.passField.pass.length === 0)
+        this.passField.error = "Required field";
+      if (this.passVerifyField.pass.length === 0)
+        this.passVerifyField.error = "Required field";
+
+      return (
+        !this.passField.error &&
+        !this.emailField.error &&
+        !this.passVerifyField.error
+      );
+    },
+
+    register() {
       this.isSubmittingForm = true;
       this.hasSubmittedForm = false;
       this.isRegisterSuccessful = null;
+
+      if (!this.areFieldsValid()) {
+        this.hasSubmittedForm = true;
+        this.isRegisterSuccessful = false;
+        this.isSubmittingForm = false;
+        this.errorMessage = "Please fix the errors below before continuing.";
+        return;
+      }
 
       var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
 
       axios
         .post(registerUrl, {
-          email: this.registerForm.email,
-          password: this.registerForm.pass,
+          email: this.emailField.email,
+          password: this.passField.pass,
         })
         .then(
           () => {

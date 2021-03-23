@@ -75,9 +75,9 @@
             <button
               v-on:click="getUser"
               type="button"
-              class="btn btn-theme-blacker"
+              class="btn btn-theme-blacker me-3"
             >
-              Get User (Test)
+              Hit protected route
             </button>
             <button
               v-on:click="logout"

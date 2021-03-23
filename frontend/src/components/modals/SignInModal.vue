@@ -43,31 +43,46 @@
           <label for="userSignInEmail" class="form-label">
             <h6>Email Address</h6>
           </label>
+
           <input
             type="email"
             class="form-control"
+            :class="{ 'form-error': emailField.error }"
             id="userSignInEmail"
-            aria-describedby="userSignInEmailHelp"
             placeholder="example@gmail.com"
             :disabled="isSubmittingForm"
-            v-model.trim="email"
+            v-model="emailField.email"
           />
+
+          <transition name="fade">
+            <span v-if="emailField.error" class="form-error-text">
+              <i class="fas fa-times-circle text-theme-warning-light"></i>
+              {{ emailField.error }}
+            </span>
+          </transition>
         </div>
 
-        <div class="mb-3 text-theme-white">
+        <div class="text-theme-white">
           <label for="userSignInPass" class="form-label">
             <h6>Password</h6>
           </label>
-          <span class="form-input-icon"><i class="fas fa-key" hidden></i></span>
+
           <input
             type="password"
             class="form-control"
+            :class="{ 'form-error': passField.error }"
             id="userSignInPass"
-            aria-describedby="userSignInPassHelp"
             placeholder="Enter password..."
             :disabled="isSubmittingForm"
-            v-model.trim="pass"
+            v-model="passField.pass"
           />
+
+          <transition name="fade">
+            <span v-if="passField.error" class="form-error-text">
+              <i class="fas fa-times-circle text-theme-warning-light"></i>
+              {{ passField.error }}
+            </span>
+          </transition>
           <!-- <div id="userSignInPassHelp" class="form-text">
             <a class="link" @click="isResettingPassword = true"
               >Forgot your password?</a
@@ -146,13 +161,35 @@ export default {
     return {
       // isResettingPassword: false,
       // isPasswordReset: false,
-      email: "",
-      pass: "",
+      emailField: {
+        email: "",
+        error: null,
+      },
+      passField: {
+        pass: "",
+        error: null,
+      },
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isLoginSuccessful: null,
-      errorMessage: "An error has occurred.",
+      errorMessage: "An error occurred. Please try again.",
     };
+  },
+
+  watch: {
+    "emailField.email": function () {
+      if (this.emailField.email.length === 0)
+        this.emailField.error = "Required field";
+      else if (!this.isEmailValid())
+        this.emailField.error = "Please enter a valid email";
+      else this.emailField.error = null;
+    },
+
+    "passField.pass": function () {
+      if (this.passField.pass.length === 0)
+        this.passField.error = "Required field";
+      else this.passField.error = null;
+    },
   },
 
   components: {
@@ -164,39 +201,53 @@ export default {
   methods: {
     /* needed to open/close this modal from parent component */
     openModal() {
-      // reset login variables to default in case the user tries to login,
-      // closes the modal, and then reopens it
-      this.email = "";
-      this.pass = "";
-      (this.isSubmittingForm = false), (this.hasSubmittedForm = false);
-      this.isLoginSuccessful = null;
-
       this.$refs.signInBaseModalRef.openModal();
     },
     closeModal() {
       this.$refs.signInBaseModalRef.closeModal();
     },
 
-    signIn() {
-      // add client-side validation checks here
+    // https://masteringjs.io/tutorials/fundamentals/email-validation
+    // checks if email follows pattern xx@yy.zz
+    isEmailValid() {
+      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.emailField.email);
+    },
 
+    areFieldsValid() {
+      // "Required field" error will not be shown until user starts typing
+      // set errors here if nothing has been entered yet
+      if (this.emailField.email.length === 0)
+        this.emailField.error = "Required field";
+      if (this.passField.pass.length === 0)
+        this.passField.error = "Required field";
+
+      return !this.passField.error && !this.emailField.error;
+    },
+
+    signIn() {
       this.isSubmittingForm = true;
       this.hasSubmittedForm = false;
       this.isLoginSuccessful = null;
 
-      var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
+      if (!this.areFieldsValid()) {
+        this.hasSubmittedForm = true;
+        this.isLoginSuccessful = false;
+        this.isSubmittingForm = false;
+        this.errorMessage = "Please fix the errors below before continuing.";
+        return;
+      }
 
+      var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
       axios
         .post(loginUrl, {
-          email: this.email,
-          password: this.pass,
+          email: this.emailField.email,
+          password: this.passField.pass,
         })
         .then(
           (response) => {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
-
             this.setAuthToken(response.data.access_token);
 
             setTimeout(() => {
