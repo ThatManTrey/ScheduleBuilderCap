@@ -1,0 +1,2 @@
+ACCOUNT_PASS = 'JDjbw3.d6Z!m7Bb'
+DB_PASS = 'kmJBcE6NTp2@zD7'
