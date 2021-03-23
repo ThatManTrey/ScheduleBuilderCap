@@ -12,7 +12,8 @@
           </span>
 
           <span class="badge rounded-pill course-badge">
-            <button class="button-as-link">{{ course.CreditHours_Max }} Credits</button>
+            <button class="button-as-link" v-if="course.CreditHours_Max == course.CreditHours_Min">{{ course.CreditHours_Max }} Credits</button>
+            <button class="button-as-link" v-else >{{ course.CreditHours_Min }}-{{ course.CreditHours_Max }} Credits</button>
           </span>
         </div>
 
