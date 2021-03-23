@@ -237,6 +237,7 @@ export default {
         return;
       }
 
+      // TODO: move to store
       var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
       axios
         .post(loginUrl, {
@@ -271,6 +272,7 @@ export default {
         );
     },
 
+    // TODO: move to store
     setAuthToken(token) {
       localStorage.setItem("user", token);
       // set axios default
@@ -284,8 +286,8 @@ export default {
   },
 
   created() {
-    this.isResettingPassword = false;
-    this.isPasswordReset = false;
+    // this.isResettingPassword = false;
+    // this.isPasswordReset = false;
   },
 };
 </script>

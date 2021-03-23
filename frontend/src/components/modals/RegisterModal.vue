@@ -166,7 +166,6 @@ export default {
   },
 
   methods: {
-    /* needed to open/close this modal from parent component */
     openModal() {
       this.$refs.registerBaseModalRef.openModal();
     },
@@ -216,6 +215,7 @@ export default {
 
       var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
 
+      // TODO: move to store
       axios
         .post(registerUrl, {
           email: this.emailField.email,

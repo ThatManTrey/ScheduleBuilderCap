@@ -110,6 +110,7 @@
       </div>
     </nav>
 
+    <!-- remove events here -->
     <SignInModal @checkAuth="checkAuth" ref="signInModal"></SignInModal>
     <RegisterModal ref="registerModal"></RegisterModal>
 
@@ -173,11 +174,13 @@ export default {
       window.scroll(0, 0);
     },
 
+    // TODO: move to store
     logout() {
       localStorage.removeItem("user");
       this.checkAuth();
     },
 
+    // TODO: move to store
     checkAuth() {
       this.isLoggedIn = localStorage.getItem("user") != null;
 
@@ -198,6 +201,7 @@ export default {
       }
     },
 
+  	// TODO: move to store
     getCurrentUserId() {
       let authToken = localStorage.getItem("user");
       try {
@@ -209,6 +213,7 @@ export default {
       }
     },
 
+    // TODO: move to store
     getUser() {
       var userUrl =
         process.env.VUE_APP_API_URL + "/users/" + this.getCurrentUserId();
