@@ -1,6 +1,6 @@
 from flask import jsonify
 from app import app, db
-from app.models import Student
+from app.models import Student, AllCourse
 from app.colors import *
 
 import datetime

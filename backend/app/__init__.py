@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy 
 from flask_jwt_extended import JWTManager
 import os
 
 # points to the built files folder for Vue
-app = Flask(__name__, template_folder="../frontend/dist/")
+app = Flask(__name__, template_folder="../../frontend/dist/")
 app.config["JWT_SECRET_KEY"] = os.urandom(32)
 
 # set keyword db for basically everything (SQLAlchemy connection)
