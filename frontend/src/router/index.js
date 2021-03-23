@@ -5,6 +5,7 @@ import About from "../views/About.vue";
 import Favorites from "../views/Favorites.vue";
 import Schedule from "../views/Schedule.vue";
 import Theme from "../views/Theme.vue";
+import * as Toast from "../toast.js";
 
 Vue.use(VueRouter);
 
@@ -26,12 +27,24 @@ const routes = [
   {
     path: "/schedule",
     name: "Schedule",
-    component: Schedule
+    component: Schedule,
+    beforeEnter: (to, from, next) => {
+      if (!localStorage.userInfo) {
+        next('/home');
+        Toast.showErrorMessage("You'll need to login before you can view that page.");
+      } else next();
+    }
   },
   {
     path: "/favorites",
     name: "Favorites",
-    component: Favorites
+    component: Favorites,
+    beforeEnter: (to, from, next) => {
+      if (!localStorage.userInfo) {
+        next('/home');
+        Toast.showErrorMessage("You'll need to login before you can view that page.");
+      } else next();
+    }
   },
   {
     path: "/theme",

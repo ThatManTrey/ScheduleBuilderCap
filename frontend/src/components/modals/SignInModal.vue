@@ -155,6 +155,7 @@ import Modal from "./Modal.vue";
 import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
 import Alert from "../Alert.vue";
+import * as Toast from "../../toast";
 
 export default {
   data() {
@@ -199,7 +200,6 @@ export default {
   },
 
   methods: {
-    /* needed to open/close this modal from parent component */
     openModal() {
       this.$refs.signInBaseModalRef.openModal();
     },
@@ -237,7 +237,6 @@ export default {
         return;
       }
 
-      // TODO: move to store
       var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
       axios
         .post(loginUrl, {
@@ -249,11 +248,15 @@ export default {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
-            this.setAuthToken(response.data.access_token);
 
             setTimeout(() => {
               this.closeModal();
-            }, 2000);
+
+              // should probably change closeModal to async instead of this
+              setTimeout(() => {
+                this.checkToken(response.data.access_token);
+              }, 250);
+            }, 1000);
           },
           (error) => {
             try {
@@ -272,11 +275,18 @@ export default {
         );
     },
 
-    // TODO: move to store
-    setAuthToken(token) {
-      localStorage.setItem("user", token);
-      // set axios default
-      this.$emit("checkAuth");
+    checkToken(authToken) {
+      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify";
+      axios
+        .get(verifyUrl, { headers: { Authorization: "Bearer " + authToken } })
+        .then(() => {
+          this.$actions.login(authToken);
+        })
+        .catch(() => {
+          Toast.showErrorMessage(
+            "Invalid authentication token. Please login again."
+          );
+        });
     },
 
     // resetPassword() {

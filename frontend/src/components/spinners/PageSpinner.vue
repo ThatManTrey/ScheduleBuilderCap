@@ -1,7 +1,7 @@
 <template lang="html">
   <!-- Spinner that's fixed to the center of the screen when pages are loading  -->
   <div class="course-spinner-container ">
-    <Spinner :showSpinner="showSpinner" sizeInRem="3rem"></Spinner>
+    <Spinner :showSpinner="showSpinner" :sizeInRem="sizeInRem"></Spinner>
   </div>
 </template>
 
@@ -12,6 +12,10 @@ export default {
     name: 'page-spinner',
     props: {
       showSpinner: Boolean,
+      sizeInRem: {
+        type: String,
+        default: "3rem"
+      }
     },
     components: {
         Spinner

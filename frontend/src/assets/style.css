@@ -512,6 +512,16 @@ a.link:hover, button.link:hover {
   opacity: 0;
 }
 
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 1.5s;
+}
+
+.page-fade-enter,
+.page-fade-leave-to {
+  opacity: 0;
+}
+
 /*
  * Tool Tips 
  * referenced from: https://codepen.io/reiinii1/pen/aPGXEa 

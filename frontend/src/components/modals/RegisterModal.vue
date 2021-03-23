@@ -215,7 +215,6 @@ export default {
 
       var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
 
-      // TODO: move to store
       axios
         .post(registerUrl, {
           email: this.emailField.email,
@@ -226,7 +225,6 @@ export default {
             this.isRegisterSuccessful = true;
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
-            // nothing else to do here (account info has been created) user closes this modal and opens login modal
           },
           (error) => {
             try {

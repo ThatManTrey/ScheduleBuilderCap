@@ -30,7 +30,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li v-if="$store.isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +40,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li v-if="$store.isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -80,10 +80,10 @@
               Hit protected route
             </button>
             <button
-              v-on:click="logout"
+              v-on:click="$actions.logout()"
               type="button"
               class="btn btn-theme-blacker"
-              v-if="isLoggedIn"
+              v-if="$store.isLoggedIn"
             >
               Logout
 
@@ -93,7 +93,7 @@
               type="button"
               class="btn btn-theme-blacker me-3"
               @click="$refs.signInModal.openModal()"
-              v-if="!isLoggedIn"
+              v-if="!$store.isLoggedIn"
             >
               Sign In
             </button>
@@ -101,7 +101,7 @@
               type="button"
               class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
-              v-if="!isLoggedIn"
+              v-if="!$store.isLoggedIn"
             >
               Create An Account
             </button>
@@ -111,8 +111,8 @@
     </nav>
 
     <!-- remove events here -->
-    <SignInModal @checkAuth="checkAuth" ref="signInModal"></SignInModal>
-    <RegisterModal ref="registerModal"></RegisterModal>
+    <SignInModal v-if="!$store.isLoggedIn" ref="signInModal"></SignInModal>
+    <RegisterModal v-if="!$store.isLoggedIn" ref="registerModal"></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -128,9 +128,8 @@
 import * as Constants from "@/const.js";
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
-import * as Toast from "../toast.js";
+//import * as Toast from "../toast.js";
 import axios from "axios";
-import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "theme-nav-bar",
@@ -148,8 +147,7 @@ export default {
 
   data() {
     return {
-      showScrollToTopButton: false,
-      isLoggedIn: false
+      showScrollToTopButton: false
     };
   },
 
@@ -174,49 +172,10 @@ export default {
       window.scroll(0, 0);
     },
 
-    // TODO: move to store
-    logout() {
-      localStorage.removeItem("user");
-      this.checkAuth();
-    },
-
-    // TODO: move to store
-    checkAuth() {
-      this.isLoggedIn = localStorage.getItem("user") != null;
-
-      // set auth token for every subsequent request until logout (add check for invalidation later)
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + localStorage.getItem("user");
-
-      if (!this.isLoggedIn) {
-        axios.defaults.headers.common["Authorization"] = "";
-
-        // redirect if anonymous user tries to access favorites/schedule page
-        if (Constants.PROTECTED_ROUTES.includes(this.currentRouteName)) {
-          this.$router.push("home");
-          Toast.showErrorMessage(
-            "You'll need to login before you can view that page."
-          );
-        }
-      }
-    },
-
-  	// TODO: move to store
-    getCurrentUserId() {
-      let authToken = localStorage.getItem("user");
-      try {
-        let decodedToken = VueJwtDecode.decode(authToken);
-        return decodedToken.sub;
-      } catch (error) {
-        console.log(error, "error from decoding token");
-        return 1;
-      }
-    },
-
-    // TODO: move to store
+    // test protected endpoint
     getUser() {
       var userUrl =
-        process.env.VUE_APP_API_URL + "/users/" + this.getCurrentUserId();
+        process.env.VUE_APP_API_URL + "/users/" + this.$store.userId;
 
       axios
         .get(userUrl)
@@ -240,7 +199,6 @@ export default {
   },
 
   created() {
-    this.checkAuth();
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }

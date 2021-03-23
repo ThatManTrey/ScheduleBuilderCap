@@ -8,7 +8,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueToast from "vue-toast-notification";
 import router from "./router";
-import store from './store.js'
+import { store, actions } from './store.js'
 
 Vue.config.productionTip = false;
 
@@ -17,8 +17,10 @@ Vue.use(VueToast, {
   duration: 10000
 });
 
+Vue.prototype.$store = store;
+Vue.prototype.$actions = actions;
+
 new Vue({
-  store,
   router,
   render: h => h(App)
 }).$mount("#app");

@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
 
-# decorator to check if user making the request is the same as 
+# decorator to check if user making the request is the same as
 #   the requested user to get information about
 # add @is_current_user to any endpoint that returns user information
 def is_current_user(function):
@@ -25,8 +25,8 @@ def register_user():
     if db.session.query(Student).filter_by(UserEmail=email).first() is not None:
         return jsonify(msg="That email is already in use."), 400
 
-    student = Student(UserEmail=email, UserPass=generate_password_hash(password), 
-        dateTime=datetime.datetime.utcnow())
+    student = Student(UserEmail=email, UserPass=generate_password_hash(password),
+                      dateTime=datetime.datetime.utcnow())
     db.session.add(student)
     db.session.commit()
     return jsonify(id=student.UserID)
@@ -45,9 +45,16 @@ def login():
     return jsonify(access_token=access_token)
 
 
+# used for front end routing checks
+@app.route('/api/auth/verify')
+@jwt_required()
+def verify_token():
+    return ("", 204)
+
+
 # protected resource
 @app.route('/api/users/<int:user_id>', methods=['GET'])
-@jwt_required()     
+@jwt_required()
 @is_current_user
 def get_user(user_id):
     student = db.session.query(Student).get(user_id)
@@ -57,6 +64,8 @@ def get_user(user_id):
     return jsonify(userID=student.UserID, userEmail=student.UserEmail, createdOn=student.dateTime)
 
 # for testing
+
+
 @app.route('/api/users', methods=['GET'])
 def get_all_users():
     students = db.session.query(Student).all()
@@ -69,13 +78,15 @@ def get_all_users():
     return jsonify(allStudents=arr_students)
 
 # for testing
+
+
 @app.route('/api/users', methods=['DELETE'])
 def delete_all_users():
     students = db.session.query(Student).all()
 
     for student in students:
         db.session.query(Student).filter_by(UserID=student.UserID).delete()
-    
+
     db.session.commit()
 
     return ("", 204)
