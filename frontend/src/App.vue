@@ -5,9 +5,7 @@
       :showSpinner="!hasLoaded"
       sizeInRem="3rem"
     ></PageSpinner>
-    <transition name="page-fade">
-      <router-view v-if="hasLoaded" />
-    </transition>
+    <router-view v-if="hasLoaded" />
   </div>
 </template>
 

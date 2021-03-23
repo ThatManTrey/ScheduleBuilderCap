@@ -80,7 +80,7 @@
               Hit protected route
             </button>
             <button
-              v-on:click="$actions.logout()"
+              v-on:click="logout()"
               type="button"
               class="btn btn-theme-blacker"
               v-if="$store.isLoggedIn"
@@ -189,6 +189,11 @@ export default {
           // eslint-disable-next-line
           console.error(error.response);
         });
+    },
+
+    logout() {
+      this.$actions.logout();
+      this.$router.push('/home');
     }
   },
 
