@@ -1,14 +1,25 @@
 <template>
   <Modal ref="signInBaseModalRef">
     <template v-slot:header>
-      <span v-if="!isResettingPassword">Sign In</span>
-      <span v-else>Reset My Password</span>
+      <span>Sign In</span>
+      <!-- <span v-else>Reset My Password</span> -->
+      <span class="ms-2">
+        <Spinner :showSpinner="isSubmittingForm" sizeInRem="1.5rem"></Spinner>
+      </span>
     </template>
 
     <template v-slot:body>
-      <!-- Login -->
+      <transition name="fade">
+        <div v-if="hasSubmittedForm">
+          <Alert
+            :isSuccess="isLoginSuccessful"
+            :errorMessage="errorMessage"
+            successMessage="Login Successful! Closing this window..."
+          ></Alert>
+        </div>
+      </transition>
 
-      <div
+      <!-- <div
         v-if="isPasswordReset"
         class="alert container bg-theme-success text-theme-whitest container"
         role="alert"
@@ -25,9 +36,9 @@
             link.
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <form v-if="!isResettingPassword">
+      <form>
         <div class="mb-3 text-theme-white">
           <label for="userSignInEmail" class="form-label">
             <h6>Email Address</h6>
@@ -37,11 +48,12 @@
             class="form-control"
             id="userSignInEmail"
             aria-describedby="userSignInEmailHelp"
+            placeholder="example@gmail.com"
+            :disabled="isSubmittingForm"
+            v-model.trim="email"
           />
-          <div id="userSignInEmailHelp" class="form-text">
-            Please enter a valid email
-          </div>
         </div>
+
         <div class="mb-3 text-theme-white">
           <label for="userSignInPass" class="form-label">
             <h6>Password</h6>
@@ -52,17 +64,20 @@
             class="form-control"
             id="userSignInPass"
             aria-describedby="userSignInPassHelp"
+            placeholder="Enter password..."
+            :disabled="isSubmittingForm"
+            v-model.trim="pass"
           />
-          <div id="userSignInPassHelp" class="form-text">
+          <!-- <div id="userSignInPassHelp" class="form-text">
             <a class="link" @click="isResettingPassword = true"
               >Forgot your password?</a
             >
-          </div>
+          </div> -->
         </div>
       </form>
 
       <!-- Password reset -->
-      <form v-else>
+      <!-- <form v-else>
         <p>
           Enter your email below and we'll send you a link to reset your
           password.
@@ -80,11 +95,11 @@
         <div id="userResetPassEmailHelp" class="form-text">
           Please enter a valid email
         </div>
-      </form>
+      </form> -->
     </template>
     <template v-slot:footer>
       <!-- Login -->
-      <div v-if="!isResettingPassword">
+      <div>
         <button type="button" class="btn btn-theme-blacker" @click="closeModal">
           Close
         </button>
@@ -99,7 +114,7 @@
       </div>
 
       <!-- Password reset -->
-      <div v-else>
+      <!-- <div v-else>
         <button
           type="button"
           class="btn btn-theme-blacker"
@@ -115,29 +130,47 @@
         >
           Reset My Password
         </button>
-      </div>
+      </div> -->
     </template>
   </Modal>
 </template>
 
 <script>
 import Modal from "./Modal.vue";
+import axios from "axios";
+import Spinner from "../spinners/Spinner.vue";
+import Alert from "../Alert.vue";
 
 export default {
   data() {
     return {
-      isResettingPassword: false,
-      isPasswordReset: false
+      // isResettingPassword: false,
+      // isPasswordReset: false,
+      email: "",
+      pass: "",
+      isSubmittingForm: false,
+      hasSubmittedForm: false,
+      isLoginSuccessful: null,
+      errorMessage: "An error has occurred.",
     };
   },
 
   components: {
-    Modal
+    Modal,
+    Spinner,
+    Alert,
   },
 
   methods: {
     /* needed to open/close this modal from parent component */
     openModal() {
+      // reset login variables to default in case the user tries to login,
+      // closes the modal, and then reopens it
+      this.email = "";
+      this.pass = "";
+      (this.isSubmittingForm = false), (this.hasSubmittedForm = false);
+      this.isLoginSuccessful = null;
+
       this.$refs.signInBaseModalRef.openModal();
     },
     closeModal() {
@@ -145,20 +178,64 @@ export default {
     },
 
     signIn() {
-      this.$emit("signIn");
-      this.closeModal();
+      // add client-side validation checks here
+
+      this.isSubmittingForm = true;
+      this.hasSubmittedForm = false;
+      this.isLoginSuccessful = null;
+
+      var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
+
+      axios
+        .post(loginUrl, {
+          email: this.email,
+          password: this.pass,
+        })
+        .then(
+          (response) => {
+            this.isLoginSuccessful = true;
+            this.isSubmittingForm = false;
+            this.hasSubmittedForm = true;
+
+            this.setAuthToken(response.data.access_token);
+
+            setTimeout(() => {
+              this.closeModal();
+            }, 2000);
+          },
+          (error) => {
+            try {
+              if (
+                error.response.data.msg != null &&
+                error.response.data.msg != ""
+              )
+                this.errorMessage = error.response.data.msg;
+              // else use default errorMessage defined above
+            } finally {
+              this.isLoginSuccessful = false;
+              this.isSubmittingForm = false;
+              this.hasSubmittedForm = true;
+            }
+          }
+        );
     },
 
-    resetPassword() {
-      this.isResettingPassword = false;
-      this.isPasswordReset = true;
+    setAuthToken(token) {
+      localStorage.setItem("user", token);
+      // set axios default
+      this.$emit("checkAuth");
     },
 
-    created() {
-      this.isResettingPassword = false;
-      this.isPasswordReset = false;
-    }
-  }
+    // resetPassword() {
+    //   this.isResettingPassword = false;
+    //   this.isPasswordReset = true;
+    // },
+  },
+
+  created() {
+    this.isResettingPassword = false;
+    this.isPasswordReset = false;
+  },
 };
 </script>
 
