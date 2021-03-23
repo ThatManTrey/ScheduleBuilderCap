@@ -40,7 +40,7 @@ export default {
           Toast.showErrorMessage(
             "Invalid authentication token. Please login again."
           );
-          this.localStorage.userInfo;
+          localStorage.removeItem("userInfo");
         });
     },
   },
