@@ -164,21 +164,21 @@ export default {
       // isPasswordReset: false,
       emailField: {
         email: "",
-        error: null,
+        error: null
       },
       passField: {
         pass: "",
-        error: null,
+        error: null
       },
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isLoginSuccessful: null,
-      errorMessage: "An error occurred. Please try again.",
+      errorMessage: "An error occurred. Please try again."
     };
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
       else if (!this.isEmailValid())
@@ -186,17 +186,17 @@ export default {
       else this.emailField.error = null;
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else this.passField.error = null;
-    },
+    }
   },
 
   components: {
     Modal,
     Spinner,
-    Alert,
+    Alert
   },
 
   methods: {
@@ -241,10 +241,10 @@ export default {
       axios
         .post(loginUrl, {
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
         .then(
-          (response) => {
+          response => {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
@@ -258,7 +258,7 @@ export default {
               }, 250);
             }, 1000);
           },
-          (error) => {
+          error => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -287,7 +287,7 @@ export default {
             "Invalid authentication token. Please login again."
           );
         });
-    },
+    }
 
     // resetPassword() {
     //   this.isResettingPassword = false;
@@ -298,7 +298,7 @@ export default {
   created() {
     // this.isResettingPassword = false;
     // this.isPasswordReset = false;
-  },
+  }
 };
 </script>
 

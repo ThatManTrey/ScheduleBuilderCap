@@ -64,8 +64,6 @@ def get_user(user_id):
     return jsonify(userID=student.UserID, userEmail=student.UserEmail, createdOn=student.dateTime)
 
 # for testing
-
-
 @app.route('/api/users', methods=['GET'])
 def get_all_users():
     students = db.session.query(Student).all()

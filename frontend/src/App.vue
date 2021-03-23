@@ -17,12 +17,12 @@ import PageSpinner from "./components/spinners/PageSpinner";
 export default {
   data() {
     return {
-      hasLoaded: false,
+      hasLoaded: false
     };
   },
 
   components: {
-    PageSpinner,
+    PageSpinner
   },
 
   methods: {
@@ -42,14 +42,12 @@ export default {
           );
           localStorage.removeItem("userInfo");
         });
-    },
+    }
   },
 
   created() {
-    if (localStorage.userInfo != null) 
-      this.checkToken(localStorage.userInfo);
-      
+    if (localStorage.userInfo != null) this.checkToken(localStorage.userInfo);
     else this.hasLoaded = true;
-  },
+  }
 };
 </script>

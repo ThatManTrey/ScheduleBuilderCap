@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import axios from 'axios';
+import Vue from "vue";
+import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 export const store = Vue.observable({
@@ -23,5 +23,5 @@ export const actions = {
     store.userId = -1;
     localStorage.removeItem("userInfo");
     delete axios.defaults.headers.common["Authorization"];
-  },
+  }
 };

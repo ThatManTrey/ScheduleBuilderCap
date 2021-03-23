@@ -30,8 +30,10 @@ const routes = [
     component: Schedule,
     beforeEnter: (to, from, next) => {
       if (!localStorage.userInfo) {
-        next('/home');
-        Toast.showErrorMessage("You'll need to login before you can view that page.");
+        next("/home");
+        Toast.showErrorMessage(
+          "You'll need to login before you can view that page."
+        );
       } else next();
     }
   },
@@ -41,8 +43,10 @@ const routes = [
     component: Favorites,
     beforeEnter: (to, from, next) => {
       if (!localStorage.userInfo) {
-        next('/home');
-        Toast.showErrorMessage("You'll need to login before you can view that page.");
+        next("/home");
+        Toast.showErrorMessage(
+          "You'll need to login before you can view that page."
+        );
       } else next();
     }
   },

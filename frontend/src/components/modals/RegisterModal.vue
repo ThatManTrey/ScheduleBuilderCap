@@ -116,25 +116,25 @@ export default {
     return {
       emailField: {
         email: "",
-        error: null,
+        error: null
       },
       passField: {
         pass: "",
-        error: null,
+        error: null
       },
       passVerifyField: {
         pass: "",
-        error: null,
+        error: null
       },
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isRegisterSuccessful: null,
-      errorMessage: "An error occurred. Please try again.",
+      errorMessage: "An error occurred. Please try again."
     };
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
       else if (!this.isEmailValid())
@@ -142,7 +142,7 @@ export default {
       else this.emailField.error = null;
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else if (this.passField.pass.length < 8)
@@ -150,19 +150,19 @@ export default {
       else this.passField.error = null;
     },
 
-    "passVerifyField.pass": function () {
+    "passVerifyField.pass": function() {
       if (this.passVerifyField.pass.length === 0)
         this.passVerifyField.error = "Required field";
       else if (this.passVerifyField.pass != this.passField.pass)
         this.passVerifyField.error = "Passwords do not match";
       else this.passVerifyField.error = null;
-    },
+    }
   },
 
   components: {
     Modal,
     Spinner,
-    Alert,
+    Alert
   },
 
   methods: {
@@ -180,7 +180,7 @@ export default {
     },
 
     areFieldsValid() {
-      // "Required field" and password not matching errors will 
+      // "Required field" and password not matching errors will
       // not be shown until user starts typing
       // set errors here if nothing has been entered yet
       if (this.passVerifyField.pass != this.passField.pass)
@@ -218,7 +218,7 @@ export default {
       axios
         .post(registerUrl, {
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
         .then(
           () => {
@@ -226,7 +226,7 @@ export default {
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
           },
-          (error) => {
+          error => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -241,7 +241,7 @@ export default {
             }
           }
         );
-    },
-  },
+    }
+  }
 };
 </script>

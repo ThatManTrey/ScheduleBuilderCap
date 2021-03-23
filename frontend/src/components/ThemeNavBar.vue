@@ -30,7 +30,10 @@
               </router-link>
             </li>
 
-            <li v-if="$store.isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li
+              v-if="$store.isLoggedIn"
+              class="nav-item col-6 col-md-4 col-lg-auto"
+            >
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +43,10 @@
               </router-link>
             </li>
 
-            <li v-if="$store.isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li
+              v-if="$store.isLoggedIn"
+              class="nav-item col-6 col-md-4 col-lg-auto"
+            >
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -72,13 +78,6 @@
           </ul>
 
           <div class="d-flex">
-            <button
-              v-on:click="getUser"
-              type="button"
-              class="btn btn-theme-blacker me-3"
-            >
-              Hit protected route
-            </button>
             <button
               v-on:click="logout()"
               type="button"
@@ -112,7 +111,10 @@
 
     <!-- remove events here -->
     <SignInModal v-if="!$store.isLoggedIn" ref="signInModal"></SignInModal>
-    <RegisterModal v-if="!$store.isLoggedIn" ref="registerModal"></RegisterModal>
+    <RegisterModal
+      v-if="!$store.isLoggedIn"
+      ref="registerModal"
+    ></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -193,7 +195,7 @@ export default {
 
     logout() {
       this.$actions.logout();
-      this.$router.push('/home');
+      this.$router.push("/home");
     }
   },
 

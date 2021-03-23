@@ -8,7 +8,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueToast from "vue-toast-notification";
 import router from "./router";
-import { store, actions } from './store.js'
+import { store, actions } from "./store.js";
 
 Vue.config.productionTip = false;
 
