@@ -1,8 +1,8 @@
 <template>
   <Modal ref="signInBaseModalRef">
     <template v-slot:header>
-      <span>Sign In</span>
-      <!-- <span v-else>Reset My Password</span> -->
+      <span v-if="!isResettingPassword">Sign In</span>
+      <span v-else>Reset Password</span>
       <span class="ms-2">
         <Spinner :showSpinner="isSubmittingForm" sizeInRem="1.5rem"></Spinner>
       </span>
@@ -11,34 +11,26 @@
     <template v-slot:body>
       <transition name="fade">
         <div v-if="hasSubmittedForm">
+          <!-- Login alert -->
           <Alert
+            v-if="!isResettingPassword"
             :isSuccess="isLoginSuccessful"
             :errorMessage="errorMessage"
             successMessage="Login Successful! Closing this window..."
           ></Alert>
+
+          <!-- Password reset alert -->
+          <Alert
+            v-else
+            :isSuccess="isPasswordResetSuccessful"
+            :errorMessage="errorMessage"
+            :successMessage="resetPassSuccessMessage"
+          ></Alert>
         </div>
       </transition>
 
-      <!-- <div
-        v-if="isPasswordReset"
-        class="alert container bg-theme-success text-theme-whitest container"
-        role="alert"
-      >
-        <div class="row">
-          <div class="col-1">
-            <i
-              class="fas fa-check-circle fa-lg"
-              style="vertical-align: -webkit-baseline-middle;"
-            ></i>
-          </div>
-          <div class="col-11">
-            Your password has been succesfully reset! Check your email for a
-            link.
-          </div>
-        </div>
-      </div> -->
-
-      <form>
+      <!-- Login form -->
+      <form v-if="!isResettingPassword">
         <div class="mb-3 text-theme-white">
           <label for="userSignInEmail" class="form-label">
             <h6>Email Address</h6>
@@ -51,7 +43,7 @@
             id="userSignInEmail"
             placeholder="example@gmail.com"
             :disabled="isSubmittingForm"
-            v-model="emailField.email"
+            v-model.trim="emailField.email"
           />
 
           <transition name="fade">
@@ -72,6 +64,7 @@
             class="form-control"
             :class="{ 'form-error': passField.error }"
             id="userSignInPass"
+            aria-describedby="userSignInPassHelp"
             placeholder="Enter password..."
             :disabled="isSubmittingForm"
             v-model="passField.pass"
@@ -83,16 +76,17 @@
               {{ passField.error }}
             </span>
           </transition>
-          <!-- <div id="userSignInPassHelp" class="form-text">
+
+          <div id="userSignInPassHelp" class="form-text">
             <a class="link" @click="isResettingPassword = true"
               >Forgot your password?</a
             >
-          </div> -->
+          </div>
         </div>
       </form>
 
-      <!-- Password reset -->
-      <!-- <form v-else>
+      <!-- Password reset form -->
+      <form v-else>
         <p>
           Enter your email below and we'll send you a link to reset your
           password.
@@ -101,20 +95,27 @@
         <label for="userResetPassEmail" class="form-label">
           <h6>Email Address</h6>
         </label>
+
         <input
           type="email"
           class="form-control"
+          :class="{ 'form-error': resetPassEmailField.error }"
           id="userResetPassEmail"
-          aria-describedby="userResetPassEmailHelp"
+          placeholder="Enter password..."
+          :disabled="isSubmittingForm"
+          v-model.trim="resetPassEmailField.email"
         />
-        <div id="userResetPassEmailHelp" class="form-text">
-          Please enter a valid email
-        </div>
-      </form> -->
+
+        <span v-if="resetPassEmailField.error" class="form-error-text">
+          <i class="fas fa-times-circle text-theme-warning-light"></i>
+          {{ resetPassEmailField.error }}
+        </span>
+      </form>
     </template>
+
     <template v-slot:footer>
-      <!-- Login -->
-      <div>
+      <!-- Login buttons -->
+      <div v-if="!isResettingPassword">
         <button type="button" class="btn btn-theme-blacker" @click="closeModal">
           Close
         </button>
@@ -128,14 +129,14 @@
         </button>
       </div>
 
-      <!-- Password reset -->
-      <!-- <div v-else>
+      <!-- Password reset buttons -->
+      <div v-else>
         <button
           type="button"
           class="btn btn-theme-blacker"
           @click="isResettingPassword = false"
         >
-          Cancel
+          Go Back
         </button>
 
         <button
@@ -145,7 +146,7 @@
         >
           Reset My Password
         </button>
-      </div> -->
+      </div>
     </template>
   </Modal>
 </template>
@@ -160,43 +161,56 @@ import * as Toast from "../../toast";
 export default {
   data() {
     return {
-      // isResettingPassword: false,
-      // isPasswordReset: false,
       emailField: {
         email: "",
-        error: null
+        error: null,
       },
       passField: {
         pass: "",
-        error: null
+        error: null,
+      },
+      resetPassEmailField: {
+        email: "",
+        error: null,
       },
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isLoginSuccessful: null,
-      errorMessage: "An error occurred. Please try again."
+      isResettingPassword: false,
+      isPasswordResetSuccessful: null,
+      errorMessage: "An error occurred. Please try again.",
+      resetPassSuccessMessage: "",
     };
   },
 
   watch: {
-    "emailField.email": function() {
+    "emailField.email": function () {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
-      else if (!this.isEmailValid())
+      else if (!this.isEmailValid(this.emailField.email))
         this.emailField.error = "Please enter a valid email";
       else this.emailField.error = null;
     },
 
-    "passField.pass": function() {
+    "resetPassEmailField.email": function () {
+      if (this.resetPassEmailField.email.length === 0)
+        this.resetPassEmailField.error = "Required field";
+      else if (!this.isEmailValid(this.resetPassEmailField.email))
+        this.resetPassEmailField.error = "Please enter a valid email";
+      else this.resetPassEmailField.error = null;
+    },
+
+    "passField.pass": function () {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else this.passField.error = null;
-    }
+    },
   },
 
   components: {
     Modal,
     Spinner,
-    Alert
+    Alert,
   },
 
   methods: {
@@ -209,11 +223,11 @@ export default {
 
     // https://masteringjs.io/tutorials/fundamentals/email-validation
     // checks if email follows pattern xx@yy.zz
-    isEmailValid() {
-      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.emailField.email);
+    isEmailValid(email) {
+      return /^[^@]+@\w+(\.\w+)+\w$/.test(email);
     },
 
-    areFieldsValid() {
+    areLoginFieldsValid() {
       // "Required field" error will not be shown until user starts typing
       // set errors here if nothing has been entered yet
       if (this.emailField.email.length === 0)
@@ -229,7 +243,7 @@ export default {
       this.hasSubmittedForm = false;
       this.isLoginSuccessful = null;
 
-      if (!this.areFieldsValid()) {
+      if (!this.areLoginFieldsValid()) {
         this.hasSubmittedForm = true;
         this.isLoginSuccessful = false;
         this.isSubmittingForm = false;
@@ -241,10 +255,10 @@ export default {
       axios
         .post(loginUrl, {
           email: this.emailField.email,
-          password: this.passField.pass
+          password: this.passField.pass,
         })
         .then(
-          response => {
+          (response) => {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
@@ -258,7 +272,7 @@ export default {
               }, 250);
             }, 1000);
           },
-          error => {
+          (error) => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -287,18 +301,60 @@ export default {
             "Invalid authentication token. Please login again."
           );
         });
-    }
+    },
 
-    // resetPassword() {
-    //   this.isResettingPassword = false;
-    //   this.isPasswordReset = true;
-    // },
+    isResetPasswordFieldValid() {
+      if (this.resetPassEmailField.email.length === 0)
+        this.resetPassEmailField.error = "Required field";
+
+      return !this.resetPassEmailField.error;
+    },
+
+    resetPassword() {
+      this.resetPassSuccessMessage = "A password reset link has been sent to ";
+      this.isSubmittingForm = true;
+      this.hasSubmittedForm = false;
+      this.isPasswordResetSuccessful = null;
+
+      if (!this.isResetPasswordFieldValid()) {
+        this.hasSubmittedForm = true;
+        this.isPasswordResetSuccessful = false;
+        this.isSubmittingForm = false;
+        this.errorMessage = "Please fix the errors below before continuing.";
+        return;
+      }
+
+      // hit api
+      var resetPassUrl =
+        process.env.VUE_APP_API_URL + "/auth/reset-pass-request";
+      axios
+        .post(resetPassUrl, {
+          email: this.resetPassEmailField.email,
+        })
+        .then(
+          () => {
+            this.resetPassSuccessMessage += this.resetPassEmailField.email;
+            this.isPasswordResetSuccessful = true;
+            this.isSubmittingForm = false;
+            this.hasSubmittedForm = true;
+          },
+          (error) => {
+            try {
+              if (
+                error.response.data.msg != null &&
+                error.response.data.msg != ""
+              )
+                this.errorMessage = error.response.data.msg;
+              // else use default errorMessage defined above
+            } finally {
+              this.isPasswordResetSuccessful = false;
+              this.isSubmittingForm = false;
+              this.hasSubmittedForm = true;
+            }
+          }
+        );
+    },
   },
-
-  created() {
-    // this.isResettingPassword = false;
-    // this.isPasswordReset = false;
-  }
 };
 </script>
 

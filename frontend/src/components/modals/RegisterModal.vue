@@ -31,7 +31,7 @@
             id="userRegisterEmail"
             placeholder="example@gmail.com"
             :disabled="isSubmittingForm"
-            v-model="emailField.email"
+            v-model.trim="emailField.email"
           />
 
           <transition name="fade">

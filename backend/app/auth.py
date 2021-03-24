@@ -1,10 +1,11 @@
 from flask import jsonify, request
-from app import app, db
+from flask_mail import Mail, Message
+from app import app, db, mail
 from app.models import Student
 import datetime
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
 
 
 # decorator to check if user making the request is the same as
@@ -45,14 +46,49 @@ def login():
     return jsonify(access_token=access_token)
 
 
+@app.route('/api/auth/reset-pass-request', methods=['POST'])
+def reset_pass_request():
+    email = request.json.get('email')
+    student = db.session.query(Student).filter_by(UserEmail=email).first()
+    if student is not None:
+        token_type = {"type": "resetPassword"}
+        reset_email_token = create_access_token(identity=student.UserID, additional_claims=token_type)
+        send_reset_pass_email(email, reset_email_token)
+
+    # shows even if invalid email is entered to prevent checking if accounts exist
+    return "A password reset link has been sent to " + email
+
+
+@app.route('/api/auth/reset-pass', methods=['POST'])
+@jwt_required()
+def reset_pass():
+    if get_jwt()['type'] != "resetPassword":
+        return "Invalid token type", 403
+    
+    password = request.json.get('password')
+    student = db.session.query(Student).get(get_jwt_identity())
+    if student is not None:
+        student.UserPass = generate_password_hash(password)
+        db.session.commit()
+
+    return ("", 204)
+
+
+def send_reset_pass_email(recipient, token):
+    msg = Message('Reset Your Password',
+                  sender='ksucourseplanner@gmail.com', recipients=[recipient])
+    msg.body = "We received a request to reset the password for " + recipient + "'s KSUCoursePlanner account\nClick the link below to select a new password.\nToken: " + token
+    mail.send(msg)
+
+
 # used for front end routing checks
+# TODO: change to check for get_jwt()['type'] != "access"
 @app.route('/api/auth/verify')
 @jwt_required()
 def verify_token():
     return ("", 204)
 
 
-# protected resource
 @app.route('/api/users/<int:user_id>', methods=['GET'])
 @jwt_required()
 @is_current_user
@@ -62,29 +98,3 @@ def get_user(user_id):
         return jsonify(msg="User with that ID does not exist."), 400
 
     return jsonify(userID=student.UserID, userEmail=student.UserEmail, createdOn=student.dateTime)
-
-# for testing
-@app.route('/api/users', methods=['GET'])
-def get_all_users():
-    students = db.session.query(Student).all()
-
-    # convert each object to dict (JSON doesnt like objects)
-    arr_students = []
-    for student in students:
-        arr_students.append(student.as_dict())
-
-    return jsonify(allStudents=arr_students)
-
-# for testing
-
-
-@app.route('/api/users', methods=['DELETE'])
-def delete_all_users():
-    students = db.session.query(Student).all()
-
-    for student in students:
-        db.session.query(Student).filter_by(UserID=student.UserID).delete()
-
-    db.session.commit()
-
-    return ("", 204)
