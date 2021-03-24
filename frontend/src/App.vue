@@ -27,8 +27,7 @@ export default {
 
   methods: {
     checkToken(authToken) {
-      console.log(authToken);
-      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify";
+      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify/access";
       axios
         .get(verifyUrl, { headers: { Authorization: "Bearer " + authToken } })
         .then(() => {

@@ -8,6 +8,7 @@ export const store = Vue.observable({
 });
 
 export const actions = {
+  // verify authToken is valid before calling this action
   login(authToken) {
     var decodedToken = jwt_decode(authToken);
     store.userId = decodedToken.sub;

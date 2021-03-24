@@ -5,6 +5,7 @@ import About from "../views/About.vue";
 import Favorites from "../views/Favorites.vue";
 import Schedule from "../views/Schedule.vue";
 import Theme from "../views/Theme.vue";
+import ResetPass from "../views/ResetPass.vue";
 import * as Toast from "../toast.js";
 
 Vue.use(VueRouter);
@@ -49,6 +50,11 @@ const routes = [
         );
       } else next();
     }
+  },
+  {
+    path: "/reset",
+    name: "Reset",
+    component: ResetPass
   },
   {
     path: "/theme",

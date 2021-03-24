@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, DateTime, Boolean
 from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -119,7 +119,8 @@ class Student(Base):
     UserID = Column(INTEGER(11), primary_key=True)
     UserEmail = Column(String(64))
     UserPass = Column(String(128))
-    dateTime = Column(String(32))
+    Created_on = Column(DateTime)
+    hasConfirmedEmail = Column(Boolean)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }

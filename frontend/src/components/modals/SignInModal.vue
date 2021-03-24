@@ -163,15 +163,15 @@ export default {
     return {
       emailField: {
         email: "",
-        error: null,
+        error: null
       },
       passField: {
         pass: "",
-        error: null,
+        error: null
       },
       resetPassEmailField: {
         email: "",
-        error: null,
+        error: null
       },
       isSubmittingForm: false,
       hasSubmittedForm: false,
@@ -179,12 +179,12 @@ export default {
       isResettingPassword: false,
       isPasswordResetSuccessful: null,
       errorMessage: "An error occurred. Please try again.",
-      resetPassSuccessMessage: "",
+      resetPassSuccessMessage: ""
     };
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
       else if (!this.isEmailValid(this.emailField.email))
@@ -192,7 +192,7 @@ export default {
       else this.emailField.error = null;
     },
 
-    "resetPassEmailField.email": function () {
+    "resetPassEmailField.email": function() {
       if (this.resetPassEmailField.email.length === 0)
         this.resetPassEmailField.error = "Required field";
       else if (!this.isEmailValid(this.resetPassEmailField.email))
@@ -200,17 +200,17 @@ export default {
       else this.resetPassEmailField.error = null;
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else this.passField.error = null;
-    },
+    }
   },
 
   components: {
     Modal,
     Spinner,
-    Alert,
+    Alert
   },
 
   methods: {
@@ -255,10 +255,10 @@ export default {
       axios
         .post(loginUrl, {
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
         .then(
-          (response) => {
+          response => {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
@@ -272,7 +272,7 @@ export default {
               }, 250);
             }, 1000);
           },
-          (error) => {
+          error => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -289,8 +289,9 @@ export default {
         );
     },
 
+    // delete this
     checkToken(authToken) {
-      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify";
+      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify/access";
       axios
         .get(verifyUrl, { headers: { Authorization: "Bearer " + authToken } })
         .then(() => {
@@ -324,12 +325,11 @@ export default {
         return;
       }
 
-      // hit api
       var resetPassUrl =
         process.env.VUE_APP_API_URL + "/auth/reset-pass-request";
       axios
         .post(resetPassUrl, {
-          email: this.resetPassEmailField.email,
+          email: this.resetPassEmailField.email
         })
         .then(
           () => {
@@ -338,7 +338,7 @@ export default {
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
           },
-          (error) => {
+          error => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -353,8 +353,8 @@ export default {
             }
           }
         );
-    },
-  },
+    }
+  }
 };
 </script>
 

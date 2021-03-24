@@ -28,7 +28,7 @@ def register_user():
         return jsonify(msg="That email is already in use."), 400
 
     student = Student(UserEmail=email, UserPass=generate_password_hash(password),
-                      dateTime=datetime.datetime.utcnow())
+                      Created_on=datetime.datetime.utcnow(), hasConfirmedEmail=False)
     db.session.add(student)
     db.session.commit()
     return jsonify(id=student.UserID)
@@ -53,7 +53,7 @@ def reset_pass_request():
     student = db.session.query(Student).filter_by(UserEmail=email).first()
     if student is not None:
         token_type = {"type": "resetPassword"}
-        reset_email_token = create_access_token(identity=student.UserID, additional_claims=token_type)
+        reset_email_token = create_access_token(identity=student.UserID, expires_delta=datetime.timedelta(hours=1), additional_claims=token_type)
         send_reset_pass_email(email, reset_email_token)
 
     # shows even if invalid email is entered to prevent checking if accounts exist
@@ -76,7 +76,7 @@ def reset_pass():
 
 
 def send_reset_pass_email(recipient, token):
-    # set default sender app setting
+    # TODO set default sender app setting
     msg = Message('Reset Your Password',
                   sender='ksucourseplanner@gmail.com', recipients=[recipient])
     msg.body = get_reset_password_txt(token)
@@ -84,11 +84,20 @@ def send_reset_pass_email(recipient, token):
     mail.send(msg)
 
 
-# used for front end routing checks
-# TODO: change to check for get_jwt()['type'] != "access"
-@app.route('/api/auth/verify')
+# used for verifying token on new session
+@app.route('/api/auth/verify/access')
 @jwt_required()
-def verify_token():
+def verify_access_token():
+    if get_jwt()['type'] != "access":
+        return "Invalid token type", 403
+    return ("", 204)
+
+
+@app.route('/api/auth/verify/reset-pass')
+@jwt_required()
+def verify_reset_pass_token():
+    if get_jwt()['type'] != "resetPassword":
+        return "Invalid token type", 403
     return ("", 204)
 
 
