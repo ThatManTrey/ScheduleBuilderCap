@@ -27,7 +27,6 @@ from app import scraper
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
 # Initial page rendering needed for PythonAnywhere

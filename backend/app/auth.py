@@ -6,6 +6,7 @@ import datetime
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
+from app.emails import *
 
 
 # decorator to check if user making the request is the same as
@@ -75,9 +76,11 @@ def reset_pass():
 
 
 def send_reset_pass_email(recipient, token):
+    # set default sender app setting
     msg = Message('Reset Your Password',
                   sender='ksucourseplanner@gmail.com', recipients=[recipient])
-    msg.body = "We received a request to reset the password for " + recipient + "'s KSUCoursePlanner account\nClick the link below to select a new password.\nToken: " + token
+    msg.body = get_reset_password_txt(token)
+    msg.html = get_reset_password_html(token)
     mail.send(msg)
 
 
