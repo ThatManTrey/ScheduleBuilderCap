@@ -79,10 +79,6 @@ export default {
             this.$refs.addToSemesterModalHome.openModal();
         },
 
-        update(courses) {
-          this.courses = courses
-        },
-
         getCourses() {
           var baseUrl = process.env.VUE_APP_API_URL + "/courses"
 
@@ -90,7 +86,7 @@ export default {
           axios.get(baseUrl + "/cs")
             .then((res) => {
               this.courses = res.data;
-              this.getCourses = res;
+              this.getCourses = true;
             })
             .catch((error) => {
               // eslint-disable-next-line
