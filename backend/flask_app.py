@@ -33,4 +33,4 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 if not on_pythonanywhere:
-    app.run()
+    app.run(debug=True)

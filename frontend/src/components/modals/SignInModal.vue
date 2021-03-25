@@ -1,8 +1,8 @@
 <template>
   <Modal ref="signInBaseModalRef">
     <template v-slot:header>
-      <span>Sign In</span>
-      <!-- <span v-else>Reset My Password</span> -->
+      <span v-if="!isResettingPassword">Sign In</span>
+      <span v-else>Reset Password</span>
       <span class="ms-2">
         <Spinner :showSpinner="isSubmittingForm" sizeInRem="1.5rem"></Spinner>
       </span>
@@ -10,96 +10,120 @@
 
     <template v-slot:body>
       <transition name="fade">
-        <div v-if="hasSubmittedForm">
-          <Alert
-            :isSuccess="isLoginSuccessful"
-            :errorMessage="errorMessage"
+        <!-- Login alerts -->
+        <div v-if="!isResettingPassword">
+          <SuccessAlert
+            v-if="isLoginSuccessful"
             successMessage="Login Successful! Closing this window..."
-          ></Alert>
+          ></SuccessAlert>
+
+          <ErrorAlert
+            v-if="isLoginSuccessful == false"
+            :errorMessage="errorMessage"
+          ></ErrorAlert>
+        </div>
+
+        <!-- Password reset alerts -->
+        <div v-else>
+          <SuccessAlert
+            v-if="isPasswordResetSuccessful"
+            :successMessage="resetPassSuccessMessage"
+          ></SuccessAlert>
+
+          <ErrorAlert
+            v-if="isPasswordResetSuccessful == false"
+            :errorMessage="errorMessage"
+          ></ErrorAlert>
         </div>
       </transition>
 
-      <!-- <div
-        v-if="isPasswordReset"
-        class="alert container bg-theme-success text-theme-whitest container"
-        role="alert"
-      >
-        <div class="row">
-          <div class="col-1">
-            <i
-              class="fas fa-check-circle fa-lg"
-              style="vertical-align: -webkit-baseline-middle;"
-            ></i>
-          </div>
-          <div class="col-11">
-            Your password has been succesfully reset! Check your email for a
-            link.
-          </div>
-        </div>
-      </div> -->
-
-      <form>
+      <!-- Login form -->
+      <form v-if="!isResettingPassword">
         <div class="mb-3 text-theme-white">
           <label for="userSignInEmail" class="form-label">
             <h6>Email Address</h6>
           </label>
+
           <input
             type="email"
             class="form-control"
+            :class="{ 'form-error': emailField.error }"
             id="userSignInEmail"
-            aria-describedby="userSignInEmailHelp"
             placeholder="example@gmail.com"
             :disabled="isSubmittingForm"
-            v-model.trim="email"
+            v-model.trim="emailField.email"
           />
+
+          <transition name="fade">
+            <span v-if="emailField.error" class="form-error-text">
+              <i class="fas fa-times-circle text-theme-warning-light"></i>
+              {{ emailField.error }}
+            </span>
+          </transition>
         </div>
 
-        <div class="mb-3 text-theme-white">
+        <div class="text-theme-white">
           <label for="userSignInPass" class="form-label">
             <h6>Password</h6>
           </label>
-          <span class="form-input-icon"><i class="fas fa-key" hidden></i></span>
+
           <input
             type="password"
             class="form-control"
+            :class="{ 'form-error': passField.error }"
             id="userSignInPass"
             aria-describedby="userSignInPassHelp"
             placeholder="Enter password..."
             :disabled="isSubmittingForm"
-            v-model.trim="pass"
+            v-model="passField.pass"
           />
-          <!-- <div id="userSignInPassHelp" class="form-text">
+
+          <transition name="fade">
+            <span v-if="passField.error" class="form-error-text">
+              <i class="fas fa-times-circle text-theme-warning-light"></i>
+              {{ passField.error }}
+            </span>
+          </transition>
+
+          <div id="userSignInPassHelp" class="form-text">
             <a class="link" @click="isResettingPassword = true"
               >Forgot your password?</a
             >
-          </div> -->
+          </div>
         </div>
       </form>
 
-      <!-- Password reset -->
-      <!-- <form v-else>
+      <!-- Password reset form -->
+      <form v-else>
         <p>
           Enter your email below and we'll send you a link to reset your
           password.
         </p>
 
-        <label for="userResetPassEmail" class="form-label">
+        <label for="userResetPassEmail" class="visually-hidden form-label">
           <h6>Email Address</h6>
         </label>
+
         <input
           type="email"
           class="form-control"
+          :class="{ 'form-error': resetPassEmailField.error }"
           id="userResetPassEmail"
-          aria-describedby="userResetPassEmailHelp"
+          placeholder="Enter email..."
+          :disabled="isSubmittingForm"
+          v-model.trim="resetPassEmailField.email"
         />
-        <div id="userResetPassEmailHelp" class="form-text">
-          Please enter a valid email
-        </div>
-      </form> -->
+
+        <span v-if="resetPassEmailField.error" class="form-error-text">
+          <i class="fas fa-times-circle text-theme-warning-light"></i>
+          {{ resetPassEmailField.error }}
+        </span>
+      </form>
     </template>
+
     <template v-slot:footer>
-      <!-- Login -->
-      <div>
+      <!-- Login buttons -->
+      <div v-if="!isResettingPassword">
         <button type="button" class="btn btn-theme-blacker" @click="closeModal">
           Close
         </button>
@@ -113,14 +137,14 @@
         </button>
       </div>
 
-      <!-- Password reset -->
-      <!-- <div v-else>
+      <!-- Password reset buttons -->
+      <div v-else>
         <button
           type="button"
           class="btn btn-theme-blacker"
           @click="isResettingPassword = false"
         >
-          Cancel
+          Go Back
         </button>
 
         <button
@@ -130,7 +154,7 @@
         >
           Reset My Password
         </button>
-      </div> -->
+      </div>
     </template>
   </Modal>
 </template>
@@ -139,69 +163,119 @@
 import Modal from "./Modal.vue";
 import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
-import Alert from "../Alert.vue";
+import SuccessAlert from "../alerts/SuccessAlert.vue";
+import ErrorAlert from "../alerts/ErrorAlert.vue";
 
 export default {
   data() {
     return {
-      // isResettingPassword: false,
-      // isPasswordReset: false,
-      email: "",
-      pass: "",
+      emailField: {
+        email: "",
+        error: null,
+      },
+      passField: {
+        pass: "",
+        error: null,
+      },
+      resetPassEmailField: {
+        email: "",
+        error: null,
+      },
       isSubmittingForm: false,
-      hasSubmittedForm: false,
       isLoginSuccessful: null,
-      errorMessage: "An error has occurred.",
+      isResettingPassword: false,
+      isPasswordResetSuccessful: null,
+      errorMessage: "An error occurred. Please try again.",
+      resetPassSuccessMessage: "",
     };
+  },
+
+  watch: {
+    "emailField.email": function () {
+      if (this.emailField.email.length === 0)
+        this.emailField.error = "Required field";
+      else if (!this.isEmailValid(this.emailField.email))
+        this.emailField.error = "Please enter a valid email";
+      else this.emailField.error = null;
+    },
+
+    "resetPassEmailField.email": function () {
+      if (this.resetPassEmailField.email.length === 0)
+        this.resetPassEmailField.error = "Required field";
+      else if (!this.isEmailValid(this.resetPassEmailField.email))
+        this.resetPassEmailField.error = "Please enter a valid email";
+      else this.resetPassEmailField.error = null;
+    },
+
+    "passField.pass": function () {
+      if (this.passField.pass.length === 0)
+        this.passField.error = "Required field";
+      else this.passField.error = null;
+    },
   },
 
   components: {
     Modal,
     Spinner,
-    Alert,
+    SuccessAlert,
+    ErrorAlert,
   },
 
   methods: {
-    /* needed to open/close this modal from parent component */
     openModal() {
-      // reset login variables to default in case the user tries to login,
-      // closes the modal, and then reopens it
-      this.email = "";
-      this.pass = "";
-      (this.isSubmittingForm = false), (this.hasSubmittedForm = false);
-      this.isLoginSuccessful = null;
-
       this.$refs.signInBaseModalRef.openModal();
     },
     closeModal() {
       this.$refs.signInBaseModalRef.closeModal();
     },
 
-    signIn() {
-      // add client-side validation checks here
+    // https://masteringjs.io/tutorials/fundamentals/email-validation
+    // checks if email roughly follows pattern xx@yy.zz
+    isEmailValid(email) {
+      return /^[^@]+@\w+(\.\w+)+\w$/.test(email);
+    },
 
+    areLoginFieldsValid() {
+      // "Required field" error will not be shown until user starts typing
+      // set errors here if nothing has been entered yet
+      if (this.emailField.email.length === 0)
+        this.emailField.error = "Required field";
+      if (this.passField.pass.length === 0)
+        this.passField.error = "Required field";
+
+      return !this.passField.error && !this.emailField.error;
+    },
+
+    signIn() {
       this.isSubmittingForm = true;
-      this.hasSubmittedForm = false;
       this.isLoginSuccessful = null;
 
-      var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
+      if (!this.areLoginFieldsValid()) {
+        this.isLoginSuccessful = false;
+        this.isSubmittingForm = false;
+        this.errorMessage = "Please fix the errors below before continuing.";
+        return;
+      }
 
+      var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
       axios
         .post(loginUrl, {
-          email: this.email,
-          password: this.pass,
+          email: this.emailField.email,
+          password: this.passField.pass,
         })
         .then(
           (response) => {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
-
-            this.setAuthToken(response.data.access_token);
 
             setTimeout(() => {
               this.closeModal();
-            }, 2000);
+
+              // should probably change closeModal to async instead of this
+              setTimeout(() => {
+                this.$actions.login(response.data.access_token);
+              }, 250);
+            }, 1000);
           },
           (error) => {
             try {
@@ -214,27 +288,57 @@ export default {
             } finally {
               this.isLoginSuccessful = false;
               this.isSubmittingForm = false;
-              this.hasSubmittedForm = true;
             }
           }
         );
     },
 
-    setAuthToken(token) {
-      localStorage.setItem("user", token);
-      // set axios default
-      this.$emit("checkAuth");
+    isResetPasswordFieldValid() {
+      if (this.resetPassEmailField.email.length === 0)
+        this.resetPassEmailField.error = "Required field";
+
+      return !this.resetPassEmailField.error;
     },
 
-    // resetPassword() {
-    //   this.isResettingPassword = false;
-    //   this.isPasswordReset = true;
-    // },
-  },
+    resetPassword() {
+      this.resetPassSuccessMessage = "A password reset link has been sent to ";
+      this.isSubmittingForm = true;
+      this.isPasswordResetSuccessful = null;
 
-  created() {
-    this.isResettingPassword = false;
-    this.isPasswordReset = false;
+      if (!this.isResetPasswordFieldValid()) {
+        this.isPasswordResetSuccessful = false;
+        this.isSubmittingForm = false;
+        this.errorMessage = "Please fix the errors below before continuing.";
+        return;
+      }
+
+      var resetPassUrl =
+        process.env.VUE_APP_API_URL + "/auth/reset-pass-request";
+      axios
+        .post(resetPassUrl, {
+          email: this.resetPassEmailField.email,
+        })
+        .then(
+          () => {
+            this.resetPassSuccessMessage += this.resetPassEmailField.email;
+            this.isPasswordResetSuccessful = true;
+            this.isSubmittingForm = false;
+          },
+          (error) => {
+            try {
+              if (
+                error.response.data.msg != null &&
+                error.response.data.msg != ""
+              )
+                this.errorMessage = error.response.data.msg;
+              // else use default errorMessage defined above
+            } finally {
+              this.isPasswordResetSuccessful = false;
+              this.isSubmittingForm = false;
+            }
+          }
+        );
+    },
   },
 };
 </script>

@@ -2,21 +2,31 @@ from flask import Flask, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy 
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
+from password import EMAIL_PASS
 import os
 
 # points to the built files folder for Vue
 app = Flask(__name__, template_folder="../../frontend/dist/")
 app.config["JWT_SECRET_KEY"] = os.urandom(32)
 
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'ksucourseplanner@gmail.com'
+app.config['MAIL_PASSWORD'] = EMAIL_PASS
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
 # set keyword db for basically everything (SQLAlchemy connection)
 db = SQLAlchemy(app)
+
+mail = Mail(app)
 
 from app import scraper
 #scraper.start_scraper()
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
 # Initial page rendering needed for PythonAnywhere
