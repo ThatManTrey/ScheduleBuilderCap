@@ -69,9 +69,7 @@ export default {
     created() {
         // loading test
         this.getCourses();
-          setTimeout(() => {
-            this.hasLoadedCourses = true;
-        }, 2000)
+          
     },
       methods: {
         showCourseInfoModal () {
@@ -80,6 +78,11 @@ export default {
         showAddToSemesterModal () {
             this.$refs.addToSemesterModalHome.openModal();
         },
+
+        update(courses) {
+          this.courses = courses
+        },
+
         getCourses() {
           var baseUrl = process.env.VUE_APP_API_URL + "/courses"
 
@@ -87,6 +90,7 @@ export default {
           axios.get(baseUrl + "/cs")
             .then((res) => {
               this.courses = res.data;
+              this.getCourses = res;
             })
             .catch((error) => {
               // eslint-disable-next-line
