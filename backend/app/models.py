@@ -116,7 +116,7 @@ class Semester(Base):
 class Student(Base):
     __tablename__ = 'student'
 
-    UserID = Column(INTEGER(11), primary_key=True)
+    UserID = Column(INTEGER(12), primary_key=True)
     UserEmail = Column(String(64))
     UserPass = Column(String(128))
     Created_on = Column(DateTime)

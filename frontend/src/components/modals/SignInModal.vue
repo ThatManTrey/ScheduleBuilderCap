@@ -10,22 +10,30 @@
 
     <template v-slot:body>
       <transition name="fade">
-        <div v-if="hasSubmittedForm">
-          <!-- Login alert -->
-          <Alert
-            v-if="!isResettingPassword"
-            :isSuccess="isLoginSuccessful"
-            :errorMessage="errorMessage"
+        <!-- Login alerts -->
+        <div v-if="!isResettingPassword">
+          <SuccessAlert
+            v-if="isLoginSuccessful"
             successMessage="Login Successful! Closing this window..."
-          ></Alert>
+          ></SuccessAlert>
 
-          <!-- Password reset alert -->
-          <Alert
-            v-else
-            :isSuccess="isPasswordResetSuccessful"
+          <ErrorAlert
+            v-if="isLoginSuccessful == false"
             :errorMessage="errorMessage"
+          ></ErrorAlert>
+        </div>
+
+        <!-- Password reset alerts -->
+        <div v-else>
+          <SuccessAlert
+            v-if="isPasswordResetSuccessful"
             :successMessage="resetPassSuccessMessage"
-          ></Alert>
+          ></SuccessAlert>
+
+          <ErrorAlert
+            v-if="isPasswordResetSuccessful == false"
+            :errorMessage="errorMessage"
+          ></ErrorAlert>
         </div>
       </transition>
 
@@ -92,7 +100,7 @@
           password.
         </p>
 
-        <label for="userResetPassEmail" class="form-label">
+        <label for="userResetPassEmail" class="visually-hidden form-label">
           <h6>Email Address</h6>
         </label>
 
@@ -101,7 +109,7 @@
           class="form-control"
           :class="{ 'form-error': resetPassEmailField.error }"
           id="userResetPassEmail"
-          placeholder="Enter password..."
+          placeholder="Enter email..."
           :disabled="isSubmittingForm"
           v-model.trim="resetPassEmailField.email"
         />
@@ -155,36 +163,35 @@
 import Modal from "./Modal.vue";
 import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
-import Alert from "../Alert.vue";
-import * as Toast from "../../toast";
+import SuccessAlert from "../alerts/SuccessAlert.vue";
+import ErrorAlert from "../alerts/ErrorAlert.vue";
 
 export default {
   data() {
     return {
       emailField: {
         email: "",
-        error: null
+        error: null,
       },
       passField: {
         pass: "",
-        error: null
+        error: null,
       },
       resetPassEmailField: {
         email: "",
-        error: null
+        error: null,
       },
       isSubmittingForm: false,
-      hasSubmittedForm: false,
       isLoginSuccessful: null,
       isResettingPassword: false,
       isPasswordResetSuccessful: null,
       errorMessage: "An error occurred. Please try again.",
-      resetPassSuccessMessage: ""
+      resetPassSuccessMessage: "",
     };
   },
 
   watch: {
-    "emailField.email": function() {
+    "emailField.email": function () {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
       else if (!this.isEmailValid(this.emailField.email))
@@ -192,7 +199,7 @@ export default {
       else this.emailField.error = null;
     },
 
-    "resetPassEmailField.email": function() {
+    "resetPassEmailField.email": function () {
       if (this.resetPassEmailField.email.length === 0)
         this.resetPassEmailField.error = "Required field";
       else if (!this.isEmailValid(this.resetPassEmailField.email))
@@ -200,17 +207,18 @@ export default {
       else this.resetPassEmailField.error = null;
     },
 
-    "passField.pass": function() {
+    "passField.pass": function () {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else this.passField.error = null;
-    }
+    },
   },
 
   components: {
     Modal,
     Spinner,
-    Alert
+    SuccessAlert,
+    ErrorAlert,
   },
 
   methods: {
@@ -222,7 +230,7 @@ export default {
     },
 
     // https://masteringjs.io/tutorials/fundamentals/email-validation
-    // checks if email follows pattern xx@yy.zz
+    // checks if email roughly follows pattern xx@yy.zz
     isEmailValid(email) {
       return /^[^@]+@\w+(\.\w+)+\w$/.test(email);
     },
@@ -240,11 +248,9 @@ export default {
 
     signIn() {
       this.isSubmittingForm = true;
-      this.hasSubmittedForm = false;
       this.isLoginSuccessful = null;
 
       if (!this.areLoginFieldsValid()) {
-        this.hasSubmittedForm = true;
         this.isLoginSuccessful = false;
         this.isSubmittingForm = false;
         this.errorMessage = "Please fix the errors below before continuing.";
@@ -255,24 +261,23 @@ export default {
       axios
         .post(loginUrl, {
           email: this.emailField.email,
-          password: this.passField.pass
+          password: this.passField.pass,
         })
         .then(
-          response => {
+          (response) => {
             this.isLoginSuccessful = true;
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
 
             setTimeout(() => {
               this.closeModal();
 
               // should probably change closeModal to async instead of this
               setTimeout(() => {
-                this.checkToken(response.data.access_token);
+                this.$actions.login(response.data.access_token);
               }, 250);
             }, 1000);
           },
-          error => {
+          (error) => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -283,25 +288,9 @@ export default {
             } finally {
               this.isLoginSuccessful = false;
               this.isSubmittingForm = false;
-              this.hasSubmittedForm = true;
             }
           }
         );
-    },
-
-    // delete this
-    checkToken(authToken) {
-      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify/access";
-      axios
-        .get(verifyUrl, { headers: { Authorization: "Bearer " + authToken } })
-        .then(() => {
-          this.$actions.login(authToken);
-        })
-        .catch(() => {
-          Toast.showErrorMessage(
-            "Invalid authentication token. Please login again."
-          );
-        });
     },
 
     isResetPasswordFieldValid() {
@@ -314,11 +303,9 @@ export default {
     resetPassword() {
       this.resetPassSuccessMessage = "A password reset link has been sent to ";
       this.isSubmittingForm = true;
-      this.hasSubmittedForm = false;
       this.isPasswordResetSuccessful = null;
 
       if (!this.isResetPasswordFieldValid()) {
-        this.hasSubmittedForm = true;
         this.isPasswordResetSuccessful = false;
         this.isSubmittingForm = false;
         this.errorMessage = "Please fix the errors below before continuing.";
@@ -329,16 +316,15 @@ export default {
         process.env.VUE_APP_API_URL + "/auth/reset-pass-request";
       axios
         .post(resetPassUrl, {
-          email: this.resetPassEmailField.email
+          email: this.resetPassEmailField.email,
         })
         .then(
           () => {
             this.resetPassSuccessMessage += this.resetPassEmailField.email;
             this.isPasswordResetSuccessful = true;
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
           },
-          error => {
+          (error) => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -349,12 +335,11 @@ export default {
             } finally {
               this.isPasswordResetSuccessful = false;
               this.isSubmittingForm = false;
-              this.hasSubmittedForm = true;
             }
           }
         );
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -127,11 +127,8 @@
 </template>
 
 <script>
-import * as Constants from "@/const.js";
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
-//import * as Toast from "../toast.js";
-import axios from "axios";
 
 export default {
   name: "theme-nav-bar",
@@ -161,8 +158,8 @@ export default {
     checkScroll() {
       // shows scroll to top button past a certain number of px from the top
       if (
-        document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
-        document.documentElement.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX
+        document.body.scrollTop > this.SHOW_SCROLL_TOP_AFTER_PX ||
+        document.documentElement.scrollTop > this.SHOW_SCROLL_TOP_AFTER_PX
       ) {
         this.showScrollToTopButton = true;
       } else {
@@ -172,25 +169,6 @@ export default {
 
     scrollToTop() {
       window.scroll(0, 0);
-    },
-
-    // test protected endpoint
-    getUser() {
-      var userUrl =
-        process.env.VUE_APP_API_URL + "/users/" + this.$store.userId;
-
-      axios
-        .get(userUrl)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(error => {
-          if (error.response.status == 401) {
-            console.log("Request is unauthorized");
-          }
-          // eslint-disable-next-line
-          console.error(error.response);
-        });
     },
 
     logout() {
@@ -206,6 +184,8 @@ export default {
   },
 
   created() {
+    this.SHOW_SCROLL_TOP_AFTER_PX = 200
+
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }

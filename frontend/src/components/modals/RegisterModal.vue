@@ -9,13 +9,15 @@
 
     <template v-slot:body>
       <transition name="fade">
-        <div v-if="hasSubmittedForm">
-          <Alert
-            :isSuccess="isRegisterSuccessful"
-            :errorMessage="errorMessage"
-            successMessage="Account created successfully! Check your email for confirmation link."
-          ></Alert>
-        </div>
+        <SuccessAlert
+          v-if="isRegisterSuccessful"
+          successMessage="Account created successfully! Check your email for confirmation link."
+        ></SuccessAlert>
+
+        <ErrorAlert
+          v-if="isRegisterSuccessful == false"
+          :errorMessage="errorMessage"
+        ></ErrorAlert>
       </transition>
 
       <form>
@@ -109,32 +111,33 @@
 import Modal from "./Modal.vue";
 import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
-import Alert from "../Alert.vue";
+import SuccessAlert from "../alerts/SuccessAlert.vue";
+import ErrorAlert from "../alerts/ErrorAlert.vue";
 
 export default {
   data() {
     return {
       emailField: {
         email: "",
-        error: null
+        error: null,
       },
       passField: {
         pass: "",
-        error: null
+        error: null,
       },
       passVerifyField: {
         pass: "",
-        error: null
+        error: null,
       },
       isSubmittingForm: false,
       hasSubmittedForm: false,
       isRegisterSuccessful: null,
-      errorMessage: "An error occurred. Please try again."
+      errorMessage: "An error occurred. Please try again.",
     };
   },
 
   watch: {
-    "emailField.email": function() {
+    "emailField.email": function () {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
       else if (!this.isEmailValid())
@@ -142,7 +145,7 @@ export default {
       else this.emailField.error = null;
     },
 
-    "passField.pass": function() {
+    "passField.pass": function () {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else if (this.passField.pass.length < 8)
@@ -150,19 +153,20 @@ export default {
       else this.passField.error = null;
     },
 
-    "passVerifyField.pass": function() {
+    "passVerifyField.pass": function () {
       if (this.passVerifyField.pass.length === 0)
         this.passVerifyField.error = "Required field";
       else if (this.passVerifyField.pass != this.passField.pass)
         this.passVerifyField.error = "Passwords do not match";
       else this.passVerifyField.error = null;
-    }
+    },
   },
 
   components: {
     Modal,
     Spinner,
-    Alert
+    SuccessAlert,
+    ErrorAlert
   },
 
   methods: {
@@ -206,6 +210,7 @@ export default {
       this.isRegisterSuccessful = null;
 
       if (!this.areFieldsValid()) {
+        console.log("fields are not valid");
         this.hasSubmittedForm = true;
         this.isRegisterSuccessful = false;
         this.isSubmittingForm = false;
@@ -214,11 +219,11 @@ export default {
       }
 
       var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
-
+      console.log("before hitting api");
       axios
         .post(registerUrl, {
           email: this.emailField.email,
-          password: this.passField.pass
+          password: this.passField.pass,
         })
         .then(
           () => {
@@ -226,7 +231,7 @@ export default {
             this.isSubmittingForm = false;
             this.hasSubmittedForm = true;
           },
-          error => {
+          (error) => {
             try {
               if (
                 error.response.data.msg != null &&
@@ -241,7 +246,7 @@ export default {
             }
           }
         );
-    }
-  }
+    },
+  },
 };
 </script>
