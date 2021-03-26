@@ -27,7 +27,10 @@
       </transition>
     </div>
 
-    <SemesterBar></SemesterBar>
+    <SemesterBar 
+      v-show="hasLoadedCourses"
+      @showAddSemesterModal="showAddSemesterModal"
+    ></SemesterBar>
 
     <CourseInfoModal
       @openAddSemesterModal="showAddToSemesterModal"
@@ -78,7 +81,9 @@ export default {
         showAddToSemesterModal () {
             this.$refs.addToSemesterModalHome.openModal();
         },
-
+        showAddSemesterModal () {
+            this.$refs.addSemesterModalHome.openModal();
+        },
         getCourses() {
           var baseUrl = process.env.VUE_APP_API_URL + "/courses"
 

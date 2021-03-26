@@ -12,30 +12,13 @@
                     <button class="button-as-link" id="semesterCredits">16</button>
                     </span></li>
 
-            <li class="list-group-item course">
-                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
+            <li class="list-group-item course" v-for="n in 4" :key="n">
+                <a @click="removeCourse()"
+                @keyup.enter="removeCourse()" 
+                class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
                 <span class="badge rounded-pill course-badge">
                     <button class="button-as-link">MATH 13013</button></span>
                 <span id="courseName">Analytic Geometry...</span></li>
-
-            <li class="list-group-item course">
-                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
-                <span class="badge rounded-pill course-badge">
-                    <button class="button-as-link">MATH 13013</button></span>
-                <span id="courseName">Analytic Geometry...</span></li>
-
-            <li class="list-group-item course">
-                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
-                <span class="badge rounded-pill course-badge">
-                    <button class="button-as-link">MATH 13013</button></span>
-                <span id="courseName">Analytic Geometry...</span></li>
-
-            <li class="list-group-item course">
-                <a href="#" class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
-                <span class="badge rounded-pill course-badge">
-                    <button class="button-as-link">MATH 13013</button></span>
-                <span id="courseName">Analytic Geometry...</span></li>
-
         </ul>
     </div>
 </template>
@@ -50,15 +33,25 @@ export default {
     },
     methods: {
         removeSemester() {
-      var removePromptResult = confirm(
-        "Are you sure you want to remove this semester and all its courses?"
-      );
-      if (removePromptResult == true) {
-        Toast.showSuccessMessage(
-          "Semester was removed successfully."
-        );
-      }
-    },
+            var removePromptResult = confirm(
+                "Are you sure you want to remove this semester and all its courses?"
+            );
+        if (removePromptResult == true) {
+            Toast.showSuccessMessage(
+                "Semester was removed successfully."
+            );
+        }
+        },
+        removeCourse() {
+            var removePromptResult = confirm(
+                "Are you sure you want to remove this course?"
+            );
+        if (removePromptResult == true) {
+            Toast.showSuccessMessage(
+                "Course was removed successfully."
+            );
+        }
+        },
     }
 }
 </script>

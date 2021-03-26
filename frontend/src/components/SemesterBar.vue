@@ -2,30 +2,29 @@
 <template lang="html">
     <div>
     <footer class="container">
-        <button class="semesterBar-button" v-on:click="toggle()">
+        <button class="semesterBar-button" v-on:click="isOpen=!isOpen">
             <i class="far fa-calendar "></i>
             <!-- My Schedule -->
             </button>
-        <div class="semesterBar-container" v-show="isOpen">
-            <span 
-            v-for="n in 4"
-            :key="n">
-                <MiniSemester></MiniSemester>
-            </span>
-            <div class="inline">
-                <a 
-                    v-if="!isRemovingCourse"
-                    tabindex="0"
-                    @keyup.enter="showAddSemesterModal()"
-                    @click="showAddSemesterModal()"
-                    data-tooltip="Add a Semester"
-                    data-tooltip-location="bottom"
-                    >
-                    <i class="fas fa-plus-circle fa-lg newSemester"></i>
-                    </a>
-          
-            </div>
-        </div>
+            <transition name="fade">
+              <div class="semesterBar-container slideIn" v-if="isOpen">
+                  <span v-for="n in 4" :key="n">
+                      <MiniSemester></MiniSemester>
+                  </span>
+                  <div class="inline">
+                      <a 
+                          tabindex="0"
+                          @keyup.enter="showAddSemesterModal()"
+                          @click="showAddSemesterModal()"
+                          data-tooltip="Add a Semester"
+                          data-tooltip-location="bottom"
+                          >
+                          <i class="fas fa-plus-circle fa-lg newSemester"></i>
+                          </a>
+                
+                  </div>
+              </div>
+            </transition>
     </footer>
 
     <AddSemesterModal ref="addSemesterModalSchedule"></AddSemesterModal>
@@ -36,14 +35,13 @@
 
 import MiniSemester from '../components/MiniSemester.vue'
 import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
-import * as Toast from '../toast.js';
+
 
 export default ({
     name: 'semester-bar',
     data() {
         return {
-            isOpen: false,
-            isRemovingCourse: ""
+            isOpen: false
         }
     },
     methods: {
@@ -53,17 +51,7 @@ export default ({
         showAddSemesterModal () {
             this.$refs.addSemesterModalSchedule.openModal();
         },
-        removeSemester() {
-            var removePromptResult = confirm(
-                "Are you sure you want to remove this semester and all its courses?"
-            );
-            if (removePromptResult == true) {
-                Toast.showSuccessMessage(
-                "Semester was removed successfully."
-                );
-            }
-        },
-    },
+      },
     components: {
         MiniSemester,
         AddSemesterModal
@@ -123,16 +111,9 @@ export default ({
   padding: 1rem;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  animation: slideIn 1s ease;
+
 }
 
-.semesterBar-containter.slideIn {
-    animation: slideIn 1s ease;
-}
-
-.semesterBar-container.slideOut {
-    animation: slideOut 1s ease;
-}
 
 @keyframes slideIn {
   0% {
@@ -146,14 +127,22 @@ export default ({
 }
 
 @keyframes slideOut {
-    100% {
+    0% {
     margin-bottom: 0%;
     opacity: 100%;
   }
-    0% {
-    margin-bottom: -18%;
+    100% {
+    margin-bottom: -18.5%;
     opacity: 100%;
   }
+}
+
+
+.fade-enter-active, .fade-leave-active {
+    animation: slideIn 2s ease;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    animation: slideOut 2s ease;
 }
 
 .inline {
