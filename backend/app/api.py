@@ -1,6 +1,6 @@
 from flask import jsonify
 from app import app, db
-from app.models import Student, AllCourse
+from app.models import Course
 from app.colors import *
 
 import datetime
@@ -14,16 +14,11 @@ def get_primary_colors():
 def get_accent_colors():
     return jsonify(accent_colors)
 
-@app.route('/query', methods=['GET'])
-def get_model():
-    student = db.session.query(Student).first()
-    return jsonify(UserID=student.UserID, UserEmail=student.UserEmail)
-
 #http://127.0.0.1:5000/ROUTE
 #if post, do raw json in body
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
 def get_dept_courses(CourseType):
-    courses = db.session.query(AllCourse).filter_by(CourseID_Type = CourseType)
+    courses = db.session.query(Course).filter_by(CourseID_Type = CourseType)
     arr_courses = []
     for course in courses:
         arr_courses.append(course.as_dict())

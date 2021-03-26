@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask_mail import Mail, Message
 from app import app, db, mail
-from app.models import Student
+from app.models import User
 import datetime
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,36 +24,36 @@ def is_current_user(function):
 def register_user():
     email = request.json.get('email')
     password = request.json.get('password')
-    if db.session.query(Student).filter_by(UserEmail=email).first() is not None:
+    if db.session.query(User).filter_by(userEmail=email).first() is not None:
         return jsonify(msg="That email is already in use."), 400
 
-    student = Student(UserEmail=email, UserPass=generate_password_hash(password),
-                      Created_on=datetime.datetime.utcnow(), hasConfirmedEmail=False)
-    db.session.add(student)
+    user = User(userEmail=email, userPass=generate_password_hash(password),
+                      createdOn=datetime.datetime.utcnow(), hasConfirmedEmail=False)
+    db.session.add(user)
     db.session.commit()
-    return jsonify(id=student.UserID)
+    return jsonify(id=user.userID)
 
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
-    student = db.session.query(Student).filter_by(UserEmail=email).first()
+    user = db.session.query(User).filter_by(userEmail=email).first()
 
-    if student is None or not check_password_hash(student.UserPass, password):
+    if user is None or not check_password_hash(user.userPass, password):
         return jsonify(msg="Incorrect email or password."), 400
 
-    access_token = create_access_token(identity=student.UserID)
+    access_token = create_access_token(identity=user.userID)
     return jsonify(access_token=access_token)
 
 
 @app.route('/api/auth/reset-pass-request', methods=['POST'])
 def reset_pass_request():
     email = request.json.get('email')
-    student = db.session.query(Student).filter_by(UserEmail=email).first()
-    if student is not None:
+    user = db.session.query(User).filter_by(userEmail=email).first()
+    if user is not None:
         token_type = {"type": "resetPassword"}
-        reset_email_token = create_access_token(identity=student.UserID, expires_delta=datetime.timedelta(hours=1), additional_claims=token_type)
+        reset_email_token = create_access_token(identity=user.userID, expires_delta=datetime.timedelta(hours=1), additional_claims=token_type)
         send_reset_pass_email(email, reset_email_token)
 
     # shows even if invalid email is entered to prevent checking if accounts exist
@@ -67,9 +67,9 @@ def reset_pass():
         return "Invalid token type", 403
     
     password = request.json.get('password')
-    student = db.session.query(Student).get(get_jwt_identity())
-    if student is not None:
-        student.UserPass = generate_password_hash(password)
+    user = db.session.query(User).get(get_jwt_identity())
+    if user is not None:
+        user.userPass = generate_password_hash(password)
         db.session.commit()
 
     return ("", 204)
@@ -105,8 +105,8 @@ def verify_reset_pass_token():
 @jwt_required()
 @is_current_user
 def get_user(user_id):
-    student = db.session.query(Student).get(user_id)
-    if student is None:
+    user = db.session.query(User).get(user_id)
+    if user is None:
         return jsonify(msg="User with that ID does not exist."), 400
 
-    return jsonify(userID=student.UserID, userEmail=student.UserEmail, createdOn=student.dateTime)
+    return jsonify(userID=user.userID, userEmail=user.userEmail, createdOn=user.createdOn)
