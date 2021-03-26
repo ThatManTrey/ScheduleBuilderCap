@@ -36,7 +36,8 @@
 
       <div v-if="!showSmallCard" class="row">
         <div class="col">
-          <a tabindex="0"
+          <a
+            tabindex="0"
             data-tooltip="Favorite Course"
             data-tooltip-location="bottom"
             ><i class="far fa-star fa-lg"></i
@@ -60,9 +61,9 @@
             @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
             data-tooltip-location="bottom"
-            >
+          >
             <i class="fas fa-plus-circle fa-lg"></i>
-            </a>
+          </a>
           <a
             v-if="isRemovingCourse"
             tabindex="0"

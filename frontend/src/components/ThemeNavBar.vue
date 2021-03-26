@@ -73,28 +73,35 @@
 
           <div class="d-flex">
             <button
-              v-if="isLoggedIn"
-              v-on:click="logout"
-              type="submit"
+              v-on:click="getUser"
+              type="button"
               class="btn btn-theme-blacker"
+            >
+              Get User (Test)
+            </button>
+            <button
+              v-on:click="logout"
+              type="button"
+              class="btn btn-theme-blacker"
+              v-if="isLoggedIn"
             >
               Logout
 
               <i class="fas fa-sign-out-alt ms-1"></i>
             </button>
             <button
-              v-if="!isLoggedIn"
-              type="submit"
+              type="button"
               class="btn btn-theme-blacker me-3"
               @click="$refs.signInModal.openModal()"
+              v-if="!isLoggedIn"
             >
               Sign In
             </button>
             <button
-              v-if="!isLoggedIn"
-              type="submit"
+              type="button"
               class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
+              v-if="!isLoggedIn"
             >
               Create An Account
             </button>
@@ -103,8 +110,8 @@
       </div>
     </nav>
 
-    <SignInModal ref="signInModal" @signIn="signIn"></SignInModal>
-    <RegisterModal ref="registerModal" @register="register"></RegisterModal>
+    <SignInModal @checkAuth="checkAuth" ref="signInModal"></SignInModal>
+    <RegisterModal ref="registerModal"></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -120,6 +127,9 @@
 import * as Constants from "@/const.js";
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
+import * as Toast from "../toast.js";
+import axios from "axios";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "theme-nav-bar",
@@ -138,18 +148,16 @@ export default {
   data() {
     return {
       showScrollToTopButton: false,
-      isLoggedIn: true,
-      showSignInModal: false,
-      test: false
+      isLoggedIn: false
     };
   },
 
   methods: {
-    isCurrentRoute: function(route) {
+    isCurrentRoute(route) {
       return this.currentRouteName == route;
     },
 
-    checkScroll: function() {
+    checkScroll() {
       // shows scroll to top button past a certain number of px from the top
       if (
         document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
@@ -160,35 +168,74 @@ export default {
         this.showScrollToTopButton = false;
       }
     },
+
     scrollToTop() {
       window.scroll(0, 0);
     },
 
-    signIn() {
-      this.isLoggedIn = true;
-      this.$emit("isLoggedIn", this.isLoggedIn);
+    logout() {
+      localStorage.removeItem("user");
+      this.checkAuth();
     },
 
-    register() {
-      console.log("registered");
-    },
+    checkAuth() {
+      this.isLoggedIn = localStorage.getItem("user") != null;
 
-    logout: function(event) {
-      if (event) {
-        this.isLoggedIn = false;
-        this.$emit("isLoggedIn", this.isLoggedIn);
+      // set auth token for every subsequent request until logout (add check for invalidation later)
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + localStorage.getItem("user");
+
+      if (!this.isLoggedIn) {
+        axios.defaults.headers.common["Authorization"] = "";
+
+        // redirect if anonymous user tries to access favorites/schedule page
+        if (Constants.PROTECTED_ROUTES.includes(this.currentRouteName)) {
+          this.$router.push("home");
+          Toast.showErrorMessage(
+            "You'll need to login before you can view that page."
+          );
+        }
       }
+    },
+
+    getCurrentUserId() {
+      let authToken = localStorage.getItem("user");
+      try {
+        let decodedToken = VueJwtDecode.decode(authToken);
+        return decodedToken.sub;
+      } catch (error) {
+        console.log(error, "error from decoding token");
+        return 1;
+      }
+    },
+
+    getUser() {
+      var userUrl =
+        process.env.VUE_APP_API_URL + "/users/" + this.getCurrentUserId();
+
+      axios
+        .get(userUrl)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          if (error.response.status == 401) {
+            console.log("Request is unauthorized");
+          }
+          // eslint-disable-next-line
+          console.error(error.response);
+        });
     }
   },
 
   computed: {
-    currentRouteName: function() {
+    currentRouteName() {
       return this.$route.name;
     }
   },
 
   created() {
-    this.$emit("isLoggedIn", this.isLoggedIn);
+    this.checkAuth();
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }
