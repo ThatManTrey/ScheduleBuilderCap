@@ -5,6 +5,9 @@ from password import *
 on_pythonanywhere = not (__name__ == '__main__')
 
 if on_pythonanywhere:
+    print("------------- ON PYTHONANYWHERE ------------------\n")
+    print(os.environ)
+    
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
         username="KSUCoursePlanner",
         password=DB_PASS,
@@ -33,4 +36,4 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 if not on_pythonanywhere:
-    app.run()
+    app.run(debug=True)

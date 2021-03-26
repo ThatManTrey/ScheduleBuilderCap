@@ -1,5 +1,9 @@
 <template lang="html">
-  <Modal :useLargeModal="true" ref="courseInfoBaseModalRef">
+  <Modal
+    :useLargeModal="true"
+    :useFooter="$store.isLoggedIn"
+    ref="courseInfoBaseModalRef"
+  >
     <template v-slot:header
       >MATH 13013 - Analytic Geometry And Calculus I</template
     >
@@ -56,15 +60,18 @@
           </div>
         </div>
         <div class="text-center">
-          <button type="button" class="btn btn-theme-primary-dark">
+          <button
+            v-if="$store.isLoggedIn"
+            type="button"
+            class="btn btn-theme-primary-dark"
+          >
             Add My Rating
           </button>
         </div>
       </div>
     </template>
 
-    <!-- ignore this error lol -->
-    <template v-slot:footer>
+    <template v-if="$store.isLoggedIn" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
           href="#"

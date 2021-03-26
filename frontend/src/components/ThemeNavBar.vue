@@ -30,7 +30,10 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li
+              v-if="$store.isLoggedIn"
+              class="nav-item col-6 col-md-4 col-lg-auto"
+            >
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +43,10 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li
+              v-if="$store.isLoggedIn"
+              class="nav-item col-6 col-md-4 col-lg-auto"
+            >
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -73,17 +79,10 @@
 
           <div class="d-flex">
             <button
-              v-on:click="getUser"
+              v-on:click="logout()"
               type="button"
               class="btn btn-theme-blacker"
-            >
-              Get User (Test)
-            </button>
-            <button
-              v-on:click="logout"
-              type="button"
-              class="btn btn-theme-blacker"
-              v-if="isLoggedIn"
+              v-if="$store.isLoggedIn"
             >
               Logout
 
@@ -93,7 +92,7 @@
               type="button"
               class="btn btn-theme-blacker me-3"
               @click="$refs.signInModal.openModal()"
-              v-if="!isLoggedIn"
+              v-if="!$store.isLoggedIn"
             >
               Sign In
             </button>
@@ -101,7 +100,7 @@
               type="button"
               class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
-              v-if="!isLoggedIn"
+              v-if="!$store.isLoggedIn"
             >
               Create An Account
             </button>
@@ -110,8 +109,12 @@
       </div>
     </nav>
 
-    <SignInModal @checkAuth="checkAuth" ref="signInModal"></SignInModal>
-    <RegisterModal ref="registerModal"></RegisterModal>
+    <!-- remove events here -->
+    <SignInModal v-if="!$store.isLoggedIn" ref="signInModal"></SignInModal>
+    <RegisterModal
+      v-if="!$store.isLoggedIn"
+      ref="registerModal"
+    ></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -124,12 +127,8 @@
 </template>
 
 <script>
-import * as Constants from "@/const.js";
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
-import * as Toast from "../toast.js";
-import axios from "axios";
-import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "theme-nav-bar",
@@ -147,8 +146,7 @@ export default {
 
   data() {
     return {
-      showScrollToTopButton: false,
-      isLoggedIn: false
+      showScrollToTopButton: false
     };
   },
 
@@ -160,8 +158,8 @@ export default {
     checkScroll() {
       // shows scroll to top button past a certain number of px from the top
       if (
-        document.body.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX ||
-        document.documentElement.scrollTop > Constants.SHOW_SCROLL_TOP_AFTER_PX
+        document.body.scrollTop > this.SHOW_SCROLL_TOP_AFTER_PX ||
+        document.documentElement.scrollTop > this.SHOW_SCROLL_TOP_AFTER_PX
       ) {
         this.showScrollToTopButton = true;
       } else {
@@ -174,57 +172,8 @@ export default {
     },
 
     logout() {
-      localStorage.removeItem("user");
-      this.checkAuth();
-    },
-
-    checkAuth() {
-      this.isLoggedIn = localStorage.getItem("user") != null;
-
-      // set auth token for every subsequent request until logout (add check for invalidation later)
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + localStorage.getItem("user");
-
-      if (!this.isLoggedIn) {
-        axios.defaults.headers.common["Authorization"] = "";
-
-        // redirect if anonymous user tries to access favorites/schedule page
-        if (Constants.PROTECTED_ROUTES.includes(this.currentRouteName)) {
-          this.$router.push("home");
-          Toast.showErrorMessage(
-            "You'll need to login before you can view that page."
-          );
-        }
-      }
-    },
-
-    getCurrentUserId() {
-      let authToken = localStorage.getItem("user");
-      try {
-        let decodedToken = VueJwtDecode.decode(authToken);
-        return decodedToken.sub;
-      } catch (error) {
-        console.log(error, "error from decoding token");
-        return 1;
-      }
-    },
-
-    getUser() {
-      var userUrl =
-        process.env.VUE_APP_API_URL + "/users/" + this.getCurrentUserId();
-
-      axios
-        .get(userUrl)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(error => {
-          if (error.response.status == 401) {
-            console.log("Request is unauthorized");
-          }
-          // eslint-disable-next-line
-          console.error(error.response);
-        });
+      this.$actions.logout();
+      this.$router.push("/home");
     }
   },
 
@@ -235,7 +184,8 @@ export default {
   },
 
   created() {
-    this.checkAuth();
+    this.SHOW_SCROLL_TOP_AFTER_PX = 200
+
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }

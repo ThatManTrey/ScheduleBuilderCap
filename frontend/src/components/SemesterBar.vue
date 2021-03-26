@@ -1,4 +1,3 @@
-
 <template lang="html">
     <div>
     <footer class="container">
@@ -32,11 +31,8 @@
 </template>
 
 <script>
-
 import MiniSemester from '../components/MiniSemester.vue'
 import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
-
-
 export default ({
     name: 'semester-bar',
     data() {
@@ -61,14 +57,12 @@ export default ({
 
 
 <style scoped>
-
 .container {
   width:99%;
   position:fixed;
   bottom:0;
   z-index: 100;
 }
-
 .semesterBar-button {
   cursor: pointer;
   display: block;
@@ -84,7 +78,6 @@ export default ({
   border-top: solid 1pt var(--theme-primary-dark);
   animation: slideup-mini 5s ease;
 }
-
 @keyframes slideup-mini {
   from {
     margin-bottom: -100%;
@@ -95,7 +88,6 @@ export default ({
     opacity: 100%;
   }
 }
-
 .semesterBar-container {
   background: var(--theme-black);
   color: var(--theme-whiter);
@@ -111,10 +103,7 @@ export default ({
   padding: 1rem;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-
 }
-
-
 @keyframes slideIn {
   0% {
     margin-bottom: -18%;
@@ -125,7 +114,6 @@ export default ({
     opacity: 100%;
   }
 }
-
 @keyframes slideOut {
     0% {
     margin-bottom: 0%;
@@ -136,26 +124,21 @@ export default ({
     opacity: 100%;
   }
 }
-
-
 .fade-enter-active, .fade-leave-active {
     animation: slideIn 2s ease;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     animation: slideOut 2s ease;
 }
-
 .inline {
     display: inline-block;
 }
-
 .newSemester {
     position: absolute;
     top: 6rem;
     padding-left: 1.5rem;
     padding-right: 3rem;
 }
-
 /* Tooltip Styling */ 
 [data-tooltip-location="bottom"]:before,
 [data-tooltip-location="bottom"]:after {
@@ -163,11 +146,9 @@ export default ({
   left: 29px;
   bottom: auto;
 }
-
 @media only screen and (max-width:1280px) {
     .container {
         display: none;
     }
 }
-
 </style>

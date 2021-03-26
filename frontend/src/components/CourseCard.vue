@@ -34,7 +34,7 @@
         </p>
       </div>
 
-      <div v-if="!showSmallCard" class="row">
+      <div v-if="$store.isLoggedIn" class="row">
         <div class="col">
           <a
             tabindex="0"
@@ -53,7 +53,7 @@
             >View more</a>
           </div>
 
-        <div class="col text-end">
+        <div v-if="$store.isLoggedIn" class="col text-end">
           <a
             v-if="!isRemovingCourse"
             tabindex="0"
