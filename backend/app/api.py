@@ -1,10 +1,12 @@
 from flask import jsonify
+
 from app import app, db
 from app.models import Course, User
 from app.colors import *
 from app.decorators import has_access_token, is_current_user
 
 import datetime
+from http import HTTPStatus
 
 # endpoint example, look at Theme.vue script for frontend example
 @app.route('/api/colors/primary', methods=['GET'])
@@ -33,7 +35,7 @@ def get_dept_courses(CourseType):
 def get_user(user_id):
     user = db.session.query(User).get(user_id)
     if user is None:
-        return jsonify(msg="User with that ID does not exist."), 400
+        return jsonify(msg="User with that ID does not exist."), HTTPStatus.BAD_REQUEST
 
     return jsonify(userID=user.userID, userEmail=user.userEmail, createdOn=user.createdOn)
     

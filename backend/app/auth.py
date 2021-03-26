@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity
 
 import datetime
+from http import HTTPStatus
 
 from app import app, db, mail
 from app.models import User
@@ -16,7 +17,7 @@ def register_user():
     email = request.json.get('email')
     password = request.json.get('password')
     if db.session.query(User).filter_by(userEmail=email).first() is not None:
-        return jsonify(msg="That email is already in use."), 400
+        return jsonify(msg="That email is already in use."), HTTPStatus.BAD_REQUEST
 
     user = User(userEmail=email, userPass=generate_password_hash(password),
                 createdOn=datetime.datetime.utcnow(), hasConfirmedEmail=False)
@@ -32,7 +33,7 @@ def login():
     user = db.session.query(User).filter_by(userEmail=email).first()
 
     if user is None or not check_password_hash(user.userPass, password):
-        return jsonify(msg="Incorrect email or password."), 400
+        return jsonify(msg="Incorrect email or password."), HTTPStatus.BAD_REQUEST
 
     access_token = create_access_token(identity=user.userID)
     return jsonify(access_token=access_token)
@@ -71,19 +72,20 @@ def reset_pass():
         db.session.commit()
 
     else:
-        return "Invalid token ID", 500
+        # doubt this would happen but just in case the user gets deleted or something?
+        return "Invalid token ID", HTTPStatus.INTERNAL_SERVER_ERROR
 
-    return ("", 204)
+    return ("", HTTPStatus.NO_CONTENT)
 
 
 # used for verifying token on new session
 @app.route('/api/auth/verify/access')
 @has_access_token()
 def verify_access_token():
-    return ("", 204)
+    return ("", HTTPStatus.NO_CONTENT)
 
 
 @app.route('/api/auth/verify/reset-pass')
 @has_reset_pass_token()
 def verify_reset_pass_token():
-    return ("", 204)
+    return ("", HTTPStatus.NO_CONTENT)
