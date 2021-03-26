@@ -1,10 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy 
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from password import EMAIL_PASS
 import os
+import git
 
 # points to the built files folder for Vue
 app = Flask(__name__, template_folder="../../frontend/dist/")
@@ -37,5 +38,19 @@ def index():
         return render_template('index.html')
     except:
         return "There is not currently a /frontend/dist folder for the built frontend files. Type <b>npm run build</b> under /frontend to create it"
+
+# for server updates
+@app.route('/update_server', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('/home/KSUCoursePlanner/ScheduleBuilderCap')
+        origin = repo.remotes.origin
+    
+        origin.pull()
+
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
+
 
 from app import auth, api
