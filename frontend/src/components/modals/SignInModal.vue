@@ -74,6 +74,7 @@
             id="userSignInPass"
             aria-describedby="userSignInPassHelp"
             placeholder="Enter password..."
+            @keyup.enter="signIn()"
             :disabled="isSubmittingForm"
             v-model="passField.pass"
           />
@@ -110,6 +111,7 @@
           :class="{ 'form-error': resetPassEmailField.error }"
           id="userResetPassEmail"
           placeholder="Enter email..."
+          @keyup.enter="resetPassword()"
           :disabled="isSubmittingForm"
           v-model.trim="resetPassEmailField.email"
         />

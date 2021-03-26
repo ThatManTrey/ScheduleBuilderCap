@@ -77,6 +77,7 @@
             :class="{ 'form-error': passVerifyField.error }"
             id="userRegisterRetypePass"
             placeholder="Re-enter password..."
+            @keyup.enter="register()"
             :disabled="isSubmittingForm"
             v-model="passVerifyField.pass"
           />
@@ -130,7 +131,6 @@ export default {
         error: null,
       },
       isSubmittingForm: false,
-      hasSubmittedForm: false,
       isRegisterSuccessful: null,
       errorMessage: "An error occurred. Please try again.",
     };
@@ -206,12 +206,9 @@ export default {
 
     register() {
       this.isSubmittingForm = true;
-      this.hasSubmittedForm = false;
       this.isRegisterSuccessful = null;
 
       if (!this.areFieldsValid()) {
-        console.log("fields are not valid");
-        this.hasSubmittedForm = true;
         this.isRegisterSuccessful = false;
         this.isSubmittingForm = false;
         this.errorMessage = "Please fix the errors below before continuing.";
@@ -219,7 +216,7 @@ export default {
       }
 
       var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
-      console.log("before hitting api");
+
       axios
         .post(registerUrl, {
           email: this.emailField.email,
@@ -229,7 +226,6 @@ export default {
           () => {
             this.isRegisterSuccessful = true;
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
           },
           (error) => {
             try {
@@ -242,7 +238,6 @@ export default {
             } finally {
               this.isRegisterSuccessful = false;
               this.isSubmittingForm = false;
-              this.hasSubmittedForm = true;
             }
           }
         );

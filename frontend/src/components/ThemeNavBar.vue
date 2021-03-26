@@ -173,7 +173,8 @@ export default {
 
     logout() {
       this.$actions.logout();
-      this.$router.push("/home");
+      if(!this.isCurrentRoute("Home"))
+        this.$router.push("/home");
     }
   },
 

@@ -1,7 +1,8 @@
 from flask import jsonify
 from app import app, db
-from app.models import Course
+from app.models import Course, User
 from app.colors import *
+from app.decorators import has_access_token, is_current_user
 
 import datetime
 
@@ -24,4 +25,15 @@ def get_dept_courses(CourseType):
         arr_courses.append(course.as_dict())
 
     return jsonify(deptCourses = arr_courses)
+
+
+@app.route('/api/users/<int:user_id>', methods=['GET'])
+@has_access_token()
+@is_current_user
+def get_user(user_id):
+    user = db.session.query(User).get(user_id)
+    if user is None:
+        return jsonify(msg="User with that ID does not exist."), 400
+
+    return jsonify(userID=user.userID, userEmail=user.userEmail, createdOn=user.createdOn)
     

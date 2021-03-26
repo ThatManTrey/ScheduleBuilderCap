@@ -9,7 +9,9 @@ def get_reset_password_txt(token):
                             
                             {}
 
-                            If you did not create this request then ignore this message.
+                            If you did not create this request then please ignore this message.
+
+
 
                             - The KSU Course Planner Team
                             """.format(url)
@@ -24,9 +26,9 @@ def get_reset_password_html(token):
     reset_password_html = """<p>We received a request to reset the password your
                             KSUCoursePlanner account.</p>
 
-                            <a href="{}">Click here</a> to select a new password.
+                            <a href="{}">Click here</a> to select a new password (this link will expire in 1 hour).</p>
 
-                            <p>If you did not create this request then ignore this message.</p>
+                            <p>If you did not create this request then please ignore this message.</p>
 
                             </p>- The KSU Course Planner Team</p>
                             """.format(url)

@@ -104,8 +104,7 @@ export default {
           error: null
         },
         isLoadingPage: true,
-        isSubmittingForm: false,
-        hasSubmittedForm: false,
+        isSubmittingForm: false
       }
     },
 
@@ -161,10 +160,8 @@ export default {
 
       resetPassword(){
         this.isSubmittingForm = true;
-        this.hasSubmittedForm = false;
 
         if (!this.areFieldsValid()) {
-          this.hasSubmittedForm = true;
           this.isSubmittingForm = false;
           Toast.showErrorMessage("Please fix the errors below before continuing.");
           return;
@@ -179,13 +176,11 @@ export default {
         { headers: { Authorization: "Bearer " + this.resetPassToken } })
         .then(
           () => {
-            this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
+            this.isSubmittingForm = false; 
             Toast.showSuccessMessage("Password reset successfully!")
           },
           error => {
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
             Toast.showErrorMessage("Error resetting password: ", error);
           }
         );
