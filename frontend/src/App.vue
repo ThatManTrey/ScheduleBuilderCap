@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <PageSpinner
-      v-if="!hasLoaded"
       :showSpinner="!hasLoaded"
       sizeInRem="3rem"
     ></PageSpinner>
@@ -11,8 +10,8 @@
 
 <script>
 import axios from "axios";
-import * as Toast from "./toast";
 import PageSpinner from "./components/spinners/PageSpinner";
+import * as Toast from "./toast.js";
 
 export default {
   data() {
@@ -25,28 +24,25 @@ export default {
     PageSpinner
   },
 
-  methods: {
-    checkToken(authToken) {
-      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify/access";
-      axios
-        .get(verifyUrl, { headers: { Authorization: "Bearer " + authToken } })
-        .then(() => {
-          this.$actions.login(authToken);
-          this.hasLoaded = true;
-        })
-        .catch(() => {
-          this.hasLoaded = true;
-          Toast.showErrorMessage(
-            "Invalid authentication token. Please login again."
-          );
-          localStorage.removeItem("userInfo");
-        });
-    }
-  },
-
   created() {
-    if (localStorage.userInfo != null) this.checkToken(localStorage.userInfo);
-    else this.hasLoaded = true;
+    axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+
+    // verify accessToken if user has it in localStorage before loading anything
+    if (localStorage.getItem("userInfo")) {
+      this.$store
+        .dispatch({
+          type: "verifyAccessToken",
+          token: localStorage.getItem("userInfo")
+        })
+        .then(() => {
+          if (this.$store.state.authError)
+            Toast.showErrorMessage(this.$store.state.authError);
+
+          this.hasLoaded = true;
+        });
+    } else {
+      this.hasLoaded = true;
+    }
   }
 };
 </script>

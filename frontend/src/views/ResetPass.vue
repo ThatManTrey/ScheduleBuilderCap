@@ -176,7 +176,7 @@ export default {
         { headers: { Authorization: "Bearer " + this.resetPassToken } })
         .then(
           () => {
-            this.isSubmittingForm = false; 
+            this.isSubmittingForm = false;
             Toast.showSuccessMessage("Password reset successfully!")
           },
           error => {

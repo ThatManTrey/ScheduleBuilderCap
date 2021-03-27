@@ -1,7 +1,7 @@
 <template lang="html">
   <Modal
     :useLargeModal="true"
-    :useFooter="$store.isLoggedIn"
+    :useFooter="$store.state.isAuthenticated"
     ref="courseInfoBaseModalRef"
   >
     <template v-slot:header
@@ -61,7 +61,7 @@
         </div>
         <div class="text-center">
           <button
-            v-if="$store.isLoggedIn"
+            v-if="$store.state.isAuthenticated"
             type="button"
             class="btn btn-theme-primary-dark"
           >
@@ -71,7 +71,7 @@
       </div>
     </template>
 
-    <template v-if="$store.isLoggedIn" v-slot:footer>
+    <template v-if="$store.state.isAuthenticated" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
           href="#"

@@ -37,5 +37,5 @@ def get_user(user_id):
     if user is None:
         return jsonify(msg="User with that ID does not exist."), HTTPStatus.BAD_REQUEST
 
-    return jsonify(userID=user.userID, userEmail=user.userEmail, createdOn=user.createdOn)
+    return jsonify(userID=user.userID, userEmail=user.userEmail, hasConfirmedEmail=user.hasConfirmedEmail, createdOn=user.createdOn)
     

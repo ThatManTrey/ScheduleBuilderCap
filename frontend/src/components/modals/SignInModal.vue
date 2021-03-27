@@ -126,7 +126,12 @@
     <template v-slot:footer>
       <!-- Login buttons -->
       <div v-if="!isResettingPassword">
-        <button type="button" class="btn btn-theme-blacker" @click="closeModal">
+        <button
+          type="button"
+          class="btn btn-theme-blacker"
+          @click="closeModal"
+          :disabled="isSubmittingForm"
+        >
           Close
         </button>
 
@@ -134,6 +139,7 @@
           type="button"
           class="btn btn-theme-primary-dark ms-2"
           @click="signIn"
+          :disabled="isSubmittingForm"
         >
           Continue
         </button>
@@ -145,6 +151,7 @@
           type="button"
           class="btn btn-theme-blacker"
           @click="isResettingPassword = false"
+          :disabled="isSubmittingForm"
         >
           Go Back
         </button>
@@ -153,6 +160,7 @@
           type="button"
           class="btn btn-theme-primary-dark ms-2"
           @click="resetPassword()"
+          :disabled="isSubmittingForm"
         >
           Reset My Password
         </button>
@@ -163,64 +171,65 @@
 
 <script>
 import Modal from "./Modal.vue";
-import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
+import { isEmailValid } from "../../utils";
+import axios from 'axios';
 
 export default {
   data() {
     return {
       emailField: {
         email: "",
-        error: null,
+        error: null
       },
       passField: {
         pass: "",
-        error: null,
+        error: null
       },
       resetPassEmailField: {
         email: "",
-        error: null,
+        error: null
       },
       isSubmittingForm: false,
       isLoginSuccessful: null,
       isResettingPassword: false,
       isPasswordResetSuccessful: null,
-      errorMessage: "An error occurred. Please try again.",
-      resetPassSuccessMessage: "",
+      errorMessage: "",
+      resetPassSuccessMessage: ""
     };
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
-      else if (!this.isEmailValid(this.emailField.email))
+      else if (!isEmailValid(this.emailField.email))
         this.emailField.error = "Please enter a valid email";
       else this.emailField.error = null;
     },
 
-    "resetPassEmailField.email": function () {
+    "resetPassEmailField.email": function() {
       if (this.resetPassEmailField.email.length === 0)
         this.resetPassEmailField.error = "Required field";
-      else if (!this.isEmailValid(this.resetPassEmailField.email))
+      else if (!isEmailValid(this.resetPassEmailField.email))
         this.resetPassEmailField.error = "Please enter a valid email";
       else this.resetPassEmailField.error = null;
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else this.passField.error = null;
-    },
+    }
   },
 
   components: {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert,
+    ErrorAlert
   },
 
   methods: {
@@ -231,10 +240,12 @@ export default {
       this.$refs.signInBaseModalRef.closeModal();
     },
 
-    // https://masteringjs.io/tutorials/fundamentals/email-validation
-    // checks if email roughly follows pattern xx@yy.zz
-    isEmailValid(email) {
-      return /^[^@]+@\w+(\.\w+)+\w$/.test(email);
+    preventClosingModal() {
+      this.$refs.signInBaseModalRef.preventClosingModal();
+    },
+
+    allowClosingModal() {
+      this.$refs.signInBaseModalRef.allowClosingModal();
     },
 
     areLoginFieldsValid() {
@@ -259,40 +270,29 @@ export default {
         return;
       }
 
-      var loginUrl = process.env.VUE_APP_API_URL + "/auth/login";
-      axios
-        .post(loginUrl, {
+      this.preventClosingModal();
+
+      this.$store
+        .dispatch({
+          type: "logIn",
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
-        .then(
-          (response) => {
+        .then(() => {
+          this.isSubmittingForm = false;
+          this.allowClosingModal();
+
+          if (this.$store.state.authError) {
+            this.isLoginSuccessful = false;
+            this.errorMessage = this.$store.state.authError;
+          } else {
             this.isLoginSuccessful = true;
-            this.isSubmittingForm = false;
 
             setTimeout(() => {
               this.closeModal();
-
-              // should probably change closeModal to async instead of this
-              setTimeout(() => {
-                this.$actions.login(response.data.access_token);
-              }, 250);
             }, 1000);
-          },
-          (error) => {
-            try {
-              if (
-                error.response.data.msg != null &&
-                error.response.data.msg != ""
-              )
-                this.errorMessage = error.response.data.msg;
-              // else use default errorMessage defined above
-            } finally {
-              this.isLoginSuccessful = false;
-              this.isSubmittingForm = false;
-            }
           }
-        );
+        });
     },
 
     isResetPasswordFieldValid() {
@@ -314,35 +314,29 @@ export default {
         return;
       }
 
-      var resetPassUrl =
-        process.env.VUE_APP_API_URL + "/auth/reset-pass-request";
+      this.preventClosingModal();
+
       axios
-        .post(resetPassUrl, {
-          email: this.resetPassEmailField.email,
+        .post("/auth/reset-pass-request", {
+          email: this.resetPassEmailField.email
         })
         .then(
           () => {
-            this.resetPassSuccessMessage += this.resetPassEmailField.email;
             this.isPasswordResetSuccessful = true;
             this.isSubmittingForm = false;
+
+            this.resetPassSuccessMessage += this.resetPassEmailField.email;
+            this.allowClosingModal();
           },
-          (error) => {
-            try {
-              if (
-                error.response.data.msg != null &&
-                error.response.data.msg != ""
-              )
-                this.errorMessage = error.response.data.msg;
-              // else use default errorMessage defined above
-            } finally {
-              this.isPasswordResetSuccessful = false;
-              this.isSubmittingForm = false;
-            }
+          () => {
+            this.isPasswordResetSuccessful = false;
+            this.isSubmittingForm = false;
+
+            this.errorMessage = "An unexpected error has occurred. Please try again.";
+            this.allowClosingModal();
           }
         );
-    },
-  },
+    }
+  }
 };
 </script>
-
-<style scoped></style>

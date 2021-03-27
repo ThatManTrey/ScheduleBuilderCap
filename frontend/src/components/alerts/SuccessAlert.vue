@@ -1,8 +1,5 @@
 <template lang="html">
-  <div
-    class="alert container text-theme-whitest bg-theme-success"
-    role="alert"
-  >
+  <div class="alert container text-theme-whitest bg-theme-success" role="alert">
     <div class="row">
       <div class="col-1">
         <i class="fas fa-check-circle fa-lg"></i>

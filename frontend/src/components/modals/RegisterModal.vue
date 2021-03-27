@@ -114,38 +114,39 @@ import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
+import { isEmailValid } from "../../utils.js";
 
 export default {
   data() {
     return {
       emailField: {
         email: "",
-        error: null,
+        error: null
       },
       passField: {
         pass: "",
-        error: null,
+        error: null
       },
       passVerifyField: {
         pass: "",
-        error: null,
+        error: null
       },
       isSubmittingForm: false,
       isRegisterSuccessful: null,
-      errorMessage: "An error occurred. Please try again.",
+      errorMessage: "An error occurred. Please try again."
     };
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
-      else if (!this.isEmailValid())
+      else if (!isEmailValid(this.emailField.email))
         this.emailField.error = "Please enter a valid email";
       else this.emailField.error = null;
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else if (this.passField.pass.length < 8)
@@ -153,13 +154,13 @@ export default {
       else this.passField.error = null;
     },
 
-    "passVerifyField.pass": function () {
+    "passVerifyField.pass": function() {
       if (this.passVerifyField.pass.length === 0)
         this.passVerifyField.error = "Required field";
       else if (this.passVerifyField.pass != this.passField.pass)
         this.passVerifyField.error = "Passwords do not match";
       else this.passVerifyField.error = null;
-    },
+    }
   },
 
   components: {
@@ -175,12 +176,6 @@ export default {
     },
     closeModal() {
       this.$refs.registerBaseModalRef.closeModal();
-    },
-
-    // https://masteringjs.io/tutorials/fundamentals/email-validation
-    // checks if email follows pattern xx@yy.zz
-    isEmailValid() {
-      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.emailField.email);
     },
 
     areFieldsValid() {
@@ -220,14 +215,15 @@ export default {
       axios
         .post(registerUrl, {
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
         .then(
           () => {
             this.isRegisterSuccessful = true;
             this.isSubmittingForm = false;
           },
-          (error) => {
+          error => {
+            // set better error message
             try {
               if (
                 error.response.data.msg != null &&
@@ -241,7 +237,7 @@ export default {
             }
           }
         );
-    },
-  },
+    }
+  }
 };
 </script>

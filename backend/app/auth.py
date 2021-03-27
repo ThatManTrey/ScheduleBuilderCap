@@ -31,12 +31,14 @@ def login():
     email = request.json.get('email')
     password = request.json.get('password')
     user = db.session.query(User).filter_by(userEmail=email).first()
+    if not user.hasConfirmedEmail:
+        return "Please confirm your email before logging in.", HTTPStatus.FORBIDDEN
 
     if user is None or not check_password_hash(user.userPass, password):
-        return jsonify(msg="Incorrect email or password."), HTTPStatus.BAD_REQUEST
+        return "Incorrect email or password.", HTTPStatus.BAD_REQUEST
 
     access_token = create_access_token(identity=user.userID)
-    return jsonify(access_token=access_token)
+    return jsonify(accessToken=access_token, hasConfirmedEmail=user.hasConfirmedEmail)
 
 
 @app.route('/api/auth/reset-pass-request', methods=['POST'])
@@ -89,3 +91,15 @@ def verify_access_token():
 @has_reset_pass_token()
 def verify_reset_pass_token():
     return ("", HTTPStatus.NO_CONTENT)
+
+
+@app.route('/api/auth/confirm-email', methods=['POST'])
+def confirm_email():
+    user_id = request.json.get('userId')
+    user = db.session.query(User).get(user_id)
+    if user is None:
+        return jsonify(msg="User with that ID does not exist."), HTTPStatus.BAD_REQUEST
+
+    user.hasConfirmedEmail = True
+    db.session.commit()
+    return "", HTTPStatus.NO_CONTENT
