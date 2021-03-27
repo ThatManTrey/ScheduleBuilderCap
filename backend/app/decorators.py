@@ -44,15 +44,15 @@ def has_reset_pass_token():
     return wrapper
 
 
-# def has_confirm_email_token():
-#     def wrapper(fn):
-#         @wraps(fn)
-#         def decorator(*args, **kwargs):
-#             verify_jwt_in_request()
-#             if get_jwt()['type'] == "confirmEmail":
-#                 return fn(*args, **kwargs)
-#             else:
-#                 return "Invalid token type", HTTPStatus.FORBIDDEN
+def has_confirmation_token():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            verify_jwt_in_request()
+            if get_jwt()['type'] == "confirmEmail":
+                return fn(*args, **kwargs)
+            else:
+                return "Invalid token type", HTTPStatus.FORBIDDEN
 
-#         return decorator
-#     return wrapper
+        return decorator
+    return wrapper

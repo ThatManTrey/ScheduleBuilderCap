@@ -9,7 +9,7 @@ from http import HTTPStatus
 from app import app, db, mail
 from app.models import User
 from app.emails import *
-from app.decorators import is_current_user, has_access_token, has_reset_pass_token
+from app.decorators import is_current_user, has_access_token, has_reset_pass_token, has_confirmation_token
 
 
 @app.route('/api/auth/register', methods=['POST'])
@@ -23,7 +23,22 @@ def register_user():
                 createdOn=datetime.datetime.utcnow(), hasConfirmedEmail=False)
     db.session.add(user)
     db.session.commit()
+
+    token_type = {"type": "confirmEmail"}
+    confirm_email_token = create_access_token(
+        identity=user.userID, expires_delta=False, additional_claims=token_type)
+    send_confirmation_email(user.userEmail, confirm_email_token)
+
     return jsonify(id=user.userID)
+
+
+def send_confirmation_email(recipient, token):
+    # TODO set default sender app setting
+    msg = Message('Confirm Your Account',
+                  sender='ksucourseplanner@gmail.com', recipients=[recipient])
+    msg.body = get_confirm_email_txt(token)
+    msg.html = get_confirm_email_html(token)
+    mail.send(msg)
 
 
 @app.route('/api/auth/login', methods=['POST'])
@@ -47,9 +62,9 @@ def reset_pass_request():
     user = db.session.query(User).filter_by(userEmail=email).first()
     if user is not None:
         token_type = {"type": "resetPassword"}
-        reset_email_token = create_access_token(
+        reset_pass_token = create_access_token(
             identity=user.userID, expires_delta=datetime.timedelta(hours=1), additional_claims=token_type)
-        send_reset_pass_email(email, reset_email_token)
+        send_reset_pass_email(email, reset_pass_token)
 
     # shows even if invalid email is entered to prevent checking if accounts exist
     return "A password reset link has been sent to " + email
@@ -93,13 +108,14 @@ def verify_reset_pass_token():
     return ("", HTTPStatus.NO_CONTENT)
 
 
-@app.route('/api/auth/confirm-email', methods=['POST'])
-def confirm_email():
-    user_id = request.json.get('userId')
-    user = db.session.query(User).get(user_id)
-    if user is None:
-        return jsonify(msg="User with that ID does not exist."), HTTPStatus.BAD_REQUEST
+@app.route('/api/auth/verify/confirm')
+@has_confirmation_token()
+def verify_confirmation_token():
+    user = db.session.query(User).get(get_jwt_identity())
+    if user.hasConfirmedEmail:
+        return "Email has already been confirmed", HTTPStatus.BAD_REQUEST
 
     user.hasConfirmedEmail = True
     db.session.commit()
-    return "", HTTPStatus.NO_CONTENT
+    
+    return ("", HTTPStatus.NO_CONTENT)

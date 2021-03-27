@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <PageSpinner
-      :showSpinner="!hasLoaded"
-      sizeInRem="3rem"
-    ></PageSpinner>
+    <PageSpinner :showSpinner="!hasLoaded" sizeInRem="3rem"></PageSpinner>
     <router-view v-if="hasLoaded" />
   </div>
 </template>

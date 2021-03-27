@@ -121,24 +121,24 @@ export default {
     return {
       emailField: {
         email: "",
-        error: null
+        error: null,
       },
       passField: {
         pass: "",
-        error: null
+        error: null,
       },
       passVerifyField: {
         pass: "",
-        error: null
+        error: null,
       },
       isSubmittingForm: false,
       isRegisterSuccessful: null,
-      errorMessage: "An error occurred. Please try again."
+      errorMessage: "An error occurred. Please try again.",
     };
   },
 
   watch: {
-    "emailField.email": function() {
+    "emailField.email": function () {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
       else if (!isEmailValid(this.emailField.email))
@@ -146,7 +146,7 @@ export default {
       else this.emailField.error = null;
     },
 
-    "passField.pass": function() {
+    "passField.pass": function () {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else if (this.passField.pass.length < 8)
@@ -154,20 +154,20 @@ export default {
       else this.passField.error = null;
     },
 
-    "passVerifyField.pass": function() {
+    "passVerifyField.pass": function () {
       if (this.passVerifyField.pass.length === 0)
         this.passVerifyField.error = "Required field";
       else if (this.passVerifyField.pass != this.passField.pass)
         this.passVerifyField.error = "Passwords do not match";
       else this.passVerifyField.error = null;
-    }
+    },
   },
 
   components: {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert
+    ErrorAlert,
   },
 
   methods: {
@@ -210,19 +210,17 @@ export default {
         return;
       }
 
-      var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
-
       axios
-        .post(registerUrl, {
+        .post("/auth/register", {
           email: this.emailField.email,
-          password: this.passField.pass
+          password: this.passField.pass,
         })
         .then(
           () => {
             this.isRegisterSuccessful = true;
             this.isSubmittingForm = false;
           },
-          error => {
+          (error) => {
             // set better error message
             try {
               if (
@@ -237,7 +235,7 @@ export default {
             }
           }
         );
-    }
-  }
+    },
+  },
 };
 </script>

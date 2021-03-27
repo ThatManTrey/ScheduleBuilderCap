@@ -175,7 +175,7 @@ import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
 import { isEmailValid } from "../../utils";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
@@ -332,7 +332,8 @@ export default {
             this.isPasswordResetSuccessful = false;
             this.isSubmittingForm = false;
 
-            this.errorMessage = "An unexpected error has occurred. Please try again.";
+            this.errorMessage =
+              "An unexpected error has occurred. Please try again.";
             this.allowClosingModal();
           }
         );

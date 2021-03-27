@@ -6,6 +6,7 @@ import Favorites from "../views/Favorites.vue";
 import Schedule from "../views/Schedule.vue";
 import Theme from "../views/Theme.vue";
 import ResetPass from "../views/ResetPass.vue";
+import Confirm from "../views/Confirm.vue";
 import * as Toast from "../toast.js";
 
 Vue.use(VueRouter);
@@ -55,6 +56,11 @@ const routes = [
     path: "/reset",
     name: "Reset",
     component: ResetPass
+  },
+  {
+    path: "/confirm",
+    name: "Confirm",
+    component: Confirm
   },
   {
     path: "/theme",

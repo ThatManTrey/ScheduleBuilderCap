@@ -75,14 +75,18 @@ export default new Vuex.Store({
                 break;
 
               case StatusCodes.FORBIDDEN:
-                commit('setUnconfirmedEmail');
-                commit("setAuthError", "Please confirm your email before logging in.");
-                break
-                
+                commit("setUnconfirmedEmail");
+                commit(
+                  "setAuthError",
+                  "Please confirm your email before logging in."
+                );
+                break;
+
               default:
                 commit("setAuthError");
             }
-          });
+          }
+        );
     },
 
     // verify existing token from "userInfo" localStorage
