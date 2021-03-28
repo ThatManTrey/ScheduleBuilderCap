@@ -1,8 +1,9 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_jwt_extended import get_jwt, get_jwt_identity, verify_jwt_in_request
-
 from functools import wraps
 from http import HTTPStatus
+from app import app
+import os
 
 
 # decorator to check if user making the request is the same as
@@ -13,6 +14,22 @@ def is_current_user(function):
         if get_jwt_identity() != user_id:
             return jsonify(msg="You cannot access another user's information."), HTTPStatus.FORBIDDEN
         return function(user_id)
+    return wrapper
+
+def has_api_key():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            if os.environ['FLASK_ENV'] == "development":
+                return fn(*args, **kwargs)
+            
+            if "Api-Key" not in request.headers:
+                return "API Key is required", HTTPStatus.BAD_REQUEST
+            elif request.headers["Api-Key"] != app.config['SECRET_KEY']:
+                return "Invalid API Key", HTTPStatus.BAD_REQUEST
+            else:
+                 return fn(*args, **kwargs)
+        return decorator
     return wrapper
 
 

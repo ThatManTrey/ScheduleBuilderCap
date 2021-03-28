@@ -21,11 +21,8 @@ export default {
     PageSpinner
   },
 
-  created() {
-    axios.defaults.baseURL = process.env.VUE_APP_API_URL;
-
-    // verify accessToken if user has it in localStorage before loading anything
-    if (localStorage.getItem("userInfo")) {
+  methods: {
+    verifyAccessToken() {
       this.$store
         .dispatch({
           type: "verifyAccessToken",
@@ -37,9 +34,23 @@ export default {
 
           this.hasLoaded = true;
         });
-    } else {
-      this.hasLoaded = true;
+    },
+
+    setAxiosDefaults() {
+      axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+      if(process.env.NODE_ENV === "development") 
+        axios.defaults.headers.common["Api-Key"] = process.env.VUE_APP_API_KEY;
     }
+  },
+
+  created() {
+    this.setAxiosDefaults();
+
+    // verify accessToken if user has it in localStorage before loading anything
+    if (localStorage.getItem("userInfo")) 
+      this.verifyAccessToken();
+    else 
+      this.hasLoaded = true;
   }
 };
 </script>

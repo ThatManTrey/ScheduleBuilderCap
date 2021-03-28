@@ -9,10 +9,11 @@ from http import HTTPStatus
 from app import app, db, mail
 from app.models import User
 from app.emails import *
-from app.decorators import is_current_user, has_access_token, has_reset_pass_token, has_confirmation_token
+from app.decorators import is_current_user, has_access_token, has_reset_pass_token, has_confirmation_token, has_api_key
 
 
 @app.route('/api/auth/register', methods=['POST'])
+@has_api_key()
 def register_user():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -42,6 +43,7 @@ def send_confirmation_email(recipient, token):
 
 
 @app.route('/api/auth/login', methods=['POST'])
+@has_api_key()
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -57,6 +59,7 @@ def login():
 
 
 @app.route('/api/auth/reset-pass-request', methods=['POST'])
+@has_api_key()
 def reset_pass_request():
     email = request.json.get('email')
     user = db.session.query(User).filter_by(userEmail=email).first()
@@ -80,6 +83,7 @@ def send_reset_pass_email(recipient, token):
 
 
 @app.route('/api/auth/reset-pass', methods=['POST'])
+@has_api_key()
 @has_reset_pass_token()
 def reset_pass():
     password = request.json.get('password')
@@ -97,18 +101,21 @@ def reset_pass():
 
 # used for verifying token on new session
 @app.route('/api/auth/verify/access')
+@has_api_key()
 @has_access_token()
 def verify_access_token():
     return ("", HTTPStatus.NO_CONTENT)
 
 
 @app.route('/api/auth/verify/reset-pass')
+@has_api_key()
 @has_reset_pass_token()
 def verify_reset_pass_token():
     return ("", HTTPStatus.NO_CONTENT)
 
 
 @app.route('/api/auth/verify/confirm')
+@has_api_key()
 @has_confirmation_token()
 def verify_confirmation_token():
     user = db.session.query(User).get(get_jwt_identity())

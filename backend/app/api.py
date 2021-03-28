@@ -2,7 +2,7 @@ from flask import jsonify
 from app import app, db
 from app.models import Course, User
 from app.colors import *
-from app.decorators import has_access_token, is_current_user
+from app.decorators import has_access_token, is_current_user, has_api_key
 
 import datetime
 from http import HTTPStatus
@@ -19,6 +19,7 @@ def get_accent_colors():
 #http://127.0.0.1:5000/ROUTE
 #if post, do raw json in body
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
+@has_api_key()
 def get_dept_courses(CourseType):
     courses = db.session.query(Course).filter_by(CourseID_Type = CourseType)
     arr_courses = []
@@ -29,6 +30,7 @@ def get_dept_courses(CourseType):
 
 
 @app.route('/api/users/<int:user_id>', methods=['GET'])
+@has_api_key()
 @has_access_token()
 @is_current_user
 def get_user(user_id):
