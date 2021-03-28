@@ -1,5 +1,4 @@
 from flask import jsonify
-
 from app import app, db
 from app.models import Course, User
 from app.colors import *

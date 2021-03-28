@@ -5,6 +5,7 @@ backend/venv/
 backend/password.py
 backend/*.exe
 backend/*.pyd
+backend/.env
 
 # frontend files
 frontend/.DS_Store

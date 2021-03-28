@@ -1,25 +1,25 @@
+from app import app
+
 def get_reset_password_txt(token):
-    # change to config setting
-    url =  "http://localhost:8080/#/reset?token=" + token
+    url = "{}/reset?token={}".format(app.config['FRONTEND_URL'], token)
 
     reset_password_txt = """We received a request to reset the password your
                             KSUCoursePlanner account.
 
                             Click the link below to select a new password.
-                            
+
                             {}
 
                             If you did not create this request then please ignore this message.
 
                             - The KSU Course Planner Team
                             """.format(url)
-    
+
     return reset_password_txt
 
 
 def get_reset_password_html(token):
-    # change to config setting
-    url =  "http://localhost:8080/#/reset?token=" + token
+    url = "{}/reset?token={}".format(app.config['FRONTEND_URL'], token)
 
     reset_password_html = """<p>We received a request to reset the password your
                             KSUCoursePlanner account.</p>
@@ -35,8 +35,7 @@ def get_reset_password_html(token):
 
 
 def get_confirm_email_txt(token):
-    # change to config setting
-    url =  "http://localhost:8080/#/confirm?token=" + token
+    url = "{}/confirm?token={}".format(app.config['FRONTEND_URL'], token)
 
     confirm_email_txt = """ Thanks for signing up for KSU Course Planner!
 
@@ -51,8 +50,7 @@ def get_confirm_email_txt(token):
 
 
 def get_confirm_email_html(token):
-    # change to config setting
-    url =  "http://localhost:8080/#/confirm?token=" + token
+    url = "{}/confirm?token={}".format(app.config['FRONTEND_URL'], token)
 
     confirm_email_html = """<p>Thanks for signing up for KSU Course Planner!</p>
 
