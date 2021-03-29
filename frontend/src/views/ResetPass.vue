@@ -104,8 +104,7 @@ export default {
           error: null
         },
         isLoadingPage: true,
-        isSubmittingForm: false,
-        hasSubmittedForm: false,
+        isSubmittingForm: false
       }
     },
 
@@ -129,12 +128,12 @@ export default {
     },
 
     methods: {
+      // TODO: move to router before enter
       verifyResetToken() {
 
         if(this.resetPassToken) {
-          var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify/reset-pass";
           axios
-          .get(verifyUrl, { headers: { Authorization: "Bearer " + this.resetPassToken } })
+          .get("/auth/verify/reset-pass", { headers: { Authorization: "Bearer " + this.resetPassToken } })
           .then(() => {
             this.isLoadingPage = false;
           })
@@ -161,31 +160,25 @@ export default {
 
       resetPassword(){
         this.isSubmittingForm = true;
-        this.hasSubmittedForm = false;
 
         if (!this.areFieldsValid()) {
-          this.hasSubmittedForm = true;
           this.isSubmittingForm = false;
           Toast.showErrorMessage("Please fix the errors below before continuing.");
           return;
         }
 
-      var resetPassUrl = process.env.VUE_APP_API_URL + "/auth/reset-pass";
-
       axios
-        .post(resetPassUrl, {
+        .post("/auth/reset-pass", {
           password: this.passField.pass
         },
         { headers: { Authorization: "Bearer " + this.resetPassToken } })
         .then(
           () => {
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
             Toast.showSuccessMessage("Password reset successfully!")
           },
           error => {
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
             Toast.showErrorMessage("Error resetting password: ", error);
           }
         );

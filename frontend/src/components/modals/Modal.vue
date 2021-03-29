@@ -27,7 +27,8 @@
             id="close-modal-icon"
             type="button"
             class="button-as-link"
-            data-bs-dismiss="modal"
+            @click="closeModal()"
+            :disabled="isStatic"
           >
             <i class="fas fa-times fa-lg text-theme-lightest-gray"></i>
           </button>
@@ -71,7 +72,8 @@ export default {
 
   data() {
     return {
-      modal: null
+      modal: null,
+      isStatic: false
     };
   },
 
@@ -81,6 +83,16 @@ export default {
     },
     closeModal() {
       this.modal.hide();
+    },
+    preventClosingModal() {
+      this.modal._config.backdrop = "static";
+      this.modal._config.keyboard = false;
+      this.isStatic = true;
+    },
+    allowClosingModal() {
+      this.modal._config.backdrop = true;
+      this.modal._config.keyboard = true;
+      this.isStatic = false;
     }
   },
 
@@ -100,7 +112,6 @@ export default {
 }
 
 /* bootstrap modal overrides */
-
 div.modal-content {
   background-color: var(--theme-blackest);
   color: var(--theme-whiter);

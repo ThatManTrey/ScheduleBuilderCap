@@ -34,7 +34,7 @@
         </p>
       </div>
 
-      <div v-if="$store.isLoggedIn" class="row">
+      <div v-if="$store.state.isAuthenticated" class="row">
         <div class="col">
           <a
             tabindex="0"
@@ -54,6 +54,7 @@
           </div>
 
         <div v-if="$store.isLoggedIn" class="col text-end">
+        <div v-if="$store.state.isAuthenticated" class="col text-end">
           <a
             v-if="!isRemovingCourse"
             tabindex="0"

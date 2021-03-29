@@ -1,78 +1,76 @@
 from flask import jsonify, request
-from flask_mail import Mail, Message
-from app import app, db, mail
-from app.models import Student
-import datetime
-import time
+from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
+from flask_jwt_extended import create_access_token, get_jwt_identity
+
+import datetime
+from http import HTTPStatus
+
+from app import app, db, mail
+from app.models import User
 from app.emails import *
-
-
-# decorator to check if user making the request is the same as
-#   the requested user to get information about
-# add @is_current_user to any endpoint that returns user information
-def is_current_user(function):
-    def wrapper(user_id):
-        if get_jwt_identity() != user_id:
-            return jsonify(msg="You cannot access another user's information."), 403
-        return function(user_id)
-    return wrapper
+from app.decorators import is_current_user, has_access_token, has_reset_pass_token, has_confirmation_token, has_api_key
 
 
 @app.route('/api/auth/register', methods=['POST'])
+@has_api_key()
 def register_user():
     email = request.json.get('email')
     password = request.json.get('password')
-    if db.session.query(Student).filter_by(UserEmail=email).first() is not None:
-        return jsonify(msg="That email is already in use."), 400
+    if db.session.query(User).filter_by(userEmail=email).first() is not None:
+        return jsonify(msg="That email is already in use."), HTTPStatus.BAD_REQUEST
 
-    student = Student(UserEmail=email, UserPass=generate_password_hash(password),
-                      Created_on=datetime.datetime.utcnow(), hasConfirmedEmail=False)
-    db.session.add(student)
+    user = User(userEmail=email, userPass=generate_password_hash(password),
+                createdOn=datetime.datetime.utcnow(), hasConfirmedEmail=False)
+    db.session.add(user)
     db.session.commit()
-    return jsonify(id=student.UserID)
+
+    token_type = {"type": "confirmEmail"}
+    confirm_email_token = create_access_token(
+        identity=user.userID, expires_delta=False, additional_claims=token_type)
+    send_confirmation_email(user.userEmail, confirm_email_token)
+
+    return jsonify(id=user.userID)
+
+
+def send_confirmation_email(recipient, token):
+    # TODO set default sender app setting
+    msg = Message('Confirm Your Account',
+                  sender='ksucourseplanner@gmail.com', recipients=[recipient])
+    msg.body = get_confirm_email_txt(token)
+    msg.html = get_confirm_email_html(token)
+    mail.send(msg)
 
 
 @app.route('/api/auth/login', methods=['POST'])
+@has_api_key()
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
-    student = db.session.query(Student).filter_by(UserEmail=email).first()
+    user = db.session.query(User).filter_by(userEmail=email).first()
+    if not user.hasConfirmedEmail:
+        return "Please confirm your email before logging in.", HTTPStatus.FORBIDDEN
 
-    if student is None or not check_password_hash(student.UserPass, password):
-        return jsonify(msg="Incorrect email or password."), 400
+    if user is None or not check_password_hash(user.userPass, password):
+        return "Incorrect email or password.", HTTPStatus.BAD_REQUEST
 
-    access_token = create_access_token(identity=student.UserID)
-    return jsonify(access_token=access_token)
+    access_token = create_access_token(identity=user.userID)
+    return jsonify(accessToken=access_token, hasConfirmedEmail=user.hasConfirmedEmail)
 
 
 @app.route('/api/auth/reset-pass-request', methods=['POST'])
+@has_api_key()
 def reset_pass_request():
     email = request.json.get('email')
-    student = db.session.query(Student).filter_by(UserEmail=email).first()
-    if student is not None:
+    user = db.session.query(User).filter_by(userEmail=email).first()
+    if user is not None:
         token_type = {"type": "resetPassword"}
-        reset_email_token = create_access_token(identity=student.UserID, expires_delta=datetime.timedelta(hours=1), additional_claims=token_type)
-        send_reset_pass_email(email, reset_email_token)
+        reset_pass_token = create_access_token(
+            identity=user.userID, expires_delta=datetime.timedelta(hours=1), additional_claims=token_type)
+        send_reset_pass_email(email, reset_pass_token)
 
     # shows even if invalid email is entered to prevent checking if accounts exist
     return "A password reset link has been sent to " + email
-
-
-@app.route('/api/auth/reset-pass', methods=['POST'])
-@jwt_required()
-def reset_pass():
-    if get_jwt()['type'] != "resetPassword":
-        return "Invalid token type", 403
-    
-    password = request.json.get('password')
-    student = db.session.query(Student).get(get_jwt_identity())
-    if student is not None:
-        student.UserPass = generate_password_hash(password)
-        db.session.commit()
-
-    return ("", 204)
 
 
 def send_reset_pass_email(recipient, token):
@@ -84,29 +82,47 @@ def send_reset_pass_email(recipient, token):
     mail.send(msg)
 
 
+@app.route('/api/auth/reset-pass', methods=['POST'])
+@has_api_key()
+@has_reset_pass_token()
+def reset_pass():
+    password = request.json.get('password')
+    user = db.session.query(User).get(get_jwt_identity())
+    if user is not None:
+        user.userPass = generate_password_hash(password)
+        db.session.commit()
+
+    else:
+        # doubt this would happen but just in case the user gets deleted or something?
+        return "Invalid token ID", HTTPStatus.INTERNAL_SERVER_ERROR
+
+    return ("", HTTPStatus.NO_CONTENT)
+
+
 # used for verifying token on new session
 @app.route('/api/auth/verify/access')
-@jwt_required()
+@has_api_key()
+@has_access_token()
 def verify_access_token():
-    if get_jwt()['type'] != "access":
-        return "Invalid token type", 403
-    return ("", 204)
+    return ("", HTTPStatus.NO_CONTENT)
 
 
 @app.route('/api/auth/verify/reset-pass')
-@jwt_required()
+@has_api_key()
+@has_reset_pass_token()
 def verify_reset_pass_token():
-    if get_jwt()['type'] != "resetPassword":
-        return "Invalid token type", 403
-    return ("", 204)
+    return ("", HTTPStatus.NO_CONTENT)
 
 
-@app.route('/api/users/<int:user_id>', methods=['GET'])
-@jwt_required()
-@is_current_user
-def get_user(user_id):
-    student = db.session.query(Student).get(user_id)
-    if student is None:
-        return jsonify(msg="User with that ID does not exist."), 400
+@app.route('/api/auth/verify/confirm')
+@has_api_key()
+@has_confirmation_token()
+def verify_confirmation_token():
+    user = db.session.query(User).get(get_jwt_identity())
+    if user.hasConfirmedEmail:
+        return "Email has already been confirmed", HTTPStatus.BAD_REQUEST
 
-    return jsonify(userID=student.UserID, userEmail=student.UserEmail, createdOn=student.dateTime)
+    user.hasConfirmedEmail = True
+    db.session.commit()
+    
+    return ("", HTTPStatus.NO_CONTENT)

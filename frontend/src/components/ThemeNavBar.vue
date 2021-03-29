@@ -31,7 +31,7 @@
             </li>
 
             <li
-              v-if="$store.isLoggedIn"
+              v-if="$store.state.isAuthenticated"
               class="nav-item col-6 col-md-4 col-lg-auto"
             >
               <router-link
@@ -44,7 +44,7 @@
             </li>
 
             <li
-              v-if="$store.isLoggedIn"
+              v-if="$store.state.isAuthenticated"
               class="nav-item col-6 col-md-4 col-lg-auto"
             >
               <router-link
@@ -82,7 +82,7 @@
               v-on:click="logout()"
               type="button"
               class="btn btn-theme-blacker"
-              v-if="$store.isLoggedIn"
+              v-if="$store.state.isAuthenticated"
             >
               Logout
 
@@ -92,7 +92,7 @@
               type="button"
               class="btn btn-theme-blacker me-3"
               @click="$refs.signInModal.openModal()"
-              v-if="!$store.isLoggedIn"
+              v-if="!$store.state.isAuthenticated"
             >
               Sign In
             </button>
@@ -100,7 +100,7 @@
               type="button"
               class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
-              v-if="!$store.isLoggedIn"
+              v-if="!$store.state.isAuthenticated"
             >
               Create An Account
             </button>
@@ -109,12 +109,8 @@
       </div>
     </nav>
 
-    <!-- remove events here -->
-    <SignInModal v-if="!$store.isLoggedIn" ref="signInModal"></SignInModal>
-    <RegisterModal
-      v-if="!$store.isLoggedIn"
-      ref="registerModal"
-    ></RegisterModal>
+    <SignInModal ref="signInModal"></SignInModal>
+    <RegisterModal ref="registerModal"></RegisterModal>
 
     <transition name="fade">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
@@ -172,8 +168,8 @@ export default {
     },
 
     logout() {
-      this.$actions.logout();
-      this.$router.push("/home");
+      this.$store.dispatch("logOut");
+      if (!this.isCurrentRoute("Home")) this.$router.push("/home");
     }
   },
 
@@ -184,7 +180,7 @@ export default {
   },
 
   created() {
-    this.SHOW_SCROLL_TOP_AFTER_PX = 200
+    this.SHOW_SCROLL_TOP_AFTER_PX = 200;
 
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);

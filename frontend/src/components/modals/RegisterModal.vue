@@ -77,6 +77,7 @@
             :class="{ 'form-error': passVerifyField.error }"
             id="userRegisterRetypePass"
             placeholder="Re-enter password..."
+            @keyup.enter="register()"
             :disabled="isSubmittingForm"
             v-model="passVerifyField.pass"
           />
@@ -113,6 +114,7 @@ import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
+import { isEmailValid } from "../../utils.js";
 
 export default {
   data() {
@@ -130,7 +132,6 @@ export default {
         error: null,
       },
       isSubmittingForm: false,
-      hasSubmittedForm: false,
       isRegisterSuccessful: null,
       errorMessage: "An error occurred. Please try again.",
     };
@@ -140,7 +141,7 @@ export default {
     "emailField.email": function () {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
-      else if (!this.isEmailValid())
+      else if (!isEmailValid(this.emailField.email))
         this.emailField.error = "Please enter a valid email";
       else this.emailField.error = null;
     },
@@ -166,7 +167,7 @@ export default {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert
+    ErrorAlert,
   },
 
   methods: {
@@ -175,12 +176,6 @@ export default {
     },
     closeModal() {
       this.$refs.registerBaseModalRef.closeModal();
-    },
-
-    // https://masteringjs.io/tutorials/fundamentals/email-validation
-    // checks if email follows pattern xx@yy.zz
-    isEmailValid() {
-      return /^[^@]+@\w+(\.\w+)+\w$/.test(this.emailField.email);
     },
 
     areFieldsValid() {
@@ -206,22 +201,17 @@ export default {
 
     register() {
       this.isSubmittingForm = true;
-      this.hasSubmittedForm = false;
       this.isRegisterSuccessful = null;
 
       if (!this.areFieldsValid()) {
-        console.log("fields are not valid");
-        this.hasSubmittedForm = true;
         this.isRegisterSuccessful = false;
         this.isSubmittingForm = false;
         this.errorMessage = "Please fix the errors below before continuing.";
         return;
       }
 
-      var registerUrl = process.env.VUE_APP_API_URL + "/auth/register";
-      console.log("before hitting api");
       axios
-        .post(registerUrl, {
+        .post("/auth/register", {
           email: this.emailField.email,
           password: this.passField.pass,
         })
@@ -229,9 +219,9 @@ export default {
           () => {
             this.isRegisterSuccessful = true;
             this.isSubmittingForm = false;
-            this.hasSubmittedForm = true;
           },
           (error) => {
+            // set better error message
             try {
               if (
                 error.response.data.msg != null &&
@@ -242,7 +232,6 @@ export default {
             } finally {
               this.isRegisterSuccessful = false;
               this.isSubmittingForm = false;
-              this.hasSubmittedForm = true;
             }
           }
         );
