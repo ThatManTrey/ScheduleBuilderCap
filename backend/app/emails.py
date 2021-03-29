@@ -56,7 +56,11 @@ def get_confirm_email_html(token):
 
                             <p>To be able to rate courses and reset your password, you'll have to verify your account first. You can do that by <a href="{}">clicking here</a>.</p>
 
+                            <p>Alternatively, you can copy the link below</p>
+
+                            {}
+
                             <p>- The KSU Course Planner Team</p>
-                            """.format(url)
+                            """.format(url, url)
     
     return confirm_email_html

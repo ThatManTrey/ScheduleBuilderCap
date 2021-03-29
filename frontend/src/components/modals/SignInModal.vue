@@ -18,7 +18,7 @@
           ></SuccessAlert>
 
           <ErrorAlert
-            v-if="isLoginSuccessful == false"
+            v-if="isLoginSuccessful === false"
             :errorMessage="errorMessage"
           ></ErrorAlert>
         </div>
@@ -31,7 +31,7 @@
           ></SuccessAlert>
 
           <ErrorAlert
-            v-if="isPasswordResetSuccessful == false"
+            v-if="isPasswordResetSuccessful === false"
             :errorMessage="errorMessage"
           ></ErrorAlert>
         </div>

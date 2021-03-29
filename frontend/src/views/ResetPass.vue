@@ -1,11 +1,7 @@
 <template lang="html">
   <div>
     <ThemeNavBar></ThemeNavBar>
-    <PageSpinner
-      v-if="isLoadingPage"
-      :showSpinner="isLoadingPage"
-    ></PageSpinner>
-    <div v-else class="container mt-5">
+    <div class="container mt-5">
       <div class="row justify-content-center">
         <div class="col-lg-4 col-md-6 col-sm-8 col-10">
           <h3 class="text-theme-whitest mb-3">
@@ -81,20 +77,18 @@
 import ThemeNavBar from '../components/ThemeNavBar.vue';
 import * as Toast from '../toast.js';
 import axios from 'axios';
-import PageSpinner from '../components/spinners/PageSpinner.vue';
 import Spinner from '../components/spinners/Spinner.vue';
 
 export default {
     name: 'reset-pass',
     components: {
         ThemeNavBar,
-        PageSpinner,
         Spinner
     },
 
     data() {
       return {
-        resetPassToken: String,
+        resetPassToken: this.$route.query.token,
         passField: {
           pass: "",
           error: null
@@ -103,7 +97,6 @@ export default {
           pass: "",
           error: null
         },
-        isLoadingPage: true,
         isSubmittingForm: false
       }
     },
@@ -114,7 +107,7 @@ export default {
         if (this.passField.pass.length === 0)
           this.passField.error = "Required field";
         else if (this.passField.pass.length < 8)
-          this.passField.error = "Password must be more than 8 characters long.";
+          this.passField.error = "Password must be at least 8 characters long.";
         else this.passField.error = null;
       },
 
@@ -128,27 +121,6 @@ export default {
     },
 
     methods: {
-      // TODO: move to router before enter
-      verifyResetToken() {
-
-        if(this.resetPassToken) {
-          axios
-          .get("/auth/verify/reset-pass", { headers: { Authorization: "Bearer " + this.resetPassToken } })
-          .then(() => {
-            this.isLoadingPage = false;
-          })
-          .catch(() => {
-            this.$router.push('home');
-            Toast.showErrorMessage(
-              "Invalid or expired authentication token. Request another reset link and try again."
-            );
-          });
-        } else {
-          this.$router.push('home');
-          Toast.showErrorMessage("Invalid reset password token.");
-        }
-      },
-
       areFieldsValid() {
         if (this.passField.pass.length === 0)
           this.passField.error = "Required field";
@@ -167,11 +139,9 @@ export default {
           return;
         }
 
-      axios
-        .post("/auth/reset-pass", {
-          password: this.passField.pass
-        },
-        { headers: { Authorization: "Bearer " + this.resetPassToken } })
+        axios.post("/auth/reset-pass", 
+          { password: this.passField.pass },
+          { headers: { Authorization: "Bearer " + this.resetPassToken } })
         .then(
           () => {
             this.isSubmittingForm = false;
@@ -184,10 +154,5 @@ export default {
         );
       }
     },
-
-    created() {
-      this.resetPassToken = this.$route.query.token;
-      this.verifyResetToken();
-    }
 };
 </script>

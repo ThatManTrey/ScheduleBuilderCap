@@ -9,6 +9,8 @@ import App from "./App.vue";
 import VueToast from "vue-toast-notification";
 import router from "./router";
 import store from "./store/";
+import axios from "axios";
+import * as Toast from "./toast.js";
 
 Vue.config.productionTip = false;
 
@@ -17,8 +19,29 @@ Vue.use(VueToast, {
   duration: 10000
 });
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount("#app");
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+if (process.env.NODE_ENV === "development")
+  axios.defaults.headers.common["Api-Key"] = process.env.VUE_APP_API_KEY;
+
+// verify access token on new session
+if (localStorage.getItem("userInfo")) {
+  store
+    .dispatch({
+      type: "verifyAccessToken",
+      token: localStorage.getItem("userInfo")
+    })
+    .then(() => {
+      if (store.state.authError) Toast.showErrorMessage(store.state.authError);
+      initalizeApp();
+    });
+} else {
+  initalizeApp();
+}
+
+function initalizeApp() {
+  new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount("#app");
+}

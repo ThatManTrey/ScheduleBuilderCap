@@ -98,7 +98,7 @@ export default {
 
   // runs after element references are created so modal is not undefined
   mounted() {
-    if (this.modal == null)
+    if (this.modal === null)
       this.modal = new bootstrap.Modal(this.$refs.modalRef);
   }
 };

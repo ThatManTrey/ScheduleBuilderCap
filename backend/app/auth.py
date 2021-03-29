@@ -34,9 +34,7 @@ def register_user():
 
 
 def send_confirmation_email(recipient, token):
-    # TODO set default sender app setting
-    msg = Message('Confirm Your Account',
-                  sender='ksucourseplanner@gmail.com', recipients=[recipient])
+    msg = Message('Confirm Your Account', recipients=[recipient])
     msg.body = get_confirm_email_txt(token)
     msg.html = get_confirm_email_html(token)
     mail.send(msg)
@@ -74,9 +72,7 @@ def reset_pass_request():
 
 
 def send_reset_pass_email(recipient, token):
-    # TODO set default sender app setting
-    msg = Message('Reset Your Password',
-                  sender='ksucourseplanner@gmail.com', recipients=[recipient])
+    msg = Message('Reset Your Password', recipients=[recipient])
     msg.body = get_reset_password_txt(token)
     msg.html = get_reset_password_html(token)
     mail.send(msg)

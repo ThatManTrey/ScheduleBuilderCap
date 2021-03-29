@@ -60,7 +60,7 @@ export default {
       var removePromptResult = confirm(
         "Are you sure you want to remove this semester and all its courses?"
       );
-      if (removePromptResult == true) {
+      if (removePromptResult === true) {
         Toast.showSuccessMessage(
           "Semester was removed successfully."
         );

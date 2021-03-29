@@ -104,8 +104,8 @@ export default new Vuex.Store({
             // server timeout
             if (!error.response) commit("setAuthError");
             else if (
-              error.response.status == StatusCodes.UNAUTHORIZED ||
-              error.response.status == StatusCodes.UNPROCESSABLE_ENTITY
+              error.response.status === StatusCodes.UNAUTHORIZED ||
+              error.response.status === StatusCodes.UNPROCESSABLE_ENTITY
             )
               commit(
                 "setAuthError",

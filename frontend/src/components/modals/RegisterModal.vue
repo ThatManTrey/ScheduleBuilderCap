@@ -15,8 +15,8 @@
         ></SuccessAlert>
 
         <ErrorAlert
-          v-if="isRegisterSuccessful == false"
-          :errorMessage="errorMessage"
+          v-if="isRegisterSuccessful === false"
+          :errorMessage="$store.state.authError"
         ></ErrorAlert>
       </transition>
 
@@ -115,30 +115,31 @@ import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
 import { isEmailValid } from "../../utils.js";
+import StatusCodes from "http-status-codes";
 
 export default {
   data() {
     return {
       emailField: {
         email: "",
-        error: null,
+        error: null
       },
       passField: {
         pass: "",
-        error: null,
+        error: null
       },
       passVerifyField: {
         pass: "",
-        error: null,
+        error: null
       },
       isSubmittingForm: false,
       isRegisterSuccessful: null,
-      errorMessage: "An error occurred. Please try again.",
+      errorMessage: "An error occurred. Please try again."
     };
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       if (this.emailField.email.length === 0)
         this.emailField.error = "Required field";
       else if (!isEmailValid(this.emailField.email))
@@ -146,28 +147,28 @@ export default {
       else this.emailField.error = null;
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       if (this.passField.pass.length === 0)
         this.passField.error = "Required field";
       else if (this.passField.pass.length < 8)
-        this.passField.error = "Password must be more than 8 characters long.";
+        this.passField.error = "Password must be at least 8 characters long.";
       else this.passField.error = null;
     },
 
-    "passVerifyField.pass": function () {
+    "passVerifyField.pass": function() {
       if (this.passVerifyField.pass.length === 0)
         this.passVerifyField.error = "Required field";
-      else if (this.passVerifyField.pass != this.passField.pass)
+      else if (this.passVerifyField.pass !== this.passField.pass)
         this.passVerifyField.error = "Passwords do not match";
       else this.passVerifyField.error = null;
-    },
+    }
   },
 
   components: {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert,
+    ErrorAlert
   },
 
   methods: {
@@ -182,7 +183,7 @@ export default {
       // "Required field" and password not matching errors will
       // not be shown until user starts typing
       // set errors here if nothing has been entered yet
-      if (this.passVerifyField.pass != this.passField.pass)
+      if (this.passVerifyField.pass !== this.passField.pass)
         this.passVerifyField.error = "Passwords do not match";
 
       if (this.emailField.email.length === 0)
@@ -199,6 +200,7 @@ export default {
       );
     },
 
+    // move to store
     register() {
       this.isSubmittingForm = true;
       this.isRegisterSuccessful = null;
@@ -213,29 +215,28 @@ export default {
       axios
         .post("/auth/register", {
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
         .then(
           () => {
             this.isRegisterSuccessful = true;
             this.isSubmittingForm = false;
           },
-          (error) => {
-            // set better error message
-            try {
-              if (
-                error.response.data.msg != null &&
-                error.response.data.msg != ""
-              )
-                this.errorMessage = error.response.data.msg;
-              // else use default errorMessage defined above
-            } finally {
-              this.isRegisterSuccessful = false;
-              this.isSubmittingForm = false;
-            }
+          error => {
+            if (!error.response) this.$store.commit("setAuthError");
+            else if (error.response.status === StatusCodes.BAD_REQUEST)
+              this.$store.commit(
+                "setAuthError",
+                "That email address is not available."
+              );
+            else 
+              this.$store.commit("setAuthError");
+
+            this.isRegisterSuccessful = false;
+            this.isSubmittingForm = false;
           }
         );
-    },
-  },
+    }
+  }
 };
 </script>

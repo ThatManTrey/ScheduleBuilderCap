@@ -117,7 +117,7 @@ export default {
           n +
           " and all its courses?"
       );
-      if (removePromptResult == true) {
+      if (removePromptResult === true) {
         Toast.showSuccessMessage(
           "Semester " + n + " was removed successfully."
         );

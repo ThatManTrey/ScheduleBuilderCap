@@ -16,6 +16,7 @@ def is_current_user(function):
         return function(user_id)
     return wrapper
 
+
 def has_api_key():
     def wrapper(fn):
         @wraps(fn)
