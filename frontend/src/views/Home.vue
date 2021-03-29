@@ -92,6 +92,7 @@ export default {
             .then((res) => {
               this.courses = res.data;
               this.getCourses = true;
+              this.hasLoadedCourses = true;
             })
             .catch((error) => {
               // eslint-disable-next-line
