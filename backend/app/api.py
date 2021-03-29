@@ -21,7 +21,7 @@ def get_accent_colors():
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
 @has_api_key()
 def get_dept_courses(CourseType):
-    courses = db.session.query(Course).filter_by(CourseID_Type = CourseType)
+    courses = db.session.query(Course).filter_by(courseIDType = CourseType)
     arr_courses = []
     for course in courses:
         arr_courses.append(course.as_dict())
