@@ -5,7 +5,9 @@ from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from config import DevelopmentConfig, ProductionConfig
 import os
+
 from http import HTTPStatus
+import git
 
 # points to the built files folder for Vue
 app = Flask(__name__, template_folder="../../frontend/dist/")
@@ -46,5 +48,19 @@ if os.environ['FLASK_ENV'] == "production":
     #         return "Invalid API Key", HTTPStatus.BAD_REQUEST
 
     #     return ""
+
+# for server updates
+@app.route('/update_server', methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('/home/KSUCoursePlanner/ScheduleBuilderCap')
+        origin = repo.remotes.origin
+    
+        origin.pull()
+
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
+
 
 from app import auth, api
