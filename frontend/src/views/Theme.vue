@@ -316,10 +316,8 @@ export default {
     },
     methods: {
         getColors() {
-            var baseUrl = process.env.VUE_APP_API_URL + "/colors";
-
             // AJAX request
-            axios.get(baseUrl + "/primary")
+            axios.get("/colors/primary")
                 .then((res) => {
                     this.primaryColors = res.data;
                 })
@@ -327,7 +325,7 @@ export default {
                     // eslint-disable-next-line
                     console.error(error);
                 });
-            axios.get(baseUrl + "/accent")
+            axios.get("/colors/accent")
                 .then((res) => {
                     this.accentColors = res.data;
                 })

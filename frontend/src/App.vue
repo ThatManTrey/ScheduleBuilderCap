@@ -1,18 +1,14 @@
 <template>
   <div id="app">
-    <PageSpinner
-      v-if="!hasLoaded"
-      :showSpinner="!hasLoaded"
-      sizeInRem="3rem"
-    ></PageSpinner>
+    <PageSpinner v-if="!hasLoaded" :showSpinner="!hasLoaded" sizeInRem="3rem"></PageSpinner>
     <router-view v-if="hasLoaded" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import * as Toast from "./toast";
 import PageSpinner from "./components/spinners/PageSpinner";
+import * as Toast from "./toast.js";
 
 export default {
   data() {
@@ -26,27 +22,35 @@ export default {
   },
 
   methods: {
-    checkToken(authToken) {
-      var verifyUrl = process.env.VUE_APP_API_URL + "/auth/verify/access";
-      axios
-        .get(verifyUrl, { headers: { Authorization: "Bearer " + authToken } })
-        .then(() => {
-          this.$actions.login(authToken);
-          this.hasLoaded = true;
+    verifyAccessToken() {
+      this.$store
+        .dispatch({
+          type: "verifyAccessToken",
+          token: localStorage.getItem("userInfo")
         })
-        .catch(() => {
+        .then(() => {
+          if (this.$store.state.authError)
+            Toast.showErrorMessage(this.$store.state.authError);
+
           this.hasLoaded = true;
-          Toast.showErrorMessage(
-            "Invalid authentication token. Please login again."
-          );
-          localStorage.removeItem("userInfo");
         });
+    },
+
+    setAxiosDefaults() {
+      axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+      if(process.env.NODE_ENV === "development") 
+        axios.defaults.headers.common["Api-Key"] = process.env.VUE_APP_API_KEY;
     }
   },
 
   created() {
-    if (localStorage.userInfo != null) this.checkToken(localStorage.userInfo);
-    else this.hasLoaded = true;
+    this.setAxiosDefaults();
+
+    // verify accessToken if user has it in localStorage before loading anything
+    if (localStorage.getItem("userInfo")) 
+      this.verifyAccessToken();
+    else 
+      this.hasLoaded = true;
   }
 };
 </script>
