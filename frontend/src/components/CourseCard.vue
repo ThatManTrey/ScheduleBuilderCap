@@ -2,18 +2,18 @@
   <div class="card justify-content-center course-card">
     <div class="card-body container-fluid text-theme-whiter">
       <div class="row text-theme-whitest">
-        <h4 class="course-card-title m-1">{{ course.CourseName }}</h4>
+        <h4 class="course-card-title m-1">{{ course.courseName }}</h4>
       </div>
 
       <div class="row" :class="{ 'mb-2': !showSmallCard }">
         <div class="col-10 p-0">
           <span class="badge rounded-pill course-badge">
-            <button class="button-as-link">{{ course.CourseID }}</button>
+            <button class="button-as-link">{{ course.courseID }}</button>
           </span>
 
           <span class="badge rounded-pill course-badge">
-            <button class="button-as-link" v-if="course.CreditHours_Max == course.CreditHours_Min">{{ course.CreditHours_Max }} Credits</button>
-            <button class="button-as-link" v-else >{{ course.CreditHours_Min }}-{{ course.CreditHours_Max }} Credits</button>
+            <button class="button-as-link" v-if="course.creditHoursMax == course.creditHoursMin">{{ course.creditHoursMax }} Credits</button>
+            <button class="button-as-link" v-else >{{ course.creditHours_Min }}-{{ course.creditHoursMax }} Credits</button>
           </span>
         </div>
 
@@ -30,12 +30,12 @@
 
       <div v-if="!showSmallCard" class="row mb-3">
         <p class="card-text">
-          {{ course.CourseDesc }}
+          {{ course.courseDesc }}
         </p>
       </div>
 
-      <div v-if="$store.state.isAuthenticated" class="row">
-        <div class="col">
+      <div class="row">
+        <div v-if="$store.state.isAuthenticated" class="col">
           <a
             tabindex="0"
             data-tooltip="Favorite Course"
