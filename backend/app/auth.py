@@ -46,8 +46,6 @@ def login():
     email = request.json.get('email')
     password = request.json.get('password')
     user = db.session.query(User).filter_by(userEmail=email).first()
-    if not user.hasConfirmedEmail:
-        return "Please confirm your email before logging in.", HTTPStatus.FORBIDDEN
 
     if user is None or not check_password_hash(user.userPass, password):
         return "Incorrect email or password.", HTTPStatus.BAD_REQUEST
@@ -100,7 +98,8 @@ def reset_pass():
 @has_api_key()
 @has_access_token()
 def verify_access_token():
-    return ("", HTTPStatus.NO_CONTENT)
+    user = db.session.query(User).get(get_jwt_identity())
+    return jsonify(hasConfirmedEmail=user.hasConfirmedEmail)
 
 
 @app.route('/api/auth/verify/reset-pass')

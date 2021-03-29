@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import StatusCodes from "http-status-codes";
+import StatusCodes from 'http-status-codes';
 import jwt_decode from "jwt-decode";
+import * as Toast from '../toast.js';
 
 Vue.use(Vuex);
 
@@ -15,12 +16,13 @@ export default new Vuex.Store({
     hasConfirmedEmail: null,
     authError: null
   },
+
   mutations: {
-    authenticateUser(state, userId) {
+    authenticateUser(state, { userId, hasConfirmedEmail}) {
       state.isAuthenticated = true;
       state.userId = userId;
-      state.hasConfirmedEmail = true;
       state.authError = null;
+      state.hasConfirmedEmail = hasConfirmedEmail;
     },
 
     unAuthenticateUser(state) {
@@ -33,11 +35,8 @@ export default new Vuex.Store({
     setAuthError(state, message = defaultError) {
       state.authError = message;
     },
-
-    setUnconfirmedEmail(state) {
-      state.hasConfirmedEmail = false;
-    }
   },
+  
   actions: {
     // get new accessToken if credentials are valid
     logIn({ commit }, { email, password }) {
@@ -53,7 +52,19 @@ export default new Vuex.Store({
             localStorage.setItem("userInfo", token);
             axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
-            commit("authenticateUser", getUserIdFromToken(token));
+            commit({
+              type: "authenticateUser", 
+              userId: getUserIdFromToken(token), 
+              hasConfirmedEmail: response.data.hasConfirmedEmail
+            });
+
+            if (!this.state.hasConfirmedEmail) {
+              setTimeout(() => {
+                Toast.showWarningMessage("You have not confirmed your email.");
+              }, 3000);
+            }
+
+            
           },
           error => {
             // server timeout
@@ -74,14 +85,6 @@ export default new Vuex.Store({
                 commit("setAuthError", "Incorrect username or password.");
                 break;
 
-              case StatusCodes.FORBIDDEN:
-                commit("setUnconfirmedEmail");
-                commit(
-                  "setAuthError",
-                  "Please confirm your email before logging in."
-                );
-                break;
-
               default:
                 commit("setAuthError");
             }
@@ -96,9 +99,14 @@ export default new Vuex.Store({
           headers: { Authorization: "Bearer " + token }
         })
         .then(
-          () => {
+          (response) => {
             axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-            commit("authenticateUser", getUserIdFromToken(token));
+
+            commit({
+              type: "authenticateUser", 
+              userId: getUserIdFromToken(token), 
+              hasConfirmedEmail: response.data.hasConfirmedEmail
+            });
           },
           error => {
             // server timeout

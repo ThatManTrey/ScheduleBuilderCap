@@ -2,7 +2,8 @@ from flask import jsonify, request
 from flask_jwt_extended import get_jwt, get_jwt_identity, verify_jwt_in_request
 from functools import wraps
 from http import HTTPStatus
-from app import app
+from app.models import User
+from app import app, db
 import os
 
 
@@ -39,6 +40,10 @@ def has_access_token():
         @wraps(fn)
         def decorator(*args, **kwargs):
             verify_jwt_in_request()
+            user = db.session.query(User).get(get_jwt_identity())
+            if user is None:
+                return "User with that ID does not exist", HTTPStatus.UNAUTHORIZED
+
             if get_jwt()['type'] == "access":
                 return fn(*args, **kwargs)
             else:
@@ -53,6 +58,10 @@ def has_reset_pass_token():
         @wraps(fn)
         def decorator(*args, **kwargs):
             verify_jwt_in_request()
+            user = db.session.query(User).get(get_jwt_identity())
+            if user is None:
+                return "User with that ID does not exist", HTTPStatus.UNAUTHORIZED
+
             if get_jwt()['type'] == "resetPassword":
                 return fn(*args, **kwargs)
             else:
@@ -67,6 +76,10 @@ def has_confirmation_token():
         @wraps(fn)
         def decorator(*args, **kwargs):
             verify_jwt_in_request()
+            user = db.session.query(User).get(get_jwt_identity())
+            if user is None:
+                return "User with that ID does not exist", HTTPStatus.UNAUTHORIZED
+
             if get_jwt()['type'] == "confirmEmail":
                 return fn(*args, **kwargs)
             else:

@@ -6,9 +6,17 @@ export function showErrorMessage(errorMessage) {
     type: "error"
   });
 }
+
 export function showSuccessMessage(successMessage) {
   Vue.$toast.open({
     message: successMessage,
     type: "success"
+  });
+}
+
+export function showWarningMessage(warningMessage) {
+  Vue.$toast.open({
+    message: warningMessage,
+    type: "warning"
   });
 }

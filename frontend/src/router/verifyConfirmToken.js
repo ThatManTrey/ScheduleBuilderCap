@@ -1,5 +1,7 @@
 import axios from 'axios';
 import * as Toast from '../toast.js';
+import HttpStatus from 'http-status-codes';
+import store from '../store';
 
 export default (to, from, next) => {
     var confirmationToken = to.query.token;
@@ -15,9 +17,17 @@ export default (to, from, next) => {
                     "Your email has been confirmed successfully!"
                 );
             })
-            .catch(() => {
+            .catch((error) => {
+                if (!error.response) store.commit('setAuthError');
+
+                if(error.response.status == HttpStatus.BAD_REQUEST)
+                    store.commit('setAuthError', "You have already confirmed your email.");
+                else
+                    store.commit('setAuthError', "Invalid email confirmation link.");
+
+                
                 next("/home");
-                Toast.showErrorMessage("You have already confirmed your email.");
+                Toast.showErrorMessage(store.state.authError);
             });
     } else {
         next("/home");
