@@ -91,15 +91,13 @@ export default {
           axios.get(baseUrl + "/cs")
             .then((res) => {
               this.courses = res.data;
-              this.getCourses = true;
               this.hasLoadedCourses = true;
             })
             .catch((error) => {
               // eslint-disable-next-line
               console.error(error);
             });
-
-        },
+        }
       },
 };
 </script>

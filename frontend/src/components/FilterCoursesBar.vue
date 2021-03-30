@@ -4,9 +4,9 @@
       <div class="course-dropdown">
         <select class="form-control theme-secondary" id="selectProgram">
           <option selected>Select a Program</option>
-          <option>Computer Science (B.S.)</option>
-          <option>Biology (B.S.)</option>
-          <option>English (B.A.)</option>
+          <option v-for="(degree, index) in degrees.degrees"
+            :key="index">{{degreeName}}
+          </option>
         </select>
         <i class="fas fa-chevron-down fa-sm text-theme-blackest icon-css"></i>
       </div>
@@ -44,6 +44,38 @@
     <hr class="bg-theme-dark-gray" />
   </div>
 </template>
+
+<script lang="js">
+import axios from 'axios';
+
+export default {
+    data() {
+        return {
+            degrees: [],
+        }
+    },
+    created() {
+        // loading test
+        this.getDegrees();
+          
+    },
+      methods: {
+        getDegrees() {
+          var baseUrl = process.env.VUE_APP_API_URL + "/degrees"
+
+          //AJAX request
+          axios.get(baseUrl + "/all")
+            .then((res) => {
+              this.degrees = res.data;
+            })
+            .catch((error) => {
+              // eslint-disable-next-line
+              console.error(error);
+            });
+        }
+      },
+};
+</script>
 
 <style scoped>
 .course-search {
