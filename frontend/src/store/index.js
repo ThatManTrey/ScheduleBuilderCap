@@ -57,7 +57,6 @@ export default new Vuex.Store({
           }
         })
         .catch(function (error) {
-          console.log("error in login: ", error)
           if (!error.response)
             commit("setAuthError");
           else if (error.response.status == StatusCodes.BAD_REQUEST)
@@ -78,14 +77,8 @@ export default new Vuex.Store({
           });
         })
         .catch(function (error) {
-          console.log("error in verifyAccessToken: ", error)
           if (!error.response)
             commit("setAuthError");
-          else if (error.response.status === StatusCodes.UNPROCESSABLE_ENTITY)
-            commit(
-              "setAuthError",
-              "Your session has expired or is invalid. Please login again."
-            );
         });
     },
 

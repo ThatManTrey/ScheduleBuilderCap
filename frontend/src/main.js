@@ -11,6 +11,7 @@ import router from "./router";
 import store from "./store/";
 import axios from "axios";
 import * as Toast from './toast.js';
+import HttpStatus from 'http-status-codes';
 
 // change this?
 Vue.config.productionTip = false;
@@ -35,13 +36,28 @@ axios.interceptors.request.use(
   }
 );
 
+// cookies are HttpOnly so can't check if cookies exist, have to run on every page refresh
 store.dispatch("verifyAccessToken")
-  .then(function (){
-    if(store.state.authError)
+  .then(function () {
+    if (store.state.authError)
       Toast.showErrorMessage(store.state.authError)
-      
+
     initalizeApp();
   });
+
+axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  // redirect to home if access token has been removed by server 
+  if (error.response.status == HttpStatus.UNPROCESSABLE_ENTITY) {
+    Toast.showErrorMessage("Your session has expired or is invalid. Please login again.");
+    store.commit("unAuthenticateUser");
+    if(router.currentRoute.name != "Home")
+      router.push("/home");
+  }
+
+  return Promise.reject(error);
+});
 
 
 function initalizeApp() {
