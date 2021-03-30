@@ -13,15 +13,15 @@
 
           <span class="badge rounded-pill course-badge">
             <button class="button-as-link" v-if="course.creditHoursMax == course.creditHoursMin">{{ course.creditHoursMax }} Credits</button>
-            <button class="button-as-link" v-else >{{ course.creditHours_Min }}-{{ course.creditHoursMax }} Credits</button>
+            <button class="button-as-link" v-else >{{ course.creditHoursMin }}-{{ course.creditHoursMax }} Credits</button>
           </span>
         </div>
 
         <div v-if="showSmallCard" class="col-2 text-end">
           <a
             tabindex="0"
-            @keyup.enter="showCourseInfoModal()"
-            @click="showCourseInfoModal()"
+            @keyup.enter="showCourseInfoModal(course)"
+            @click="showCourseInfoModal(course)"
           >
             <i class="fas fa-lg fa-info-circle"></i>
           </a>
@@ -47,8 +47,8 @@
         <div class="col text-center">
           <a
             tabindex="0"
-            @keyup.enter="showCourseInfoModal()"
-            @click="showCourseInfoModal()"
+            @keyup.enter="showCourseInfoModal(course)"
+            @click="showCourseInfoModal(course)"
             class="link small"
             >View more</a>
           </div>
@@ -102,7 +102,8 @@ export default {
     showAddToSemesterModal() {
       this.$emit("openAddSemesterModal");
     },
-    showCourseInfoModal() {
+    showCourseInfoModal(course) {
+      this.$store.commit('setCourse', {course:course});
       this.$emit("openCourseInfoModal");
     },
 

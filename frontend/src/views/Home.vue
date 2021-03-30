@@ -67,7 +67,7 @@ export default {
         AddToSemesterModal,
         PageSpinner,
         FilterCoursesBar,
-        SemesterBar
+        SemesterBar,
     },
     created() {
         // loading test
