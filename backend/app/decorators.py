@@ -93,7 +93,7 @@ def has_confirmation_token():
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
-            verify_jwt_in_request()
+            verify_jwt_in_request(locations=["headers"])
             user = db.session.query(User).get(get_jwt_identity())
             if user is None:
                 return "User with that ID does not exist", HTTPStatus.UNAUTHORIZED
