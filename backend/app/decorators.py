@@ -5,7 +5,8 @@ from http import HTTPStatus
 from app.models import User
 from app import app, db
 import os
-
+import jwt
+import time
 
 # decorator to check if user making the request is the same as
 #   the requested user to get information about
@@ -57,15 +58,26 @@ def has_reset_pass_token():
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
-            verify_jwt_in_request()
-            user = db.session.query(User).get(get_jwt_identity())
-            if user is None:
-                return "User with that ID does not exist", HTTPStatus.UNAUTHORIZED
+            token = request.headers.get('Authorization')
+            if not token:
+                return "No token found", HTTPStatus.UNAUTHORIZED
+            
+            # decode token without verifying first to get userID
+            token_payload = jwt.decode(token, options={"verify_signature": False}, algorithms="HS256")
 
-            if get_jwt()['type'] == "resetPassword":
-                return fn(*args, **kwargs)
-            else:
-                return "Invalid token type", HTTPStatus.FORBIDDEN
+            # verify token payload
+            if token_payload['type'] != "resetPassword":
+                return "Invalid token type", HTTPStatus.UNAUTHORIZED
+            if time.time() > token_payload['exp']:
+                return "Token has expired", HTTPStatus.UNAUTHORIZED
+
+            user = db.session.query(User).get(token_payload['sub'])
+            if user is None:
+                return "User with that ID does not exist", HTTPStatus.BAD_REQUEST
+
+            # finally verify the token with the user's current hashed password
+            verified_token = jwt.decode(token, user.userPass, algorithms="HS256")
+            return fn(*args, **kwargs)
 
         return decorator
     return wrapper

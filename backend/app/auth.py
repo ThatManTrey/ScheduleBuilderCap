@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, get_jwt_identity
 
 import datetime
+import jwt
 from http import HTTPStatus
 
 from app import app, db, mail
@@ -60,9 +61,18 @@ def reset_pass_request():
     email = request.json.get('email')
     user = db.session.query(User).filter_by(userEmail=email).first()
     if user is not None:
-        token_type = {"type": "resetPassword"}
-        reset_pass_token = create_access_token(
-            identity=user.userID, expires_delta=datetime.timedelta(hours=1), additional_claims=token_type)
+        # have to use PyJWT here since this token will have a different signature from the others
+        reset_pass_token = jwt.encode(
+            { 
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1),
+                "type": "resetPassword",
+                "sub": user.userID
+            }, 
+            user.userPass,      # sign the token with the user's current hashed password
+                                # prevents reset password links from being used multiple times 
+            algorithm="HS256"
+        )
+
         send_reset_pass_email(email, reset_pass_token)
 
     # shows even if invalid email is entered to prevent checking if accounts exist
@@ -80,9 +90,12 @@ def send_reset_pass_email(recipient, token):
 @has_api_key()
 @has_reset_pass_token()
 def reset_pass():
-    password = request.json.get('password')
-    user = db.session.query(User).get(get_jwt_identity())
+    token = request.headers.get('Authorization')
+    token_payload = jwt.decode(token, options={"verify_signature": False}, algorithms="HS256")
+
+    user = db.session.query(User).get(token_payload['sub'])
     if user is not None:
+        password = request.json.get('password')
         user.userPass = generate_password_hash(password)
         db.session.commit()
 

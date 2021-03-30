@@ -141,10 +141,11 @@ export default {
 
         axios.post("/auth/reset-pass", 
           { password: this.passField.pass },
-          { headers: { Authorization: "Bearer " + this.resetPassToken } })
+          { headers: { Authorization: this.resetPassToken } })
         .then(
           () => {
             this.isSubmittingForm = false;
+            this.$router.push('/home');
             Toast.showSuccessMessage("Password reset successfully!")
           },
           error => {

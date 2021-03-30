@@ -7,7 +7,7 @@ export default (to, from, next) => {
     if (resetPassToken) {
         axios
             .get("/auth/verify/reset-pass", {
-                headers: { Authorization: "Bearer " + resetPassToken }
+                headers: { Authorization: resetPassToken }
             })
             .then(() => {
                 next({
