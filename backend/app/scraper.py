@@ -3,6 +3,8 @@
 # $$$ means not tested
 # testing after fixing stuff
 
+# todo: needs refactored to reduce coupling
+
 #------------------------------------------------------------------------------
 # modules
 
@@ -19,15 +21,12 @@ from bs4 import BeautifulSoup   # for html parsing
 
 # database
 from app import db
-from app.models import AllCourse
+from app.models import Course, Degree
 
 #------------------------------------------------------------------------------
-# todo: scraper setup
 
 # sets up schedule for scraper
 def start_scraper():
-    
-    
     # find next sunday date
     today = datetime.date.today()
     idx = 6-today.weekday()
@@ -47,8 +46,9 @@ def start_scraper():
 
 # finds all data for db
 def scrape():
-    getCourses()
     getAllPrograms()
+    getCourses()
+    #getCore()
     
 
 #------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ def scrape():
 
 # gets all courses, adds each to db seeall
 def getCourses():
-    coursesSite = getSiteData('http://catalog.kent.edu/coursesaz/seeall/')
+    coursesSite = getSiteData("http://catalog.kent.edu/coursesaz/seeall/")
 
     # get main text
     content = coursesSite.find('div', class_="sc_sccoursedescs")
@@ -94,8 +94,12 @@ def getCourseData(course):
         CreditHours_Max = MinandMax[0]
     # CourseName
     CourseName = ""
-    for word in range(2, len(titleText)-3):
-        CourseName = CourseName + titleText[word] + " "
+    for word in range(2, len(titleText)-3): # cuz "3 Credit Hours"
+        if word != u'\xa0':
+            if word == len(titleText)-4:
+                CourseName = CourseName + titleText[word]
+            else:
+                CourseName = CourseName + titleText[word] + " "
     attribute = attribute.find_next('p', class_="noindent")
     
     # description
@@ -120,40 +124,96 @@ def getCourseData(course):
     addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, CreditHours_Max, GradeType, CourseID_Type, None)
 
 
-# PROGRAM STUFF (still in development)
+# PROGRAM STUFF
 
-# $$$get all programs, add each to database
+# gets all programs
 def getAllPrograms():
     # get program page data
-    programsSite = getSiteData('http://catalog.kent.edu/programsaz/')
+    programsSite = getSiteData('http://catalog.kent.edu/coursesaz/')
     
-    #find the meat of the page #az_sitemap
-    az_sitemap = programsSite.find(id="az_sitemap")
+    # find the meat of the page .az_sitemap
+    atozindex = programsSite.find(id="atozindex")
+
+    # find all lettered lists as <ul>
+    letterList = atozindex.find_all('ul')
+    
+    # get lists of degrees as <a> tags
+    # temporary version until future feature
+    programList=[]
+    for letter in letterList:
+        for program in letter.find_all('a'):
+            programList.append(program)
+
+    # get info for each degree
+    for program in programList:
+        if program.text != " All Kent State Courses":
+            titleParts = program.text.split("(")
+
+            # extract type and program name
+            programType = titleParts[1][0:(len(titleParts[1])-1)]
+            programName = titleParts[0][0:(len(titleParts[0])-1)]
+            addProgram(programName, programType)
+
+
+# DEGREE STUFF (still in development)
+
+#$$$get all degrees, add each to database
+def getAllDegrees():
+    # get degree page data
+    degreesSite = getSiteData('http://catalog.kent.edu/programsaz/')
+    
+    # find the meat of the page .az_sitemap
+    az_sitemap = degreesSite.find(class_="az_sitemap")
 
     # find all lettered lists as <ul>
     letterList = az_sitemap.find_all('ul')
+    letterList.remove(az_sitemap.find(class_="letternav"))
     
-    # get lists of programs as <a> tags
-    programList=[]
+    # get lists of degrees as <a> tags
+    # temporary version until future feature
+    degreeList=[]
     for letter in letterList:
-        programList.append(letter.find_all('a'))
-    
-    # open each program <a> tag to get courses from that dept
-    for program in programList:
-        getProgramDegrees(program)
+        for degree in letter.find_all('a'):
+            degreeList.append(degree)
+
+    # get info for each degree
+    for degree in degreeList:
+        print(degree.prettify())
+        # get site
+        degreeCoursesSite = getSiteData("http://catalog.kent.edu" + degree.get('href') + "#programrequirementstext")
+
+        # get code
+        courselist = degreeCoursesSite.find(class_='sc_courselist')
+        print(courselist.prettify())
+        tbody = courselist.find('tbody')
+        print(tbody.prettify())
+        td = tbody.find(class_="odd")
+        print(td)
+        codecol = tbody.find(class_='codecol')
+        print(codecol.prettify())
+
+        # find type of first major course and degree name
+        degreeType = codecol.find('a').text.split(u'\xa0')[0]
+        degreeName = degree.text
+        addDegree(degreeName, degreeType)
+
+    # future feature
+    # # open each program <a> tag to get courses from that dept
+    # for degree in programList:
+    #     getProgramConcentrations(program)
 
 
-# $$$gets all program degrees, add each to database
+# $$$gets all degrees, add each to database
 # given <a href="/colleges/COLLEGE/DEPT-SCHOOL/">PROGRAM_NAME</a>
-def getProgramDegrees(program):
+def getDegreeConcentrations(degree):
     # get dept courses page data
-    programCoursesSite = getSiteData('http://catalog.kent.edu' + program.get('href') + "#roadmapstext")
+    degreeCoursesSite = getSiteData('http://catalog.kent.edu' + degree.get('href') + "#roadmapstext")
 
     # get all course lists
-    degreeLists = programCoursesSite.find_all('table', class_='sc_plangrid')
+    concLists = degreeCoursesSite.find_all('table', class_='sc_plangrid')
 
     # iterate through first list: major reqs
-    for degree in degreeLists:
+    for concentration in concLists:
         # find header for degree
         DegreeName = degree.find_parent('h3').get_text()
         DegreeID = addProgram(DegreeName)
@@ -205,16 +265,32 @@ def getDegreeReqs(degree, DegreeID):
             # check if core or elective
 
 
-# $$$CORE STUFF (havent started)
-# http://catalog.kent.edu/undergraduate-university-requirements/kent-core/
-def addCoreParts():
-    print()
+# CORE STUFF
+
+# gets all core attributes, adds to courses
+# http://catalog.kent.edu/undergraduate-university-requirements/
+def getCore():
+    coreSite = getSiteData("http://catalog.kent.edu/undergraduate-university-requirements/")
+
+    # get main text
+    content = coursesSite.find(id="textcontainer")
+
+    # get core lists
+    coreLists = content.find_all('a')
+
+    # get data for each list
+    for coreList in coreLists:
+        getCoreData(coreList)
+
+
+def getCoreData():
+    
 
 
 #------------------------------------------------------------------------------
 # database shit
 
-# adds course record in db
+# adds course record
 def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, CreditHours_Max, GradeType, CourseID_Type, KentCore):
     insertRecord = True
     
@@ -224,7 +300,7 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, Cre
     # if so, check if it needs updated
     if existing_course:
         # construct search query
-        existing_course = db.session.query(AllCourse).filter_by(
+        matching_course = db.session.query(AllCourse).filter_by(
             CourseID = CourseID,
             CourseName = CourseName,
             CourseDesc = CourseDesc,
@@ -234,10 +310,10 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, Cre
             GradeType = GradeType,
             CourseID_Type = CourseID_Type,
             KentCore = KentCore
-        ).first()
+        )
 
         # check results
-        if not existing_course: # difference found, needs updated, delete record
+        if not matching_course: # difference found, needs updated, delete record
             db.session.delete(existing_course)
         else:   # dont do anything, call off insertion
             insertRecord = False
@@ -260,11 +336,58 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, Cre
         db.session.add(newCourse)
         db.session.commit()
 
-# $$$
-def addProgram(DegreeName):
-    print()
-    DegreeID = int()
-    return DegreeID
+
+# adds program
+def addProgram(ProgramName, ProgramType):
+    insertRecord = True
+    
+    # see if record exists
+    existing_program = db.session.query(Degree).filter_by(degreeName = ProgramName)
+    
+    # if so, check if it needs updated
+    if existing_program:
+        # construct search query
+        matching_program = db.session.query(Degree).filter_by(
+            degreeName = ProgramName,
+            degreeType = ProgramType
+        )
+
+        # check results
+        if not matching_program: # difference found, needs updated, delete record
+            db.session.delete(existing_program)
+        else:   # dont do anything, call off insertion
+            insertRecord = False
+    
+    if insertRecord:    # if were supposed to insert something
+        # prep degree object
+        newDegree = Degree(
+            degreeName = ProgramName,
+            degreeType = ProgramType
+        )
+        
+        # add and commit
+        db.session.add(newDegree)
+        db.session.commit()
+
+
+# adds degree listing (will be similar to addProgram)
+def addDegree(DegreeName, DegreeType):
+    print(DegreeName + " " + DegreeType)
+    # # if record exists
+    # if !(db.session.query(Degree).filter_by(
+    #         degreeName = DegreeName,
+    #         degreeType = DegreeType
+    #     )):
+    #     # prep course object
+    #     newDegree = AllCourse(
+    #             degreeName = DegreeName,
+    #             degreeType = DegreeType
+    #         )
+        
+    #     # add and commit
+    #     db.session.add(newDegree)
+    #     db.session.commit()
+
 
 # $$$needs to get credit hours from courseID
 def addProgramReq(DegreeID, CourseID, RequirementID, Paired):

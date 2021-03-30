@@ -63,6 +63,7 @@ class SemesterCourse(Base):
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
 
+
 class Semester(Base):
     __tablename__ = 'Semesters'
 
