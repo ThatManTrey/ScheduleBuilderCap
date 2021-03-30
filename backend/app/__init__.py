@@ -23,7 +23,7 @@ db = SQLAlchemy(app)
 # from app import scraper
 # #scraper.start_scraper()
 
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app, resources={r'/*': {'origins': '*'}}, supports_credentials=True)
 mail = Mail(app)
 jwt = JWTManager(app)
 

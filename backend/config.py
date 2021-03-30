@@ -37,6 +37,8 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
+    JWT_TOKEN_LOCATION = ["cookies"]
+    JWT_COOKIE_SECURE = False
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

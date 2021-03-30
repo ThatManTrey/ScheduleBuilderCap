@@ -23,6 +23,17 @@ axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 if (process.env.NODE_ENV === "development")
   axios.defaults.headers.common["Api-Key"] = process.env.VUE_APP_API_KEY;
 
+// allow each request to send and receive cookies
+axios.interceptors.request.use(
+  function (config) {
+    config.withCredentials = true;
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
 // verify access token on new session
 if (localStorage.getItem("userInfo")) {
   store
