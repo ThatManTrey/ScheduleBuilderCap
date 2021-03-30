@@ -48,6 +48,7 @@ class Rating(Base):
     courseID = Column(String(32))
     ratingQuality = Column(DECIMAL(4, 2))
     ratingDifficulty = Column(DECIMAL(4, 2))
+    userID = Column(INTEGER(12), nullable=False)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
