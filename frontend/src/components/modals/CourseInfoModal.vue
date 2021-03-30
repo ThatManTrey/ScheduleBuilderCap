@@ -4,11 +4,11 @@
     :useFooter="$store.state.isAuthenticated"
     ref="courseInfoBaseModalRef"
   >
-    <template v-slot:header
+    <template v-slot:header v-if="course.course"
       >{{course.course.courseID}} - {{course.course.courseName}}</template
     >
 
-    <template v-slot:body>
+    <template v-slot:body v-if="course.course">
       <div class="container-fluid">
         <div class="row">
           <h5><strong>Description</strong></h5>
