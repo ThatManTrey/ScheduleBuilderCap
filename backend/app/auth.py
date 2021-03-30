@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, get_jwt_identity, set_access_cookies
+from flask_jwt_extended import create_access_token, get_jwt_identity, set_access_cookies, unset_jwt_cookies
 
 import datetime
 import jwt
@@ -52,8 +52,16 @@ def login():
         return "Incorrect email or password.", HTTPStatus.BAD_REQUEST
 
     access_token = create_access_token(identity=user.userID)
-    response = jsonify(accessToken=access_token, hasConfirmedEmail=user.hasConfirmedEmail)
+    response = jsonify(hasConfirmedEmail=bool(user.hasConfirmedEmail), userId=user.userID)
     set_access_cookies(response, access_token)
+    return response
+
+
+@app.route('/api/auth/logout', methods=['POST'])
+@has_api_key()
+def logout():
+    response = jsonify(msg="Logout successful")
+    unset_jwt_cookies(response)
     return response
 
 
@@ -114,7 +122,7 @@ def reset_pass():
 @has_access_token()
 def verify_access_token():
     user = db.session.query(User).get(get_jwt_identity())
-    return jsonify(hasConfirmedEmail=user.hasConfirmedEmail)
+    return jsonify(hasConfirmedEmail=bool(user.hasConfirmedEmail), userId=user.userID)
 
 
 @app.route('/api/auth/verify/reset-pass')

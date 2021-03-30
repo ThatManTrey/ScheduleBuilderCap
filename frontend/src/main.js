@@ -10,8 +10,9 @@ import VueToast from "vue-toast-notification";
 import router from "./router";
 import store from "./store/";
 import axios from "axios";
-import * as Toast from "./toast.js";
+import * as Toast from './toast.js';
 
+// change this?
 Vue.config.productionTip = false;
 
 Vue.use(VueToast, {
@@ -34,20 +35,14 @@ axios.interceptors.request.use(
   }
 );
 
-// verify access token on new session
-if (localStorage.getItem("userInfo")) {
-  store
-    .dispatch({
-      type: "verifyAccessToken",
-      token: localStorage.getItem("userInfo")
-    })
-    .then(() => {
-      if (store.state.authError) Toast.showErrorMessage(store.state.authError);
-      initalizeApp();
-    });
-} else {
-  initalizeApp();
-}
+store.dispatch("verifyAccessToken")
+  .then(function (){
+    if(store.state.authError)
+      Toast.showErrorMessage(store.state.authError)
+      
+    initalizeApp();
+  });
+
 
 function initalizeApp() {
   new Vue({

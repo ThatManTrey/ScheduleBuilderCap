@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from flask_jwt_extended import get_jwt, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import get_jwt, get_jwt_identity, verify_jwt_in_request, unset_jwt_cookies
 from functools import wraps
 from http import HTTPStatus
 from app.models import User
@@ -40,7 +40,14 @@ def has_access_token():
     def wrapper(fn):
         @wraps(fn)
         def decorator(*args, **kwargs):
-            verify_jwt_in_request()
+            # remove cookies from response if invalid
+            try:
+                verify_jwt_in_request(locations=['cookies'])
+            except:
+                response = jsonify(msg="Invalid token")
+                unset_jwt_cookies(response)
+                return response, HTTPStatus.UNPROCESSABLE_ENTITY
+
             user = db.session.query(User).get(get_jwt_identity())
             if user is None:
                 return "User with that ID does not exist", HTTPStatus.UNAUTHORIZED
@@ -48,7 +55,7 @@ def has_access_token():
             if get_jwt()['type'] == "access":
                 return fn(*args, **kwargs)
             else:
-                return "Invalid token type", HTTPStatus.FORBIDDEN
+                return "Invalid token type", HTTPStatus.BAD_REQUEST
 
         return decorator
     return wrapper
@@ -65,7 +72,6 @@ def has_reset_pass_token():
             # decode token without verifying first to get userID
             token_payload = jwt.decode(token, options={"verify_signature": False}, algorithms="HS256")
 
-            # verify token payload
             if token_payload['type'] != "resetPassword":
                 return "Invalid token type", HTTPStatus.UNAUTHORIZED
             if time.time() > token_payload['exp']:
