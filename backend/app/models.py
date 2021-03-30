@@ -8,8 +8,8 @@ metadata = Base.metadata
 class Course(Base):
     __tablename__ = 'Courses'
     courseID = Column(String(32), primary_key=True)
-    courseName = Column(TEXT)
-    courseDesc = Column(TEXT)
+    courseName = Column(text)
+    courseDesc = Column(text)
     courseType = Column(String(32))
     creditHoursMax = Column(String(32))
     creditHoursMin = Column(String(32))
