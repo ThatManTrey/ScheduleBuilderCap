@@ -26,6 +26,8 @@ from app.models import AllCourse
 
 # sets up schedule for scraper
 def start_scraper():
+    
+    
     # find next sunday date
     today = datetime.date.today()
     idx = 6-today.weekday()
@@ -235,7 +237,7 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, Cre
         ).first()
 
         # check results
-        if existing_course: # difference found, needs updated, delete record
+        if not existing_course: # difference found, needs updated, delete record
             db.session.delete(existing_course)
         else:   # dont do anything, call off insertion
             insertRecord = False
