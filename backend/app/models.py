@@ -8,8 +8,8 @@ metadata = Base.metadata
 class Course(Base):
     __tablename__ = 'Courses'
     courseID = Column(String(32), primary_key=True)
-    courseName = Column(String(64))
-    courseDesc = Column(String(400))
+    courseName = Column(TEXT)
+    courseDesc = Column(TEXT)
     courseType = Column(String(32))
     creditHoursMax = Column(String(32))
     creditHoursMin = Column(String(32))
@@ -23,7 +23,7 @@ class Course(Base):
 
 class Degree(Base):
     __tablename__ = 'Degrees'
-    degreeID = Column(INTEGER(11), primary_key=True)
+    degreeID = Column(INTEGER(12), primary_key=True)
     degreeName = Column(String(32))
     degreeType = Column(String(16))
 
@@ -35,7 +35,7 @@ class FavCourse(Base):
     __tablename__ = 'FavCourses'
     courseID = Column(String(32), primary_key=True, nullable=False)
     userID = Column(INTEGER(12), primary_key=True, nullable=False)
-    dateTime = Column(String(32))
+    favoritedOn = Column(DateTime)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
