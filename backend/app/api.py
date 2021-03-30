@@ -42,6 +42,8 @@ def get_user(user_id):
 #------------------------------------------------------------------------------
 # university catalog
 
+# courses
+
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
 @has_api_key()
 def get_dept_courses(CourseType):
@@ -61,6 +63,9 @@ def get_all_courses():
     for course in courses:
         arr_courses.append(course.as_dict())
     return jsonify(allCourses = arr_courses)
+
+
+# degrees
 
 
 @app.route('/api/degrees/all', methods=['GET'])

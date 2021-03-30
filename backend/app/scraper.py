@@ -46,9 +46,9 @@ def start_scraper():
 
 # finds all data for db
 def scrape():
-    # getAllPrograms()
-    # getCourses()
-    getCore()
+    getAllPrograms()
+    getCourses()
+    #getCore()
     
 
 #------------------------------------------------------------------------------
@@ -94,8 +94,12 @@ def getCourseData(course):
         CreditHours_Max = MinandMax[0]
     # CourseName
     CourseName = ""
-    for word in range(2, len(titleText)-3):
-        CourseName = CourseName + titleText[word] + " "
+    for word in range(2, len(titleText)-3): # cuz "3 Credit Hours"
+        if word != u'\xa0':
+            if word == len(titleText)-4:
+                CourseName = CourseName + titleText[word]
+            else:
+                CourseName = CourseName + titleText[word] + " "
     attribute = attribute.find_next('p', class_="noindent")
     
     # description
@@ -118,11 +122,6 @@ def getCourseData(course):
 
     # insert into db
     addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, CreditHours_Max, GradeType, CourseID_Type, None)
-
-
-# $$$updates core courses
-def getCore():
-    print()
 
 
 # PROGRAM STUFF
@@ -266,10 +265,26 @@ def getDegreeReqs(degree, DegreeID):
             # check if core or elective
 
 
-# $$$CORE STUFF (havent started)
-# http://catalog.kent.edu/undergraduate-university-requirements/kent-core/
-def addCoreParts():
-    print()
+# CORE STUFF
+
+# gets all core attributes, adds to courses
+# http://catalog.kent.edu/undergraduate-university-requirements/
+def getCore():
+    coreSite = getSiteData("http://catalog.kent.edu/undergraduate-university-requirements/")
+
+    # get main text
+    content = coursesSite.find(id="textcontainer")
+
+    # get core lists
+    coreLists = content.find_all('a')
+
+    # get data for each list
+    for coreList in coreLists:
+        getCoreData(coreList)
+
+
+def getCoreData():
+    
 
 
 #------------------------------------------------------------------------------
