@@ -16,7 +16,7 @@ def connect_to_db_locally():
 
 def get_local_conn_string():
     tunnel = connect_to_db_locally()
-    return 'mysql://KSUCoursePlanner:{}@127.0.0.1:{}/KSUCoursePlanner$production'.format(
+    return 'mysql://KSUCoursePlanner:{}@127.0.0.1:{}/KSUCoursePlanner$test'.format(
         os.environ.get('DB_PASS'), tunnel.local_bind_port)
 
 
