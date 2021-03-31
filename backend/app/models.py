@@ -16,6 +16,9 @@ class Course(Base):
     gradeType = Column(String(24))
     courseIDType = Column(String(32))
     kentCore = Column(String(8))
+    contactHoursMax = Column(String(32))
+    contactHoursMin = Column(String(32))
+    prereqs = Column(String)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
