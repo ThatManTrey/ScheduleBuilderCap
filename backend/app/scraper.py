@@ -295,41 +295,43 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType, CreditHours_Min, Cre
     insertRecord = True
     
     # see if record exists
-    existing_course = db.session.query(AllCourse).get([CourseID])
+    existing_course = db.session.query(Course).get([CourseID])
     
     # if so, check if it needs updated
     if existing_course:
+        print(CourseName)
         # construct search query
-        matching_course = db.session.query(AllCourse).filter_by(
-            CourseID = CourseID,
-            CourseName = CourseName,
-            CourseDesc = CourseDesc,
-            CourseType = CourseType,
-            CreditHours_Min = CreditHours_Min,
-            CreditHours_Max = CreditHours_Max, 
-            GradeType = GradeType,
-            CourseID_Type = CourseID_Type,
-            KentCore = KentCore
-        )
+        matching_course = db.session.query(Course).filter_by(
+            courseID = CourseID,
+            courseName = CourseName,
+            courseDesc = CourseDesc,
+            courseType = CourseType,
+            creditHoursMin = CreditHours_Min,
+            creditHoursMax = CreditHours_Max, 
+            gradeType = GradeType,
+            courseIDType = CourseID_Type,
+            kentCore = KentCore
+        ).first()
 
         # check results
-        if not matching_course: # difference found, needs updated, delete record
-            db.session.delete(existing_course)
-        else:   # dont do anything, call off insertion
+        if matching_course: # dont do anything, call off insertion
             insertRecord = False
+        else:   # difference found, needs updated, delete record
+            db.session.delete(existing_course)
+            db.session.commit()
     
     if insertRecord:    # if were supposed to insert something
         # prep course object
-        newCourse = AllCourse(
-            CourseID = CourseID,
-            CourseName = CourseName,
-            CourseDesc = CourseDesc,
-            CourseType = CourseType,
-            CreditHours_Min = CreditHours_Min,
-            CreditHours_Max = CreditHours_Max, 
-            GradeType = GradeType,
-            CourseID_Type = CourseID_Type,
-            KentCore = KentCore
+        newCourse = Course(
+            courseID = CourseID,
+            courseName = CourseName,
+            courseDesc = CourseDesc,
+            courseType = CourseType,
+            creditHoursMin = CreditHours_Min,
+            creditHoursMax = CreditHours_Max, 
+            gradeType = GradeType,
+            courseIDType = CourseID_Type,
+            kentCore = KentCore
         )
         
         # add and commit
@@ -342,7 +344,7 @@ def addProgram(ProgramName, ProgramType):
     insertRecord = True
     
     # see if record exists
-    existing_program = db.session.query(Degree).filter_by(degreeName = ProgramName)
+    existing_program = db.session.query(Degree).filter_by(degreeName = ProgramName).first()
     
     # if so, check if it needs updated
     if existing_program:
@@ -350,13 +352,14 @@ def addProgram(ProgramName, ProgramType):
         matching_program = db.session.query(Degree).filter_by(
             degreeName = ProgramName,
             degreeType = ProgramType
-        )
+        ).first()
 
         # check results
-        if not matching_program: # difference found, needs updated, delete record
-            db.session.delete(existing_program)
-        else:   # dont do anything, call off insertion
+        if matching_program:    # dont do anything, call off insertion
             insertRecord = False
+        else:   # difference found, needs updated, delete record
+            db.session.delete(existing_program)
+            db.session.commit()
     
     if insertRecord:    # if were supposed to insert something
         # prep degree object
