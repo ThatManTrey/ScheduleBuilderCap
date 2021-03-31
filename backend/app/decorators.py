@@ -42,7 +42,7 @@ def has_access_token():
         def decorator(*args, **kwargs):
             # remove cookies from response if invalid
             try:
-                verify_jwt_in_request(locations=['cookies'])
+                verify_jwt_in_request()
             except:
                 response = jsonify(msg="Invalid token")
                 unset_jwt_cookies(response)

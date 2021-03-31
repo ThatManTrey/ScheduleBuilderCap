@@ -41,6 +41,20 @@ def send_confirmation_email(recipient, token):
     mail.send(msg)
 
 
+@app.route('/api/auth/resend-confirm', methods=['POST'])
+@has_api_key()
+@has_access_token()
+def resend_confirm_email():
+    user = db.session.query(User).get(get_jwt_identity())
+
+    token_type = {"type": "confirmEmail"}
+    confirm_email_token = create_access_token(identity=user.userID, 
+        expires_delta=False, additional_claims=token_type)
+
+    send_confirmation_email(user.userEmail, confirm_email_token)
+    return "Email has been sent"
+
+
 @app.route('/api/auth/login', methods=['POST'])
 @has_api_key()
 def login():
@@ -52,7 +66,8 @@ def login():
         return "Incorrect email or password.", HTTPStatus.BAD_REQUEST
 
     access_token = create_access_token(identity=user.userID)
-    response = jsonify(hasConfirmedEmail=bool(user.hasConfirmedEmail), userId=user.userID)
+    response = jsonify(hasConfirmedEmail=bool(
+        user.hasConfirmedEmail), userId=user.userID)
     set_access_cookies(response, access_token)
     return response
 
@@ -73,13 +88,13 @@ def reset_pass_request():
     if user is not None:
         # have to use PyJWT here since this token will have a different signature from the others
         reset_pass_token = jwt.encode(
-            { 
+            {
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1),
                 "type": "resetPassword",
                 "sub": user.userID
-            }, 
+            },
             user.userPass,      # sign the token with the user's current hashed password
-                                # prevents reset password links from being used multiple times 
+                                # prevents reset password links from being used multiple times
             algorithm="HS256"
         )
 
@@ -101,7 +116,8 @@ def send_reset_pass_email(recipient, token):
 @has_reset_pass_token()
 def reset_pass():
     token = request.headers.get('Authorization')
-    token_payload = jwt.decode(token, options={"verify_signature": False}, algorithms="HS256")
+    token_payload = jwt.decode(
+        token, options={"verify_signature": False}, algorithms="HS256")
 
     user = db.session.query(User).get(token_payload['sub'])
     if user is not None:
@@ -142,5 +158,5 @@ def verify_confirmation_token():
 
     user.hasConfirmedEmail = True
     db.session.commit()
-    
+
     return ("", HTTPStatus.NO_CONTENT)

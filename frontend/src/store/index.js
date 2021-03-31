@@ -50,9 +50,15 @@ export default new Vuex.Store({
             hasConfirmedEmail: response.data.hasConfirmedEmail
           });
 
+          axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
+
           if (!response.data.hasConfirmedEmail) {
             setTimeout(() => {
-              Toast.showWarningMessage("You have not confirmed your email.");
+              Vue.$toast.open({
+                message: "You have not confirmed your account yet. Click here to send another email.",
+                type: "info",
+                onClick: resendConfirmationEmail
+              });
             }, 3000);
           }
         })
@@ -93,3 +99,13 @@ export default new Vuex.Store({
     }
   }
 });
+
+function resendConfirmationEmail() {
+  axios.post("/auth/resend-confirm")
+  .then(function () {
+    Toast.showSuccessMessage("Confirmation email has been sent!");
+  })
+  .catch(function (error) {
+    console.log(error)
+  });
+}

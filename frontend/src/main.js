@@ -7,6 +7,7 @@ import "vue-toast-notification/dist/theme-default.css";
 import Vue from "vue";
 import App from "./App.vue";
 import VueToast from "vue-toast-notification";
+import VueCookies from 'vue-cookies';
 import router from "./router";
 import store from "./store/";
 import axios from "axios";
@@ -15,6 +16,8 @@ import HttpStatus from 'http-status-codes';
 
 // change this?
 Vue.config.productionTip = false;
+
+Vue.use(VueCookies);
 
 Vue.use(VueToast, {
   position: "top",
@@ -36,12 +39,15 @@ axios.interceptors.request.use(
   }
 );
 
-// cookies are HttpOnly so can't check if cookies exist, have to run on every page refresh
+// access token cookies is HttpOnly so can't check if it exists, have to run on every page refresh
 store.dispatch("verifyAccessToken")
   .then(function () {
     if (store.state.authError)
       Toast.showErrorMessage(store.state.authError)
-
+    else
+      // needed for validating POST, PUT, DELETE requests
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
+  
     initalizeApp();
   });
 

@@ -13,10 +13,3 @@ export function showSuccessMessage(successMessage) {
     type: "success"
   });
 }
-
-export function showWarningMessage(warningMessage) {
-  Vue.$toast.open({
-    message: warningMessage,
-    type: "warning"
-  });
-}
