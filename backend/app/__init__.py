@@ -7,7 +7,7 @@ from config import DevelopmentConfig, ProductionConfig
 import os
 
 from http import HTTPStatus
-#import git
+import git
 
 # points to the built files folder for Vue
 app = Flask(__name__, template_folder="../../frontend/dist/")
@@ -21,7 +21,7 @@ else:
 db = SQLAlchemy(app)
 
 from app import scraper
-scraper.start_scraper()
+# scraper.start_scraper()
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 mail = Mail(app)
@@ -53,10 +53,10 @@ if os.environ['FLASK_ENV'] == "production":
 @app.route('/update_server', methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        # repo = git.Repo('/home/KSUCoursePlanner/ScheduleBuilderCap')
-        # origin = repo.remotes.origin
+        repo = git.Repo('/home/KSUCoursePlanner/ScheduleBuilderCap')
+        origin = repo.remotes.origin
     
-        # origin.pull()
+        origin.pull()
 
         return 'Updated PythonAnywhere successfully', 200
     else:
