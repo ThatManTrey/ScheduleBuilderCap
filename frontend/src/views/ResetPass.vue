@@ -78,6 +78,7 @@ import ThemeNavBar from '../components/ThemeNavBar.vue';
 import * as Toast from '../toast.js';
 import axios from 'axios';
 import Spinner from '../components/spinners/Spinner.vue';
+import { validatePassField, validatePassVerifyField, } from "../utils.js";
 
 export default {
     name: 'reset-pass',
@@ -104,28 +105,18 @@ export default {
      watch: {
 
       "passField.pass": function() {
-        if (this.passField.pass.length === 0)
-          this.passField.error = "Required field";
-        else if (this.passField.pass.length < 8)
-          this.passField.error = "Password must be at least 8 characters long.";
-        else this.passField.error = null;
+        validatePassField(this.passField);
       },
 
       "passVerifyField.pass": function() {
-        if (this.passVerifyField.pass.length === 0)
-          this.passVerifyField.error = "Required field";
-        else if (this.passVerifyField.pass != this.passField.pass)
-          this.passVerifyField.error = "Passwords do not match";
-        else this.passVerifyField.error = null;
+        validatePassVerifyField(this.passVerifyField, this.passField);
       }
     },
 
     methods: {
       areFieldsValid() {
-        if (this.passField.pass.length === 0)
-          this.passField.error = "Required field";
-        if (this.passVerifyField.pass.length === 0)
-          this.passVerifyField.error = "Required field";
+        validatePassField(this.passField);
+        validatePassVerifyField(this.passVerifyField, this.passField);
 
         return !this.passField.error && !this.passVerifyField.error;
       },

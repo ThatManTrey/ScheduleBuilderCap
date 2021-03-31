@@ -16,7 +16,7 @@
 
         <ErrorAlert
           v-if="isRegisterSuccessful === false"
-          :errorMessage="$store.state.authError"
+          :errorMessage="errorMessage"
         ></ErrorAlert>
       </transition>
 
@@ -93,7 +93,12 @@
     </template>
 
     <template v-slot:footer>
-      <button type="button" class="btn btn-theme-blacker" @click="closeModal">
+      <button
+        type="button"
+        class="btn btn-theme-blacker"
+        :disabled="isSubmittingForm"
+        @click="closeModal"
+      >
         Close
       </button>
 
@@ -110,57 +115,51 @@
 
 <script>
 import Modal from "./Modal.vue";
-import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
-import { isEmailValid } from "../../utils.js";
-import StatusCodes from "http-status-codes";
+import {
+  validateEmailField,
+  validatePassField,
+  validatePassVerifyField,
+} from "../../utils.js";
+
+function initialState() {
+  return {
+    emailField: {
+      email: null,
+      error: null,
+    },
+    passField: {
+      pass: null,
+      error: null,
+    },
+    passVerifyField: {
+      pass: null,
+      error: null,
+    },
+    isSubmittingForm: false,
+    isRegisterSuccessful: null,
+    errorMessage: "An error occurred. Please try again.",
+  };
+}
 
 export default {
   data() {
-    return {
-      emailField: {
-        email: "",
-        error: null,
-      },
-      passField: {
-        pass: "",
-        error: null,
-      },
-      passVerifyField: {
-        pass: "",
-        error: null,
-      },
-      isSubmittingForm: false,
-      isRegisterSuccessful: null,
-      errorMessage: "An error occurred. Please try again.",
-    };
+    return initialState();
   },
 
   watch: {
     "emailField.email": function () {
-      if (this.emailField.email.length === 0)
-        this.emailField.error = "Required field";
-      else if (!isEmailValid(this.emailField.email))
-        this.emailField.error = "Please enter a valid email";
-      else this.emailField.error = null;
+      validateEmailField(this.emailField);
     },
 
     "passField.pass": function () {
-      if (this.passField.pass.length === 0)
-        this.passField.error = "Required field";
-      else if (this.passField.pass.length < 8)
-        this.passField.error = "Password must be at least 8 characters long.";
-      else this.passField.error = null;
+      validatePassField(this.passField);
     },
 
     "passVerifyField.pass": function () {
-      if (this.passVerifyField.pass.length === 0)
-        this.passVerifyField.error = "Required field";
-      else if (this.passVerifyField.pass !== this.passField.pass)
-        this.passVerifyField.error = "Passwords do not match";
-      else this.passVerifyField.error = null;
+      validatePassVerifyField(this.passVerifyField, this.passField);
     },
   },
 
@@ -177,21 +176,28 @@ export default {
     },
     closeModal() {
       this.$refs.registerBaseModalRef.closeModal();
+      Object.assign(this.$data, initialState());
+    },
+
+    preventClosingModal() {
+      this.$refs.registerBaseModalRef.preventClosingModal();
+    },
+
+    allowClosingModal() {
+      this.$refs.registerBaseModalRef.allowClosingModal();
     },
 
     areFieldsValid() {
       // "Required field" and password not matching errors will
       // not be shown until user starts typing
       // set errors here if nothing has been entered yet
-      if (this.passVerifyField.pass !== this.passField.pass)
-        this.passVerifyField.error = "Passwords do not match";
+      if (this.emailField.email === null) this.emailField.email = "";
+      if (this.passField.pass === null) this.passField.pass = "";
+      if (this.passVerifyField.pass === null) this.passVerifyField.pass = "";
 
-      if (this.emailField.email.length === 0)
-        this.emailField.error = "Required field";
-      if (this.passField.pass.length === 0)
-        this.passField.error = "Required field";
-      if (this.passVerifyField.pass.length === 0)
-        this.passVerifyField.error = "Required field";
+      validateEmailField(this.emailField);
+      validatePassField(this.passField);
+      validatePassVerifyField(this.passVerifyField, this.passField);
 
       return (
         !this.passField.error &&
@@ -200,7 +206,6 @@ export default {
       );
     },
 
-    // move to store
     register() {
       this.isSubmittingForm = true;
       this.isRegisterSuccessful = null;
@@ -212,17 +217,21 @@ export default {
         return;
       }
 
-      axios
-        .post("/auth/register", {
+      this.preventClosingModal();
+
+      this.$store
+        .dispatch({
+          type: "register",
           email: this.emailField.email,
           password: this.passField.pass,
         })
-        .then(
-          () => {
-            this.isRegisterSuccessful = true;
+        .then(() => {
+          if (this.$store.state.authError) {
             this.isSubmittingForm = false;
-
-            // attempt login
+            this.isRegisterSuccessful = false;
+            this.errorMessage = this.$store.state.authError;
+            this.allowClosingModal();
+          } else {
             this.$store
               .dispatch({
                 type: "logIn",
@@ -230,31 +239,16 @@ export default {
                 password: this.passField.pass,
               })
               .then(() => {
-                //this.allowClosingModal();
-
-                if (this.$store.state.authError) {
-                  this.isRegisterSuccessful = false;
-                  this.errorMessage = this.$store.state.authError;
-                } else {
-                  setTimeout(() => {
-                    this.closeModal();
-                  }, 1000);
-                }
+                this.isSubmittingForm = false;
+                this.isRegisterSuccessful = true;
+                this.allowClosingModal();
+                
+                setTimeout(() => {
+                  this.closeModal();
+                }, 1000);
               });
-          },
-          (error) => {
-            if (!error.response) this.$store.commit("setAuthError");
-            else if (error.response.status === StatusCodes.BAD_REQUEST)
-              this.$store.commit(
-                "setAuthError",
-                "That email address is not available."
-              );
-            else this.$store.commit("setAuthError");
-
-            this.isRegisterSuccessful = false;
-            this.isSubmittingForm = false;
           }
-        );
+        });
     },
   },
 };

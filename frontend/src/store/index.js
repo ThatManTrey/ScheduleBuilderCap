@@ -72,7 +72,26 @@ export default new Vuex.Store({
         });
     },
 
-    // verify existing token from "userInfo" localStorage
+    register({ commit }, { email, password }) {
+      return axios
+        .post("/auth/register", {
+          email: email,
+          password: password,
+        })
+        .then(function () {})
+        .catch(function (error) {
+          console.log(error)
+          if (!error.response) commit("setAuthError");
+          else if (error.response.status === StatusCodes.BAD_REQUEST)
+            commit(
+              "setAuthError",
+              "That email address is not available."
+            );
+          else commit("setAuthError");
+        });
+    },
+
+    // verify token on new session
     verifyAccessToken({ commit }) {
       return axios.get("/auth/verify/access")
         .then(function (response) {
@@ -83,8 +102,7 @@ export default new Vuex.Store({
           });
         })
         .catch(function (error) {
-          if (!error.response)
-            commit("setAuthError");
+          if (!error.response) commit("setAuthError");
         });
     },
 
@@ -94,7 +112,7 @@ export default new Vuex.Store({
       return axios.post("/auth/logout")
         .catch(function () {
           commit("setAuthError");
-          Toast.showErrorMessage(this.state.authError);
+          console.log(this.state.authError);
         });
     }
   }
@@ -102,10 +120,10 @@ export default new Vuex.Store({
 
 function resendConfirmationEmail() {
   axios.post("/auth/resend-confirm")
-  .then(function () {
-    Toast.showSuccessMessage("Confirmation email has been sent!");
-  })
-  .catch(function (error) {
-    console.log(error)
-  });
+    .then(function () {
+      Toast.showSuccessMessage("Confirmation email has been sent!");
+    })
+    .catch(function (error) {
+      console.log(error)
+    });
 }
