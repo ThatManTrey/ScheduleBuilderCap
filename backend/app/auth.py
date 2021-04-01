@@ -12,7 +12,7 @@ from app import app, db, mail
 from app.models import User
 from app import jwt as jwt_extended
 from app.emails import *
-from app.decorators import is_current_user, has_access_token, has_reset_pass_token, has_confirmation_token, has_api_key
+from app.decorators import is_current_user, has_access_token, has_reset_pass_token, has_confirmation_token
 
 
 #
@@ -21,7 +21,6 @@ from app.decorators import is_current_user, has_access_token, has_reset_pass_tok
 
 
 @app.route('/api/auth/register', methods=['POST'])
-@has_api_key()
 def register_user():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -33,16 +32,17 @@ def register_user():
     db.session.add(user)
     db.session.commit()
 
-    token_type = {"type": "confirmEmail"}
-    confirm_email_token = create_access_token(
-        identity=user.userID, expires_delta=False, additional_claims=token_type)
-    send_confirmation_email(user.userEmail, confirm_email_token)
-
-    return jsonify(id=user.userID)
+    # sending an email will raise an error sometimes
+    try:
+        token_type = {"type": "confirmEmail"}
+        confirm_email_token = create_access_token(
+            identity=user.userID, expires_delta=False, additional_claims=token_type)
+        send_confirmation_email(user.userEmail, confirm_email_token)
+    finally:
+        return jsonify(id=user.userID)
 
 
 @app.route('/api/auth/login', methods=['POST'])
-@has_api_key()
 def login():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -59,7 +59,6 @@ def login():
 
 
 @app.route('/api/auth/logout', methods=['POST'])
-@has_api_key()
 def logout():
     response = jsonify(msg="Logout successful")
     unset_jwt_cookies(response)
@@ -79,7 +78,6 @@ def send_confirmation_email(recipient, token):
 
 
 @app.route('/api/auth/resend-confirm', methods=['POST'])
-@has_api_key()
 @has_access_token()
 def resend_confirm_email():
     user = get_current_user()
@@ -93,7 +91,6 @@ def resend_confirm_email():
 
 
 @app.route('/api/auth/reset-pass-request', methods=['POST'])
-@has_api_key()
 def reset_pass_request():
     email = request.json.get('email')
     user = db.session.query(User).filter_by(userEmail=email).first()
@@ -124,7 +121,6 @@ def send_reset_pass_email(recipient, token):
 
 
 @app.route('/api/auth/reset-pass', methods=['POST'])
-@has_api_key()
 @has_reset_pass_token()
 def reset_pass():
     token = request.headers.get('Authorization')
@@ -151,7 +147,6 @@ def reset_pass():
 
 # used for verifying existing access token on new session
 @app.route('/api/auth/verify/access')
-@has_api_key()
 @has_access_token()
 def verify_access_token():
     user = get_current_user()
@@ -160,7 +155,6 @@ def verify_access_token():
 
 # needed for routing check
 @app.route('/api/auth/verify/reset-pass')
-@has_api_key()
 @has_reset_pass_token()
 def verify_reset_pass_token():
     return ("", HTTPStatus.NO_CONTENT)
@@ -168,7 +162,6 @@ def verify_reset_pass_token():
 
 # needed for routing check
 @app.route('/api/auth/verify/confirm')
-@has_api_key()
 @has_confirmation_token()
 def verify_confirmation_token():
     user = get_current_user()
@@ -186,6 +179,7 @@ def verify_confirmation_token():
 #
 
 
+# determines behavior for get_current_user()
 @jwt_extended.user_lookup_loader
 def lookup_user(jwt_headers, jwt_payload):
     user = db.session.query(User).get(jwt_payload['sub'])

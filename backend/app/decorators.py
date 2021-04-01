@@ -23,21 +23,21 @@ def is_current_user(function):
     return wrapper
 
 
-def has_api_key():
-    def wrapper(fn):
-        @wraps(fn)
-        def decorator(*args, **kwargs):
-            if os.environ['FLASK_ENV'] == "development":
-                return fn(*args, **kwargs)
+# def has_api_key():
+#     def wrapper(fn):
+#         @wraps(fn)
+#         def decorator(*args, **kwargs):
+#             if os.environ['FLASK_ENV'] == "development":
+#                 return fn(*args, **kwargs)
             
-            if "Api-Key" not in request.headers:
-                return "API Key is required", HTTPStatus.INTERNAL_SERVER_ERROR
-            elif request.headers["Api-Key"] != app.config['SECRET_KEY']:
-                return "Invalid API Key", HTTPStatus.INTERNAL_SERVER_ERROR
-            else:
-                 return fn(*args, **kwargs)
-        return decorator
-    return wrapper
+#             if "Api-Key" not in request.headers:
+#                 return "API Key is required", HTTPStatus.INTERNAL_SERVER_ERROR
+#             elif request.headers["Api-Key"] != app.config['SECRET_KEY']:
+#                 return "Invalid API Key", HTTPStatus.INTERNAL_SERVER_ERROR
+#             else:
+#                  return fn(*args, **kwargs)
+#         return decorator
+#     return wrapper
 
 
 def has_access_token():
