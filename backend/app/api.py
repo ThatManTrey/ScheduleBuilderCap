@@ -40,3 +40,13 @@ def get_user(user_id):
 
     return jsonify(userID=user.userID, userEmail=user.userEmail, hasConfirmedEmail=user.hasConfirmedEmail, createdOn=user.createdOn)
     
+
+@app.route('/api/post-test', methods=['POST'])
+@has_access_token()
+def test_post():
+    return ""
+
+@app.route('/api/get-test', methods=['GET'])
+@has_access_token()
+def test_get():
+    return ""

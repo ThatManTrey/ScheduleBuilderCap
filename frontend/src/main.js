@@ -12,7 +12,6 @@ import router from "./router";
 import store from "./store/";
 import axios from "axios";
 import * as Toast from './toast.js';
-import HttpStatus from 'http-status-codes';
 
 // change this?
 Vue.config.productionTip = false;
@@ -25,7 +24,7 @@ Vue.use(VueToast, {
 });
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
-if (process.env.NODE_ENV === "development")
+if (process.env.NODE_ENV === "production")
   axios.defaults.headers.common["Api-Key"] = process.env.VUE_APP_API_KEY;
 
 // allow each request to send and receive cookies
@@ -39,31 +38,46 @@ axios.interceptors.request.use(
   }
 );
 
-// access token cookies is HttpOnly so can't check if it exists, have to run on every page refresh
-store.dispatch("verifyAccessToken")
-  .then(function () {
-    if (store.state.authError)
-      Toast.showErrorMessage(store.state.authError)
-    else
-      // needed for validating POST, PUT, DELETE requests
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
-  
-    initalizeApp();
-  });
-
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
   // redirect to home if access token has been removed by server 
-  if (error.response.status == HttpStatus.UNPROCESSABLE_ENTITY) {
-    Toast.showErrorMessage("Your session has expired or is invalid. Please login again.");
+  if (error.response.status === 471) {
+    Toast.showErrorMessage("Your session has expired. Please login again.");
     store.commit("unAuthenticateUser");
-    if(router.currentRoute.name != "Home")
+    if (router.currentRoute.name != "Home")
       router.push("/home");
-  }
+  // access token has been refresh, update CSRF header and retry request
+  } else if (error.response.status === 470) {
+    console.log("adding new csrf token")
+    console.log("old csrf token: ", error.config.headers["X-CSRF-TOKEN"])
+    console.log("new csrf token: ", Vue.$cookies.get('csrf_access_token'))
+    // set new CSRF token for last request and all future requests
+    error.config.headers["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
+    axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
 
+    // retry last request
+    return axios.request(error.config);
+  }
   return Promise.reject(error);
 });
+
+// csrf token cookie isn't httponly, access token is
+// assume if there's a csrf token there's an access token
+if (Vue.$cookies.get('csrf_access_token')) {
+  store.dispatch("verifyAccessToken")
+    .then(function () {
+      if (store.state.authError)
+        console.log(store.state.authError)
+      else
+        // needed for validating POST, PUT, DELETE requests
+        axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
+
+      initalizeApp();
+    });
+} else {
+  initalizeApp();
+}
 
 
 function initalizeApp() {

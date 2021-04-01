@@ -95,6 +95,7 @@ export default new Vuex.Store({
     verifyAccessToken({ commit }) {
       return axios.get("/auth/verify/access")
         .then(function (response) {
+          console.log("successfully verified access...")
           commit({
             type: "authenticateUser",
             userId: response.data.userId,
@@ -102,6 +103,7 @@ export default new Vuex.Store({
           });
         })
         .catch(function (error) {
+          console.log("error verifying access ", error)
           if (!error.response) commit("setAuthError");
         });
     },
