@@ -26,15 +26,18 @@
             <h6>Email Address</h6>
           </label>
 
-          <input
-            type="email"
-            class="form-control"
-            :class="{ 'form-error': emailField.error }"
-            id="userRegisterEmail"
-            placeholder="example@gmail.com"
-            :disabled="isSubmittingForm"
-            v-model.trim="emailField.email"
-          />
+          <div class="input-container">
+            <i class="fas fa-envelope fa-md text-theme-blacker" id="icon"></i>
+            <input
+              type="email"
+              class="form-control"
+              :class="{ 'form-error': emailField.error }"
+              id="userRegisterEmail"
+              placeholder="example@gmail.com"
+              :disabled="isSubmittingForm"
+              v-model.trim="emailField.email"
+            />
+          </div>
 
           <transition name="fade">
             <span v-if="emailField.error" class="form-error-text">
@@ -49,15 +52,18 @@
             <h6>Password</h6>
           </label>
 
-          <input
-            type="password"
-            class="form-control"
-            :class="{ 'form-error': passField.error }"
-            id="userRegisterPass"
-            placeholder="Enter password..."
-            :disabled="isSubmittingForm"
-            v-model="passField.pass"
-          />
+          <div class="input-container">
+            <i class="fas fa-key fa-md text-theme-blacker" id="icon"></i>
+            <input
+              type="password"
+              class="form-control"
+              :class="{ 'form-error': passField.error }"
+              id="userRegisterPass"
+              placeholder="Enter password..."
+              :disabled="isSubmittingForm"
+              v-model="passField.pass"
+            />
+          </div>
 
           <transition name="fade">
             <span v-if="passField.error" class="form-error-text">
@@ -71,16 +77,20 @@
           <label for="userRegisterRetypePass" class="form-label">
             <h6>Retype Password</h6>
           </label>
-          <input
-            type="password"
-            class="form-control"
-            :class="{ 'form-error': passVerifyField.error }"
-            id="userRegisterRetypePass"
-            placeholder="Re-enter password..."
-            @keyup.enter="register()"
-            :disabled="isSubmittingForm"
-            v-model="passVerifyField.pass"
-          />
+
+          <div class="input-container">
+            <i class="fas fa-key fa-md text-theme-blacker" id="icon"></i>
+            <input
+              type="password"
+              class="form-control"
+              :class="{ 'form-error': passVerifyField.error }"
+              id="userRegisterRetypePass"
+              placeholder="Re-enter password..."
+              @keyup.enter="register()"
+              :disabled="isSubmittingForm"
+              v-model="passVerifyField.pass"
+            />
+          </div>
 
           <transition name="fade">
             <span v-if="passVerifyField.error" class="form-error-text">
@@ -239,3 +249,29 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+.input-container {
+  display: flex;
+  width: 100%;
+}
+
+#icon {
+  padding: 10px;
+  min-width: 2.5rem;
+  border: none;
+  box-shadow: none;
+  background: var(--theme-darkest-gray);
+  text-align: center;
+}
+
+#userRegisterEmail {
+  width: 100%;
+}
+
+#userRegisterPass {
+  width: 100%;
+}
+
+</style>
