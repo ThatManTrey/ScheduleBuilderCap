@@ -14,7 +14,7 @@ import axios from "axios";
 import * as Toast from "./toast.js";
 import HttpStatus from "http-status-codes";
 
-// change this?
+
 Vue.config.productionTip = false;
 
 Vue.use(VueCookies);
@@ -51,12 +51,9 @@ axios.interceptors.response.use(
       // access token has been refreshed, update CSRF header and retry request
     } else if (error.response.status === 470) {
       // set new CSRF token for last request and all future requests
-      error.config.headers["X-CSRF-TOKEN"] = Vue.$cookies.get(
-        "csrf_access_token"
-      );
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
-        "csrf_access_token"
-      );
+      var newCsrfToken = Vue.$cookies.get("csrf_access_token");
+      error.config.headers["X-CSRF-TOKEN"] = newCsrfToken;
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = newCsrfToken;
 
       // retry last request
       return axios.request(error.config);
