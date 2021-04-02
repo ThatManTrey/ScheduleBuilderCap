@@ -7,7 +7,6 @@ from config import DevelopmentConfig, ProductionConfig
 import os
 
 from http import HTTPStatus
-import git
 
 # points to the built files folder for Vue
 app = Flask(__name__, template_folder="../../frontend/dist/")
@@ -15,13 +14,14 @@ app = Flask(__name__, template_folder="../../frontend/dist/")
 if os.environ['FLASK_ENV'] == "development":
     app.config.from_object(DevelopmentConfig)
 else:
+    import git
     app.config.from_object(ProductionConfig)
 
 
 db = SQLAlchemy(app)
 
 from app import scraper
-# scraper.start_scraper()
+scraper.start_scraper()
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 mail = Mail(app)
@@ -49,18 +49,18 @@ if os.environ['FLASK_ENV'] == "production":
 
     #     return ""
 
-# for server updates
-@app.route('/update_server', methods=['POST'])
-def webhook():
-    if request.method == 'POST':
-        repo = git.Repo('/home/KSUCoursePlanner/ScheduleBuilderCap')
-        origin = repo.remotes.origin
-    
-        origin.pull()
+    # for server updates
+    @app.route('/update_server', methods=['POST'])
+    def update_server():
+        if request.method == 'POST':
+            repo = git.Repo('/home/KSUCoursePlanner/ScheduleBuilderCap')
+            origin = repo.remotes.origin
+        
+            origin.pull()
 
-        return 'Updated PythonAnywhere successfully', 200
-    else:
-        return 'Wrong event type', 400
+            return 'Updated PythonAnywhere successfully', 200
+        else:
+            return 'Wrong event type', 400
 
 
 from app import auth, api
