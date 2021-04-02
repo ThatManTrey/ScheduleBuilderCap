@@ -224,24 +224,8 @@ def refresh_expired_access_tokens(jwt_header, jwt_payload):
         access_token = create_access_token(identity=jwt_payload['sub'])
         response = make_response("Access token has been refreshed", 470)
         set_access_cookies(response, access_token)
-        debug_expired_jwts(True, creation_timestamp, jwt_payload["exp"], user.lastPasswordReset)
     else:
         response = make_response("Access token has expired", HTTPStatus.UNAUTHORIZED)
         unset_jwt_cookies(response)
-        debug_expired_jwts(False, creation_timestamp, jwt_payload["exp"], user.lastPasswordReset)
 
     return response
-
-
-def debug_expired_jwts(has_refreshed, creation_timestamp, expires_timestamp, lastPasswordReset):
-    if app.config['DEBUG']:
-        print("--------------EXPIRED JWTS----------------------")
-        print("Token created on \t", datetime.fromtimestamp(creation_timestamp))
-        print("Current time \t\t", datetime.now())
-        print("Token expired on \t", datetime.fromtimestamp(expires_timestamp))
-        print("Last password reset \t", lastPasswordReset)
-        if(has_refreshed):
-            print("New token has been created")
-        else:
-            print("Token has expired")
-        print("--------------------------------------------")

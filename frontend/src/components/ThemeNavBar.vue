@@ -79,22 +79,6 @@
 
           <div class="d-flex">
             <button
-              v-on:click="getTest()"
-              type="button"
-              class="btn btn-theme-blacker"
-              v-if="$store.state.isAuthenticated"
-            >
-              get test
-            </button>
-            <button
-              v-on:click="postTest()"
-              type="button"
-              class="btn btn-theme-blacker"
-              v-if="$store.state.isAuthenticated"
-            >
-              post test
-            </button>
-            <button
               v-on:click="logout()"
               type="button"
               class="btn btn-theme-blacker"
@@ -141,7 +125,6 @@
 <script>
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
-import axios from 'axios';
 
 export default {
   name: "theme-nav-bar",
@@ -187,20 +170,6 @@ export default {
     logout() {
       this.$store.dispatch("logOut");
       if (!this.isCurrentRoute("Home")) this.$router.push("/home");
-    },
-
-    getTest(){
-      axios.get('/get-test')
-      .then(function (response){
-        console.log("get response: ", response)
-      });
-    },
-
-    postTest() {
-      axios.post('/post-test')
-      .then(function (response){ 
-        console.log("post response: ", response)
-      });;
     }
   },
 

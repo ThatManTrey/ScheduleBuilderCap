@@ -181,15 +181,15 @@ function initialState() {
   return {
     emailField: {
       email: null,
-      error: null,
+      error: null
     },
     passField: {
       pass: null,
-      error: null,
+      error: null
     },
     resetPassEmailField: {
       email: null,
-      error: null,
+      error: null
     },
     isSubmittingForm: false,
     isLoginSuccessful: null,
@@ -206,24 +206,24 @@ export default {
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       validateEmailField(this.emailField);
     },
 
-    "resetPassEmailField.email": function () {
+    "resetPassEmailField.email": function() {
       validateEmailField(this.resetPassEmailField);
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       validatePassField(this.passField, false);
-    },
+    }
   },
 
   components: {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert,
+    ErrorAlert
   },
 
   methods: {
@@ -272,7 +272,7 @@ export default {
         .dispatch({
           type: "logIn",
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
         .then(() => {
           this.isSubmittingForm = false;
@@ -292,7 +292,8 @@ export default {
     },
 
     isResetPasswordFieldValid() {
-      if (this.resetPassEmailField.email === null) this.resetPassEmailField.email = "";
+      if (this.resetPassEmailField.email === null)
+        this.resetPassEmailField.email = "";
       validateEmailField(this.resetPassEmailField);
 
       return !this.resetPassEmailField.error;
@@ -314,7 +315,7 @@ export default {
 
       axios
         .post("/auth/reset-pass-request", {
-          email: this.resetPassEmailField.email,
+          email: this.resetPassEmailField.email
         })
         .then(
           () => {
@@ -333,7 +334,7 @@ export default {
             this.allowClosingModal();
           }
         );
-    },
-  },
+    }
+  }
 };
 </script>

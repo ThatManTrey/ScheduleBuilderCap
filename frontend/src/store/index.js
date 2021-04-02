@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import StatusCodes from 'http-status-codes';
-import * as Toast from '../toast.js';
+import StatusCodes from "http-status-codes";
+import * as Toast from "../toast.js";
 
 Vue.use(Vuex);
 
@@ -47,32 +47,33 @@ export default new Vuex.Store({
           email: email,
           password: password
         })
-        .then(function (response) {
+        .then(function(response) {
           commit({
             type: "authenticateUser",
             userId: response.data.userId,
             hasConfirmedEmail: response.data.hasConfirmedEmail
           });
 
-          axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
+          axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
+            "csrf_access_token"
+          );
 
           if (!response.data.hasConfirmedEmail) {
             setTimeout(() => {
               Vue.$toast.open({
-                message: "You have not confirmed your account yet. Click here to send another email.",
+                message:
+                  "You have not confirmed your account yet. Click here to send another email.",
                 type: "info",
                 onClick: resendConfirmationEmail
               });
             }, 3000);
           }
         })
-        .catch(function (error) {
-          if (!error.response)
-            commit("setAuthError");
+        .catch(function(error) {
+          if (!error.response) commit("setAuthError");
           else if (error.response.status == StatusCodes.BAD_REQUEST)
             commit("setAuthError", "Incorrect username or password.");
-          else
-            commit("setAuthError");
+          else commit("setAuthError");
         });
     },
 
@@ -80,36 +81,31 @@ export default new Vuex.Store({
       return axios
         .post("/auth/register", {
           email: email,
-          password: password,
+          password: password
         })
-        .then(function () {
-          commit("setAuthError", null)
+        .then(function() {
+          commit("setAuthError", null);
         })
-        .catch(function (error) {
-          console.log(error)
+        .catch(function(error) {
           if (!error.response) commit("setAuthError");
           else if (error.response.status === StatusCodes.BAD_REQUEST)
-            commit(
-              "setAuthError",
-              "That email address is not available."
-            );
+            commit("setAuthError", "That email address is not available.");
           else commit("setAuthError");
         });
     },
 
     // verify token on new session
     verifyAccessToken({ commit }) {
-      return axios.get("/auth/verify/access")
-        .then(function (response) {
-          console.log("successfully verified access...")
+      return axios
+        .get("/auth/verify/access")
+        .then(function(response) {
           commit({
             type: "authenticateUser",
             userId: response.data.userId,
             hasConfirmedEmail: response.data.hasConfirmedEmail
           });
         })
-        .catch(function (error) {
-          console.log("error verifying access ", error)
+        .catch(function(error) {
           if (!error.response) commit("setAuthError");
         });
     },
@@ -117,21 +113,22 @@ export default new Vuex.Store({
     logOut({ commit }) {
       commit("unAuthenticateUser");
 
-      return axios.post("/auth/logout")
-        .catch(function () {
-          commit("setAuthError");
-          console.log(this.state.authError);
-        });
+      return axios.post("/auth/logout").catch(function() {
+        commit("setAuthError");
+      });
     }
   }
 });
 
 function resendConfirmationEmail() {
-  axios.post("/auth/resend-confirm")
-    .then(function () {
+  axios
+    .post("/auth/resend-confirm")
+    .then(function() {
       Toast.showSuccessMessage("Confirmation email has been sent!");
     })
-    .catch(function () {
-      Toast.showErrorMessage("Error sending confirmation email. Please try again.");
+    .catch(function() {
+      Toast.showErrorMessage(
+        "Error sending confirmation email. Please try again."
+      );
     });
 }

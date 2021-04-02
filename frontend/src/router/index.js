@@ -8,9 +8,9 @@ import Schedule from "../views/Schedule.vue";
 import Theme from "../views/Theme.vue";
 import ResetPass from "../views/ResetPass.vue";
 
-import VerifyAuth from './verifyAuth.js';
-import VerifyResetToken from './verifyResetToken.js';
-import verifyConfirmToken from './verifyConfirmToken.js';
+import VerifyAuth from "./verifyAuth.js";
+import VerifyResetToken from "./verifyResetToken.js";
+import verifyConfirmToken from "./verifyConfirmToken.js";
 
 Vue.use(VueRouter);
 

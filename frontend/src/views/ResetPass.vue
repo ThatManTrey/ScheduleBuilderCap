@@ -127,7 +127,7 @@ export default {
           return;
         }
 
-        axios.post("/auth/reset-pass", 
+        axios.post("/auth/reset-pass",
           { password: this.passField.pass },
           { headers: { Authorization: this.resetPassToken } })
         .then(
