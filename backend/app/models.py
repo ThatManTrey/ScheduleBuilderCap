@@ -8,14 +8,17 @@ metadata = Base.metadata
 class Course(Base):
     __tablename__ = 'Courses'
     courseID = Column(String(32), primary_key=True)
-    courseName = Column(String(64))
-    courseDesc = Column(String(400))
+    courseName = Column(String)
+    courseDesc = Column(String)
     courseType = Column(String(32))
     creditHoursMax = Column(String(32))
     creditHoursMin = Column(String(32))
     gradeType = Column(String(24))
     courseIDType = Column(String(32))
     kentCore = Column(String(8))
+    contactHoursMax = Column(String(32))
+    contactHoursMin = Column(String(32))
+    prereqs = Column(String)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
@@ -23,7 +26,7 @@ class Course(Base):
 
 class Degree(Base):
     __tablename__ = 'Degrees'
-    degreeID = Column(INTEGER(11), primary_key=True)
+    degreeID = Column(INTEGER(12), primary_key=True)
     degreeName = Column(String(32))
     degreeType = Column(String(16))
 
@@ -35,7 +38,7 @@ class FavCourse(Base):
     __tablename__ = 'FavCourses'
     courseID = Column(String(32), primary_key=True, nullable=False)
     userID = Column(INTEGER(12), primary_key=True, nullable=False)
-    dateTime = Column(String(32))
+    favoritedOn = Column(DateTime)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
@@ -48,6 +51,7 @@ class Rating(Base):
     courseID = Column(String(32))
     ratingQuality = Column(DECIMAL(4, 2))
     ratingDifficulty = Column(DECIMAL(4, 2))
+    userID = Column(INTEGER(12), nullable=False)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
@@ -61,6 +65,7 @@ class SemesterCourse(Base):
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
+
 
 class Semester(Base):
     __tablename__ = 'Semesters'
