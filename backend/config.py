@@ -26,7 +26,7 @@ def get_prod_conn_string():
         username="KSUCoursePlanner",
         password=os.environ.get('DB_PASS'),
         hostname="KSUCoursePlanner.mysql.pythonanywhere-services.com",
-        databasename="KSUCoursePlanner$test"
+        databasename="KSUCoursePlanner$production"
     )
 
 # base config regardless of environment
