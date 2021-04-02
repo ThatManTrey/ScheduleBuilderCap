@@ -33,6 +33,7 @@ def register_user():
     db.session.commit()
 
     # sending an email will raise an error sometimes
+    # user can send another email after logging in if it does
     try:
         token_type = {"type": "confirmEmail"}
         confirm_email_token = create_access_token(
@@ -225,7 +226,7 @@ def refresh_expired_access_tokens(jwt_header, jwt_payload):
         set_access_cookies(response, access_token)
         debug_expired_jwts(True, creation_timestamp, jwt_payload["exp"], user.lastPasswordReset)
     else:
-        response = make_response("Access token has expired", 471)
+        response = make_response("Access token has expired", HTTPStatus.UNAUTHORIZED)
         unset_jwt_cookies(response)
         debug_expired_jwts(False, creation_timestamp, jwt_payload["exp"], user.lastPasswordReset)
 

@@ -136,9 +136,9 @@ export default {
             this.$router.push('/home');
             Toast.showSuccessMessage("Password reset successfully!")
           },
-          error => {
+          () => {
             this.isSubmittingForm = false;
-            Toast.showErrorMessage("Error resetting password: ", error);
+            Toast.showErrorMessage("Error resetting password. Please try again.");
           }
         );
       }

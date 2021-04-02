@@ -42,9 +42,9 @@ if os.environ['FLASK_ENV'] == "production":
     @app.before_request
     def before_request_func():
         if "Api-Key" not in request.headers:
-            return "API Key is required", HTTPStatus.UNAUTHORIZED
+            return "API Key is required", HTTPStatus.INTERNAL_SERVER_ERROR
         elif request.headers["Api-Key"] != app.config['SECRET_KEY']:
-            return "Invalid API Key", HTTPStatus.UNAUTHORIZED
+            return "Invalid API Key", HTTPStatus.INTERNAL_SERVER_ERROR
 
 # for server updates
 @app.route('/update_server', methods=['POST'])

@@ -54,5 +54,5 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = get_local_conn_string()
     FRONTEND_URL = "http://localhost:8080/#"
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=30)    # for testing
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=1)    # for testing
     JWT_COOKIE_SECURE = False

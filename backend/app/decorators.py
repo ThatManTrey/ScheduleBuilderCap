@@ -28,7 +28,7 @@ def has_access_token(optional=False):
         @wraps(fn)
         def decorator(*args, **kwargs):
             verify_jwt_in_request(optional)
-            
+
             if get_jwt()['type'] == "access":
                 return fn(*args, **kwargs)
             else:
@@ -43,6 +43,7 @@ def has_reset_pass_token():
         @wraps(fn)
         def decorator(*args, **kwargs):
             token = request.headers.get('Authorization')
+
             if not token:
                 return "No token found", HTTPStatus.UNAUTHORIZED
             

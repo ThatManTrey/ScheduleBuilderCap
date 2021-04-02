@@ -58,8 +58,6 @@ def get_confirm_email_html(token):
 
                             <p>Alternatively, you can copy the link below</p>
 
-                            {}
-
                             <p>- The KSU Course Planner Team</p>
                             """.format(url, url)
     

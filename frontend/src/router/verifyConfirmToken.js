@@ -12,6 +12,7 @@ export default (to, from, next) => {
                 headers: { Authorization: "Bearer " + confirmationToken }
             })
             .then(() => {
+                store.commit('confirmEmail', true)
                 next("/home");
                 Toast.showSuccessMessage(
                     "Your email has been confirmed successfully!"

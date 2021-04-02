@@ -12,6 +12,7 @@ import router from "./router";
 import store from "./store/";
 import axios from "axios";
 import * as Toast from './toast.js';
+import HttpStatus from 'http-status-codes';
 
 // change this?
 Vue.config.productionTip = false;
@@ -41,17 +42,13 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
-  // redirect to home if access token has been removed by server 
-  if (error.response.status === 471) {
+  if (error.response.status === HttpStatus.UNAUTHORIZED) {
     Toast.showErrorMessage("Your session has expired. Please login again.");
     store.commit("unAuthenticateUser");
     if (router.currentRoute.name != "Home")
       router.push("/home");
-  // access token has been refresh, update CSRF header and retry request
+  // access token has been refreshed, update CSRF header and retry request
   } else if (error.response.status === 470) {
-    console.log("adding new csrf token")
-    console.log("old csrf token: ", error.config.headers["X-CSRF-TOKEN"])
-    console.log("new csrf token: ", Vue.$cookies.get('csrf_access_token'))
     // set new CSRF token for last request and all future requests
     error.config.headers["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');
     axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get('csrf_access_token');

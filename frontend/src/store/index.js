@@ -34,6 +34,10 @@ export default new Vuex.Store({
     setAuthError(state, message = defaultError) {
       state.authError = message;
     },
+
+    confirmEmail(state, hasConfirmedEmail) {
+      state.hasConfirmedEmail = hasConfirmedEmail;
+    }
   },
 
   actions: {
@@ -78,7 +82,9 @@ export default new Vuex.Store({
           email: email,
           password: password,
         })
-        .then(function () {})
+        .then(function () {
+          commit("setAuthError", null)
+        })
         .catch(function (error) {
           console.log(error)
           if (!error.response) commit("setAuthError");
@@ -125,7 +131,7 @@ function resendConfirmationEmail() {
     .then(function () {
       Toast.showSuccessMessage("Confirmation email has been sent!");
     })
-    .catch(function (error) {
-      console.log(error)
+    .catch(function () {
+      Toast.showErrorMessage("Error sending confirmation email. Please try again.");
     });
 }

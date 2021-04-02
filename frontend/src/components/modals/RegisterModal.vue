@@ -11,7 +11,7 @@
       <transition name="fade">
         <SuccessAlert
           v-if="isRegisterSuccessful"
-          successMessage="Account created successfully! Logging you in..."
+          :successMessage="successMessage"
         ></SuccessAlert>
 
         <ErrorAlert
@@ -141,6 +141,7 @@ function initialState() {
     isSubmittingForm: false,
     isRegisterSuccessful: null,
     errorMessage: "An error occurred. Please try again.",
+    successMessage: "",
   };
 }
 
@@ -239,13 +240,21 @@ export default {
                 password: this.passField.pass,
               })
               .then(() => {
+                if (this.$store.state.authError) {
+                  this.successMessage =
+                    "Account created successfully! You can now log in.";
+                } else {
+                  this.successMessage =
+                    "Account created successfully! Logging you in...";
+
+                  setTimeout(() => {
+                    this.closeModal();
+                  }, 1000);
+                }
+   
                 this.isSubmittingForm = false;
                 this.isRegisterSuccessful = true;
                 this.allowClosingModal();
-                
-                setTimeout(() => {
-                  this.closeModal();
-                }, 1000);
               });
           }
         });
