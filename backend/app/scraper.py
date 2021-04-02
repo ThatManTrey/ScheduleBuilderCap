@@ -107,12 +107,12 @@ def getCourseData(course):
     theText = attribute.text
     Prereqs = ""
     # find prereq
-    lastIndex = theText.find("Prerequisite:")
+    lastIndex = theText.find("Prerequisite: ")
     if lastIndex != -1: # prereq is inside description (edge case)
-        CourseDesc = theText[1:lastIndex].strip()
-        Prereqs = theText[lastIndex:].strip()
+        CourseDesc = theText[:lastIndex].strip()
+        Prereqs = theText[lastIndex+len("Prerequisite: "):theText.find("Schedule Type: ")].strip()
     else:   # prereq is in own <p>
-        CourseDesc = theText[1:].strip()
+        CourseDesc = theText.strip()
         while attribute.find('strong').text != "Prerequisite: ":
             attribute = attribute.find_next('p', class_="noindent")
         attribute.find('strong').clear()
@@ -453,7 +453,9 @@ def addProgram(ProgramName, ProgramType):
     insertRecord = True
 
     # see if record exists
-    existing_program = db.session.query(Degree).filter_by(degreeName = ProgramName).first()
+    existing_program = db.session.query(Degree).filter_by(
+        degreeName = ProgramName
+    ).first()
     
     # if so, check if it needs updated
     if existing_program:
