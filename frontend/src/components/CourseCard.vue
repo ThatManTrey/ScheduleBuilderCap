@@ -40,7 +40,7 @@
             tabindex="0"
             data-tooltip="Favorite Course"
             data-tooltip-location="bottom"
-            ><i class="far fa-star fa-lg"></i
+            ><i class="far fa-bookmark fa-lg"></i
           ></a>
         </div>
         

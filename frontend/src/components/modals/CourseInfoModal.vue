@@ -76,7 +76,7 @@
           data-tooltip="Favorite Course"
           data-tooltip-location="bottom"
         >
-          <i class="far fa-star fa-lg star-unfilled-icon"></i
+          <i class="far fa-bookmark fa-lg bookmark-unfilled-icon"></i
         ></a>
         <a
           class="ms-auto"

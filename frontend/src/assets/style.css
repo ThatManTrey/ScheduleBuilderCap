@@ -201,6 +201,14 @@ a .fa-star:hover {
   color: rgba(209, 128, 24, var(--btn-transparency));
 }
 
+a .fa-bookmark {
+  color: var(--theme-secondary);
+}
+
+a .fa-bookmark:hover {
+  color: rgba(209, 128, 24, var(--btn-transparency));
+}
+
 a .fa-trash, a .fa-times-circle  {
   color: var(--theme-white);
 }

@@ -52,7 +52,7 @@
                 to="favorites"
                 v-bind:class="{ 'nav-active': isCurrentRoute('Favorites') }"
               >
-                <i class="fas fa-star "></i>Favorites
+                <i class="fas fa-bookmark "></i>Favorites
               </router-link>
             </li>
 
@@ -213,7 +213,7 @@ export default {
   margin-right: 0.25rem;
 }
 
-i.fa-star {
+i.fa-bookmark {
   color: var(--theme-whitest);
 }
 
