@@ -43,16 +43,7 @@
             ><i class="far fa-star fa-lg"></i
           ></a>
         </div>
-
-        <div class="col text-center">
-          <a
-            tabindex="0"
-            @keyup.enter="showCourseInfoModal(course)"
-            @click="showCourseInfoModal(course)"
-            class="link small"
-            >View more</a>
-          </div>
-
+        
         <div v-if="$store.state.isAuthenticated" class="col text-end">
           <a
             v-if="!isRemovingCourse"
@@ -102,11 +93,6 @@ export default {
     showAddToSemesterModal() {
       this.$emit("openAddSemesterModal");
     },
-    showCourseInfoModal(course) {
-      this.$store.commit('setCourse', {course:course});
-      this.$emit("openCourseInfoModal");
-    },
-
     removeFromSemester() {
       confirm("Are you sure you want to remove this course?");
     }

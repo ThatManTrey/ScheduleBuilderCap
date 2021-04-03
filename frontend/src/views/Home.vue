@@ -17,11 +17,16 @@
             :key="index"
             
           >
+          <a
+            tabindex="0"
+            @keyup.enter="showCourseInfoModal(course)"
+            @click="showCourseInfoModal(course)"
+            >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
               v-bind:course="course"
-            ></CourseCard>
+            ></CourseCard></a>
           </div>
         </div>
       </transition>
@@ -75,7 +80,8 @@ export default {
           
     },
       methods: {
-        showCourseInfoModal () {
+        showCourseInfoModal (course) {
+            this.$store.commit('setCourse', {course:course});
             this.$refs.courseInfoModalHome.openModal();
         },
         showAddToSemesterModal () {
