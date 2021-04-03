@@ -18,7 +18,7 @@
         </div>
         <div class="row">
           <p>
-            <strong>Prerequisite</strong>: {{ }}
+            <strong>Prerequisite</strong>: {{course.course.prereqs}}
           </p>
           <p>
             <strong>Attributes</strong>: {{ }}
