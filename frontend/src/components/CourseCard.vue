@@ -1,5 +1,10 @@
 <template lang="html">
   <div class="card justify-content-center course-card">
+    <a
+            tabindex="0"
+            @keyup.enter="showCourseInfoModal(course)"
+            @click="showCourseInfoModal(course)"
+            >
     <div class="card-body container-fluid text-theme-whiter">
       <div class="row text-theme-whitest">
         <h4 class="course-card-title m-1">{{ course.courseName }}</h4>
@@ -67,6 +72,7 @@
         </div>
       </div>
     </div>
+    </a>
   </div>
 </template>
 
@@ -90,6 +96,10 @@ export default {
   },
 
   methods: {
+    showCourseInfoModal (course) {
+      this.$store.commit('setCourse', {course:course});
+      this.$emit("openCourseInfoModal");
+    },
     showAddToSemesterModal() {
       this.$emit("openAddSemesterModal");
     },
