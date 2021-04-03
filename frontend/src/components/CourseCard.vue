@@ -141,6 +141,7 @@ span.course-badge {
   color: var(--theme-whiter);
   background-color: var(--theme-darkest-gray);
   margin-left: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .course-badge button {
@@ -149,6 +150,17 @@ span.course-badge {
 
 .course-card-title {
   font-family: "Source Sans Pro";
+  font-size: 17pt;
+  min-height: 3.50rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+   -webkit-box-orient: vertical;
 }
 
 i.fa-info-circle {
