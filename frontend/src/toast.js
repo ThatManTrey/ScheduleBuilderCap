@@ -6,6 +6,7 @@ export function showErrorMessage(errorMessage) {
     type: "error"
   });
 }
+
 export function showSuccessMessage(successMessage) {
   Vue.$toast.open({
     message: successMessage,

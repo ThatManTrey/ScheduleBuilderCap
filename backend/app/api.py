@@ -2,7 +2,7 @@ from flask import jsonify
 from app import app, db
 from app.models import Course, User, FavCourse, Degree
 from app.colors import *
-from app.decorators import has_access_token, is_current_user, has_api_key
+from app.decorators import has_access_token, is_current_user
 
 import datetime
 from http import HTTPStatus
@@ -45,7 +45,6 @@ def get_user(user_id):
 # courses
 
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
-@has_api_key()
 def get_dept_courses(CourseType):
     courses = db.session.query(Course).filter_by(courseIDType = CourseType)
     arr_courses = []
@@ -53,7 +52,7 @@ def get_dept_courses(CourseType):
         arr_courses.append(course.as_dict())
     return jsonify(deptCourses = arr_courses)
 
-
+  
 # use at your own risk, but works
 @app.route('/api/courses/all', methods=['GET'])
 @has_api_key()

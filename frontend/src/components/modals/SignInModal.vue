@@ -18,7 +18,7 @@
           ></SuccessAlert>
 
           <ErrorAlert
-            v-if="isLoginSuccessful == false"
+            v-if="isLoginSuccessful === false"
             :errorMessage="errorMessage"
           ></ErrorAlert>
         </div>
@@ -31,7 +31,7 @@
           ></SuccessAlert>
 
           <ErrorAlert
-            v-if="isPasswordResetSuccessful == false"
+            v-if="isPasswordResetSuccessful === false"
             :errorMessage="errorMessage"
           ></ErrorAlert>
         </div>
@@ -174,54 +174,48 @@ import Modal from "./Modal.vue";
 import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
-import { isEmailValid } from "../../utils";
+import { validateEmailField, validatePassField } from "../../utils";
 import axios from "axios";
+
+function initialState() {
+  return {
+    emailField: {
+      email: null,
+      error: null
+    },
+    passField: {
+      pass: null,
+      error: null
+    },
+    resetPassEmailField: {
+      email: null,
+      error: null
+    },
+    isSubmittingForm: false,
+    isLoginSuccessful: null,
+    isResettingPassword: false,
+    isPasswordResetSuccessful: null,
+    errorMessage: "",
+    resetPassSuccessMessage: ""
+  };
+}
 
 export default {
   data() {
-    return {
-      emailField: {
-        email: "",
-        error: null
-      },
-      passField: {
-        pass: "",
-        error: null
-      },
-      resetPassEmailField: {
-        email: "",
-        error: null
-      },
-      isSubmittingForm: false,
-      isLoginSuccessful: null,
-      isResettingPassword: false,
-      isPasswordResetSuccessful: null,
-      errorMessage: "",
-      resetPassSuccessMessage: ""
-    };
+    return initialState();
   },
 
   watch: {
     "emailField.email": function() {
-      if (this.emailField.email.length === 0)
-        this.emailField.error = "Required field";
-      else if (!isEmailValid(this.emailField.email))
-        this.emailField.error = "Please enter a valid email";
-      else this.emailField.error = null;
+      validateEmailField(this.emailField);
     },
 
     "resetPassEmailField.email": function() {
-      if (this.resetPassEmailField.email.length === 0)
-        this.resetPassEmailField.error = "Required field";
-      else if (!isEmailValid(this.resetPassEmailField.email))
-        this.resetPassEmailField.error = "Please enter a valid email";
-      else this.resetPassEmailField.error = null;
+      validateEmailField(this.resetPassEmailField);
     },
 
     "passField.pass": function() {
-      if (this.passField.pass.length === 0)
-        this.passField.error = "Required field";
-      else this.passField.error = null;
+      validatePassField(this.passField, false);
     }
   },
 
@@ -238,6 +232,7 @@ export default {
     },
     closeModal() {
       this.$refs.signInBaseModalRef.closeModal();
+      Object.assign(this.$data, initialState());
     },
 
     preventClosingModal() {
@@ -251,10 +246,11 @@ export default {
     areLoginFieldsValid() {
       // "Required field" error will not be shown until user starts typing
       // set errors here if nothing has been entered yet
-      if (this.emailField.email.length === 0)
-        this.emailField.error = "Required field";
-      if (this.passField.pass.length === 0)
-        this.passField.error = "Required field";
+      if (this.emailField.email === null) this.emailField.email = "";
+      if (this.passField.pass === null) this.passField.pass = "";
+
+      validateEmailField(this.emailField);
+      validatePassField(this.passField, false);
 
       return !this.passField.error && !this.emailField.error;
     },
@@ -296,8 +292,9 @@ export default {
     },
 
     isResetPasswordFieldValid() {
-      if (this.resetPassEmailField.email.length === 0)
-        this.resetPassEmailField.error = "Required field";
+      if (this.resetPassEmailField.email === null)
+        this.resetPassEmailField.email = "";
+      validateEmailField(this.resetPassEmailField);
 
       return !this.resetPassEmailField.error;
     },

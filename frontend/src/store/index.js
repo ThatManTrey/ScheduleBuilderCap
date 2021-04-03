@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import StatusCodes from "http-status-codes";
-import jwt_decode from "jwt-decode";
+import * as Toast from "../toast.js";
 
 Vue.use(Vuex);
 
@@ -15,12 +15,13 @@ export default new Vuex.Store({
     hasConfirmedEmail: null,
     authError: null
   },
+
   mutations: {
-    authenticateUser(state, userId) {
+    authenticateUser(state, { userId, hasConfirmedEmail }) {
       state.isAuthenticated = true;
       state.userId = userId;
-      state.hasConfirmedEmail = true;
       state.authError = null;
+      state.hasConfirmedEmail = hasConfirmedEmail;
     },
 
     unAuthenticateUser(state) {
@@ -34,100 +35,100 @@ export default new Vuex.Store({
       state.authError = message;
     },
 
-    setUnconfirmedEmail(state) {
-      state.hasConfirmedEmail = false;
+    confirmEmail(state, hasConfirmedEmail) {
+      state.hasConfirmedEmail = hasConfirmedEmail;
     }
   },
+
   actions: {
-    // get new accessToken if credentials are valid
     logIn({ commit }, { email, password }) {
       return axios
         .post("/auth/login", {
           email: email,
           password: password
         })
-        .then(
-          response => {
-            var token = response.data.accessToken;
+        .then(function(response) {
+          commit({
+            type: "authenticateUser",
+            userId: response.data.userId,
+            hasConfirmedEmail: response.data.hasConfirmedEmail
+          });
 
-            localStorage.setItem("userInfo", token);
-            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+          axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
+            "csrf_access_token"
+          );
 
-            commit("authenticateUser", getUserIdFromToken(token));
-          },
-          error => {
-            // server timeout
-            if (!error.response) {
-              commit("setAuthError");
-              return;
-            }
-
-            switch (error.response.status) {
-              case StatusCodes.UNAUTHORIZED:
-                commit(
-                  "setAuthError",
-                  "Your session has expired or is invalid. Please login again."
-                );
-                break;
-
-              case StatusCodes.BAD_REQUEST:
-                commit("setAuthError", "Incorrect username or password.");
-                break;
-
-              case StatusCodes.FORBIDDEN:
-                commit("setUnconfirmedEmail");
-                commit(
-                  "setAuthError",
-                  "Please confirm your email before logging in."
-                );
-                break;
-
-              default:
-                commit("setAuthError");
-            }
+          if (!response.data.hasConfirmedEmail) {
+            setTimeout(() => {
+              Vue.$toast.open({
+                message:
+                  "You have not confirmed your account yet. Click here to send another email.",
+                type: "info",
+                onClick: resendConfirmationEmail
+              });
+            }, 3000);
           }
-        );
+        })
+        .catch(function(error) {
+          if (!error.response) commit("setAuthError");
+          else if (error.response.status == StatusCodes.BAD_REQUEST)
+            commit("setAuthError", "Incorrect username or password.");
+          else commit("setAuthError");
+        });
     },
 
-    // verify existing token from "userInfo" localStorage
-    verifyAccessToken({ commit }, { token }) {
+    register({ commit }, { email, password }) {
       return axios
-        .get("/auth/verify/access", {
-          headers: { Authorization: "Bearer " + token }
+        .post("/auth/register", {
+          email: email,
+          password: password
         })
-        .then(
-          () => {
-            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-            commit("authenticateUser", getUserIdFromToken(token));
-          },
-          error => {
-            // server timeout
-            if (!error.response) commit("setAuthError");
-            else if (
-              error.response.status == StatusCodes.UNAUTHORIZED ||
-              error.response.status == StatusCodes.UNPROCESSABLE_ENTITY
-            )
-              commit(
-                "setAuthError",
-                "Your session has expired or is invalid. Please login again."
-              );
-            else commit("setAuthError");
+        .then(function() {
+          commit("setAuthError", null);
+        })
+        .catch(function(error) {
+          if (!error.response) commit("setAuthError");
+          else if (error.response.status === StatusCodes.BAD_REQUEST)
+            commit("setAuthError", "That email address is not available.");
+          else commit("setAuthError");
+        });
+    },
 
-            localStorage.removeItem("userInfo");
-          }
-        );
+    // verify token on new session
+    verifyAccessToken({ commit }) {
+      return axios
+        .get("/auth/verify/access")
+        .then(function(response) {
+          commit({
+            type: "authenticateUser",
+            userId: response.data.userId,
+            hasConfirmedEmail: response.data.hasConfirmedEmail
+          });
+        })
+        .catch(function(error) {
+          if (!error.response) commit("setAuthError");
+        });
     },
 
     logOut({ commit }) {
-      localStorage.removeItem("userInfo");
-      delete axios.defaults.headers.common["Authorization"];
-
       commit("unAuthenticateUser");
+
+      return axios.post("/auth/logout").catch(function() {
+        commit("setAuthError");
+      });
     }
   }
 });
 
-function getUserIdFromToken(token) {
-  var decodedToken = jwt_decode(token);
-  return decodedToken.sub;
+function resendConfirmationEmail() {
+  axios
+    .post("/auth/resend-confirm")
+    .then(function() {
+      Toast.showSuccessMessage("Confirmation email has been sent!");
+    })
+    .catch(function() {
+      Toast.showErrorMessage(
+        "Error sending confirmation email. Please try again."
+      );
+    });
 }
