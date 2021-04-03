@@ -53,7 +53,7 @@ def get_dept_courses(CourseType):
   
 # use at your own risk, but works
 @app.route('/api/courses/all', methods=['GET'])
-@has_api_key()
+#@has_api_key()
 def get_all_courses():
     courses = db.session.query(Course).all()
     arr_courses = []
