@@ -14,7 +14,6 @@ import axios from "axios";
 import * as Toast from "./toast.js";
 import HttpStatus from "http-status-codes";
 
-
 Vue.config.productionTip = false;
 
 Vue.use(VueCookies);
