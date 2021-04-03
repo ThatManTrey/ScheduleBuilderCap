@@ -2,7 +2,7 @@ from flask import jsonify
 from app import app, db
 from app.models import Course, User, FavCourse, Degree
 from app.colors import *
-from app.decorators import has_access_token, is_current_user, has_api_key
+from app.decorators import has_access_token, is_current_user
 
 import datetime
 from http import HTTPStatus
@@ -26,9 +26,7 @@ def get_primary_colors():
 def get_accent_colors():
     return jsonify(accent_colors)
 
-
 @app.route('/api/users/<int:user_id>', methods=['GET'])
-@has_api_key()
 @has_access_token()
 @is_current_user
 def get_user(user_id):
@@ -42,8 +40,9 @@ def get_user(user_id):
 #------------------------------------------------------------------------------
 # university catalog
 
+# courses
+
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
-@has_api_key()
 def get_dept_courses(CourseType):
     courses = db.session.query(Course).filter_by(courseIDType = CourseType)
     arr_courses = []
@@ -51,7 +50,7 @@ def get_dept_courses(CourseType):
         arr_courses.append(course.as_dict())
     return jsonify(deptCourses = arr_courses)
 
-
+  
 # use at your own risk, but works
 @app.route('/api/courses/all', methods=['GET'])
 @has_api_key()
@@ -63,8 +62,10 @@ def get_all_courses():
     return jsonify(allCourses = arr_courses)
 
 
+# degrees
+
+
 @app.route('/api/degrees/all', methods=['GET'])
-@has_api_key()
 def get_all_degrees():
     the_degrees = db.session.query(Degree).all()
     arr_degrees = []
@@ -77,7 +78,6 @@ def get_all_degrees():
 # favorites
 
 @app.route('/api/user/<int:user_id>/favorites', methods=['GET'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def get_favorite_courses(user_id):
@@ -89,7 +89,6 @@ def get_favorite_courses(user_id):
 
 
 @app.route('/api/user/<int:user_id>/favorites/<string:course_id>', methods=['POST'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def add_to_favorites(user_id, course_id):
@@ -103,7 +102,6 @@ def add_to_favorites(user_id, course_id):
 
 
 @app.route('/api/user/<int:user_id>/favorites/<string:course_id>', methods=['DELETE'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def remove_from_favorites(user_id, course_id):
@@ -121,7 +119,6 @@ def remove_from_favorites(user_id, course_id):
 # course
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['POST'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def add_rating(user_id):
@@ -141,7 +138,6 @@ def add_rating(user_id):
 
 
 @app.route('/api/courses/<string:course_id>/ratings', methods=['GET'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def get_course_rating(course_id):
@@ -162,7 +158,6 @@ def get_course_rating(course_id):
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id> ', methods=['PUT'])
 #or api/courses/<course_id>/ratings/<user_id>
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def edit_rating(user_id, course_id):
@@ -171,7 +166,6 @@ def edit_rating(user_id, course_id):
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', methods=['DELETE'])
 #or api/courses/<course_id>/ratings/<user_id>
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def remove_rating(user_id, course_id):
@@ -179,7 +173,6 @@ def remove_rating(user_id, course_id):
 
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['GET'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def get_user_ratings(user_id):

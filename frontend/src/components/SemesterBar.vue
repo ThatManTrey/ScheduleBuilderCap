@@ -40,6 +40,15 @@ export default ({
             isOpen: false
         }
     },
+    removeSemester() {
+      var removePromptResult = confirm(
+        "Are you sure you want to remove this semester and all its courses?"
+      );
+      if (removePromptResult === true) {
+        Toast.showSuccessMessage("Semester was removed successfully.");
+      }
+    },
+
     methods: {
         toggle: function() {
             this.isOpen = !this.isOpen

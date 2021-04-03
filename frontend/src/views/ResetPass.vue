@@ -1,11 +1,6 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
-    <PageSpinner
-      v-if="isLoadingPage"
-      :showSpinner="isLoadingPage"
-    ></PageSpinner>
-    <div v-else class="container mt-5">
+    <div class="container mt-5">
       <div class="row justify-content-center">
         <div class="col-lg-4 col-md-6 col-sm-8 col-10">
           <h3 class="text-theme-whitest mb-3">
@@ -78,23 +73,20 @@
 </template>
 
 <script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
 import * as Toast from '../toast.js';
 import axios from 'axios';
-import PageSpinner from '../components/spinners/PageSpinner.vue';
 import Spinner from '../components/spinners/Spinner.vue';
+import { validatePassField, validatePassVerifyField, } from "../utils.js";
 
 export default {
     name: 'reset-pass',
     components: {
-        ThemeNavBar,
-        PageSpinner,
         Spinner
     },
 
     data() {
       return {
-        resetPassToken: String,
+        resetPassToken: this.$route.query.token,
         passField: {
           pass: "",
           error: null
@@ -103,7 +95,6 @@ export default {
           pass: "",
           error: null
         },
-        isLoadingPage: true,
         isSubmittingForm: false
       }
     },
@@ -111,49 +102,18 @@ export default {
      watch: {
 
       "passField.pass": function() {
-        if (this.passField.pass.length === 0)
-          this.passField.error = "Required field";
-        else if (this.passField.pass.length < 8)
-          this.passField.error = "Password must be more than 8 characters long.";
-        else this.passField.error = null;
+        validatePassField(this.passField);
       },
 
       "passVerifyField.pass": function() {
-        if (this.passVerifyField.pass.length === 0)
-          this.passVerifyField.error = "Required field";
-        else if (this.passVerifyField.pass != this.passField.pass)
-          this.passVerifyField.error = "Passwords do not match";
-        else this.passVerifyField.error = null;
+        validatePassVerifyField(this.passVerifyField, this.passField);
       }
     },
 
     methods: {
-      // TODO: move to router before enter
-      verifyResetToken() {
-
-        if(this.resetPassToken) {
-          axios
-          .get("/auth/verify/reset-pass", { headers: { Authorization: "Bearer " + this.resetPassToken } })
-          .then(() => {
-            this.isLoadingPage = false;
-          })
-          .catch(() => {
-            this.$router.push('home');
-            Toast.showErrorMessage(
-              "Invalid or expired authentication token. Request another reset link and try again."
-            );
-          });
-        } else {
-          this.$router.push('home');
-          Toast.showErrorMessage("Invalid reset password token.");
-        }
-      },
-
       areFieldsValid() {
-        if (this.passField.pass.length === 0)
-          this.passField.error = "Required field";
-        if (this.passVerifyField.pass.length === 0)
-          this.passVerifyField.error = "Required field";
+        validatePassField(this.passField);
+        validatePassVerifyField(this.passVerifyField, this.passField);
 
         return !this.passField.error && !this.passVerifyField.error;
       },
@@ -167,27 +127,21 @@ export default {
           return;
         }
 
-      axios
-        .post("/auth/reset-pass", {
-          password: this.passField.pass
-        },
-        { headers: { Authorization: "Bearer " + this.resetPassToken } })
+        axios.post("/auth/reset-pass",
+          { password: this.passField.pass },
+          { headers: { Authorization: this.resetPassToken } })
         .then(
           () => {
             this.isSubmittingForm = false;
+            this.$router.push('/home');
             Toast.showSuccessMessage("Password reset successfully!")
           },
-          error => {
+          () => {
             this.isSubmittingForm = false;
-            Toast.showErrorMessage("Error resetting password: ", error);
+            Toast.showErrorMessage("Error resetting password. Please try again.");
           }
         );
       }
     },
-
-    created() {
-      this.resetPassToken = this.$route.query.token;
-      this.verifyResetToken();
-    }
 };
 </script>

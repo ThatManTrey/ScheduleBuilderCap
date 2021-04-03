@@ -148,7 +148,7 @@ export default {
 
   methods: {
     isCurrentRoute(route) {
-      return this.currentRouteName == route;
+      return this.currentRouteName === route;
     },
 
     checkScroll() {

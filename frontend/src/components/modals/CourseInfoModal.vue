@@ -59,7 +59,7 @@
         </div>
         <div class="text-center">
           <button
-            v-if="$store.state.isAuthenticated"
+            v-if="$store.state.hasConfirmedEmail"
             type="button"
             class="btn btn-theme-primary-dark"
           >
