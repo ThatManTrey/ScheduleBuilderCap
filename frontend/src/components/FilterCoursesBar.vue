@@ -5,7 +5,7 @@
         <select class="form-control theme-secondary" id="selectProgram">
           <option selected>Select a Program</option>
           <option v-for="(degree, index) in degrees.degrees"
-            :key="index">{{degree.degreeName}}
+            :key="index">{{degree.degreeType}} - {{degree.degreeName}}
           </option>
         </select>
         <i class="fas fa-chevron-down fa-sm text-theme-blackest icon-css"></i>
