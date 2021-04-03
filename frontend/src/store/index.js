@@ -13,7 +13,11 @@ export default new Vuex.Store({
     isAuthenticated: false,
     userId: null,
     hasConfirmedEmail: null,
-    authError: null
+    authError: null,
+
+    course: {
+      type: Object
+    }
   },
 
   mutations: {
@@ -37,6 +41,10 @@ export default new Vuex.Store({
 
     confirmEmail(state, hasConfirmedEmail) {
       state.hasConfirmedEmail = hasConfirmedEmail;
+    },
+
+    setCourse(state, course) {
+      state.course = course;
     }
   },
 
