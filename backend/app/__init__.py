@@ -1,6 +1,7 @@
+from app import auth, api
 from flask import Flask, render_template, request
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy 
+from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from config import DevelopmentConfig, ProductionConfig
@@ -39,10 +40,16 @@ if os.environ['FLASK_ENV'] == "production":
     # require API key for each request on pythonanywhere
     @app.before_request
     def before_request_func():
-        if "Api-Key" not in request.headers:
-            return "API Key is required", HTTPStatus.INTERNAL_SERVER_ERROR
-        elif request.headers["Api-Key"] != app.config['SECRET_KEY']:
-            return "Invalid API Key", HTTPStatus.INTERNAL_SERVER_ERROR
+        # needed for github webhook defined below
+        if "X-Hub-Signature-256" in request.headers:
+            api_key = request.headers["X-Hub-Signature-256"]
+        elif "Api-Key" in request.headers:
+            api_key = request.headers["Api-Key"]
+        else:
+            return "API Key is required", HTTPStatus.BAD_REQUEST
+
+        if api_key != app.config['SECRET_KEY']:
+            return "Invalid API Key", HTTPStatus.BAD_REQUEST
 
     # for server updates
     @app.route('/update_server', methods=['POST'])
@@ -50,12 +57,9 @@ if os.environ['FLASK_ENV'] == "production":
         if request.method == 'POST':
             repo = git.Repo('/home/KSUCoursePlanner/ScheduleBuilderCap')
             origin = repo.remotes.origin
-        
+
             origin.pull()
 
             return 'Updated PythonAnywhere successfully', 200
         else:
             return 'Wrong event type', 400
-
-
-from app import auth, api
