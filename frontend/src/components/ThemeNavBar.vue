@@ -131,18 +131,18 @@ export default {
   props: {
     useScrollToTopButton: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   components: {
     SignInModal,
-    RegisterModal
+    RegisterModal,
   },
 
   data() {
     return {
-      showScrollToTopButton: false
+      showScrollToTopButton: false,
     };
   },
 
@@ -170,13 +170,13 @@ export default {
     logout() {
       this.$store.dispatch("logOut");
       if (!this.isCurrentRoute("Home")) this.$router.push("/home");
-    }
+    },
   },
 
   computed: {
     currentRouteName() {
       return this.$route.name;
-    }
+    },
   },
 
   created() {
@@ -191,7 +191,7 @@ export default {
     if (this.useScrollToTopButton) {
       window.removeEventListener("scroll", this.checkScroll);
     }
-  }
+  },
 };
 </script>
 
@@ -206,7 +206,7 @@ export default {
     rgba(255, 255, 255, 0.1),
     rgba(255, 255, 255, 0)
   );
-  background-color: #070707;
+  background-color: #000;
 }
 
 .nav-link i {
@@ -261,13 +261,17 @@ a.nav-active:hover {
   width: 100%;
   text-align: center;
   border-radius: 50%;
-  background-color: #3f256d;
+  background-color: var(--theme-darkest-gray);
+
+  &:hover {
+    background-color: var(--theme-primary-dark);
+  }
 }
 
 #scroll-to-top a i {
   position: relative;
   top: 7px;
-  color: var(--theme-whiter);
+  color: var(--theme-whitest);
 }
 
 .fade-enter-active,

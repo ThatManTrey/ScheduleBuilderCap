@@ -51,7 +51,6 @@
             <a
               tabindex="0"
               data-tooltip="Favorite Course"
-              data-tooltip-location="bottom"
               ><i class="far fa-bookmark fa-lg"></i
             ></a>
           </div>
@@ -63,7 +62,6 @@
               @keyup.enter="showAddToSemesterModal()"
               @click="showAddToSemesterModal()"
               data-tooltip="Add to Semester"
-              data-tooltip-location="bottom"
             >
               <i class="fas fa-plus-circle fa-lg"></i>
             </a>
@@ -73,7 +71,6 @@
               @keyup.enter="removeFromSemester()"
               @click="removeFromSemester()"
               data-tooltip="Remove from Semester"
-              data-tooltip-location="bottom"
               ><i class="fas fa-times-circle fa-lg"></i
             ></a>
           </div>
@@ -88,18 +85,18 @@ export default {
   props: {
     showSmallCard: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     /* true replaces the add semester button with a remove button (used on schedule page) */
     isRemovingCourse: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     course: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   methods: {
@@ -112,15 +109,15 @@ export default {
     },
     removeFromSemester() {
       confirm("Are you sure you want to remove this course?");
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
 div.course-card {
   background-color: var(--theme-blacker);
-  transition: transform 0.2s;
+  //transition: transform 0.2s;
 }
 
 div.course-card:hover,
@@ -133,7 +130,8 @@ div.course-card:focus-within {
     0 0 6px 2px rgb(95 99 104 / 60%);
   z-index: 1;
 
-  transform: scale(1.05);
+  // disabling since it messes with the tooltip
+  //transform: scale(1.05);
 }
 
 .course-desc {

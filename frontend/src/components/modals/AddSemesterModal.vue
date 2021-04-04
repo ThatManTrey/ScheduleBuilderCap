@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template lang="html">
   <Modal
     :centerHeader="true"
