@@ -1,5 +1,6 @@
 import os
 import sshtunnel
+from datetime import timedelta
 
 def connect_to_db_locally():
     tunnel = sshtunnel.SSHTunnelForwarder(
@@ -37,6 +38,7 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
+    JWT_TOKEN_LOCATION = ["cookies"]
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -45,8 +47,12 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = get_prod_conn_string()
     FRONTEND_URL = "https://ksucourseplanner.pythonanywhere.com/#"
     SECRET_KEY = os.environ.get('API_KEY')
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+    JWT_COOKIE_SECURE = True
 
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = get_local_conn_string()
     FRONTEND_URL = "http://localhost:8080/#"
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=1)    # for testing
+    JWT_COOKIE_SECURE = False

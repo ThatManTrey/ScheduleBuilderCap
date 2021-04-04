@@ -201,6 +201,14 @@ a .fa-star:hover {
   color: rgba(209, 128, 24, var(--btn-transparency));
 }
 
+a .fa-bookmark {
+  color: var(--theme-secondary);
+}
+
+a .fa-bookmark:hover {
+  color: rgba(209, 128, 24, var(--btn-transparency));
+}
+
 a .fa-trash, a .fa-times-circle  {
   color: var(--theme-white);
 }
@@ -332,6 +340,7 @@ textarea.form-control:focus {
   background-color: var(--theme-blackest);
   color: var(--theme-whiter);
   border: 1px solid rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(91, 57, 150, 0.5);
 }
 
 input.form-control:focus {

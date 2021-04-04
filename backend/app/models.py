@@ -86,6 +86,7 @@ class User(Base):
     userPass = Column(String(128))
     createdOn = Column(DateTime)
     hasConfirmedEmail = Column(TINYINT(1), nullable=False, server_default=text("'0'"))
+    lastPasswordReset = Column(DateTime)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }

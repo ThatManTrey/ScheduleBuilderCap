@@ -1,13 +1,16 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+
 import Home from "../views/Home.vue";
 import About from "../views/About.vue";
 import Favorites from "../views/Favorites.vue";
 import Schedule from "../views/Schedule.vue";
 import Theme from "../views/Theme.vue";
 import ResetPass from "../views/ResetPass.vue";
-import Confirm from "../views/Confirm.vue";
-import * as Toast from "../toast.js";
+
+import VerifyAuth from "./verifyAuth.js";
+import VerifyResetToken from "./verifyResetToken.js";
+import verifyConfirmToken from "./verifyConfirmToken.js";
 
 Vue.use(VueRouter);
 
@@ -30,37 +33,24 @@ const routes = [
     path: "/schedule",
     name: "Schedule",
     component: Schedule,
-    beforeEnter: (to, from, next) => {
-      if (!localStorage.userInfo) {
-        next("/home");
-        Toast.showErrorMessage(
-          "You'll need to login before you can view that page."
-        );
-      } else next();
-    }
+    beforeEnter: VerifyAuth
   },
   {
     path: "/favorites",
     name: "Favorites",
     component: Favorites,
-    beforeEnter: (to, from, next) => {
-      if (!localStorage.userInfo) {
-        next("/home");
-        Toast.showErrorMessage(
-          "You'll need to login before you can view that page."
-        );
-      } else next();
-    }
+    beforeEnter: VerifyAuth
   },
   {
     path: "/reset",
     name: "Reset",
-    component: ResetPass
+    component: ResetPass,
+    beforeEnter: VerifyResetToken
   },
   {
     path: "/confirm",
     name: "Confirm",
-    component: Confirm
+    beforeEnter: verifyConfirmToken
   },
   {
     path: "/theme",

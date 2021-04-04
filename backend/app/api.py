@@ -2,7 +2,7 @@ from flask import jsonify
 from app import app, db
 from app.models import Course, User, FavCourse, Degree
 from app.colors import *
-from app.decorators import has_access_token, is_current_user, has_api_key
+from app.decorators import has_access_token, is_current_user
 
 import datetime
 from http import HTTPStatus
@@ -26,9 +26,7 @@ def get_primary_colors():
 def get_accent_colors():
     return jsonify(accent_colors)
 
-
 @app.route('/api/users/<int:user_id>', methods=['GET'])
-@has_api_key()
 @has_access_token()
 @is_current_user
 def get_user(user_id):
@@ -45,7 +43,6 @@ def get_user(user_id):
 # courses
 
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
-@has_api_key()
 def get_dept_courses(CourseType):
     courses = db.session.query(Course).filter_by(courseIDType = CourseType)
     arr_courses = []
@@ -53,10 +50,10 @@ def get_dept_courses(CourseType):
         arr_courses.append(course.as_dict())
     return jsonify(deptCourses = arr_courses)
 
-
+  
 # use at your own risk, but works
 @app.route('/api/courses/all', methods=['GET'])
-@has_api_key()
+#@has_api_key()
 def get_all_courses():
     courses = db.session.query(Course).all()
     arr_courses = []
@@ -69,7 +66,6 @@ def get_all_courses():
 
 
 @app.route('/api/degrees/all', methods=['GET'])
-@has_api_key()
 def get_all_degrees():
     the_degrees = db.session.query(Degree).all()
     arr_degrees = []
@@ -82,7 +78,6 @@ def get_all_degrees():
 # favorites
 
 @app.route('/api/user/<int:user_id>/favorites', methods=['GET'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def get_favorite_courses(user_id):
@@ -94,7 +89,6 @@ def get_favorite_courses(user_id):
 
 
 @app.route('/api/user/<int:user_id>/favorites/<string:course_id>', methods=['POST'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def add_to_favorites(user_id, course_id):
@@ -108,7 +102,6 @@ def add_to_favorites(user_id, course_id):
 
 
 @app.route('/api/user/<int:user_id>/favorites/<string:course_id>', methods=['DELETE'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def remove_from_favorites(user_id, course_id):
@@ -126,7 +119,6 @@ def remove_from_favorites(user_id, course_id):
 # course
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['POST'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def add_rating(user_id):
@@ -146,7 +138,6 @@ def add_rating(user_id):
 
 
 @app.route('/api/courses/<string:course_id>/ratings', methods=['GET'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def get_course_rating(course_id):
@@ -167,7 +158,6 @@ def get_course_rating(course_id):
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id> ', methods=['PUT'])
 #or api/courses/<course_id>/ratings/<user_id>
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def edit_rating(user_id, course_id):
@@ -176,7 +166,6 @@ def edit_rating(user_id, course_id):
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', methods=['DELETE'])
 #or api/courses/<course_id>/ratings/<user_id>
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def remove_rating(user_id, course_id):
@@ -184,7 +173,6 @@ def remove_rating(user_id, course_id):
 
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['GET'])
-@has_api_key()
 # @has_access_token()
 # @is_current_user
 def get_user_ratings(user_id):
@@ -194,3 +182,86 @@ def get_user_ratings(user_id):
     # for course in courses:
     #     arr_courses.append(course.as_dict())
     # return jsonify(favCourses = arr_courses)
+
+#------------------------------------------------------------------------------
+# semesters
+"""
+
+@app.route('/api/users/<int:user_id>/semesters', methods=['GET'])
+# @has_access_token()
+# @is_current_user
+def get_semesters(user_id):
+    the_semesters = db.session.query(Semesters).filter_by(userID = user_id)
+    arr_semesters = []
+    for semester in the_semesters:
+        arr_courses.append(semester.as_dict())
+    return jsonify(semesters = arr_semesters)
+
+@app.route('/api/users/<int:user_id>/semesters', methods=['POST'])
+# @has_access_token()
+# @is_current_user
+def add_semester(semester_id, user_id, semester_name):
+    newSemester = Semester(
+            semesterID = semester_id,
+            userID = user_id,
+            semesterName = semester_name
+        )
+    db.session.add(newSemester)
+    db.session.commit()
+
+#I have absolutely no idea if this works... it should take the value of newName given in the function and change it in the db... it should... idk I hope it does...
+@app.route('/api/users/<int:user_id>/semesters/<string:semester_id>', methods=['PUT'])
+# @has_access_token()
+# @is_current_user
+def updateSemester(semesterID_given, newName):
+    new_name = session.query(Semesters).filter(Semesters.semesterID == semesterID_given).one()
+    new_name.semesterName = newName
+    db.session.commit()
+
+@app.route('/api/users/<int:user_id>/semesters/<string:semester_id>', methods=['DELETE'])
+# @has_access_token()
+# @is_current_user
+def remove_from_semesters(semester_id, user_id):
+    oldSemester = db.session.query(Semesters).filter_by(
+            semesterID = semester_id,
+            userID = user_id
+        )
+    db.session.delete(oldSemester)
+    db.session.commit()
+
+#------------------------------------------------------------------------------
+# semester courses
+
+@app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses', methods=['GET'])
+# @has_access_token()
+# @is_current_user
+def get_semester_courses(semester_id):
+    the_semester_courses = db.session.query(SemesterCourses).filter_by(semesterID = semesterID)
+    arr_semester_courses = []
+    for semesterCourse in the_semester_courses:
+        arr_semester_courses.append(semesterCourse.as_dict())
+    return jsonify(semesterCourses = arr_semesters)
+
+@app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', methods=['POST'])
+# @has_access_token()
+# @is_current_user
+def add_semester_course(semester_id, course_id):
+    newSemesterCourse = Semester(
+            semesterID = semester_id,
+            courseID = course_id
+        )
+    db.session.add(newSemesterCourse)
+    db.session.commit()
+
+@app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', methods=['DELETE'])
+# @has_access_token()
+# @is_current_user
+def remove_from_semesters(semester_id, course_id):
+    oldSemesterCourse = db.session.query(SemesterCourses).filter_by(
+            semesterID = semester_id,
+            courseID = course_id
+        )
+    db.session.delete(oldSemesterCourse)
+    db.session.commit()
+"""
+#commented for now, have not tested any of it yet.

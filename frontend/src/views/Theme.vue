@@ -320,18 +320,10 @@ export default {
             axios.get("/colors/primary")
                 .then((res) => {
                     this.primaryColors = res.data;
-                })
-                .catch((error) => {
-                    // eslint-disable-next-line
-                    console.error(error);
                 });
             axios.get("/colors/accent")
                 .then((res) => {
                     this.accentColors = res.data;
-                })
-                .catch((error) => {
-                    // eslint-disable-next-line
-                    console.error(error);
                 });
         },
         error(){

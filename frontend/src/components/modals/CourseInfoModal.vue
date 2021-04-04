@@ -4,43 +4,41 @@
     :useFooter="$store.state.isAuthenticated"
     ref="courseInfoBaseModalRef"
   >
-    <template v-slot:header
-      >MATH 13013 - Analytic Geometry And Calculus I</template
+    <template v-slot:header v-if="course.course"
+      >{{course.course.courseID}} - {{course.course.courseName}}</template
     >
 
-    <template v-slot:body>
+    <template v-slot:body v-if="course.course">
       <div class="container-fluid">
         <div class="row">
           <h5><strong>Description</strong></h5>
           <p>
-            Concepts of limit, continuity and derivative, and the indefinite and
-            definite integral for functions of one real variable. Maximization,
-            related rates, fundamental theorem of calculus. No credit earned
-            toward a degree for this course if the student already earned credit
-            for MATH 12011 and MATH 12012.
+            {{course.course.courseDesc}}
           </p>
         </div>
         <div class="row">
           <p>
-            <strong>Prerequisite</strong>: Minimum 78 ALEKS math score; or MATH
-            11022 with a minimum C grade.
+            <strong>Prerequisite</strong>: {{course.course.prereqs}}
           </p>
           <p>
-            <strong>Attributes</strong>: Kent Core Mathematics and Critical
-            Reasoning, Transfer Module Mathematics
+            <strong>Attributes</strong>: {{ }}
           </p>
         </div>
         <div class="row">
           <div class="col-6">
-            <p>
-              <strong>Credits</strong>: <span id="creditHours">5</span> Credit
+            <p v-if="course.course.creditHoursMax == course.course.creditHoursMin">
+              <strong>Credits</strong>: <span id="creditHours">{{course.course.creditHoursMax}}</span> Credit
               Hours
             </p>
-            <p><strong>Schedule Type</strong>: Lecture</p>
+            <p v-if="course.course.creditHoursMax != course.course.creditHoursMin">
+              <strong>Credits</strong>: <span id="creditHours">
+                {{course.course.creditHoursMin}}-{{course.course.creditHoursMax}}</span> Credit Hours
+            </p>
+            <p><strong>Schedule Type</strong>: {{course.course.courseType}}</p>
           </div>
           <div class="col-6">
-            <p><strong>Contact Hours</strong>: 5 lecture</p>
-            <p><strong>Grade Mode</strong>: Standard Letter</p>
+            <p><strong>Contact Hours</strong>: {{ }} lecture</p>
+            <p><strong>Grade Mode</strong>: {{course.course.gradeType}}</p>
           </div>
         </div>
 
@@ -61,7 +59,7 @@
         </div>
         <div class="text-center">
           <button
-            v-if="$store.state.isAuthenticated"
+            v-if="$store.state.hasConfirmedEmail"
             type="button"
             class="btn btn-theme-primary-dark"
           >
@@ -78,7 +76,7 @@
           data-tooltip="Favorite Course"
           data-tooltip-location="bottom"
         >
-          <i class="far fa-star fa-lg star-unfilled-icon"></i
+          <i class="far fa-bookmark fa-lg bookmark-unfilled-icon"></i
         ></a>
         <a
           class="ms-auto"
@@ -95,11 +93,15 @@
 
 <script>
 import Modal from "./Modal.vue";
+import { mapState } from 'vuex';
 
 export default {
   components: {
     Modal
-  },
+  },    
+  computed: mapState([
+      'course'
+  ]),
 
   methods: {
     /* needed to open/close this modal from parent component */

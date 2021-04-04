@@ -11,11 +11,11 @@
       <transition name="fade">
         <SuccessAlert
           v-if="isRegisterSuccessful"
-          successMessage="Account created successfully! Check your email for confirmation link."
+          :successMessage="successMessage"
         ></SuccessAlert>
 
         <ErrorAlert
-          v-if="isRegisterSuccessful == false"
+          v-if="isRegisterSuccessful === false"
           :errorMessage="errorMessage"
         ></ErrorAlert>
       </transition>
@@ -26,15 +26,18 @@
             <h6>Email Address</h6>
           </label>
 
-          <input
-            type="email"
-            class="form-control"
-            :class="{ 'form-error': emailField.error }"
-            id="userRegisterEmail"
-            placeholder="example@gmail.com"
-            :disabled="isSubmittingForm"
-            v-model.trim="emailField.email"
-          />
+          <div class="input-container">
+            <i class="fas fa-envelope fa-md text-theme-blacker" id="icon"></i>
+            <input
+              type="email"
+              class="form-control"
+              :class="{ 'form-error': emailField.error }"
+              id="userRegisterEmail"
+              placeholder="example@gmail.com"
+              :disabled="isSubmittingForm"
+              v-model.trim="emailField.email"
+            />
+          </div>
 
           <transition name="fade">
             <span v-if="emailField.error" class="form-error-text">
@@ -49,15 +52,18 @@
             <h6>Password</h6>
           </label>
 
-          <input
-            type="password"
-            class="form-control"
-            :class="{ 'form-error': passField.error }"
-            id="userRegisterPass"
-            placeholder="Enter password..."
-            :disabled="isSubmittingForm"
-            v-model="passField.pass"
-          />
+          <div class="input-container">
+            <i class="fas fa-key fa-md text-theme-blacker" id="icon"></i>
+            <input
+              type="password"
+              class="form-control"
+              :class="{ 'form-error': passField.error }"
+              id="userRegisterPass"
+              placeholder="Enter password..."
+              :disabled="isSubmittingForm"
+              v-model="passField.pass"
+            />
+          </div>
 
           <transition name="fade">
             <span v-if="passField.error" class="form-error-text">
@@ -71,16 +77,20 @@
           <label for="userRegisterRetypePass" class="form-label">
             <h6>Retype Password</h6>
           </label>
-          <input
-            type="password"
-            class="form-control"
-            :class="{ 'form-error': passVerifyField.error }"
-            id="userRegisterRetypePass"
-            placeholder="Re-enter password..."
-            @keyup.enter="register()"
-            :disabled="isSubmittingForm"
-            v-model="passVerifyField.pass"
-          />
+
+          <div class="input-container">
+            <i class="fas fa-key fa-md text-theme-blacker" id="icon"></i>
+            <input
+              type="password"
+              class="form-control"
+              :class="{ 'form-error': passVerifyField.error }"
+              id="userRegisterRetypePass"
+              placeholder="Re-enter password..."
+              @keyup.enter="register()"
+              :disabled="isSubmittingForm"
+              v-model="passVerifyField.pass"
+            />
+          </div>
 
           <transition name="fade">
             <span v-if="passVerifyField.error" class="form-error-text">
@@ -93,7 +103,12 @@
     </template>
 
     <template v-slot:footer>
-      <button type="button" class="btn btn-theme-blacker" @click="closeModal">
+      <button
+        type="button"
+        class="btn btn-theme-blacker"
+        :disabled="isSubmittingForm"
+        @click="closeModal"
+      >
         Close
       </button>
 
@@ -110,64 +125,60 @@
 
 <script>
 import Modal from "./Modal.vue";
-import axios from "axios";
 import Spinner from "../spinners/Spinner.vue";
 import SuccessAlert from "../alerts/SuccessAlert.vue";
 import ErrorAlert from "../alerts/ErrorAlert.vue";
-import { isEmailValid } from "../../utils.js";
+import {
+  validateEmailField,
+  validatePassField,
+  validatePassVerifyField
+} from "../../utils.js";
+
+function initialState() {
+  return {
+    emailField: {
+      email: null,
+      error: null
+    },
+    passField: {
+      pass: null,
+      error: null
+    },
+    passVerifyField: {
+      pass: null,
+      error: null
+    },
+    isSubmittingForm: false,
+    isRegisterSuccessful: null,
+    errorMessage: "An error occurred. Please try again.",
+    successMessage: ""
+  };
+}
 
 export default {
   data() {
-    return {
-      emailField: {
-        email: "",
-        error: null,
-      },
-      passField: {
-        pass: "",
-        error: null,
-      },
-      passVerifyField: {
-        pass: "",
-        error: null,
-      },
-      isSubmittingForm: false,
-      isRegisterSuccessful: null,
-      errorMessage: "An error occurred. Please try again.",
-    };
+    return initialState();
   },
 
   watch: {
-    "emailField.email": function () {
-      if (this.emailField.email.length === 0)
-        this.emailField.error = "Required field";
-      else if (!isEmailValid(this.emailField.email))
-        this.emailField.error = "Please enter a valid email";
-      else this.emailField.error = null;
+    "emailField.email": function() {
+      validateEmailField(this.emailField);
     },
 
-    "passField.pass": function () {
-      if (this.passField.pass.length === 0)
-        this.passField.error = "Required field";
-      else if (this.passField.pass.length < 8)
-        this.passField.error = "Password must be more than 8 characters long.";
-      else this.passField.error = null;
+    "passField.pass": function() {
+      validatePassField(this.passField);
     },
 
-    "passVerifyField.pass": function () {
-      if (this.passVerifyField.pass.length === 0)
-        this.passVerifyField.error = "Required field";
-      else if (this.passVerifyField.pass != this.passField.pass)
-        this.passVerifyField.error = "Passwords do not match";
-      else this.passVerifyField.error = null;
-    },
+    "passVerifyField.pass": function() {
+      validatePassVerifyField(this.passVerifyField, this.passField);
+    }
   },
 
   components: {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert,
+    ErrorAlert
   },
 
   methods: {
@@ -176,21 +187,28 @@ export default {
     },
     closeModal() {
       this.$refs.registerBaseModalRef.closeModal();
+      Object.assign(this.$data, initialState());
+    },
+
+    preventClosingModal() {
+      this.$refs.registerBaseModalRef.preventClosingModal();
+    },
+
+    allowClosingModal() {
+      this.$refs.registerBaseModalRef.allowClosingModal();
     },
 
     areFieldsValid() {
       // "Required field" and password not matching errors will
       // not be shown until user starts typing
       // set errors here if nothing has been entered yet
-      if (this.passVerifyField.pass != this.passField.pass)
-        this.passVerifyField.error = "Passwords do not match";
+      if (this.emailField.email === null) this.emailField.email = "";
+      if (this.passField.pass === null) this.passField.pass = "";
+      if (this.passVerifyField.pass === null) this.passVerifyField.pass = "";
 
-      if (this.emailField.email.length === 0)
-        this.emailField.error = "Required field";
-      if (this.passField.pass.length === 0)
-        this.passField.error = "Required field";
-      if (this.passVerifyField.pass.length === 0)
-        this.passVerifyField.error = "Required field";
+      validateEmailField(this.emailField);
+      validatePassField(this.passField);
+      validatePassVerifyField(this.passVerifyField, this.passField);
 
       return (
         !this.passField.error &&
@@ -210,32 +228,73 @@ export default {
         return;
       }
 
-      axios
-        .post("/auth/register", {
+      this.preventClosingModal();
+
+      this.$store
+        .dispatch({
+          type: "register",
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
-        .then(
-          () => {
-            this.isRegisterSuccessful = true;
+        .then(() => {
+          if (this.$store.state.authError) {
             this.isSubmittingForm = false;
-          },
-          (error) => {
-            // set better error message
-            try {
-              if (
-                error.response.data.msg != null &&
-                error.response.data.msg != ""
-              )
-                this.errorMessage = error.response.data.msg;
-              // else use default errorMessage defined above
-            } finally {
-              this.isRegisterSuccessful = false;
-              this.isSubmittingForm = false;
-            }
+            this.isRegisterSuccessful = false;
+            this.errorMessage = this.$store.state.authError;
+            this.allowClosingModal();
+          } else {
+            this.$store
+              .dispatch({
+                type: "logIn",
+                email: this.emailField.email,
+                password: this.passField.pass
+              })
+              .then(() => {
+                if (this.$store.state.authError) {
+                  this.successMessage =
+                    "Account created successfully! You can now log in.";
+                } else {
+                  this.successMessage =
+                    "Account created successfully! Logging you in...";
+
+                  setTimeout(() => {
+                    this.closeModal();
+                  }, 1000);
+                }
+
+                this.isSubmittingForm = false;
+                this.isRegisterSuccessful = true;
+                this.allowClosingModal();
+              });
           }
-        );
-    },
-  },
+        });
+    }
+  }
 };
 </script>
+
+<style scoped>
+
+.input-container {
+  display: flex;
+  width: 100%;
+}
+
+#icon {
+  padding: 10px;
+  min-width: 2.5rem;
+  border: none;
+  box-shadow: none;
+  background: var(--theme-darkest-gray);
+  text-align: center;
+}
+
+#userRegisterEmail {
+  width: 100%;
+}
+
+#userRegisterPass {
+  width: 100%;
+}
+
+</style>

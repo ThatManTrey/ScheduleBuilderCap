@@ -1,50 +1,26 @@
 <template lang="html">
-  <div class="semester">
-    <ul class="list-group">
-      <li class="list-group-item header">
-        <a
-          @click="removeSemester()"
-          @keyup.enter="removeSemester()"
-          data-tooltip="Remove Semester"
-          data-tooltip-location="bottom"
-        >
-          <i class="fas fa-trash fa-sm padding"></i
-        ></a>
-        <span id="semesterName" contenteditable="true">Spring 2021</span>
-        <span class="badge rounded-pill course-badge float-right">
-          <button class="button-as-link" id="semesterCredits">16</button>
-        </span>
-      </li>
+    <div class="semester">
+        <ul class="list-group">
+            <li class="list-group-item header">
+                <a @click="removeSemester()" 
+                @keyup.enter="removeSemester()" 
+                data-tooltip="Remove Semester"
+                data-tooltip-location="bottom">
+                <i class="fas fa-trash fa-sm padding"></i></a> 
+                <span id="semesterName" contenteditable="true">Spring 2021</span>
+                <span class="badge rounded-pill course-badge float-right">
+                    <button class="button-as-link" id="semesterCredits">16</button>
+                    </span></li>
 
-      <li class="list-group-item course">
-        <span class="badge rounded-pill course-badge">
-          <button class="button-as-link">MATH 13013</button></span
-        >
-        <span id="courseName">Analytic Geometry...</span>
-      </li>
-
-      <li class="list-group-item course">
-        <span class="badge rounded-pill course-badge">
-          <button class="button-as-link">MATH 13013</button></span
-        >
-        <span id="courseName">Analytic Geometry...</span>
-      </li>
-
-      <li class="list-group-item course">
-        <span class="badge rounded-pill course-badge">
-          <button class="button-as-link">MATH 13013</button></span
-        >
-        <span id="courseName">Analytic Geometry...</span>
-      </li>
-
-      <li class="list-group-item course">
-        <span class="badge rounded-pill course-badge">
-          <button class="button-as-link">MATH 13013</button></span
-        >
-        <span id="courseName">Analytic Geometry...</span>
-      </li>
-    </ul>
-  </div>
+            <li class="list-group-item course" v-for="n in 4" :key="n">
+                <a @click="removeCourse()"
+                @keyup.enter="removeCourse()" 
+                class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
+                <span class="badge rounded-pill course-badge">
+                    <button class="button-as-link">MATH 13013</button></span>
+                <span id="courseName">Analytic Geometry...</span></li>
+        </ul>
+    </div>
 </template>
 
 <script lang="js">
@@ -57,15 +33,25 @@ export default {
     },
     methods: {
         removeSemester() {
-      var removePromptResult = confirm(
-        "Are you sure you want to remove this semester and all its courses?"
-      );
-      if (removePromptResult == true) {
-        Toast.showSuccessMessage(
-          "Semester was removed successfully."
-        );
-      }
-    },
+            var removePromptResult = confirm(
+                "Are you sure you want to remove this semester and all its courses?"
+            );
+        if (removePromptResult === true) {
+            Toast.showSuccessMessage(
+                "Semester was removed successfully."
+            );
+        }
+        },
+        removeCourse() {
+            var removePromptResult = confirm(
+                "Are you sure you want to remove this course?"
+            );
+        if (removePromptResult === true) {
+            Toast.showSuccessMessage(
+                "Course was removed successfully."
+            );
+        }
+      },
     }
 }
 </script>
@@ -76,8 +62,8 @@ div.container {
 }
 
 .list-group {
-  width: 15rem;
-}
+    width: 16rem;
+ }
 
 .list-group li {
   background-color: var(--theme-blacker);
@@ -91,8 +77,9 @@ div.container {
 }
 
 .list-group-item.header {
-  font-size: 12pt;
-  color: var(--theme-whitest);
+    font-size: 12pt;
+    color: var(--theme-whitest);
+    background-color: var(--theme-blackest);
 }
 
 #courseName {
@@ -125,4 +112,10 @@ span.course-badge {
   display: inline-block;
   margin-right: 1rem;
 }
+
+#remove {
+    padding-right: 0.5rem;
+    margin-left: -0.25rem;
+}
+
 </style>
