@@ -1,7 +1,6 @@
 # Beautiful Soup: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 # APScheduler: https://apscheduler.readthedocs.io/en/stable/#
 # $$$ means not tested
-# testing after fixing stuff
 
 # todo: needs refactored to reduce coupling
 
@@ -9,47 +8,55 @@
 # modules
 
 # scheduling
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
 
 # schedule helpers
-import time
-import atexit
-import datetime
+# import time
+# import atexit
+# import datetime
 
 import requests # for http request 
 from bs4 import BeautifulSoup   # for html parsing
+
+# for db connection
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 # database
 from app import db
 from app.models import Course, Degree
 
+
 #------------------------------------------------------------------------------
 
 # sets up schedule for scraper
-def start_scraper():
-    # find next sunday date
-    today = datetime.date.today()
-    idx = 6-today.weekday()
-    sun = today + datetime.timedelta(idx)
+# (won't work on pythonanywhere, doesnt support multithreading)
+# def start_scraper():
+#     # find next sunday date
+#     today = datetime.date.today()
+#     idx = 6-today.weekday()
+#     sun = today + datetime.timedelta(idx)
     
-    scheduler = BackgroundScheduler()   # create new schedule for...
-    scheduler.add_job(
-        func=scrape,
-        trigger='date')  # ...now and...
-    scheduler.add_job(
-        func=scrape,
-        trigger='interval',
-        weeks=1,
-        start_date=sun)  # ...weekly on sunday
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
+#     scheduler = BackgroundScheduler()   # create new schedule for...
+#     scheduler.add_job(
+#         func=scrape,
+#         trigger='date')  # ...now and...
+#     scheduler.add_job(
+#         func=scrape,
+#         trigger='interval',
+#         weeks=1,
+#         start_date=sun)  # ...weekly on sunday
+#     scheduler.start()
+#     atexit.register(lambda: scheduler.shutdown())
+
 
 # finds all data for db
 def scrape():
     getAllPrograms()
     getCourses()
-    #getCore()
-    print("done!")
     
 
 #------------------------------------------------------------------------------
