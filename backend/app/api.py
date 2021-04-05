@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from app import app, db
-from app.models import Course, User, FavCourse, Degree
+from app.models import Course, User, FavCourse, Degree, Rating
 from app.colors import *
 from app.decorators import has_access_token, is_current_user
 
@@ -127,7 +127,7 @@ def remove_from_favorites(user_id):
     oldFav = db.session.query(FavCourse).get(
         {'userID': user_id, 'courseID': body['course_id']})
     course = db.session.query(Course).get(body['course_id'])
-    if oldFav or course:  # exists
+    if oldFav & course:  # exists
         db.session.delete(oldFav)
         db.session.commit()
         body = request.get_json()
@@ -142,42 +142,66 @@ def remove_from_favorites(user_id):
 
 # course
 
-# @app.route('/api/users/<int:user_id>/add', methods=['POST'])
-# # @has_access_token()
-# # @is_current_user
-# def add_rating(user_id):
-#     body = request.get_json()
+@app.route('/api/users/<int:user_id>/ratings/add', methods=['POST'])
+# @has_access_token()
+# @is_current_user
+def add_rating(user_id):
+    body = request.get_json()
 
-#     if rating already exists
-#         return error
-#     elif course doesnt exist
-#         return error
-#     else:
-#         newRat = FavCourse(
-#                 courseID = course_id,
-#                 ratingQuality,
-#                 ratingDifficulty
-#             )
-#         db.session.add(newRat)
-#         db.session.commit()
+    # see if course exists
+    course = db.session.query(Course).get(body['course_id'])
+    if course:  # course found, add rating
+        newRat = Rating(
+            courseID = body['course_id'],
+            ratingQuality = body['quality'],
+            ratingDifficulty = body['difficulty'],
+            userID = user_id
+        )
+        db.session.add(newRat)
+        db.session.commit()
+        return jsonify(update = "success")
+    
+    else:   # error, course may not exist
+        return jsonify(update = "fail")
 
 
 @app.route('/api/courses/<string:course_id>/ratings', methods=['GET'])
 # @has_access_token()
 # @is_current_user
 def get_course_rating(course_id):
-    print()
-    # the_ratings = db.session.query(Rating).filter_by(courseID = course_id)
-    # the_averages = db.session.query(
-    #         func.avg(Rating.ratingQuality).label('quality'),
-    #         func.avg(Rating.ratingDifficulty).label('difficulty')).filter_by(
-    #             courseID = course_id
-    #         )
-    # arr_ratings = []
-    # for rating in the_ratings:
-    #     arr_ratings.append(rating.as_dict())
-    # dict_avg = the_averages.as_dict()
-    # return jsonify(ratings = arr_ratings, averages = dict_avg)
+    # notice float casting;
+    # you cannot jsonify Decimal values from SQL
+    # you CAN omit quotations in json for numbers
+    
+    # these 2 parts can probably be consolidated
+    # idek if we need both, wasn't sure what data frontend would need
+
+    # all ratings for course_id
+    the_ratings = db.session.query(Rating).filter_by(courseID = course_id).all()
+    arr_ratings = []
+    for rating in the_ratings:
+        entry = rating.as_dict()
+        entry['ratingQuality'] = float(entry['ratingQuality'])
+        entry['ratingDifficulty'] = float(entry['ratingDifficulty'])
+        arr_ratings.append(entry)
+    print(arr_ratings)
+    
+    # averages for course_id
+    the_averages = db.session.query(
+                func.avg(Rating.ratingQuality).label('quality'),
+                func.avg(Rating.ratingDifficulty).label('difficulty')
+            ).filter_by(
+                courseID = course_id
+            ).first()
+    quality = float(the_averages.quality)
+    difficulty = float(the_averages.difficulty)
+    
+    
+    return jsonify(
+        ratings = arr_ratings,
+        quality = quality,
+        difficulty = difficulty
+    )
 
 
 # user
