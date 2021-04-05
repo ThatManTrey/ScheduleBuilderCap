@@ -71,7 +71,7 @@ if os.environ['FLASK_ENV'] == "production":
                 origin = repo.remotes.origin
 
                 origin.pull()
-
+                print("if this is in the server log it should work")
                 return 'Updated PythonAnywhere successfully'
             else:
                 return "Incorrect signature", HTTPStatus.FORBIDDEN
