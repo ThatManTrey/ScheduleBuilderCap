@@ -40,11 +40,14 @@ if os.environ['FLASK_ENV'] == "production":
 
 
     def verify_signature(request):
-        received_signature = request.headers["X-Hub-Signature-256"]
+        print("verifying signature....")
+        received_signature = request.headers["X-Hub-Signature-256"].split("sha256=")[1]
+        print("received signature: ", received_signature)
         if received_signature is None:
             return HTTPStatus.BAD_REQUEST
         
         expected_signature = HMAC(key=app.config['SECRET_KEY'], msg=request.data, digestmod=sha256).hexdigest()
+        print("expected signature: ", expected_signature)
         return compare_digest(received_signature, expected_signature)
 
 
@@ -74,6 +77,7 @@ if os.environ['FLASK_ENV'] == "production":
                 print("if this is in the server log it should work")
                 return 'Updated PythonAnywhere successfully'
             else:
+                print("signature is not valid")
                 return "Incorrect signature", HTTPStatus.FORBIDDEN
         else:
             return 'Wrong event type', HTTPStatus.BAD_REQUEST
