@@ -8,7 +8,7 @@ import datetime
 from http import HTTPStatus
 
 from sqlalchemy.sql import func
-#
+
 
 #------------------------------------------------------------------------------
 
