@@ -85,5 +85,5 @@ if os.environ['FLASK_ENV'] == "production":
         else:
             return 'Wrong event type', HTTPStatus.BAD_REQUEST
 
-
+# if this is on pythonanywhere it should work
 from app import auth, api 
