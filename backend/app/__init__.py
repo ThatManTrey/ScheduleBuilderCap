@@ -38,10 +38,11 @@ if os.environ['FLASK_ENV'] == "production":
 
     # require API key for each request on pythonanywhere
     @app.before_request
-    def before_request_func():
+    def before_request_func():   
         if request.endpoint == "index":
             return
             
+        print(request.headers)
         # needed for github webhook defined below
         if "X-Hub-Signature-256" in request.headers:
             api_key = request.headers["X-Hub-Signature-256"]
