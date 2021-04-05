@@ -1,4 +1,3 @@
-from app import auth, api
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -63,3 +62,6 @@ if os.environ['FLASK_ENV'] == "production":
             return 'Updated PythonAnywhere successfully', 200
         else:
             return 'Wrong event type', 400
+
+
+from app import auth, api
