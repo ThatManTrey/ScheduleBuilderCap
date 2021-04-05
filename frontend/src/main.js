@@ -24,6 +24,8 @@ Vue.use(VueToast, {
   duration: 10000
 });
 
+console.log("if this is in the console then the webhook works");
+
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 if (process.env.NODE_ENV === "production")
   axios.defaults.headers.common["Api-Key"] = process.env.VUE_APP_API_KEY;
