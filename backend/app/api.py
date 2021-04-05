@@ -64,7 +64,6 @@ def get_all_courses():
 
 # degrees
 
-
 @app.route('/api/degrees/all', methods=['GET'])
 def get_all_degrees():
     the_degrees = db.session.query(Degree).all()
