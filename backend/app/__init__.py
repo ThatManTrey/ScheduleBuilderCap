@@ -83,5 +83,5 @@ if os.environ['FLASK_ENV'] == "production":
             return 'Wrong event type', HTTPStatus.BAD_REQUEST
 
 
-from app import auth, api
+from app import auth, api   
   
