@@ -45,10 +45,10 @@ axios.interceptors.response.use(
   function(error) {
     if (error.response.status === HttpStatus.UNAUTHORIZED) {
       Toast.showErrorMessage("Your session has expired. Please login again.");
-      store.commit("unAuthenticateUser");
-      if (router.currentRoute.name != "Home") router.push("/home");
-      // access token has been refreshed, update CSRF header and retry request
+      store.commit("auth/unAuthenticateUser");
+      if (router.currentRoute.name != "Home") router.push("/home"); 
     } else if (error.response.status === 470) {
+      // access token has been refreshed, update CSRF header and retry request
       // set new CSRF token for last request and all future requests
       var newCsrfToken = Vue.$cookies.get("csrf_access_token");
       error.config.headers["X-CSRF-TOKEN"] = newCsrfToken;
@@ -64,10 +64,10 @@ axios.interceptors.response.use(
 // csrf token cookie isn't httponly, access token is
 // assume if there's a csrf token there's an access token
 if (Vue.$cookies.get("csrf_access_token")) {
-  store.dispatch("verifyAccessToken").then(function() {
-    if (store.state.authError) console.log(store.state.authError);
-    // needed for validating POST, PUT, DELETE requests
+  store.dispatch("auth/verifyAccessToken").then(function() {
+    if (store.state.auth.authError) console.log(store.state.auth.authError);
     else
+    // needed for validating POST, PUT, DELETE requests
       axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
         "csrf_access_token"
       );

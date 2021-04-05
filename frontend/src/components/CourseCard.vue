@@ -47,7 +47,7 @@
         </div>
 
         <div class="row">
-          <div v-if="$store.state.isAuthenticated" class="col">
+          <div v-if="$store.state.auth.isAuthenticated" class="col">
             <a
               tabindex="0"
               data-tooltip="Favorite Course"
@@ -55,7 +55,7 @@
             ></a>
           </div>
 
-          <div v-if="$store.state.isAuthenticated" class="col text-end">
+          <div v-if="$store.state.auth.isAuthenticated" class="col text-end">
             <a
               v-if="!isRemovingCourse"
               tabindex="0"
@@ -101,7 +101,7 @@ export default {
 
   methods: {
     showCourseInfoModal(course) {
-      this.$store.commit("setCourse", { course: course });
+      this.$store.commit("auth/setCourse", { course: course });
       this.$emit("openCourseInfoModal");
     },
     showAddToSemesterModal() {

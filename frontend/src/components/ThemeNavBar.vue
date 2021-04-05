@@ -31,7 +31,7 @@
             </li>
 
             <li
-              v-if="$store.state.isAuthenticated"
+              v-if="isLoggedIn"
               class="nav-item col-6 col-md-4 col-lg-auto"
             >
               <router-link
@@ -44,7 +44,7 @@
             </li>
 
             <li
-              v-if="$store.state.isAuthenticated"
+              v-if="isLoggedIn"
               class="nav-item col-6 col-md-4 col-lg-auto"
             >
               <router-link
@@ -82,7 +82,7 @@
               v-on:click="logout()"
               type="button"
               class="btn btn-theme-blacker"
-              v-if="$store.state.isAuthenticated"
+              v-if="isLoggedIn"
             >
               Logout
 
@@ -92,7 +92,7 @@
               type="button"
               class="btn btn-theme-blacker me-3"
               @click="$refs.signInModal.openModal()"
-              v-if="!$store.state.isAuthenticated"
+              v-if="!isLoggedIn"
             >
               Sign In
             </button>
@@ -100,7 +100,7 @@
               type="button"
               class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
-              v-if="!$store.state.isAuthenticated"
+              v-if="!isLoggedIn"
             >
               Create An Account
             </button>
@@ -125,6 +125,7 @@
 <script>
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
+import { mapState } from 'vuex';
 
 export default {
   name: "theme-nav-bar",
@@ -148,7 +149,7 @@ export default {
 
   methods: {
     isCurrentRoute(route) {
-      return this.currentRouteName === route;
+      return this.$route.name === route;
     },
 
     checkScroll() {
@@ -168,16 +169,14 @@ export default {
     },
 
     logout() {
-      this.$store.dispatch("logOut");
+      this.$store.dispatch("auth/logOut");
       if (!this.isCurrentRoute("Home")) this.$router.push("/home");
     },
   },
 
-  computed: {
-    currentRouteName() {
-      return this.$route.name;
-    },
-  },
+  computed: mapState({
+    isLoggedIn: state => state.auth.isAuthenticated
+  }),
 
   created() {
     this.SHOW_SCROLL_TOP_AFTER_PX = 200;

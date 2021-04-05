@@ -1,7 +1,7 @@
 <template lang="html">
   <Modal
     :useLargeModal="true"
-    :useFooter="$store.state.isAuthenticated"
+    :useFooter="$store.state.auth.isAuthenticated"
     ref="courseInfoBaseModalRef"
   >
     <template v-slot:header v-if="course.course"
@@ -71,7 +71,7 @@
         </div>
         <div class="text-center">
           <button
-            v-if="$store.state.hasConfirmedEmail"
+            v-if="$store.state.auth.hasConfirmedEmail"
             type="button"
             class="btn btn-theme-primary-dark"
           >
@@ -81,7 +81,7 @@
       </div>
     </template>
 
-    <template v-if="$store.state.isAuthenticated" v-slot:footer>
+    <template v-if="$store.state.auth.isAuthenticated" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
           href="#"
@@ -111,7 +111,9 @@ export default {
   components: {
     Modal
   },
-  computed: mapState(["course"]),
+  computed: mapState({
+    course: state => state.auth.course
+  }),
 
   methods: {
     /* needed to open/close this modal from parent component */
