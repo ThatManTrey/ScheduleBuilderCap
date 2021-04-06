@@ -55,7 +55,8 @@
               "
             >
               <strong> Contact Hours</strong>:
-              {{ course.course.contactHoursMax }} Hours
+              <span id="creditHours"> {{ course.course.creditHoursMax }}</span>
+              Hours
             </p>
             <p
               v-if="
@@ -63,9 +64,11 @@
               "
             >
               <strong> Contact Hours</strong>:
-              {{ course.course.contactHoursMin }}-{{
-                course.course.contactHoursMax
-              }}
+              <span id="creditHours">
+                {{ course.course.creditHoursMin }} - {{
+                  course.course.creditHoursMax
+                }}</span
+              >
               Hours
             </p>
             <p><strong>Grade Mode</strong>: {{ course.course.gradeType }}</p>
@@ -119,6 +122,8 @@
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
+              <p v-if="ratings.quality === 0" id="creditHours">0 / 10</p>
+              <p v-else id="creditHours">{{ ratings.quality }} / 10</p>
             </div>
           </div>
 
@@ -132,7 +137,7 @@
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.difficulty >= 3 || ratings.difficulty< 5">
+              <h3 v-else-if="ratings.difficulty >= 3 || ratings.difficulty < 5">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
@@ -153,7 +158,9 @@
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.difficulty >= 9 || ratings.difficulty <= 10">
+              <h3
+                v-else-if="ratings.difficulty >= 9 || ratings.difficulty <= 10"
+              >
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
@@ -167,6 +174,8 @@
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
+              <p v-if="ratings.difficulty === 0" id="creditHours">0 / 10</p>
+              <p v-else id="creditHours">{{ ratings.difficulty }} / 10</p>
             </div>
           </div>
         </div>
@@ -185,7 +194,9 @@
     <template v-if="$store.state.isAuthenticated" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
-          href="#"
+          tabindex="0"
+          @keyup.enter="addToFavorites(course)"
+          @click="addToFavorites(course)"
           data-tooltip="Favorite Course"
           data-tooltip-location="bottom"
         >
@@ -246,7 +257,8 @@ export default {
     },
 
     getRatings() {
-      var baseUrl = process.env.VUE_APP_API_URL + "/courses/" + this.course.course.courseID;
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/courses/" + this.course.course.courseID;
       // hard coded for now, having trouble passing courseID
 
       //AJAX request
@@ -256,6 +268,23 @@ export default {
           this.ratings = res.data;
           this.hasLoadedRatings = true;
         })
+        .catch(error => {
+          // eslint-disable-next-line
+              console.error(error);
+        });
+    },
+    addToFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .post(baseUrl + "/favorites/add", {
+          course_id: course.courseID
+        })
+        //.then(res => {
+
+        //})
         .catch(error => {
           // eslint-disable-next-line
               console.error(error);
@@ -286,6 +315,6 @@ p {
 
 .avg-rating {
   margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 </style>
