@@ -142,7 +142,7 @@ def remove_from_favorites(user_id):
 
 # course
 
-@app.route('/api/users/<int:user_id>/ratings/add', methods=['POST'])
+@app.route('/api/users/<int:user_id>/ratings', methods=['POST'])
 # @has_access_token()
 # @is_current_user
 def add_rating(user_id):
@@ -171,10 +171,7 @@ def add_rating(user_id):
 def get_course_rating(course_id):
     # notice float casting;
     # you cannot jsonify Decimal values from SQL
-    # you CAN omit quotations in json for numbers
-    
-    # these 2 parts can probably be consolidated
-    # idek if we need both, wasn't sure what data frontend would need
+    # you CAN omit quotations in posted json for numbers
 
     # all ratings for course_id
     the_ratings = db.session.query(Rating).filter_by(courseID = course_id).all()
@@ -206,12 +203,26 @@ def get_course_rating(course_id):
 
 # user
 
-@app.route('/api/users/<int:user_id>/ratings/<string:course_id> ', methods=['PUT'])
+@app.route('/api/users/<int:user_id>/ratings/<string:course_id>', methods=['PUT'])
 #or api/courses/<course_id>/ratings/<user_id>
 # @has_access_token()
 # @is_current_user
 def edit_rating(user_id, course_id):
-    print()
+    body = request.get_json()
+
+    # see if rating exists
+    rating = db.session.query(Rating).filter_by(
+        courseID = course_id,
+        userID = user_id
+    ).first()
+    if rating:  # rating found, modify
+        rating.ratingQuality = body['quality']
+        rating.ratingDifficulty = body['difficulty']
+        db.session.commit()
+        return jsonify(update = "success")
+    
+    else:   # error, course may not exist
+        return jsonify(update = "fail")
 
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', methods=['DELETE'])
@@ -219,19 +230,33 @@ def edit_rating(user_id, course_id):
 # @has_access_token()
 # @is_current_user
 def remove_rating(user_id, course_id):
-    print()
+    # see if rating exists
+    rating = db.session.query(Rating).filter_by(
+        courseID = course_id,
+        userID = user_id
+    ).first()
+    if rating:  # rating found, delete rating
+        db.session.delete(rating)
+        db.session.commit()
+        return jsonify(update = "success")
+    
+    else:   # error, rating may not exist
+        return jsonify(update = "fail")
 
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['GET'])
 # @has_access_token()
 # @is_current_user
 def get_user_ratings(user_id):
-    print()
-    # courses = db.session.query(Rating).filter_by(userID = user_id)
-    # arr_courses = []
-    # for course in courses:
-    #     arr_courses.append(course.as_dict())
-    # return jsonify(favCourses = arr_courses)
+    ratings = db.session.query(Rating).filter_by(userID = user_id).all()
+    arr_ratings = []
+    for rating in ratings:
+        entry = rating.as_dict()
+        entry['ratingQuality'] = float(entry['ratingQuality'])
+        entry['ratingDifficulty'] = float(entry['ratingDifficulty'])
+        arr_ratings.append(entry)
+    return jsonify(ratedCourses = arr_ratings)
+
 
 # #------------------------------------------------------------------------------
 # # semesters
