@@ -76,15 +76,11 @@
           <hr class="bg-theme-darkest-gray" size="5" />
           <div class="col">
             Course Quality:
-            <h1 class="avg-rating">
-              {{ratings.quality}} / 10
-            </h1>
+            <h1 class="avg-rating">{{ ratings.quality }} / 10</h1>
           </div>
           <div class="col">
             Course Difficulty:
-            <h1 class="avg-rating">
-              {{ratings.difficulty}} / 10
-            </h1>
+            <h1 class="avg-rating">{{ ratings.difficulty }} / 10</h1>
           </div>
         </div>
         <div class="text-center">
@@ -164,7 +160,7 @@ export default {
 
     getRatings() {
       var baseUrl = process.env.VUE_APP_API_URL + "/courses/" + "CS49999";
-        // hard coded for now, having trouble passing courseID
+      // hard coded for now, having trouble passing courseID
 
       //AJAX request
       axios
