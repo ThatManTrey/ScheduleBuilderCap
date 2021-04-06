@@ -18,7 +18,7 @@
         </div>
         <div class="row">
           <p><strong>Prerequisite</strong>: {{ course.course.prereqs }}</p>
-          <p><strong>Attributes</strong>: {{}}</p>
+          <p><strong>Attributes</strong>: {{ }}</p>
         </div>
         <div class="row">
           <div class="col-6">
@@ -77,13 +77,13 @@
           <div class="col">
             Course Quality:
             <h1 class="avg-rating">
-              7 / 10
+              {{ratings.quality}} / 10
             </h1>
           </div>
           <div class="col">
             Course Difficulty:
             <h1 class="avg-rating">
-              5 / 10
+              {{ratings.difficulty}} / 10
             </h1>
           </div>
         </div>
@@ -123,13 +123,26 @@
 
 <script>
 import Modal from "./Modal.vue";
+import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
   components: {
     Modal
   },
+  data() {
+    return {
+      ratings: [],
+      hasLoadedRatings: false
+    };
+  },
+
   computed: mapState(["course"]),
+
+  created() {
+    // loading test
+    this.getRatings();
+  },
 
   methods: {
     /* needed to open/close this modal from parent component */
@@ -147,6 +160,23 @@ export default {
       setTimeout(() => {
         this.$emit("openAddSemesterModal");
       }, 320);
+    },
+
+    getRatings() {
+      var baseUrl = process.env.VUE_APP_API_URL + "/courses/" + "CS49999";
+        // hard coded for now, having trouble passing courseID
+
+      //AJAX request
+      axios
+        .get(baseUrl + "/ratings")
+        .then(res => {
+          this.ratings = res.data;
+          this.hasLoadedRatings = true;
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+              console.error(error);
+        });
     }
   }
 };
