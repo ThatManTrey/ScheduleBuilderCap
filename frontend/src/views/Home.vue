@@ -15,7 +15,6 @@
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in courses.deptCourses"
             :key="index"
-            
           >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
@@ -27,7 +26,7 @@
       </transition>
     </div>
 
-    <SemesterBar 
+    <SemesterBar
       v-show="hasLoadedCourses"
       @showAddSemesterModal="showAddSemesterModal"
     ></SemesterBar>
@@ -72,7 +71,7 @@ export default {
     created() {
         // loading test
         this.getCourses();
-          
+
     },
       methods: {
         showCourseInfoModal () {

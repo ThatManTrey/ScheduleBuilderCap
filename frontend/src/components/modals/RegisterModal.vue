@@ -274,7 +274,6 @@ export default {
 </script>
 
 <style scoped>
-
 .input-container {
   display: flex;
   width: 100%;
@@ -296,5 +295,4 @@ export default {
 #userRegisterPass {
   width: 100%;
 }
-
 </style>

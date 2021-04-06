@@ -4,8 +4,8 @@
       <div class="course-dropdown">
         <select class="form-control theme-secondary" id="selectProgram">
           <option selected>Select a Program</option>
-          <option v-for="(degree, index) in degrees.degrees"
-            :key="index">{{degree.degreeType}} - {{degree.degreeName}}
+          <option v-for="(degree, index) in degrees.degrees" :key="index"
+            >{{ degree.degreeType }} - {{ degree.degreeName }}
           </option>
         </select>
         <i class="fas fa-chevron-down fa-sm text-theme-blackest icon-css"></i>
@@ -57,7 +57,7 @@ export default {
     created() {
         // loading test
         this.getDegrees();
-          
+
     },
       methods: {
         getDegrees() {
