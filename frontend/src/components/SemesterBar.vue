@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <footer class="container">
+    <footer class="container" v-if="$store.state.isAuthenticated">
       <button class="semesterBar-button" v-on:click="isOpen = !isOpen">
         <i class="far fa-calendar "></i>
         <!-- My Schedule -->
