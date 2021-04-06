@@ -110,7 +110,7 @@ def add_to_favorites(user_id):
         newFav = FavCourse(
                 courseID = body['course_id'],
                 userID = user_id,
-                dateTime = datetime.datetime.utcnow()   # get correct format
+                favoritedOn = datetime.datetime.utcnow()   # get correct format
             )
         db.session.add(newFav)
         db.session.commit()
