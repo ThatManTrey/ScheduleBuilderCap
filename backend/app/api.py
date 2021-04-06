@@ -51,6 +51,8 @@ def get_user(user_id):
 # courses
 
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
+# @has_access_token()
+# @is_current_user
 def get_dept_courses(CourseType):
     courses = db.session.query(Course).filter_by(courseIDType = CourseType)
     arr_courses = []
@@ -61,12 +63,25 @@ def get_dept_courses(CourseType):
   
 # use at your own risk, but works
 @app.route('/api/courses/all', methods=['GET'])
+# @has_access_token()
+# @is_current_user
 def get_all_courses():
     courses = db.session.query(Course).all()
     arr_courses = []
     for course in courses:
         arr_courses.append(course.as_dict())
     return jsonify(allCourses = arr_courses)
+
+
+@app.route('/api/courses/<page>/<per_page>', methods=['GET'])
+# @has_access_token()
+# @is_current_user
+def paginate_n_filtrate():
+    body = request.get_json()
+    
+    
+    
+    return
 
 
 # degrees
@@ -78,7 +93,7 @@ def get_all_degrees():
     for degree in the_degrees:
         arr_degrees.append(degree.as_dict())
     return jsonify(degrees = arr_degrees)
-
+    
 
 #------------------------------------------------------------------------------
 # favorites
@@ -104,7 +119,7 @@ def add_to_favorites(user_id):
     favorite = db.session.query(FavCourse).get((body['course_id'], user_id))
     course = db.session.query(Course).get(body['course_id'])
     if favorite or not course:    # duplicate entry
-        return jsonify(update = "fail")
+        return jsonify(msg = ""), HTTPStatus.BAD_REQUEST
     
     else:   # nonduplicate, update db
         newFav = FavCourse(
@@ -114,7 +129,7 @@ def add_to_favorites(user_id):
             )
         db.session.add(newFav)
         db.session.commit()
-        return jsonify(update = "success")
+        return jsonify()
 
 
 @app.route('/api/user/<int:user_id>/favorites/remove', methods=['DELETE'])
@@ -131,10 +146,10 @@ def remove_from_favorites(user_id):
         db.session.delete(oldFav)
         db.session.commit()
         body = request.get_json()
-        return jsonify(update = "success")
+        return jsonify()
     
     else:   # some error, may not exist
-        return jsonify(update = "fail")
+        return jsonify(update = "fail"), HTTPStatus.BAD_REQUEST
 
 
 #------------------------------------------------------------------------------
@@ -159,10 +174,10 @@ def add_rating(user_id):
         )
         db.session.add(newRat)
         db.session.commit()
-        return jsonify(update = "success")
+        return jsonify()
     
     else:   # error, course may not exist
-        return jsonify(update = "fail")
+        return jsonify(), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/courses/<string:course_id>/ratings', methods=['GET'])
@@ -219,10 +234,10 @@ def edit_rating(user_id, course_id):
         rating.ratingQuality = body['quality']
         rating.ratingDifficulty = body['difficulty']
         db.session.commit()
-        return jsonify(update = "success")
+        return jsonify()
     
     else:   # error, course may not exist
-        return jsonify(update = "fail")
+        return jsonify(), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', methods=['DELETE'])
@@ -238,10 +253,10 @@ def remove_rating(user_id, course_id):
     if rating:  # rating found, delete rating
         db.session.delete(rating)
         db.session.commit()
-        return jsonify(update = "success")
+        return jsonify()
     
     else:   # error, rating may not exist
-        return jsonify(update = "fail")
+        return jsonify(), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['GET'])
