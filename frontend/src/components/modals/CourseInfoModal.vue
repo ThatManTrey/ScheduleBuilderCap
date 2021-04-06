@@ -65,8 +65,8 @@
             >
               <strong> Contact Hours</strong>:
               <span id="creditHours">
-                {{ course.course.creditHoursMin }} - {{
-                  course.course.creditHoursMax
+                {{ course.course.contactHoursMin }} - {{
+                  course.course.contactHoursMax
                 }}</span
               >
               Hours
