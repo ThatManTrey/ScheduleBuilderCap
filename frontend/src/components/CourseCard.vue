@@ -28,16 +28,6 @@
               </button>
             </span>
           </div>
-
-          <div v-if="showSmallCard" class="col-2 text-end">
-            <a
-              tabindex="0"
-              @keyup.enter="showCourseInfoModal(course)"
-              @click="showCourseInfoModal(course)"
-            >
-              <i class="fas fa-lg fa-info-circle"></i>
-            </a>
-          </div>
         </div>
 
         <div v-if="!showSmallCard" class="row mb-3">
@@ -81,13 +71,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
-    showSmallCard: {
-      type: Boolean,
-      default: false,
-    },
-
     /* true replaces the add semester button with a remove button (used on schedule page) */
     isRemovingCourse: {
       type: Boolean,
@@ -98,6 +85,10 @@ export default {
       type: Object,
     },
   },
+
+  computed: mapGetters('courses', {
+    showSmallCard: 'showSmallCard'
+  }),
 
   methods: {
     showCourseInfoModal(course) {

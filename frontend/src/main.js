@@ -13,6 +13,7 @@ import store from "./store/";
 import axios from "axios";
 import * as Toast from "./toast.js";
 import HttpStatus from "http-status-codes";
+import enums from './enums.js';
 
 Vue.config.productionTip = false;
 
@@ -23,30 +24,32 @@ Vue.use(VueToast, {
   duration: 10000
 });
 
+Vue.prototype.$enums = enums;
+
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 if (process.env.NODE_ENV === "production")
   axios.defaults.headers.common["Api-Key"] = process.env.VUE_APP_API_KEY;
 
 // allow each request to send and receive cookies
 axios.interceptors.request.use(
-  function(config) {
+  function (config) {
     config.withCredentials = true;
     return config;
   },
-  function(error) {
+  function (error) {
     return Promise.reject(error);
   }
 );
 
 axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     return response;
   },
-  function(error) {
+  function (error) {
     if (error.response.status === HttpStatus.UNAUTHORIZED) {
       Toast.showErrorMessage("Your session has expired. Please login again.");
       store.commit("auth/unAuthenticateUser");
-      if (router.currentRoute.name != "Home") router.push("/home"); 
+      if (router.currentRoute.name != "Home") router.push("/home");
     } else if (error.response.status === 470) {
       // access token has been refreshed, update CSRF header and retry request
       // set new CSRF token for last request and all future requests
@@ -64,10 +67,10 @@ axios.interceptors.response.use(
 // csrf token cookie isn't httponly, access token is
 // assume if there's a csrf token there's an access token
 if (Vue.$cookies.get("csrf_access_token")) {
-  store.dispatch("auth/verifyAccessToken").then(function() {
+  store.dispatch("auth/verifyAccessToken").then(function () {
     if (store.state.auth.authError) console.log(store.state.auth.authError);
     else
-    // needed for validating POST, PUT, DELETE requests
+      // needed for validating POST, PUT, DELETE requests
       axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
         "csrf_access_token"
       );
@@ -77,6 +80,7 @@ if (Vue.$cookies.get("csrf_access_token")) {
 } else {
   initalizeApp();
 }
+
 
 function initalizeApp() {
   new Vue({

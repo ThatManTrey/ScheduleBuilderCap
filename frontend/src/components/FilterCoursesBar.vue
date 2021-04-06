@@ -7,7 +7,7 @@
         class="form-control"
         placeholder="Search"
         @keyup.enter="searchCourses()"
-        v-model="searchRequest.keyword"
+        :value="keyword"
       />
 
       <a class="d-block d-md-none filter-button" @click="openChangeProgramModal()" data-tooltip="Select Program">
@@ -29,20 +29,20 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType(SortTypes.courseId) }"
-              @click="changeSort(SortTypes.courseId)"
+              :class="{ 'dropdown-active': isSortType($enums.SortTypes.courseId) }"
+              @click="changeSort($enums.SortTypes.courseId)"
             >
               Division Level
               <div
-                v-if="isSortType(SortTypes.courseId)"
+                v-if="isSortType($enums.SortTypes.courseId)"
                 class="sort-icon-container"
               >
                 <i
-                  :class="{ 'sort-active': isAscending() }"
+                  :class="{ 'sort-active': isAscending }"
                   class="fas fa-sort-up"
                 ></i>
                 <i
-                  :class="{ 'sort-active': !isAscending() }"
+                  :class="{ 'sort-active': !isAscending }"
                   class="fas fa-sort-down"
                 ></i>
               </div>
@@ -51,20 +51,20 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType(SortTypes.program) }"
-              @click="changeSort(SortTypes.program)"
+              :class="{ 'dropdown-active': isSortType($enums.SortTypes.program) }"
+              @click="changeSort($enums.SortTypes.program)"
             >
               Program
               <div
-                v-if="isSortType(SortTypes.program)"
+                v-if="isSortType($enums.SortTypes.program)"
                 class="sort-icon-container"
               >
                 <i
-                  :class="{ 'sort-active': isAscending() }"
+                  :class="{ 'sort-active': isAscending }"
                   class="fas fa-sort-up"
                 ></i>
                 <i
-                  :class="{ 'sort-active': !isAscending() }"
+                  :class="{ 'sort-active': !isAscending }"
                   class="fas fa-sort-down"
                 ></i>
               </div>
@@ -73,20 +73,20 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType(SortTypes.credits) }"
-              @click="changeSort(SortTypes.credits)"
+              :class="{ 'dropdown-active': isSortType($enums.SortTypes.credits) }"
+              @click="changeSort($enums.SortTypes.credits)"
             >
               Credits
               <div
-                v-if="isSortType(SortTypes.credits)"
+                v-if="isSortType($enums.SortTypes.credits)"
                 class="sort-icon-container"
               >
                 <i
-                  :class="{ 'sort-active': isAscending() }"
+                  :class="{ 'sort-active': isAscending }"
                   class="fas fa-sort-up"
                 ></i>
                 <i
-                  :class="{ 'sort-active': !isAscending() }"
+                  :class="{ 'sort-active': !isAscending }"
                   class="fas fa-sort-down"
                 ></i>
               </div>
@@ -111,9 +111,9 @@
             <a
               class="dropdown-item"
               :class="{
-                'dropdown-active': viewOption === ViewOptions.normalCard
+                'dropdown-active': isViewOption($enums.ViewOptions.normalCard)
               }"
-              @click="viewOption = ViewOptions.normalCard"
+              @click="changeViewOption($enums.ViewOptions.normalCard)"
             >
               Standard Card
             </a>
@@ -122,17 +122,17 @@
             <a
               class="dropdown-item"
               :class="{
-                'dropdown-active': viewOption === ViewOptions.smallCard
+                'dropdown-active': isViewOption($enums.ViewOptions.smallCard)
               }"
-              @click="viewOption = ViewOptions.smallCard"
+              @click="changeViewOption($enums.ViewOptions.smallCard)"
               >Small Card</a
             >
           </li>
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': viewOption === ViewOptions.table }"
-              @click="viewOption = ViewOptions.table"
+              :class="{ 'dropdown-active': isViewOption($enums.ViewOptions.table) }"
+              @click="changeViewOption($enums.ViewOptions.table)"
               >Table</a
             >
           </li>
@@ -144,8 +144,8 @@
     <div
       class="col d-flex align-items-center justify-content-center justify-content-md-start"
     >
-      <h1 class="text-theme-whitest d-inline">
-        CS Courses
+      <h1 class="text-theme-whitest d-inline text-center text-md-start">
+        {{ getProgramDisplayName() }}
       </h1>
     </div>
 
@@ -170,20 +170,20 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType(SortTypes.courseId) }"
-              @click="changeSort(SortTypes.courseId)"
+              :class="{ 'dropdown-active': isSortType($enums.SortTypes.courseId) }"
+              @click="changeSort($enums.SortTypes.courseId)"
             >
               Division Level
               <div
-                v-if="isSortType(SortTypes.courseId)"
+                v-if="isSortType($enums.SortTypes.courseId)"
                 class="sort-icon-container"
               >
                 <i
-                  :class="{ 'sort-active': isAscending() }"
+                  :class="{ 'sort-active': isAscending }"
                   class="fas fa-sort-up"
                 ></i>
                 <i
-                  :class="{ 'sort-active': !isAscending() }"
+                  :class="{ 'sort-active': !isAscending }"
                   class="fas fa-sort-down"
                 ></i>
               </div>
@@ -192,20 +192,20 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType(SortTypes.program) }"
-              @click="changeSort(SortTypes.program)"
+              :class="{ 'dropdown-active': isSortType($enums.SortTypes.program) }"
+              @click="changeSort($enums.SortTypes.program)"
             >
               Program
               <div
-                v-if="isSortType(SortTypes.program)"
+                v-if="isSortType($enums.SortTypes.program)"
                 class="sort-icon-container"
               >
                 <i
-                  :class="{ 'sort-active': isAscending() }"
+                  :class="{ 'sort-active': isAscending }"
                   class="fas fa-sort-up"
                 ></i>
                 <i
-                  :class="{ 'sort-active': !isAscending() }"
+                  :class="{ 'sort-active': !isAscending }"
                   class="fas fa-sort-down"
                 ></i>
               </div>
@@ -214,20 +214,20 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType(SortTypes.credits) }"
-              @click="changeSort(SortTypes.credits)"
+              :class="{ 'dropdown-active': isSortType($enums.SortTypes.credits) }"
+              @click="changeSort($enums.SortTypes.credits)"
             >
               Credits
               <div
-                v-if="isSortType(SortTypes.credits)"
+                v-if="isSortType($enums.SortTypes.credits)"
                 class="sort-icon-container"
               >
                 <i
-                  :class="{ 'sort-active': isAscending() }"
+                  :class="{ 'sort-active': isAscending }"
                   class="fas fa-sort-up"
                 ></i>
                 <i
-                  :class="{ 'sort-active': !isAscending() }"
+                  :class="{ 'sort-active': !isAscending }"
                   class="fas fa-sort-down"
                 ></i>
               </div>
@@ -252,9 +252,9 @@
             <a
               class="dropdown-item"
               :class="{
-                'dropdown-active': viewOption === ViewOptions.normalCard
+                'dropdown-active': isViewOption($enums.ViewOptions.normalCard)
               }"
-              @click="viewOption = ViewOptions.normalCard"
+              @click="changeViewOption($enums.ViewOptions.normalCard)"
             >
               Standard Card
             </a>
@@ -263,17 +263,17 @@
             <a
               class="dropdown-item"
               :class="{
-                'dropdown-active': viewOption === ViewOptions.smallCard
+                'dropdown-active': isViewOption($enums.ViewOptions.smallCard)
               }"
-              @click="viewOption = ViewOptions.smallCard"
+              @click="changeViewOption($enums.ViewOptions.smallCard)"
               >Small Card</a
             >
           </li>
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': viewOption === ViewOptions.table }"
-              @click="viewOption = ViewOptions.table"
+              :class="{ 'dropdown-active': isViewOption($enums.ViewOptions.table) }"
+              @click="changeViewOption($enums.ViewOptions.table)"
               >Table</a
             >
           </li>
@@ -289,7 +289,7 @@
           placeholder="Search"
           ref="searchCourses"
           @keyup.enter="searchCourses()"
-          v-model="searchRequest.keyword"
+          :value="keyword"
         />
       </transition>
 
@@ -304,82 +304,82 @@
 </template>
 
 <script lang="js">
-
-const ViewOptions = Object.freeze({
-  normalCard: 1,
-  smallCard: 2,
-  table: 3
-});
-
-const SortTypes = Object.freeze({
-  courseId: 1,
-  credits: 2,
-  program: 3
-});
+import { mapState } from 'vuex';
 
 export default {
     data() {
         return {
-            ViewOptions,
-            SortTypes,
-            degrees: [],
-            isSearching: false,
-            searchRequest: {
-              keyword: null,
-              program: null,
-              sortOption: {
-                type: SortTypes.courseId,
-                isAscending: true
-              }
-            },
-            viewOption: ViewOptions.normalCard
+            isSearching: false
         }
     },
 
-    watch: {
-      viewOption: function() {
-          console.log(this.viewOption)
+    computed: mapState({
+      keyword: state => state.courses.searchRequest.keyword,
+      isAscending: state => state.courses.searchRequest.sortOption.isAscending,
+      programs: state => state.courses.searchRequest.programs
+    }),
+
+    methods: {
+      changeSort(sortType) {
+        this.$store.commit('courses/setSortType', sortType);
+        // dispatch
       },
-    },
 
-      methods: {
-        changeSort(sortType) {
-          if(this.isSortType(sortType))
-            this.searchRequest.sortOption.isAscending = !this.searchRequest.sortOption.isAscending;
-          else
-            this.searchRequest.sortOption.type = sortType;
+      isSortType(sortType) {
+        return this.$store.state.courses.searchRequest.sortOption.type === sortType;
+      },
 
-          this.searchCourses();
-        },
+      changeViewOption(viewOption) {
+        this.$store.commit('courses/setViewOption', viewOption);
+      },
 
-        isSortType(sortType) {
-          return this.searchRequest.sortOption.type === sortType;
-        },
+      isViewOption(viewOption) {
+        return this.$store.state.courses.viewOption == viewOption;
+      },
 
-        isAscending() {
-          return this.searchRequest.sortOption.isAscending;
-        },
+      openChangeProgramModal(){
+        this.$emit("openChangeProgramModal");
+      },
 
-        openChangeProgramModal(){
-          this.$emit("openChangeProgramModal");
-        },
+      toggleSearch() {
+        this.isSearching = !this.isSearching;
+        if(this.isSearching) {
+          // doesn't work without this timeout for some reason
+          setTimeout(() => {
+            this.$refs.searchCourses.focus();
+          }, 10);
+        } else {
+          this.$store.commit('courses/setSearchKeyword', "");
+        }
+      },
 
-        toggleSearch() {
-          this.isSearching = !this.isSearching;
-          if(this.isSearching) {
-            // doesn't work without this timeout
-            setTimeout(() => {
-              this.$refs.searchCourses.focus();
-            }, 10);
-          } else {
-            this.searchRequest.keyword = null;
+      searchCourses() {
+        this.$store.commit('courses/setSearchKeyword', this.keyword);
+        // dispatch
+      },
+
+      getProgramDisplayName() {
+        if (this.programs.length === 0)
+          return "All Courses"
+        else if (this.programs.length === 1)
+          return this.programs[0].degreeName + " Courses";
+        else if(this.programs.length <= 3) {
+          var result = "";
+          for(var i = 0; i < this.programs.length; i++) {
+            result += this.programs[i].degreeType
+
+            if(i === this.programs.length - 2)
+              result += " and ";
+            else if(i !== this.programs.length - 1)
+                result += ", ";            
           }
-        },
 
-        searchCourses() {
-          console.log("search request: ", this.searchRequest)
-        }
-      },
+          result += " Courses";
+          return result;
+        } else 
+          return "Multiple Programs Selected";
+      }
+    },
 };
 </script>
 

@@ -2,20 +2,19 @@
   <div>
     <ThemeNavBar></ThemeNavBar>
     <PageSpinner
-      v-if="!hasLoadedCourses"
-      :showSpinner="!hasLoadedCourses"
+      :showSpinner="isLoading"
     ></PageSpinner>
 
-    <div class="container">
+    <div v-if="!isLoading" class="container">
       <FilterCoursesBar
         @openChangeProgramModal="$refs.changeProgramModalHome.openModal()"
       ></FilterCoursesBar>
 
       <transition name="coursefade">
-        <div v-show="hasLoadedCourses" class="row mx-3">
+        <div v-if="showCard" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-            v-for="(course, index) in courses"
+            v-for="(course, index) in allCourses"
             :key="index"
           >
             <CourseCard
@@ -24,6 +23,10 @@
               v-bind:course="course"
             ></CourseCard>
           </div>
+        </div>
+
+        <div v-else class="row mx-3">
+          <p class="text-theme-whitest">This is a table</p>
         </div>
       </transition>
 
@@ -38,7 +41,7 @@
           <nav class="course-pagination" aria-label="Course pagination">
             <ul>
               <li>
-                <a href="#" aria-label="First page" data-tooltip="First Page">
+                <a @click="firstPage()" class="page-button-disabled" aria-label="First page" data-tooltip="First Page">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevrons-left"
@@ -58,7 +61,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Previous page" data-tooltip="Previous Page">
+                <a @click="prevPage()" class="page-button-disabled" aria-label="Previous page" data-tooltip="Previous Page">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevron-left"
@@ -77,7 +80,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Next page" data-tooltip="Next Page">
+                <a @click="nextPage()" aria-label="Next page" data-tooltip="Next Page">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevron-right"
@@ -96,7 +99,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Last page" data-tooltip="Last Page">
+                <a @click="lastPage()" aria-label="Last page" data-tooltip="Last Page">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevrons-right"
@@ -126,8 +129,9 @@
     <div
       class="side-button-container d-none d-md-flex"
       id="prev-page-side-button-container"
+      v-if="!isLoading"
     >
-      <button class="button-as-link">
+      <button class="button-as-link page-button-disabled" @click="prevPage()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-chevron-left"
@@ -151,8 +155,9 @@
     <div
       class="side-button-container d-none d-md-flex"
       id="next-page-side-button-container"
+      v-if="!isLoading"
     >
-      <button class="button-as-link">
+      <button class="button-as-link" @click="nextPage()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-chevron-right"
@@ -172,7 +177,6 @@
     </div>
 
     <SemesterBar
-      v-show="hasLoadedCourses"
       @showAddSemesterModal="showAddSemesterModal"
     ></SemesterBar>
 
@@ -194,18 +198,11 @@ import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import ChangeProgramModal from '../components/modals/ChangeProgramModal.vue';
 import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 import SemesterBar from '../components/SemesterBar.vue';
-import axios from 'axios';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     name: 'home',
-    props: [],
-    data() {
-        return {
-            courses: [],
-            hasLoadedCourses: false,
-            isLoggedIn: false
-        }
-    },
+
     components: {
         ThemeNavBar,
         CourseCard,
@@ -216,33 +213,51 @@ export default {
         SemesterBar,
         ChangeProgramModal
     },
-    created() {
-        // loading test
-        this.getCourses();
 
+    computed: {
+      ...mapState({
+        allCourses: state => state.courses.allCourses,
+        isLoading: state => state.courses.isLoadingCourses,
+        viewOption: state => state.courses.searchRequest.viewOption
+      }),
+      ...mapGetters('courses', {
+        showCard: 'showCard'
+      })
     },
-      methods: {
-        showCourseInfoModal () {
-            this.$refs.courseInfoModalHome.openModal();
-        },
-        showAddToSemesterModal () {
-            this.$refs.addToSemesterModalHome.openModal();
-        },
-        showAddSemesterModal () {
-            this.$refs.addSemesterModalHome.openModal();
-        },
-        getCourses() {
-          axios.get("courses/cs")
-            .then((res) => {
-              this.courses = res.data.deptCourses;
-              this.hasLoadedCourses = true;
-            })
-            .catch((error) => {
-              // eslint-disable-next-line
-              console.error(error);
-            });
-        }
+
+    created() {
+        this.$store.dispatch('courses/getCourses');
+    },
+
+    methods: {
+      showCourseInfoModal () {
+        this.$refs.courseInfoModalHome.openModal();
       },
+
+      showAddToSemesterModal () {
+        this.$refs.addToSemesterModalHome.openModal();
+      },
+        
+      showAddSemesterModal () {
+        this.$refs.addSemesterModalHome.openModal();
+      },
+
+      firstPage() {
+
+      },
+
+      prevPage() {
+
+      },
+
+      nextPage() {
+
+      },
+
+      lastPage() {
+
+      }
+    },
 };
 </script>
 
@@ -288,4 +303,19 @@ export default {
     display: inline-block;
   }
 }
+
+svg:not(.page-button-disabled svg):hover {
+    stroke: var(--theme-primary-light);
+}
+
+.page-button-disabled {
+    opacity: 0.25;
+    cursor: default;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
 </style>

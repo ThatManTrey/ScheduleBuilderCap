@@ -1,13 +1,13 @@
 <template lang="html">
-  <Modal ref="changeProgramModalRef">
+  <Modal :useFooter="false" ref="changeProgramModalRef">
     <template v-slot:header>
       Change Program
     </template>
 
     <template v-slot:body>
-      <div>
-        <div>fixeefief oijef[ji]</div>
-        <!-- <div v-if="addedPrograms.length > 0" class="mb-3">
+  <div>
+    <div>fixeefief oijef[ji]</div>
+    <!-- <div v-if="addedPrograms.length > 0" class="mb-3">
       <h5 class="ms-3">Selected Programs</h5>
       <table class="table text-theme-whitest mt-3">
         <tbody>
@@ -31,51 +31,49 @@
       </table>
     </div> -->
 
-        <input
-          type="search"
-          class="form-control"
-          placeholder="Search Programs"
-          v-model.trim="keyword"
-        />
+    <input
+      type="search"
+      class="form-control"
+      placeholder="Search Programs"
+      v-model.trim="keyword"
+    />
 
-        <table
-          v-if="searchResults && searchResults.length > 0"
-          class="table text-theme-whitest mt-3"
-        >
-          <tbody>
-            <tr
-              class="program-row"
-              v-for="(degree, index) in searchResults"
-              :key="index"
-            >
-              <td>{{ degree.degreeType }}</td>
-              <td>{{ degree.degreeName }}</td>
-              <td>
-                <a
-                  @click="addProgram(degree)"
-                  tabindex="0"
-                  class="add-remove-link"
-                  ><i class="fas fa-plus-circle fa-lg"></i
-                ></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="mt-3" v-else>No programs found</p>
-      </div>
-    </template>
-    <template v-slot:footer></template>
+    <div v-if="searchResults && searchResults.length > 0" class="mt-3 px-3">
+      <table class="table text-theme-whitest">
+        <tbody>
+          <tr
+            class="program-row"
+            v-for="(degree, index) in searchResults"
+            :key="index"
+          >
+            <td>{{ degree.degreeType }}</td>
+            <td>{{ degree.degreeName }}</td>
+            <td>
+              <a
+                @click="addProgram(degree)"
+                tabindex="0"
+                class="add-remove-link"
+                ><i class="fas fa-plus-circle fa-lg"></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3" v-else>No programs found</p>
+  </div>
+  </template>
   </Modal>
 </template>
 
 <script>
 import Modal from "./Modal.vue";
 import axios from "axios";
+import { mapState } from "vuex";
 
 export default {
   components: {
-    Modal
+    Modal,
   },
 
   data() {
@@ -83,14 +81,17 @@ export default {
       allDegrees: null,
       searchResults: null,
       keyword: "",
-      addedPrograms: []
     };
   },
 
+  computed: mapState({
+    addedPrograms: (state) => state.courses.searchRequest.programs,
+  }),
+
   watch: {
-    keyword: function() {
+    keyword: function () {
       if (this.keyword.length > 0) this.searchPrograms();
-    }
+    },
   },
 
   methods: {
@@ -103,14 +104,14 @@ export default {
     },
 
     getDegrees() {
-      axios.get("/degrees/all").then(res => {
+      axios.get("/degrees/all").then((res) => {
         this.allDegrees = res.data.degrees;
         if (this.keyword.length === 0) this.searchResults = this.allDegrees;
       });
     },
 
     searchPrograms() {
-      this.searchResults = this.allDegrees.filter(degree =>
+      this.searchResults = this.allDegrees.filter((degree) =>
         `${degree.degreeName.toLowerCase()} ${degree.degreeType.toLowerCase()}`.includes(
           this.keyword.toLowerCase()
         )
@@ -118,13 +119,13 @@ export default {
     },
 
     addProgram(program) {
-      this.addedPrograms.push(program);
-    }
+      this.$store.commit("courses/addProgram", program);
+    },
   },
 
   created() {
     this.getDegrees();
-  }
+  },
 };
 </script>
 
