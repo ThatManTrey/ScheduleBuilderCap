@@ -54,6 +54,8 @@
         <div v-if="$store.state.isAuthenticated" class="col">
           <a
             tabindex="0"
+            @keyup.enter="addToFavorites(course)"
+            @click="addToFavorites(course)"
             data-tooltip="Favorite Course"
             data-tooltip-location="bottom"
             ><i class="far fa-bookmark fa-lg"></i
@@ -87,6 +89,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
@@ -120,6 +123,23 @@ export default {
     },
     removeFromSemester() {
       confirm("Are you sure you want to remove this course?");
+    },
+    addToFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .post(baseUrl + "/favorites/add", {
+          course_id: course.courseID
+        })
+        //.then(res => {
+
+        //})
+        .catch(error => {
+          // eslint-disable-next-line
+              console.error(error);
+        });
     }
   }
 };

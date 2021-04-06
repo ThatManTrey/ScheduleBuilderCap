@@ -18,7 +18,7 @@
         </div>
         <div class="row">
           <p><strong>Prerequisite</strong>: {{ course.course.prereqs }}</p>
-          <p><strong>Attributes</strong>: {{ }}</p>
+          <p><strong>Attributes</strong>: {{}}</p>
         </div>
         <div class="row">
           <div class="col-6">
@@ -124,7 +124,7 @@
 
           <div class="col">
             Course Difficulty:
-            <div class="avg-rating">              
+            <div class="avg-rating">
               <h3 v-if="course.difficulty >= 1 || course.difficulty < 3">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
