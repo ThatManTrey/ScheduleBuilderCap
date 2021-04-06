@@ -49,10 +49,25 @@
             </p>
           </div>
           <div class="col-6">
-            <p v-if="course.course.contactHoursMin == course.course.contactHoursMax"><strong>
-              Contact Hours</strong>: {{course.course.contactHoursMax}} Hours</p>
-            <p v-if="course.course.contactHoursMin != course.course.contactHoursMax"><strong>
-              Contact Hours</strong>: {{course.course.contactHoursMin}}-{{course.course.contactHoursMax}} Hours</p>
+            <p
+              v-if="
+                course.course.contactHoursMin == course.course.contactHoursMax
+              "
+            >
+              <strong> Contact Hours</strong>:
+              {{ course.course.contactHoursMax }} Hours
+            </p>
+            <p
+              v-if="
+                course.course.contactHoursMin != course.course.contactHoursMax
+              "
+            >
+              <strong> Contact Hours</strong>:
+              {{ course.course.contactHoursMin }}-{{
+                course.course.contactHoursMax
+              }}
+              Hours
+            </p>
             <p><strong>Grade Mode</strong>: {{ course.course.gradeType }}</p>
           </div>
         </div>

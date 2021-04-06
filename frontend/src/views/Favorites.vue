@@ -8,13 +8,13 @@
 
     <div class="container">
       <FilterCoursesBar></FilterCoursesBar>
-        <transition name="coursefade">
-          <div v-show="hasLoadedCourses" class="row mx-3">
-            <div
-              class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-              v-for="(course, index) in courses.deptCourses"
-              :key="index"
-            >
+      <transition name="coursefade">
+        <div v-show="hasLoadedCourses" class="row mx-3">
+          <div
+            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+            v-for="(course, index) in courses.deptCourses"
+            :key="index"
+          >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
@@ -54,7 +54,7 @@ export default {
         // loading test
         this.getCourses();
     },
-    
+
     data () {
       return {
         isModalVisible: false,
