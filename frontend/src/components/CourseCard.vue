@@ -64,8 +64,8 @@
           <a
             v-if="!isRemovingCourse"
             tabindex="0"
-            @keyup.enter="showAddToSemesterModal()"
-            @click="showAddToSemesterModal()"
+            @keyup.enter="showAddToSemesterModal(course)"
+            @click="showAddToSemesterModal(course)"
             data-tooltip="Add to Semester"
             data-tooltip-location="bottom"
           >
@@ -87,12 +87,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   props: {
     showSmallCard: {
       type: Boolean,
       default: false
     },
+
+    computed: mapState(["course"]),
 
     /* true replaces the add semester button with a remove button (used on schedule page) */
     isRemovingCourse: {
@@ -110,7 +114,8 @@ export default {
       this.$store.commit("setCourse", { course: course });
       this.$emit("openCourseInfoModal");
     },
-    showAddToSemesterModal() {
+    showAddToSemesterModal(course) {
+      this.$store.commit("setCourse", { course: course });
       this.$emit("openAddSemesterModal");
     },
     removeFromSemester() {

@@ -9,7 +9,7 @@
     <template v-slot:body>
       <div>
         <h6 class="text-center">
-          Select the semester you would like to add MATH 13013 to:
+          Select the semester you would like to add {{course.course.courseID}} to:
         </h6>
         <div class="list-group mt-3">
           <!-- list of semesters -->
@@ -86,6 +86,7 @@
 <script>
 import Modal from "./Modal.vue";
 import * as Toast from "../../toast.js";
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -94,6 +95,8 @@ export default {
       semesters: 0
     };
   },
+
+  computed: mapState(["course"]),
 
   components: {
     Modal
