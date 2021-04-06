@@ -76,11 +76,98 @@
           <hr class="bg-theme-darkest-gray" size="5" />
           <div class="col">
             Course Quality:
-            <h1 class="avg-rating">{{ ratings.quality }} / 10</h1>
+            <div class="avg-rating">
+              <h3 v-if="course.quality >= 1 || course.quality < 3">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.quality >= 3 || course.quality < 5">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.quality >= 5 || course.quality < 7">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.quality >= 7 || course.quality < 9">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.quality >= 9 || course.quality <= 10">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+            </div>
           </div>
+
           <div class="col">
             Course Difficulty:
-            <h1 class="avg-rating">{{ ratings.difficulty }} / 10</h1>
+            <div class="avg-rating">              
+              <h3 v-if="course.difficulty >= 1 || course.difficulty < 3">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.difficulty >= 3 || course.difficulty < 5">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.difficulty >= 5 || course.difficulty < 7">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.difficulty >= 7 || course.difficulty < 9">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="course.difficulty >= 9 || course.difficulty <= 10">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+            </div>
           </div>
         </div>
         <div class="text-center">
@@ -195,5 +282,10 @@ p {
 #course-info-footer {
   width: 100%;
   font-size: 1.15rem;
+}
+
+.avg-rating {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 </style>
