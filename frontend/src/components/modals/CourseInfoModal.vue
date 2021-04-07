@@ -18,7 +18,7 @@
         </div>
         <div class="row">
           <p><strong>Prerequisite</strong>: {{ course.course.prereqs }}</p>
-          <p><strong>Attributes</strong>: {{}}</p>
+          <p><strong>Attributes</strong>: {{ }}</p>
         </div>
         <div class="row">
           <div class="col-6">
@@ -65,9 +65,8 @@
             >
               <strong> Contact Hours</strong>:
               <span id="creditHours">
-                {{ course.course.contactHoursMin }} - {{
-                  course.course.contactHoursMax
-                }}</span
+                {{ course.course.contactHoursMin }} -
+                {{ course.course.contactHoursMax }}</span
               >
               Hours
             </p>
