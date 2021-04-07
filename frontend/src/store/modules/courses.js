@@ -5,6 +5,9 @@ import enums from "../../enums";
 
 const state = () => ({
   allCourses: [],
+  currentCourse: {
+    type: Object
+  },
   isLoadingCourses: true,
   allPrograms: [],
   viewOption: enums.ViewOptions.normalCard,
@@ -25,6 +28,10 @@ const mutations = {
   setAllCourses(state, allCourses) {
     state.allCourses = allCourses;
     state.isLoadingCourses = false;
+  },
+
+  setCurrentCourse(state, course) {
+    state.currentCourse = course;
   },
 
   setAllPrograms(state, allPrograms) {

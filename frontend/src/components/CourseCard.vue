@@ -36,7 +36,7 @@
           </p>
         </div>
 
-        <div class="row">
+        <div v-if="!showSmallCard" class="row">
           <div v-if="$store.state.auth.isAuthenticated" class="col">
             <a tabindex="0" data-tooltip="Favorite Course"
               ><i class="far fa-bookmark fa-lg"></i
@@ -90,7 +90,7 @@ export default {
 
   methods: {
     showCourseInfoModal(course) {
-      this.$store.commit("auth/setCourse", { course: course });
+      this.$store.commit("courses/setCurrentCourse", { course: course });
       this.$emit("openCourseInfoModal");
     },
     showAddToSemesterModal() {

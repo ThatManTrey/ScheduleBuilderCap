@@ -38,7 +38,7 @@ export default {
 
     methods: {
         showCourseInfoModal() {
-            this.$store.commit("auth/setCourse", { course: this.course });
+            this.$store.commit("courses/setCurrentCourse", { course: this.course });
             this.$emit("openCourseInfoModal");
         },
         showAddToSemesterModal() {

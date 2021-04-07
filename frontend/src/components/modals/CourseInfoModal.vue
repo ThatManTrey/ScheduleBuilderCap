@@ -112,7 +112,7 @@ export default {
     Modal
   },
   computed: mapState({
-    course: state => state.auth.course
+    course: state => state.courses.currentCourse
   }),
 
   methods: {

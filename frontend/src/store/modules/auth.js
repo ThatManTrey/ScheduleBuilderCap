@@ -10,11 +10,6 @@ const state = () => ({
   userId: null,
   hasConfirmedEmail: null,
   authError: null,
-
-  //  move to courses
-  course: {
-    type: Object
-  }
 });
 
 const mutations = {
@@ -39,10 +34,6 @@ const mutations = {
   confirmEmail(state, hasConfirmedEmail) {
     state.hasConfirmedEmail = hasConfirmedEmail;
   },
-
-  setCourse(state, course) {
-    state.course = course;
-  }
 };
 
 const actions = {
