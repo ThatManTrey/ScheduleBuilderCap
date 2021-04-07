@@ -90,6 +90,7 @@
 
 <script>
 import axios from "axios";
+import * as Toast from "../toast.js";
 import { mapState } from "vuex";
 
 export default {
@@ -108,8 +109,9 @@ export default {
     },
 
     course: {
-      type: Object
-    }
+        type: Object
+      },
+
   },
 
   methods: {
@@ -133,13 +135,22 @@ export default {
         .post(baseUrl + "/favorites/add", {
           course_id: course.courseID
         })
-        //.then(res => {
-
-        //})
+        .then( res => {
+          console.log(res);
+          this.displayMessage(res)
+        })
         .catch(error => {
           // eslint-disable-next-line
-              console.error(error);
-        });
+          console.error(error);
+        },
+    )},
+    displayMessage(res) {
+        if(res.status >= 200 || res.status < 300) {
+          Toast.showSuccessMessage("Course added successfully!");
+        }
+        else {
+          Toast.showErrorMessage("Unable to add course.");
+        }
     }
   }
 };
