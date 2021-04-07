@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <div class="container" id="display-block">
       <div class="row">
         <nav
@@ -115,18 +114,6 @@
     </div>
   </div>
 </template>
-
-<script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
-
-export default {
-    name: 'about',
-    props: [],
-    components: {
-        ThemeNavBar,
-    },
-}
-</script>
 
 <style scoped>
 #sidenav {

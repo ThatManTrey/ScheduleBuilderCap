@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <div class="container">
       <div class="row course-container">
         <div
@@ -22,16 +21,12 @@
 </template>
 
 <script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue'
 
 export default {
-    name: 'favorites',
-    props: [],
     components: {
-        ThemeNavBar,
         CourseCard,
         CourseInfoModal,
         AddToSemesterModal

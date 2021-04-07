@@ -202,11 +202,11 @@ a .fa-star:hover {
 }
 
 a .fa-bookmark {
-  color: var(--theme-secondary);
+  color: var(--theme-primary-light);
 }
 
 a .fa-bookmark:hover {
-  color: rgba(209, 128, 24, var(--btn-transparency));
+  color: rgba(198, 165, 255, var(--btn-transparency));
 }
 
 a .fa-trash, a .fa-times-circle  {

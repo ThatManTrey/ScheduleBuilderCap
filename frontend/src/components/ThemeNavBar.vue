@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <nav class="navbar navbar-expand-lg" id="app-nav">
+    <nav class="navbar navbar-expand-md" id="app-nav">
       <div class="container-fluid">
         <!-- Put logo here -->
 
@@ -19,8 +19,8 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
-            <li class="nav-item col-6 col-md-4 col-lg-auto">
+          <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-md-0">
+            <li class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="Home"
@@ -30,7 +30,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -40,7 +40,7 @@
               </router-link>
             </li>
 
-            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -50,7 +50,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-md-4 col-lg-auto">
+            <li class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="about"
@@ -60,7 +60,7 @@
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-md-4 col-lg-auto">
+            <!-- <li class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="theme"
@@ -68,7 +68,7 @@
               >
                 <i class="fas fa-question-circle"></i>Theme ref</router-link
               >
-            </li>
+            </li> -->
           </ul>
 
           <div class="d-flex">
@@ -202,32 +202,26 @@ export default {
   background-color: #000;
 }
 
-.nav-link i {
-  margin-right: 0.25rem;
-}
-
-i.fa-bookmark {
-  color: var(--theme-whitest);
-}
-
 .nav-link {
   color: var(--theme-white);
+
+  &:hover {
+    color: var(--theme-whitest);
+  }
+
+  i {
+    margin-right: 0.25rem;
+    color: var(--theme-light-gray);
+  }
 }
 
-.nav-link:hover {
+.nav-active,
+.nav-active i {
   color: var(--theme-whitest);
 }
 
-a.navbar-brand {
+.navbar-brand {
   color: var(--theme-whiter);
-}
-
-a.nav-active {
-  color: #d29241;
-}
-
-a.nav-active:hover {
-  color: #d29241;
 }
 
 .navbar-toggler i {

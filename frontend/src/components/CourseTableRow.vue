@@ -1,32 +1,34 @@
 <template lang="html">
-    <tr class="text-theme-whitest">
-        <td>
-            <a class="course-info-link" @click="showCourseInfoModal()">
-            <div class="cell-container">
-                {{ course.courseID }}
-            </div>
-            </a>
-        </td>
-        <td>
-            <a class="course-info-link" @click="showCourseInfoModal()">
-            <div class="cell-container">
-                {{ course.courseName }}
-            </div>
-            </a>
-        </td>
-        <td>
-            <a class="course-info-link" @click="showCourseInfoModal()">
-            <div class="cell-container">
-                {{ course.courseDesc }}
-            </div>
-            </a>
-        </td>
-        <td>
-            <div class="cell-container center p-1">
-                <a @click="showAddToSemesterModal()"><i class="fas fa-plus-circle text-theme-confirm"></i></a>
-            </div>
-        </td>
-    </tr>
+  <tr class="text-theme-whitest">
+    <td>
+      <a class="course-info-link" @click="showCourseInfoModal()">
+        <div class="cell-container">
+          {{ course.courseID }}
+        </div>
+      </a>
+    </td>
+    <td>
+      <a class="course-info-link" @click="showCourseInfoModal()">
+        <div class="cell-container">
+          {{ course.courseName }}
+        </div>
+      </a>
+    </td>
+    <td>
+      <a class="course-info-link" @click="showCourseInfoModal()">
+        <div class="cell-container">
+          {{ course.courseDesc }}
+        </div>
+      </a>
+    </td>
+    <td>
+      <div class="cell-container center p-1">
+        <a @click="showAddToSemesterModal()"
+          ><i class="fas fa-plus-circle text-theme-confirm"></i
+        ></a>
+      </div>
+    </td>
+  </tr>
 </template>
 
 <script lang="js">
@@ -44,7 +46,6 @@ export default {
         },
     }
 }
-
 </script>
 
 <style lang="scss" scoped>

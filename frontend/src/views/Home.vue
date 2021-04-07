@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <PageSpinner :showSpinner="isLoadingCourses"></PageSpinner>
 
     <div class="container">
@@ -23,18 +22,28 @@
           </div>
         </div>
 
-        <div v-if="!showCard && !isLoadingCourses" class="row mt-3 mt-md-5 mb-3 mx-3 mx-xl-1" id="table-container">
+        <div
+          v-if="!showCard && !isLoadingCourses"
+          class="row mt-3 mt-md-5 mb-3 mx-3 mx-xl-1"
+          id="table-container"
+        >
           <table class="table">
             <colgroup>
-                <col span="1" style="width: 10%;">
-                <col span="1" style="width: 30%;">
-                <col span="1" style="width: 56%;">
-                <col span="1" style="width: 2%;">
-                <col span="1" style="width: 2%;">
+              <col span="1" style="width: 10%;" />
+              <col span="1" style="width: 30%;" />
+              <col span="1" style="width: 56%;" />
+              <col span="1" style="width: 2%;" />
+              <col span="1" style="width: 2%;" />
             </colgroup>
 
             <tbody>
-              <CourseTableRow v-for="(course, index) in allCourses" :key="index" :course="course" @openCourseInfoModal="showCourseInfoModal" @openAddSemesterModal="showAddToSemesterModal"></CourseTableRow>
+              <CourseTableRow
+                v-for="(course, index) in allCourses"
+                :key="index"
+                :course="course"
+                @openCourseInfoModal="showCourseInfoModal"
+                @openAddSemesterModal="showAddToSemesterModal"
+              ></CourseTableRow>
             </tbody>
           </table>
         </div>
@@ -231,7 +240,6 @@
 </template>
 
 <script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
 import CourseTableRow from '../components/CourseTableRow.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
@@ -246,7 +254,6 @@ export default {
     name: 'home',
 
     components: {
-        ThemeNavBar,
         CourseCard,
         CourseInfoModal,
         AddToSemesterModal,
@@ -316,7 +323,7 @@ export default {
 
 <style scoped lang="scss">
 .coursefade-enter-active {
-  transition: opacity 1.5s;
+  transition: all 1s;
 }
 
 .coursefade-enter,

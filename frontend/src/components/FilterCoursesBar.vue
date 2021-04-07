@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="row mt-3 mb-4">
+  <div class="row mt-3 mb-5">
     <!-- filter bar for sm screens -->
     <div class="col-12 d-flex d-md-none align-items-center mb-3">
       <input

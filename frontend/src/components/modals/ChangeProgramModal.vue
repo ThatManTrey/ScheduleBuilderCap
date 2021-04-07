@@ -5,89 +5,89 @@
     </template>
 
     <template v-slot:body>
-  <div>
-    <div v-if="addedPrograms.length > 0" class="mb-3">
-      <h5 class="ms-3">Selected Programs</h5>
-      <table class="table text-theme-whitest mt-3">
-        <tbody>
-          <tr
-            class="program-row"
-            v-for="(degree, index) in addedPrograms"
-            :key="index"
-          >
-            <td>{{ degree.degreeType }}</td>
-            <td>{{ degree.degreeName }}</td>
-            <td>
-              <a
-                @click="removeProgram(degree)"
-                tabindex="0"
-                class="add-remove-link"
-                ><i class="fas fa-times-circle fa-lg"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <div>
+        <div v-if="addedPrograms.length > 0" class="mb-3">
+          <h5 class="ms-3">Selected Programs</h5>
+          <table class="table text-theme-whitest mt-3">
+            <tbody>
+              <tr
+                class="program-row"
+                v-for="(degree, index) in addedPrograms"
+                :key="index"
+              >
+                <td>{{ degree.degreeType }}</td>
+                <td>{{ degree.degreeName }}</td>
+                <td>
+                  <a
+                    @click="removeProgram(degree)"
+                    tabindex="0"
+                    class="add-remove-link"
+                    ><i class="fas fa-times-circle fa-lg"></i
+                  ></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-    <div class="accordion accordion-flush" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <button
-            class="accordion-button"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseOne"
-            aria-expanded="true"
-            aria-controls="collapseOne"
-          >
-            Search Courses
-          </button>
-        </h2>
-        <div
-          id="collapseOne"
-          class="accordion-collapse collapse"
-          :class="{ 'show': openAccordion }"
-          aria-labelledby="headingOne"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <input
-              type="search"
-              class="form-control"
-              placeholder="Search Programs"
-              v-model.trim="keyword"
-            />
+        <div class="accordion accordion-flush" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                Search Courses
+              </button>
+            </h2>
+            <div
+              id="collapseOne"
+              class="accordion-collapse collapse"
+              :class="{ show: openAccordion }"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div class="accordion-body">
+                <input
+                  type="search"
+                  class="form-control"
+                  placeholder="Search Programs"
+                  v-model.trim="keyword"
+                />
 
-            <div v-if="programs.length > 0" class="mt-3 px-3">
-              <table class="table text-theme-whitest">
-                <tbody>
-                  <tr
-                    class="program-row"
-                    v-for="(degree, index) in programs"
-                    :key="index"
-                  >
-                    <td>{{ degree.degreeType }}</td>
-                    <td>{{ degree.degreeName }}</td>
-                    <td>
-                      <a
-                        @click="addProgram(degree)"
-                        tabindex="0"
-                        class="add-remove-link"
-                        ><i class="fas fa-plus-circle fa-lg"></i
-                      ></a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <div v-if="programs.length > 0" class="mt-3 px-3">
+                  <table class="table text-theme-whitest">
+                    <tbody>
+                      <tr
+                        class="program-row"
+                        v-for="(degree, index) in programs"
+                        :key="index"
+                      >
+                        <td>{{ degree.degreeType }}</td>
+                        <td>{{ degree.degreeName }}</td>
+                        <td>
+                          <a
+                            @click="addProgram(degree)"
+                            tabindex="0"
+                            class="add-remove-link"
+                            ><i class="fas fa-plus-circle fa-lg"></i
+                          ></a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="mt-3" v-else>No programs found</p>
+              </div>
             </div>
-            <p class="mt-3" v-else>No programs found</p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</template>
+    </template>
   </Modal>
 </template>
 
@@ -97,7 +97,7 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    Modal,
+    Modal
   },
 
   data() {
@@ -109,15 +109,15 @@ export default {
   },
 
   watch: {
-    keyword: function () {
+    keyword: function() {
       this.programs = this.$store.getters["courses/searchPrograms"](
         this.keyword
       );
-    },
+    }
   },
 
   computed: mapState({
-    addedPrograms: (state) => state.courses.searchRequest.programs,
+    addedPrograms: state => state.courses.searchRequest.programs
   }),
 
   methods: {
@@ -137,16 +137,16 @@ export default {
     removeProgram(program) {
       this.$store.commit("courses/removeProgram", program);
       this.$store.dispatch("courses/getCourses");
-    },
+    }
   },
 
   created() {
-    this.openAccordion = (this.addedPrograms.length === 0);
+    this.openAccordion = this.addedPrograms.length === 0;
 
     this.$store.dispatch("courses/getPrograms").then(() => {
       this.programs = this.$store.state.courses.allPrograms;
     });
-  },
+  }
 };
 </script>
 

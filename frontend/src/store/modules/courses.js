@@ -154,14 +154,13 @@ const actions = {
     { commit },
     { viewOption, sortType, isAscending, programs }
   ) {
-    if (isValidViewOption(viewOption)) 
-      commit("setViewOption", viewOption);
+    if (isValidViewOption(viewOption)) commit("setViewOption", viewOption);
 
     if (isValidSortType(sortType))
       commit("setSortOption", { sortType, isAscending });
 
-    if(programs !== null && programs.length > 0) 
-      commit('setSearchPrograms', programs);
+    if (programs !== null && programs.length > 0)
+      commit("setSearchPrograms", programs);
 
     //otherwise use default values defined in state
   }
@@ -174,7 +173,6 @@ export default {
   actions,
   mutations
 };
-
 
 function updateLocalStorageViewOption(viewOption) {
   localStorage.setItem("viewOption", viewOption);
