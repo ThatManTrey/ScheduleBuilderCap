@@ -6,8 +6,7 @@
 
     <template v-slot:body>
   <div>
-    <div>fixeefief oijef[ji]</div>
-    <!-- <div v-if="addedPrograms.length > 0" class="mb-3">
+    <div v-if="addedPrograms.length > 0" class="mb-3">
       <h5 class="ms-3">Selected Programs</h5>
       <table class="table text-theme-whitest mt-3">
         <tbody>
@@ -20,7 +19,7 @@
             <td>{{ degree.degreeName }}</td>
             <td>
               <a
-                @click="addProgram(degree)"
+                @click="removeProgram(degree)"
                 tabindex="0"
                 class="add-remove-link"
                 ><i class="fas fa-times-circle fa-lg"></i
@@ -29,46 +28,71 @@
           </tr>
         </tbody>
       </table>
-    </div> -->
-
-    <input
-      type="search"
-      class="form-control"
-      placeholder="Search Programs"
-      v-model.trim="keyword"
-    />
-
-    <div v-if="searchResults && searchResults.length > 0" class="mt-3 px-3">
-      <table class="table text-theme-whitest">
-        <tbody>
-          <tr
-            class="program-row"
-            v-for="(degree, index) in searchResults"
-            :key="index"
-          >
-            <td>{{ degree.degreeType }}</td>
-            <td>{{ degree.degreeName }}</td>
-            <td>
-              <a
-                @click="addProgram(degree)"
-                tabindex="0"
-                class="add-remove-link"
-                ><i class="fas fa-plus-circle fa-lg"></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
-    <p class="mt-3" v-else>No programs found</p>
+
+    <div class="accordion accordion-flush" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseOne"
+            aria-expanded="true"
+            aria-controls="collapseOne"
+          >
+            Search Courses
+          </button>
+        </h2>
+        <div
+          id="collapseOne"
+          class="accordion-collapse collapse"
+          :class="{ 'show': openAccordion }"
+          aria-labelledby="headingOne"
+          data-bs-parent="#accordionExample"
+        >
+          <div class="accordion-body">
+            <input
+              type="search"
+              class="form-control"
+              placeholder="Search Programs"
+              v-model.trim="keyword"
+            />
+
+            <div v-if="programs.length > 0" class="mt-3 px-3">
+              <table class="table text-theme-whitest">
+                <tbody>
+                  <tr
+                    class="program-row"
+                    v-for="(degree, index) in programs"
+                    :key="index"
+                  >
+                    <td>{{ degree.degreeType }}</td>
+                    <td>{{ degree.degreeName }}</td>
+                    <td>
+                      <a
+                        @click="addProgram(degree)"
+                        tabindex="0"
+                        class="add-remove-link"
+                        ><i class="fas fa-plus-circle fa-lg"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="mt-3" v-else>No programs found</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  </template>
+</template>
   </Modal>
 </template>
 
 <script>
 import Modal from "./Modal.vue";
-import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
@@ -78,21 +102,23 @@ export default {
 
   data() {
     return {
-      allDegrees: null,
-      searchResults: null,
+      programs: [],
       keyword: "",
+      openAccordion: false
     };
+  },
+
+  watch: {
+    keyword: function () {
+      this.programs = this.$store.getters["courses/searchPrograms"](
+        this.keyword
+      );
+    },
   },
 
   computed: mapState({
     addedPrograms: (state) => state.courses.searchRequest.programs,
   }),
-
-  watch: {
-    keyword: function () {
-      if (this.keyword.length > 0) this.searchPrograms();
-    },
-  },
 
   methods: {
     /* needed to open/close this modal from parent component */
@@ -101,30 +127,27 @@ export default {
     },
     closeModal() {
       this.$refs.changeProgramModalRef.closeModal();
-    },
-
-    getDegrees() {
-      axios.get("/degrees/all").then((res) => {
-        this.allDegrees = res.data.degrees;
-        if (this.keyword.length === 0) this.searchResults = this.allDegrees;
-      });
-    },
-
-    searchPrograms() {
-      this.searchResults = this.allDegrees.filter((degree) =>
-        `${degree.degreeName.toLowerCase()} ${degree.degreeType.toLowerCase()}`.includes(
-          this.keyword.toLowerCase()
-        )
-      );
+      if(this.addedPrograms > 0)
+        this.openAccordion = false;
     },
 
     addProgram(program) {
       this.$store.commit("courses/addProgram", program);
+      this.$store.dispatch("courses/getCourses");
+    },
+
+    removeProgram(program) {
+      this.$store.commit("courses/removeProgram", program);
+      this.$store.dispatch("courses/getCourses");
     },
   },
 
   created() {
-    this.getDegrees();
+    this.openAccordion = (this.addedPrograms.length === 0);
+
+    this.$store.dispatch("courses/getPrograms").then(() => {
+      this.programs = this.$store.state.courses.allPrograms;
+    });
   },
 };
 </script>
@@ -147,11 +170,28 @@ tr {
   }
 }
 
+@media (min-width: 576px) {
+  td {
+    padding: 1rem;
+  }
+}
+
 td {
-  padding: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .table {
   margin-bottom: 0;
+}
+
+.accordion-item {
+  background-color: transparent;
+  border: 0;
+}
+
+.accordion-button {
+  background-color: transparent;
+  color: var(--theme-whitest);
 }
 </style>

@@ -24,7 +24,8 @@ export default (to, from, next) => {
             "auth/setAuthError",
             "You have already confirmed your email."
           );
-        else store.commit("auth/setAuthError", "Invalid email confirmation link.");
+        else
+          store.commit("auth/setAuthError", "Invalid email confirmation link.");
 
         next("/home");
         Toast.showErrorMessage(store.state.auth.authError);

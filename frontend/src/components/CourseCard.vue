@@ -38,9 +38,7 @@
 
         <div class="row">
           <div v-if="$store.state.auth.isAuthenticated" class="col">
-            <a
-              tabindex="0"
-              data-tooltip="Favorite Course"
+            <a tabindex="0" data-tooltip="Favorite Course"
               ><i class="far fa-bookmark fa-lg"></i
             ></a>
           </div>
@@ -71,23 +69,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
   props: {
     /* true replaces the add semester button with a remove button (used on schedule page) */
     isRemovingCourse: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     course: {
-      type: Object,
-    },
+      type: Object
+    }
   },
 
-  computed: mapGetters('courses', {
-    showSmallCard: 'showSmallCard'
+  computed: mapGetters("courses", {
+    showSmallCard: "showSmallCard"
   }),
 
   methods: {
@@ -100,8 +98,8 @@ export default {
     },
     removeFromSemester() {
       confirm("Are you sure you want to remove this course?");
-    },
-  },
+    }
+  }
 };
 </script>
 

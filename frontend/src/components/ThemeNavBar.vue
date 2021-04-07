@@ -30,10 +30,7 @@
               </router-link>
             </li>
 
-            <li
-              v-if="isLoggedIn"
-              class="nav-item col-6 col-md-4 col-lg-auto"
-            >
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
@@ -43,10 +40,7 @@
               </router-link>
             </li>
 
-            <li
-              v-if="isLoggedIn"
-              class="nav-item col-6 col-md-4 col-lg-auto"
-            >
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
@@ -125,25 +119,25 @@
 <script>
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   name: "theme-nav-bar",
   props: {
     useScrollToTopButton: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
 
   components: {
     SignInModal,
-    RegisterModal,
+    RegisterModal
   },
 
   data() {
     return {
-      showScrollToTopButton: false,
+      showScrollToTopButton: false
     };
   },
 
@@ -171,7 +165,7 @@ export default {
     logout() {
       this.$store.dispatch("auth/logOut");
       if (!this.isCurrentRoute("Home")) this.$router.push("/home");
-    },
+    }
   },
 
   computed: mapState({
@@ -190,7 +184,7 @@ export default {
     if (this.useScrollToTopButton) {
       window.removeEventListener("scroll", this.checkScroll);
     }
-  },
+  }
 };
 </script>
 

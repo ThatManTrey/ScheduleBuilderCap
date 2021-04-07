@@ -13,7 +13,7 @@ import store from "./store/";
 import axios from "axios";
 import * as Toast from "./toast.js";
 import HttpStatus from "http-status-codes";
-import enums from './enums.js';
+import enums from "./enums.js";
 
 Vue.config.productionTip = false;
 
@@ -32,20 +32,20 @@ if (process.env.NODE_ENV === "production")
 
 // allow each request to send and receive cookies
 axios.interceptors.request.use(
-  function (config) {
+  function(config) {
     config.withCredentials = true;
     return config;
   },
-  function (error) {
+  function(error) {
     return Promise.reject(error);
   }
 );
 
 axios.interceptors.response.use(
-  function (response) {
+  function(response) {
     return response;
   },
-  function (error) {
+  function(error) {
     if (error.response.status === HttpStatus.UNAUTHORIZED) {
       Toast.showErrorMessage("Your session has expired. Please login again.");
       store.commit("auth/unAuthenticateUser");
@@ -64,13 +64,14 @@ axios.interceptors.response.use(
   }
 );
 
+store.dispatch("courses/getOptionsFromLocalStorage");
+
 // csrf token cookie isn't httponly, access token is
-// assume if there's a csrf token there's an access token
 if (Vue.$cookies.get("csrf_access_token")) {
-  store.dispatch("auth/verifyAccessToken").then(function () {
+  store.dispatch("auth/verifyAccessToken").then(function() {
     if (store.state.auth.authError) console.log(store.state.auth.authError);
+    // needed for validating POST, PUT, DELETE requests
     else
-      // needed for validating POST, PUT, DELETE requests
       axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
         "csrf_access_token"
       );
@@ -80,7 +81,6 @@ if (Vue.$cookies.get("csrf_access_token")) {
 } else {
   initalizeApp();
 }
-
 
 function initalizeApp() {
   new Vue({

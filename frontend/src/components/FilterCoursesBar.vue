@@ -10,7 +10,11 @@
         :value="keyword"
       />
 
-      <a class="d-block d-md-none filter-button" @click="openChangeProgramModal()" data-tooltip="Select Program">
+      <a
+        class="d-block d-md-none filter-button"
+        @click="openChangeProgramModal()"
+        data-tooltip="Select Program"
+      >
         <i class="fas fa-pencil-alt"></i>
       </a>
 
@@ -29,7 +33,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType($enums.SortTypes.courseId) }"
+              :class="{
+                'dropdown-active': isSortType($enums.SortTypes.courseId)
+              }"
               @click="changeSort($enums.SortTypes.courseId)"
             >
               Division Level
@@ -51,7 +57,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType($enums.SortTypes.program) }"
+              :class="{
+                'dropdown-active': isSortType($enums.SortTypes.program)
+              }"
               @click="changeSort($enums.SortTypes.program)"
             >
               Program
@@ -73,7 +81,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType($enums.SortTypes.credits) }"
+              :class="{
+                'dropdown-active': isSortType($enums.SortTypes.credits)
+              }"
               @click="changeSort($enums.SortTypes.credits)"
             >
               Credits
@@ -131,7 +141,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isViewOption($enums.ViewOptions.table) }"
+              :class="{
+                'dropdown-active': isViewOption($enums.ViewOptions.table)
+              }"
               @click="changeViewOption($enums.ViewOptions.table)"
               >Table</a
             >
@@ -151,7 +163,11 @@
 
     <!-- filter bar for screens md and up -->
     <div class="col d-none d-md-flex align-items-center justify-content-end">
-      <a @click="openChangeProgramModal()" data-tooltip="Select Program" class="filter-button">
+      <a
+        @click="openChangeProgramModal()"
+        data-tooltip="Select Program"
+        class="filter-button"
+      >
         <i class="fas fa-pencil-alt"></i>
       </a>
 
@@ -170,7 +186,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType($enums.SortTypes.courseId) }"
+              :class="{
+                'dropdown-active': isSortType($enums.SortTypes.courseId)
+              }"
               @click="changeSort($enums.SortTypes.courseId)"
             >
               Division Level
@@ -192,7 +210,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType($enums.SortTypes.program) }"
+              :class="{
+                'dropdown-active': isSortType($enums.SortTypes.program)
+              }"
               @click="changeSort($enums.SortTypes.program)"
             >
               Program
@@ -214,7 +234,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isSortType($enums.SortTypes.credits) }"
+              :class="{
+                'dropdown-active': isSortType($enums.SortTypes.credits)
+              }"
               @click="changeSort($enums.SortTypes.credits)"
             >
               Credits
@@ -272,7 +294,9 @@
           <li>
             <a
               class="dropdown-item"
-              :class="{ 'dropdown-active': isViewOption($enums.ViewOptions.table) }"
+              :class="{
+                'dropdown-active': isViewOption($enums.ViewOptions.table)
+              }"
               @click="changeViewOption($enums.ViewOptions.table)"
               >Table</a
             >
@@ -293,10 +317,20 @@
         />
       </transition>
 
-      <a v-if="!isSearching" @click="toggleSearch()" data-tooltip="Search Courses" class="filter-button">
+      <a
+        v-if="!isSearching"
+        @click="toggleSearch()"
+        data-tooltip="Search Courses"
+        class="filter-button"
+      >
         <i class="fas fa-search"></i>
       </a>
-      <a v-else @click="toggleSearch()" data-tooltip="Cancel Search" class="filter-button">
+      <a
+        v-else
+        @click="toggleSearch()"
+        data-tooltip="Cancel Search"
+        class="filter-button"
+      >
         <i class="fas fa-times"></i>
       </a>
     </div>
@@ -322,7 +356,7 @@ export default {
     methods: {
       changeSort(sortType) {
         this.$store.commit('courses/setSortType', sortType);
-        // dispatch
+        this.$store.dispatch('courses/getCourses');
       },
 
       isSortType(sortType) {
@@ -355,7 +389,7 @@ export default {
 
       searchCourses() {
         this.$store.commit('courses/setSearchKeyword', this.keyword);
-        // dispatch
+        this.$store.dispatch('courses/getCourses');
       },
 
       getProgramDisplayName() {
@@ -365,19 +399,18 @@ export default {
           return this.programs[0].degreeName + " Courses";
         else if(this.programs.length <= 3) {
           var result = "";
+
           for(var i = 0; i < this.programs.length; i++) {
             result += this.programs[i].degreeType
-
             if(i === this.programs.length - 2)
               result += " and ";
             else if(i !== this.programs.length - 1)
-                result += ", ";            
+                result += ", ";
           }
 
           result += " Courses";
           return result;
-        } else 
-          return "Multiple Programs Selected";
+        } else return "Multiple Programs Selected";
       }
     },
 };

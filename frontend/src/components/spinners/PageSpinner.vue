@@ -28,8 +28,8 @@ export default {
   top: 50%;
   left: 50vw;
   left: 50%;
-  margin-top: -25px;    // half the spinner's height/width
-  margin-left: -25px; 
+  margin-top: -25px; // half the spinner's height/width
+  margin-left: -25px;
   z-index: 3;
 }
 </style>

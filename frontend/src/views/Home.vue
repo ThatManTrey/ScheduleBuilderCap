@@ -1,17 +1,15 @@
 <template lang="html">
   <div>
     <ThemeNavBar></ThemeNavBar>
-    <PageSpinner
-      :showSpinner="isLoading"
-    ></PageSpinner>
+    <PageSpinner :showSpinner="isLoadingCourses"></PageSpinner>
 
-    <div v-if="!isLoading" class="container">
+    <div class="container">
       <FilterCoursesBar
         @openChangeProgramModal="$refs.changeProgramModalHome.openModal()"
       ></FilterCoursesBar>
 
       <transition name="coursefade">
-        <div v-if="showCard" class="row mx-3">
+        <div v-if="showCard && !isLoadingCourses" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in allCourses"
@@ -25,15 +23,18 @@
           </div>
         </div>
 
-        <div v-else class="row mx-3">
+        <div v-if="!showCard && !isLoadingCourses" class="row mx-3">
           <p class="text-theme-whitest">This is a table</p>
         </div>
       </transition>
 
-
       <!-- pagination buttons and total results -->
       <!-- SVG source: https://tablericons.com/ -->
-      <div class="row mx-3 mt-3" style="margin-bottom: 5rem;">
+      <div
+        v-if="!isLoadingCourses"
+        class="row mx-3 mt-3"
+        style="margin-bottom: 5rem;"
+      >
         <div class="col-4 text-theme-white">
           <h5>168 Results</h5>
         </div>
@@ -41,7 +42,13 @@
           <nav class="course-pagination" aria-label="Course pagination">
             <ul>
               <li>
-                <a @click="firstPage()" class="page-button-disabled" aria-label="First page" data-tooltip="First Page">
+                <button
+                  class="button-as-link"
+                  :disabled="isFirstPage()"
+                  @click="firstPage()"
+                  aria-label="First page"
+                  data-tooltip="First Page"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevrons-left"
@@ -58,10 +65,16 @@
                     <polyline points="11 7 6 12 11 17" />
                     <polyline points="17 7 12 12 17 17" />
                   </svg>
-                </a>
+                </button>
               </li>
               <li>
-                <a @click="prevPage()" class="page-button-disabled" aria-label="Previous page" data-tooltip="Previous Page">
+                <button
+                  class="button-as-link"
+                  :disabled="isFirstPage()"
+                  @click="prevPage()"
+                  aria-label="Previous page"
+                  data-tooltip="Previous Page"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevron-left"
@@ -77,10 +90,16 @@
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <polyline points="15 6 9 12 15 18" />
                   </svg>
-                </a>
+                </button>
               </li>
               <li>
-                <a @click="nextPage()" aria-label="Next page" data-tooltip="Next Page">
+                <button
+                  class="button-as-link"
+                  :disabled="isLastPage()"
+                  @click="nextPage()"
+                  aria-label="Next page"
+                  data-tooltip="Next Page"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevron-right"
@@ -96,10 +115,16 @@
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <polyline points="9 6 15 12 9 18" />
                   </svg>
-                </a>
+                </button>
               </li>
               <li>
-                <a @click="lastPage()" aria-label="Last page" data-tooltip="Last Page">
+                <button
+                  class="button-as-link"
+                  :disabled="isLastPage()"
+                  @click="lastPage()"
+                  aria-label="Last page"
+                  data-tooltip="Last Page"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="icon icon-tabler icon-tabler-chevrons-right"
@@ -116,7 +141,7 @@
                     <polyline points="7 7 12 12 7 17" />
                     <polyline points="13 7 18 12 13 17" />
                   </svg>
-                </a>
+                </button>
               </li>
             </ul>
           </nav>
@@ -129,9 +154,12 @@
     <div
       class="side-button-container d-none d-md-flex"
       id="prev-page-side-button-container"
-      v-if="!isLoading"
     >
-      <button class="button-as-link page-button-disabled" @click="prevPage()">
+      <button
+        class="button-as-link"
+        :disabled="isFirstPage()"
+        @click="prevPage()"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-chevron-left"
@@ -155,9 +183,12 @@
     <div
       class="side-button-container d-none d-md-flex"
       id="next-page-side-button-container"
-      v-if="!isLoading"
     >
-      <button class="button-as-link" @click="nextPage()">
+      <button
+        class="button-as-link"
+        :disabled="isLastPage()"
+        @click="nextPage()"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="icon icon-tabler icon-tabler-chevron-right"
@@ -176,9 +207,7 @@
       </button>
     </div>
 
-    <SemesterBar
-      @showAddSemesterModal="showAddSemesterModal"
-    ></SemesterBar>
+    <SemesterBar @showAddSemesterModal="showAddSemesterModal"></SemesterBar>
 
     <CourseInfoModal
       @openAddSemesterModal="showAddToSemesterModal"
@@ -217,8 +246,10 @@ export default {
     computed: {
       ...mapState({
         allCourses: state => state.courses.allCourses,
-        isLoading: state => state.courses.isLoadingCourses,
-        viewOption: state => state.courses.searchRequest.viewOption
+        isLoadingCourses: state => state.courses.isLoadingCourses,
+        viewOption: state => state.courses.searchRequest.viewOption,
+        currentPage: state => state.courses.currentPage,
+        totalPages: state => state.courses.totalPages
       }),
       ...mapGetters('courses', {
         showCard: 'showCard'
@@ -237,25 +268,33 @@ export default {
       showAddToSemesterModal () {
         this.$refs.addToSemesterModalHome.openModal();
       },
-        
+
       showAddSemesterModal () {
         this.$refs.addSemesterModalHome.openModal();
       },
 
       firstPage() {
-
+        this.$store.dispatch('courses/updatePagination', 1);
       },
 
       prevPage() {
-
+        this.$store.dispatch('courses/updatePagination', this.currentPage - 1);
       },
 
       nextPage() {
-
+        this.$store.dispatch('courses/updatePagination', this.currentPage + 1);
       },
 
       lastPage() {
+        this.$store.dispatch('courses/updatePagination', this.totalPages);
+      },
 
+      isFirstPage() {
+        return this.currentPage === 1;
+      },
+
+      isLastPage() {
+        return this.currentPage === this.totalPages;
       }
     },
 };
@@ -304,18 +343,23 @@ export default {
   }
 }
 
-svg:not(.page-button-disabled svg):hover {
-    stroke: var(--theme-primary-light);
-}
-
-.page-button-disabled {
+button,
+a {
+  &[disabled] {
     opacity: 0.25;
     cursor: default;
 
+    // hide tooltip
     &::before,
     &::after {
       display: none;
     }
   }
 
+  &:not([disabled]) {
+    svg:hover {
+      stroke: var(--theme-primary-light);
+    }
+  }
+}
 </style>
