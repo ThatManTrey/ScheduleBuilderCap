@@ -54,11 +54,21 @@
         <div v-if="$store.state.isAuthenticated" class="col">
           <a
             tabindex="0"
+            v-if="!isAFavorite"
             @keyup.enter="addToFavorites(course)"
             @click="addToFavorites(course)"
             data-tooltip="Favorite Course"
             data-tooltip-location="bottom"
             ><i class="far fa-bookmark fa-lg"></i
+          ></a>
+          <a
+            tabindex="0"
+            v-if="isAFavorite"
+            @keyup.enter="removeFromFavorites(course)"
+            @click="removeFromFavorites(course)"
+            data-tooltip="Unfavorite Course"
+            data-tooltip-location="bottom"
+            ><i class="fas fa-bookmark fa-lg"></i
           ></a>
         </div>
 
@@ -108,10 +118,14 @@ export default {
       default: false
     },
 
-    course: {
-        type: Object
-      },
+    isAFavorite: {
+      type: Boolean,
+      default: false
+    },
 
+    course: {
+      type: Object
+    }
   },
 
   methods: {
@@ -126,6 +140,7 @@ export default {
     removeFromSemester() {
       confirm("Are you sure you want to remove this course?");
     },
+
     addToFavorites(course) {
       var baseUrl =
         process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
@@ -135,22 +150,49 @@ export default {
         .post(baseUrl + "/favorites/add", {
           course_id: course.courseID
         })
-        .then( res => {
+        .then(res => {
           console.log(res);
-          this.displayMessage(res)
+          this.displayMessageADD(res);
         })
         .catch(error => {
           // eslint-disable-next-line
           console.error(error);
-        },
-    )},
-    displayMessage(res) {
-        if(res.status >= 200 || res.status < 300) {
-          Toast.showSuccessMessage("Course added successfully!");
-        }
-        else {
-          Toast.showErrorMessage("Unable to add course.");
-        }
+        });
+    },
+
+    removeFromFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .delete(baseUrl + "/favorites/remove", {
+          course_id: course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displayMessageREMOVE(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+
+    displayMessageADD(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course added successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to add course.");
+      }
+    },
+
+    displayMessageREMOVE(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course removed successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to remove course.");
+      }
     }
   }
 };

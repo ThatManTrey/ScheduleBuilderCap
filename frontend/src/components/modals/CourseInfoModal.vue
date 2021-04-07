@@ -18,7 +18,7 @@
         </div>
         <div class="row">
           <p><strong>Prerequisite</strong>: {{ course.course.prereqs }}</p>
-          <p><strong>Attributes</strong>: {{ }}</p>
+          <p><strong>Attributes</strong>: {{}}</p>
         </div>
         <div class="row">
           <div class="col-6">
@@ -194,12 +194,21 @@
       <div class="d-flex" id="course-info-footer">
         <a
           tabindex="0"
+          v-if="!isAFavorite"
           @keyup.enter="addToFavorites(course)"
           @click="addToFavorites(course)"
           data-tooltip="Favorite Course"
           data-tooltip-location="bottom"
-        >
-          <i class="far fa-bookmark fa-lg bookmark-unfilled-icon"></i
+          ><i class="far fa-bookmark fa-lg"></i
+        ></a>
+        <a
+          tabindex="0"
+          v-if="isAFavorite"
+          @keyup.enter="removeFromFavorites(course)"
+          @click="removeFromFavorites(course)"
+          data-tooltip="Unfavorite Course"
+          data-tooltip-location="bottom"
+          ><i class="fas fa-bookmark fa-lg"></i
         ></a>
         <a
           class="ms-auto"
@@ -217,6 +226,7 @@
 <script>
 import Modal from "./Modal.vue";
 import axios from "axios";
+import * as Toast from "../../toast.js";
 import { mapState } from "vuex";
 
 export default {
@@ -226,11 +236,17 @@ export default {
   data() {
     return {
       ratings: [],
-      hasLoadedRatings: false
+      hasLoadedRatings: false,
+      isAFavorite: null
     };
   },
 
   computed: mapState(["course"]),
+
+  isAFavorite: {
+    type: Boolean,
+    default: true
+  },
 
   created() {
     // loading test
@@ -258,7 +274,6 @@ export default {
     getRatings() {
       var baseUrl =
         process.env.VUE_APP_API_URL + "/courses/" + this.course.course.courseID;
-      // hard coded for now, having trouble passing courseID
 
       //AJAX request
       axios
@@ -279,15 +294,51 @@ export default {
       //AJAX request
       axios
         .post(baseUrl + "/favorites/add", {
-          course_id: course.courseID
+          course_id: course.course.courseID
         })
-        //.then(res => {
-
-        //})
+        .then(res => {
+          console.log(res);
+          this.displayMessageADD(res);
+        })
         .catch(error => {
           // eslint-disable-next-line
-              console.error(error);
+          console.error(error);
         });
+    },
+
+    removeFromFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .delete(baseUrl + "/favorites/remove", {
+          course_id: course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displayMessageREMOVE(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+
+    displayMessageADD(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course added successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to add course.");
+      }
+    },
+
+    displayMessageREMOVE(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course removed successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to remove course.");
+      }
     }
   }
 };
