@@ -21,7 +21,9 @@
             ></CourseCard>
           </div>
         </div>
+      </transition>
 
+      <transition name="coursefade">
         <div
           v-if="!showCard && !isLoadingCourses"
           class="row mt-3 mt-md-5 mb-3 mx-3 mx-xl-1"
@@ -31,9 +33,8 @@
             <colgroup>
               <col span="1" style="width: 10%;" />
               <col span="1" style="width: 30%;" />
-              <col span="1" style="width: 56%;" />
-              <col span="1" style="width: 2%;" />
-              <col span="1" style="width: 2%;" />
+              <col span="1" style="width: 55%;" />
+              <col span="1" style="width: 5%;" />
             </colgroup>
 
             <tbody>
@@ -323,7 +324,11 @@ export default {
 
 <style scoped lang="scss">
 .coursefade-enter-active {
-  transition: all 1s;
+  transition: all .5s;
+}
+
+.coursefade-leave-active {
+  transition: all .5s;
 }
 
 .coursefade-enter,
