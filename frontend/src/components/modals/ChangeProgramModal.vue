@@ -127,8 +127,6 @@ export default {
     },
     closeModal() {
       this.$refs.changeProgramModalRef.closeModal();
-      if(this.addedPrograms > 0)
-        this.openAccordion = false;
     },
 
     addProgram(program) {
