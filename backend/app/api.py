@@ -277,79 +277,110 @@ def get_user_ratings(user_id):
 # # semesters
 
 
-# @app.route('/api/users/<int:user_id>/semesters', methods=['GET'])
-# # @has_access_token()
-# # @is_current_user
-# def get_semesters(user_id):
-#     the_semesters = db.session.query(Semesters).filter_by(userID = user_id)
-#     arr_semesters = []
-#     for semester in the_semesters:
-#         arr_courses.append(semester.as_dict())
-#     return jsonify(semesters = arr_semesters)
+#works but didnt rly test for issues...
+@app.route('/api/user/<int:user_id>/semesters', methods=['GET'])
+# @has_access_token()
+# @is_current_user
+def get_semesters(user_id):
+    the_semesters = db.session.query(Semester).filter_by(userID = user_id)
+    arr_semesters = []
+    for semester in the_semesters:
+        arr_semesters.append(semester.as_dict())
+    return jsonify(semesters = arr_semesters)
+#works but didnt rly test for issues...
 
-# @app.route('/api/users/<int:user_id>/semesters', methods=['POST'])
-# # @has_access_token()
-# # @is_current_user
-# def add_semester(semester_id, user_id, semester_name):
-#     newSemester = Semester(
-#             semesterID = semester_id,
-#             userID = user_id,
-#             semesterName = semester_name
-#         )
-#     db.session.add(newSemester)
-#     db.session.commit()
+@app.route('/api/user/<int:user_id>/semesters', methods=['POST'])
+# @has_access_token()
+# @is_current_user
+def add_semester(user_id):
+    body = request.get_json()
+    # see if semester id is real
+    sem = db.session.query(Semester).get((body['semester_id'], body['user_id']))
+    if not sem:
+        newSemester = Semester(
+            semesterID = body['semester_id'],
+            userID = user_id,
+            semesterName = body['semester_name']
+        )
+        db.session.add(newSemester)
+        db.session.commit()
+        return jsonify(update = "success")
+    else:
+        return jsonify(update = "fail")
 
-# #I have absolutely no idea if this works... it should take the value of newName given in the function and change it in the db... it should... idk I hope it does...
+# #fix
 # @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>', methods=['PUT'])
 # # @has_access_token()
 # # @is_current_user
-# def updateSemester(semesterID_given, newName):
-#     new_name = session.query(Semesters).filter(Semesters.semesterID == semesterID_given).one()
+# def updateSemester(user_id, semester_id):
+#     new_name = db.session.query(Semesters).filter(Semesters.semesterID == semesterID_given).one()
 #     new_name.semesterName = newName
 #     db.session.commit()
 
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>', methods=['DELETE'])
+#works but didnt rly test for cases
+@app.route('/api/user/<int:user_id>/semesters/<string:semester_id>', methods=['DELETE'])
+# @has_access_token()
+# @is_current_user
+def remove_from_semesters(user_id, semester_id):
+    body = request.get_json()
+    #checks to see if the values exist 
+    oldSemester = db.session.query(Semester).get({'userID': user_id, 'semesterID': semester_id})
+    if oldSemester:
+        db.session.delete(oldSemester)
+        db.session.commit()
+        body = request.get_json()
+        return jsonify(update = "success")
+    else:
+        return jsonify(update = "fail")
+#some of the below are test but not tested fully yet... will update ASAP!
+#------------------------------------------------------------------------------
+# semester courses
+
+# @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>/courses', methods=['GET'])
 # # @has_access_token()
 # # @is_current_user
-# def remove_from_semesters(semester_id, user_id):
-#     oldSemester = db.session.query(Semesters).filter_by(
-#             semesterID = semester_id,
-#             userID = user_id
-#         )
-#     db.session.delete(oldSemester)
-#     db.session.commit()
-
-# #------------------------------------------------------------------------------
-# # semester courses
-
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses', methods=['GET'])
-# # @has_access_token()
-# # @is_current_user
-# def get_semester_courses(semester_id):
-#     the_semester_courses = db.session.query(SemesterCourses).filter_by(semesterID = semesterID)
+# def get_semester_courses(user_id, semester_id):
+#     the_semester_courses = db.session.query(Semester.semesterID, Semester.userID, SemesterCourse.courseID).join(SemesterCourse, Semester.semesterID == SemesterCourse.semesterID).all()            
 #     arr_semester_courses = []
 #     for semesterCourse in the_semester_courses:
 #         arr_semester_courses.append(semesterCourse.as_dict())
-#     return jsonify(semesterCourses = arr_semesters)
+#     return jsonify(semesterCourses = arr_semester_courses)
 
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', methods=['POST'])
+# @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>/courses/<string:course_id>', methods=['POST'])
 # # @has_access_token()
 # # @is_current_user
-# def add_semester_course(semester_id, course_id):
-#     newSemesterCourse = Semester(
-#             semesterID = semester_id,
-#             courseID = course_id
-#         )
-#     db.session.add(newSemesterCourse)
-#     db.session.commit()
+# def add_semester_course(user_id, semester_id, course_id):
+#     body = request.get_json()
+#     #we need to check if a courseID and semesterID exist
+#     semester = db.session.query(Semester).get((body['semester_id'], user_id))
+#     course = db.session.query(Course).get(body['course_id'])
+#     if semester or not course:
+#         return jsonify(update = "fail")
+#     else:
+#         newSemesterCourse = Semester(
+#                 userID = user_id,
+#                 semesterID = semester_id,
+#                 courseID = course_id
+#             )
+#         db.session.add(newSemesterCourse)
+#         db.session.commit()
+#         return jsonify(update = "success")
 
 # @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', methods=['DELETE'])
 # # @has_access_token()
 # # @is_current_user
-# def remove_from_semesters(semester_id, course_id):
-#     oldSemesterCourse = db.session.query(SemesterCourses).filter_by(
-#             semesterID = semester_id,
-#             courseID = course_id
-#         )
-#     db.session.delete(oldSemesterCourse)
-#     db.session.commit()
+# def remove_from_semestersssss(user_id, semester_id, course_id):
+#     body = request.get_json()
+
+#     oldSemester = db.session.query(SemesterCourses).get(
+#         {'semesterID': semester_id, 'courseID': course_id})
+
+#     if oldSemester:
+#         db.session.delete(oldSemester)
+#         db.session.commit()
+#         body = request.get_json()
+#         return jsonify(update = "success")
+#     else:
+#         return jsonify(update = "fail")
+
+
