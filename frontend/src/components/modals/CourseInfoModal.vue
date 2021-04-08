@@ -121,7 +121,7 @@
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <p v-if="ratings.quality === 0" id="creditHours">0 / 10</p>
+              <p v-if="!ratings.quality" id="creditHours">0 / 10</p>
               <p v-else id="creditHours">{{ ratings.quality }} / 10</p>
             </div>
           </div>
@@ -173,7 +173,7 @@
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <p v-if="ratings.difficulty === 0" id="creditHours">0 / 10</p>
+              <p v-if="!ratings.difficulty" id="creditHours">0 / 10</p>
               <p v-else id="creditHours">{{ ratings.difficulty }} / 10</p>
             </div>
           </div>
@@ -358,6 +358,7 @@ p {
 #creditHours {
   color: var(--theme-secondary);
   font-weight: 700;
+  padding-top: 0.25rem;
 }
 
 #course-info-footer {
