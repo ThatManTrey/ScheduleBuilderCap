@@ -147,7 +147,6 @@ export default {
 </script>
 
 <style scoped>
-
 .myContainer {
   min-height: 30rem;
   overflow: hidden;
@@ -157,5 +156,4 @@ export default {
   min-height: 100%;
   margin-top: 13%;
 }
-
 </style>

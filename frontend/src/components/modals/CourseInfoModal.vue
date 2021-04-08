@@ -18,7 +18,7 @@
         </div>
         <div class="row">
           <p><strong>Prerequisite</strong>: {{ course.course.prereqs }}</p>
-          <p><strong>Attributes</strong>: {{}}</p>
+          <!-- <p><strong>Attributes</strong>: {{}}</p> -->
         </div>
         <div class="row">
           <div class="col-6">
@@ -339,7 +339,7 @@ export default {
       Toast.showErrorMessage("Unable to add course.");
     },
 
-    displayErrorRemove () {
+    displayErrorRemove() {
       Toast.showErrorMessage("Unable to remove course.");
     }
   }
