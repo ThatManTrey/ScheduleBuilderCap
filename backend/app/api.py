@@ -73,10 +73,10 @@ def get_all_courses():
     return jsonify(allCourses = arr_courses)
 
 
-@app.route('/api/courses/<page>/<per_page>', methods=['GET'])
+@app.route('/api/courses/<int:page>/<int:per_page>', methods=['GET'])
 # @has_access_token()
 # @is_current_user
-def filtrate_n_paginate(page, per_page):
+def get_courses(page, per_page):
     body = request.get_json()
     
     # find courses according to search parameter
@@ -90,51 +90,65 @@ def filtrate_n_paginate(page, per_page):
         ))
     )
 
+    print(sortType.courseId)
+
     # sort courses
-    if sortType[body['sortType']] == 1:   # courseId
-        query.order_by()
+    if body['sortType'] == 1:   # courseId
+        # gets length, location, courseID
+        componentQuery = db.session.query(
+            func.length(Course.courseID).label('length'),
+            func.locate(" ", Course.courseID).label('loc'),
+            Course.courseID
+        ).subquery()
+
+        # gets courseNo
+        sortAttrQuery = db.session.query(
+            func.substring(
+                componentQuery.c.courseID,
+                componentQuery.c.loc,
+                componentQuery.c.length
+            ).label('courseNo'),
+            componentQuery.c.courseID.label('courseID')
+        ).subquery()
+
+        # joins original query with courseNo attribute
+        query = query.outerjoin(
+            sortAttrQuery,
+            Course.courseID == sortAttrQuery.c.courseID
+        )
 
         if body['isAscending']:
-            query = query.order_by(courseNo.asc())
+            query = query.order_by(sortAttrQuery.c.courseNo.asc())
         else:
-            query = query.order_by(courseNo.dsc())
+            query = query.order_by(sortAttrQuery.c.courseNo.dsc())
 
-    elif sortType[body['sortType']] == 2: # credits
+    elif body['sortType'] == 2: # credits
         if body['isAscending']:
             query = query.order_by(Course.creditHoursMin.asc())
         else:
-            query = query.order_by(Course.creditHoursMin.dsc())
+            query = query.order_by(Course.creditHoursMin.desc())
 
-    elif sortType[body['sortType']] == 3: # program
+    elif body['sortType'] == 3: # program
         if body['isAscending']:
             query = query.order_by(Course.courseIDType.asc())
         else:
-            query = query.order_by(Course.courseIDType.dsc())
+            query = query.order_by(Course.courseIDType.desc())
 
     else:
         return jsonify(msg = "invalid sorting option"), HTTPStatus.BAD_REQUEST
 
+
     # retrieve results
-    results = query.all()
-
-
-    # compile result info
-    # count results
-    numResults = len(results)
-
-    # get iteration bounds
-    numPages = (numResults / per_page) + 1    # page index + 1
-    startIndex = (per_page * (page-1))
+    record_query = query.paginate(page, per_page, True)
     
-    # adjust endIndex if out of results array bounds
-    endIndex = (per_page * (page))
-    if numResults < endIndex:
-        endIndex = numResults
+    numResults = record_query.total
+    numPages = record_query.pages
+    results = record_query.items
 
-    # add page courses to results
+    # # add page courses to results
     courses = []
-    for index in range(startIndex, endIndex):
-        courses.append(results[index])
+    for result in results:
+        courses.append(result.as_dict())
 
     return jsonify(
         coursesForPage = courses,
