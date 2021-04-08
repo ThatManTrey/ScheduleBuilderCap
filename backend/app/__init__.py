@@ -56,7 +56,7 @@ if os.environ['FLASK_ENV'] == "production":
     def before_request_func():
         if request.endpoint == "index" or request.endpoint == "update_server":
             return
-
+          
         api_key = request.headers["Api-Key"]
         if api_key is None:
             return "API Key is required", HTTPStatus.BAD_REQUEST
@@ -64,8 +64,8 @@ if os.environ['FLASK_ENV'] == "production":
         if api_key != app.config['SECRET_KEY']:
             return "Invalid API Key", HTTPStatus.BAD_REQUEST
 
+          
     # for server updates
-
     @app.route('/update_server', methods=['POST'])
     def update_server():
         if request.method == 'POST':
@@ -80,5 +80,5 @@ if os.environ['FLASK_ENV'] == "production":
         else:
             return 'Wrong event type', HTTPStatus.BAD_REQUEST
 
-# test
+
 from app import auth, api 

@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <footer class="container">
+    <footer class="container" v-if="$store.state.isAuthenticated">
       <button class="semesterBar-button" v-on:click="isOpen = !isOpen">
         <i class="far fa-calendar "></i>
         <!-- My Schedule -->
@@ -32,7 +32,8 @@
 <script>
 import MiniSemester from "../components/MiniSemester.vue";
 import AddSemesterModal from "../components/modals/AddSemesterModal.vue";
-import * as Toast from "../toast";
+import * as Toast from "../toast.js";
+
 export default {
   name: "semester-bar",
   data() {
@@ -66,6 +67,7 @@ export default {
 
 <style scoped>
 .container {
+  display: none;
   width: 99%;
   position: fixed;
   bottom: 0;

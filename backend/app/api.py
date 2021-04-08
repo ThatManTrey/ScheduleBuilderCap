@@ -12,6 +12,13 @@ from sqlalchemy.sql import func
 import enum
 
 
+# def get_that_json():
+#     if "application/json" in request.headers["Content-Type"]:
+#         return request.json
+#     else:
+#         return Response(status=415)
+
+
 #------------------------------------------------------------------------------
 # classes
 
@@ -158,7 +165,6 @@ def get_courses(page, per_page):
 
 
 # degrees
-
 @app.route('/api/degrees/all', methods=['GET'])
 def get_all_degrees():
     the_degrees = db.session.query(Degree).all()
@@ -198,11 +204,11 @@ def add_to_favorites(user_id):
         newFav = FavCourse(
                 courseID = body['course_id'],
                 userID = user_id,
-                dateTime = datetime.datetime.utcnow()   # get correct format
+                favoritedOn = datetime.datetime.utcnow()   # get correct format
             )
         db.session.add(newFav)
         db.session.commit()
-        return jsonify()
+        return ""
 
 
 @app.route('/api/user/<int:user_id>/favorites/remove', methods=['DELETE'])
@@ -219,7 +225,7 @@ def remove_from_favorites(user_id):
         db.session.delete(oldFav)
         db.session.commit()
         body = request.get_json()
-        return jsonify()
+        return ""
     
     else:   # some error, may not exist
         return jsonify(update = "fail"), HTTPStatus.BAD_REQUEST
@@ -247,10 +253,10 @@ def add_rating(user_id):
         )
         db.session.add(newRat)
         db.session.commit()
-        return jsonify()
+        return ""
     
     else:   # error, course may not exist
-        return jsonify(), HTTPStatus.BAD_REQUEST
+        return "", HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/courses/<string:course_id>/ratings', methods=['GET'])
@@ -307,11 +313,11 @@ def edit_rating(user_id, course_id):
         rating.ratingQuality = body['quality']
         rating.ratingDifficulty = body['difficulty']
         db.session.commit()
-        return jsonify()
+        return ""
     
     else:   # error, course may not exist
-        return jsonify(), HTTPStatus.BAD_REQUEST
-
+        return "", HTTPStatus.BAD_REQUEST
+      
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', methods=['DELETE'])
 #or api/courses/<course_id>/ratings/<user_id>
@@ -326,10 +332,10 @@ def remove_rating(user_id, course_id):
     if rating:  # rating found, delete rating
         db.session.delete(rating)
         db.session.commit()
-        return jsonify()
+        return ""
     
     else:   # error, rating may not exist
-        return jsonify(), HTTPStatus.BAD_REQUEST
+        return "", HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['GET'])
@@ -345,7 +351,7 @@ def get_user_ratings(user_id):
         arr_ratings.append(entry)
     return jsonify(ratedCourses = arr_ratings)
 
-
+  
 #------------------------------------------------------------------------------
 # semesters
 

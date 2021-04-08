@@ -18,7 +18,7 @@
         </div>
         <div class="row">
           <p><strong>Prerequisite</strong>: {{ course.course.prereqs }}</p>
-          <p><strong>Attributes</strong>: {{}}</p>
+          <!-- <p><strong>Attributes</strong>: {{}}</p> -->
         </div>
         <div class="row">
           <div class="col-6">
@@ -49,7 +49,27 @@
             </p>
           </div>
           <div class="col-6">
-            <p><strong>Contact Hours</strong>: {{}} lecture</p>
+            <p
+              v-if="
+                course.course.contactHoursMin == course.course.contactHoursMax
+              "
+            >
+              <strong> Contact Hours</strong>:
+              <span id="creditHours"> {{ course.course.creditHoursMax }}</span>
+              Hours
+            </p>
+            <p
+              v-if="
+                course.course.contactHoursMin != course.course.contactHoursMax
+              "
+            >
+              <strong> Contact Hours</strong>:
+              <span id="creditHours">
+                {{ course.course.contactHoursMin }} -
+                {{ course.course.contactHoursMax }}</span
+              >
+              Hours
+            </p>
             <p><strong>Grade Mode</strong>: {{ course.course.gradeType }}</p>
           </div>
         </div>
@@ -58,15 +78,104 @@
           <hr class="bg-theme-darkest-gray" size="5" />
           <div class="col">
             Course Quality:
-            <h1 class="avg-rating">
-              7 / 10
-            </h1>
+            <div class="avg-rating">
+              <h3 v-if="ratings.quality >= 1 || ratings.quality < 3">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="ratings.quality >= 3 || ratings.quality < 5">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="ratings.quality >= 5 || ratings.quality < 7">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="ratings.quality >= 7 || ratings.quality < 9">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="ratings.quality >= 9 || ratings.quality <= 10">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <p v-if="!ratings.quality" id="creditHours">0 / 10</p>
+              <p v-else id="creditHours">{{ ratings.quality }} / 10</p>
+            </div>
           </div>
+
           <div class="col">
             Course Difficulty:
-            <h1 class="avg-rating">
-              5 / 10
-            </h1>
+            <div class="avg-rating">
+              <h3 v-if="ratings.difficulty >= 1 || ratings.difficulty < 3">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="ratings.difficulty >= 3 || ratings.difficulty < 5">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="ratings.difficulty >= 5 || ratings.difficulty < 7">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else-if="ratings.difficulty >= 7 || ratings.difficulty < 9">
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3
+                v-else-if="ratings.difficulty >= 9 || ratings.difficulty <= 10"
+              >
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+                <i class="fas fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <h3 v-else>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+                <i class="far fa-star fa-lg text-theme-secondary"></i>
+              </h3>
+              <p v-if="!ratings.difficulty" id="creditHours">0 / 10</p>
+              <p v-else id="creditHours">{{ ratings.difficulty }} / 10</p>
+            </div>
           </div>
         </div>
         <div class="text-center">
@@ -84,11 +193,22 @@
     <template v-if="$store.state.auth.isAuthenticated" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
-          href="#"
+          tabindex="0"
+          v-if="!isAFavorite"
+          @keyup.enter="addToFavorites(course)"
+          @click="addToFavorites(course)"
           data-tooltip="Favorite Course"
           data-tooltip-location="bottom"
-        >
-          <i class="far fa-bookmark fa-lg bookmark-unfilled-icon"></i
+          ><i class="far fa-bookmark fa-lg"></i
+        ></a>
+        <a
+          tabindex="0"
+          v-if="isAFavorite"
+          @keyup.enter="removeFromFavorites(course)"
+          @click="removeFromFavorites(course)"
+          data-tooltip="Unfavorite Course"
+          data-tooltip-location="bottom"
+          ><i class="fas fa-bookmark fa-lg"></i
         ></a>
         <a
           class="ms-auto"
@@ -105,12 +225,33 @@
 
 <script>
 import Modal from "./Modal.vue";
+import axios from "axios";
+import * as Toast from "../../toast.js";
+
 import { mapState } from "vuex";
 
 export default {
   components: {
     Modal
   },
+  data() {
+    return {
+      ratings: [],
+      hasLoadedRatings: false,
+      isAFavorite: null
+    };
+  },
+
+  isAFavorite: {
+    type: Boolean,
+    default: true
+  },
+
+  created() {
+    // loading test
+    this.getRatings();
+  },
+
   computed: mapState({
     course: state => state.courses.currentCourse
   }),
@@ -131,6 +272,78 @@ export default {
       setTimeout(() => {
         this.$emit("openAddSemesterModal");
       }, 320);
+    },
+
+    getRatings() {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/courses/" + this.course.course.courseID;
+
+      //AJAX request
+      axios
+        .get(baseUrl + "/ratings")
+        .then(res => {
+          this.ratings = res.data;
+          this.hasLoadedRatings = true;
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+              console.error(error);
+        });
+    },
+    addToFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .post(baseUrl + "/favorites/add", {
+          course_id: course.course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displayMessageADD(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.displayErrorAdd();
+        });
+    },
+
+    removeFromFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .delete(baseUrl + "/favorites/remove", {
+          course_id: course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displaySuccess(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.displayErrorRemove();
+        });
+    },
+
+    displaySuccess(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course added successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to add course.");
+      }
+    },
+
+    displayErrorAdd() {
+      Toast.showErrorMessage("Unable to add course.");
+    },
+
+    displayErrorRemove() {
+      Toast.showErrorMessage("Unable to remove course.");
     }
   }
 };
@@ -148,10 +361,16 @@ p {
 #creditHours {
   color: var(--theme-secondary);
   font-weight: 700;
+  padding-top: 0.25rem;
 }
 
 #course-info-footer {
   width: 100%;
   font-size: 1.15rem;
+}
+
+.avg-rating {
+  margin-top: 1rem;
+  margin-bottom: 1.25rem;
 }
 </style>

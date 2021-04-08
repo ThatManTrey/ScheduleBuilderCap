@@ -1,80 +1,118 @@
 <template lang="html">
   <div class="card justify-content-center course-card">
-    <a
-      tabindex="0"
-      @keyup.enter="showCourseInfoModal(course)"
-      @click="showCourseInfoModal(course)"
-    >
-      <div class="card-body container-fluid text-theme-whiter">
-        <div class="row text-theme-whitest">
-          <h4 class="course-card-title m-1">{{ course.courseName }}</h4>
-        </div>
+    <div class="card-body container-fluid text-theme-whiter">
+      <a
+        tabindex="0"
+        @keyup.enter="showCourseInfoModal(course)"
+        @click="showCourseInfoModal(course)"
+      >
+        <div>
+          <div class="row text-theme-whitest">
+            <h4 class="course-card-title m-1">{{ course.courseName }}</h4>
+          </div>
 
-        <div class="row" :class="{ 'mb-2': !showSmallCard }">
-          <div class="col-10 p-0">
-            <span class="badge rounded-pill course-badge">
-              <button class="button-as-link">{{ course.courseID }}</button>
-            </span>
+          <div class="row" :class="{ 'mb-2': !showSmallCard }">
+            <div class="col-10 p-0">
+              <span class="badge rounded-pill course-badge">
+                <button class="button-as-link">{{ course.courseID }}</button>
+              </span>
 
-            <span class="badge rounded-pill course-badge">
-              <button
-                class="button-as-link"
-                v-if="course.creditHoursMax == course.creditHoursMin"
+              <span class="badge rounded-pill course-badge">
+                <button
+                  class="button-as-link"
+                  v-if="course.creditHoursMax == course.creditHoursMin"
+                >
+                  {{ course.creditHoursMax }} Credits
+                </button>
+                <button class="button-as-link" v-else>
+                  {{ course.creditHoursMin }}-{{ course.creditHoursMax }}
+                  Credits
+                </button>
+              </span>
+            </div>
+
+            <div v-if="showSmallCard" class="col-2 text-end">
+              <a
+                tabindex="0"
+                @keyup.enter="showCourseInfoModal(course)"
+                @click="showCourseInfoModal(course)"
               >
-                {{ course.creditHoursMax }} Credits
-              </button>
-              <button class="button-as-link" v-else>
-                {{ course.creditHoursMin }}-{{ course.creditHoursMax }} Credits
-              </button>
-            </span>
+                <i class="fas fa-lg fa-info-circle"></i>
+              </a>
+            </div>
+          </div>
+
+          <div v-if="!showSmallCard" class="row mb-3">
+            <p class="card-text">
+              {{ course.courseDesc }}
+            </p>
           </div>
         </div>
+      </a>
 
-        <div v-if="!showSmallCard" class="row mb-3">
-          <p class="card-text">
-            {{ course.courseDesc }}
-          </p>
+      <div class="row">
+        <div v-if="$store.state.isAuthenticated" class="col">
+          <a
+            tabindex="0"
+            v-if="!isAFavorite"
+            @keyup.enter="addToFavorites(course)"
+            @click="addToFavorites(course)"
+            data-tooltip="Favorite Course"
+            data-tooltip-location="bottom"
+            ><i class="far fa-bookmark fa-lg"></i
+          ></a>
+          <a
+            tabindex="0"
+            v-if="isAFavorite"
+            @keyup.enter="removeFromFavorites(course)"
+            @click="removeFromFavorites(course)"
+            data-tooltip="Unfavorite Course"
+            data-tooltip-location="bottom"
+            ><i class="fas fa-bookmark fa-lg"></i
+          ></a>
         </div>
 
-        <div v-if="!showSmallCard" class="row">
-          <div v-if="$store.state.auth.isAuthenticated" class="col">
-            <a tabindex="0" data-tooltip="Favorite Course"
-              ><i class="far fa-bookmark fa-lg"></i
-            ></a>
-          </div>
-
-          <div v-if="$store.state.auth.isAuthenticated" class="col text-end">
-            <a
-              v-if="!isRemovingCourse"
-              tabindex="0"
-              @keyup.enter="showAddToSemesterModal()"
-              @click="showAddToSemesterModal()"
-              data-tooltip="Add to Semester"
-            >
-              <i class="fas fa-plus-circle fa-lg"></i>
-            </a>
-            <a
-              v-if="isRemovingCourse"
-              tabindex="0"
-              @keyup.enter="removeFromSemester()"
-              @click="removeFromSemester()"
-              data-tooltip="Remove from Semester"
-              ><i class="fas fa-times-circle fa-lg"></i
-            ></a>
-          </div>
+        <div v-if="$store.state.isAuthenticated" class="col text-end">
+          <a
+            v-if="!isRemovingCourse"
+            tabindex="0"
+            @keyup.enter="showAddToSemesterModal(course)"
+            @click="showAddToSemesterModal(course)"
+            data-tooltip="Add to Semester"
+            data-tooltip-location="bottom"
+          >
+            <i class="fas fa-plus-circle fa-lg"></i>
+          </a>
+          <a
+            v-if="isRemovingCourse"
+            tabindex="0"
+            @keyup.enter="removeFromSemester()"
+            @click="removeFromSemester()"
+            data-tooltip="Remove from Semester"
+            data-tooltip-location="bottom"
+            ><i class="fas fa-times-circle fa-lg"></i
+          ></a>
         </div>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import * as Toast from "../toast.js";
+import { mapState } from "vuex";
 import { mapGetters } from "vuex";
 
 export default {
   props: {
     /* true replaces the add semester button with a remove button (used on schedule page) */
     isRemovingCourse: {
+      type: Boolean,
+      default: false
+    },
+
+    isAFavorite: {
       type: Boolean,
       default: false
     },
@@ -93,11 +131,66 @@ export default {
       this.$store.commit("courses/setCurrentCourse", { course: course });
       this.$emit("openCourseInfoModal");
     },
-    showAddToSemesterModal() {
+    showAddToSemesterModal(course) {
+      this.$store.commit("setCourse", { course: course });
       this.$emit("openAddSemesterModal");
     },
     removeFromSemester() {
       confirm("Are you sure you want to remove this course?");
+    },
+
+    addToFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .post(baseUrl + "/favorites/add", {
+          course_id: course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displayMessageADD(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+
+    removeFromFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .delete(baseUrl + "/favorites/remove", {
+          course_id: course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displayMessageREMOVE(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+
+    displayMessageADD(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course added successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to add course.");
+      }
+    },
+
+    displayMessageREMOVE(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course removed successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to remove course.");
+      }
     }
   }
 };

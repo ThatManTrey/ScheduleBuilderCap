@@ -13,6 +13,7 @@ import store from "./store/";
 import axios from "axios";
 import * as Toast from "./toast.js";
 import HttpStatus from "http-status-codes";
+
 import enums from "./enums.js";
 
 Vue.config.productionTip = false;
