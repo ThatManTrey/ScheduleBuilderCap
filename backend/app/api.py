@@ -9,19 +9,19 @@ from http import HTTPStatus
 
 from sqlalchemy.sql import func
 
-
-# def get_that_json():
-#     if "application/json" in request.headers["Content-Type"]:
-#         return request.json
-#     else:
-#         return Response(status=415)
+import enum
 
 
 #------------------------------------------------------------------------------
+# classes
 
-#http://127.0.0.1:5000/ROUTE
-#if post, do raw json in body
+class sortType(enum.Enum):
+    courseId = 1
+    credits = 2
+    program = 3
 
+
+#------------------------------------------------------------------------------
 
 # endpoint example, look at Theme.vue script for frontend example
 @app.route('/api/colors/primary', methods=['GET'])
@@ -76,12 +76,71 @@ def get_all_courses():
 @app.route('/api/courses/<page>/<per_page>', methods=['GET'])
 # @has_access_token()
 # @is_current_user
-def paginate_n_filtrate():
+def filtrate_n_paginate(page, per_page):
     body = request.get_json()
     
+    # find courses according to search parameter
+    query = db.session.query(Course).filter(
+        (Course.courseIDType.in_(body['programs'])
+        & (
+            Course.courseID.like('%' + body['keyword'] + '%')
+            | Course.courseDesc.like('%' + body['keyword'] + '%')
+            | Course.courseName.like('%' + body['keyword'] + '%')
+            | Course.prereqs.like('%' + body['keyword'] + '%')
+        ))
+    )
+
+    # sort courses
+    if sortType[body['sortType']] == 1:   # courseId
+        query.order_by()
+
+        if body['isAscending']:
+            query = query.order_by(courseNo.asc())
+        else:
+            query = query.order_by(courseNo.dsc())
+
+    elif sortType[body['sortType']] == 2: # credits
+        if body['isAscending']:
+            query = query.order_by(Course.creditHoursMin.asc())
+        else:
+            query = query.order_by(Course.creditHoursMin.dsc())
+
+    elif sortType[body['sortType']] == 3: # program
+        if body['isAscending']:
+            query = query.order_by(Course.courseIDType.asc())
+        else:
+            query = query.order_by(Course.courseIDType.dsc())
+
+    else:
+        return jsonify(msg = "invalid sorting option"), HTTPStatus.BAD_REQUEST
+
+    # retrieve results
+    results = query.all()
+
+
+    # compile result info
+    # count results
+    numResults = len(results)
+
+    # get iteration bounds
+    numPages = (numResults / per_page) + 1    # page index + 1
+    startIndex = (per_page * (page-1))
     
-    
-    return
+    # adjust endIndex if out of results array bounds
+    endIndex = (per_page * (page))
+    if numResults < endIndex:
+        endIndex = numResults
+
+    # add page courses to results
+    courses = []
+    for index in range(startIndex, endIndex):
+        courses.append(results[index])
+
+    return jsonify(
+        coursesForPage = courses,
+        numPages = numPages,
+        numResults = numResults,
+    )
 
 
 # degrees
