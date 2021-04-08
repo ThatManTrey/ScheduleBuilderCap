@@ -202,11 +202,11 @@ a .fa-star:hover {
 }
 
 a .fa-bookmark {
-  color: var(--theme-secondary);
+  color: var(--theme-primary-light);
 }
 
 a .fa-bookmark:hover {
-  color: rgba(209, 128, 24, var(--btn-transparency));
+  color: rgba(198, 165, 255, var(--btn-transparency));
 }
 
 a .fa-trash, a .fa-times-circle  {
@@ -308,7 +308,7 @@ div.modal-backdrop.show {
 /* bootstrap dropdown overrides */
 
 ul.dropdown-menu {
-  background-color: var(--theme-black);
+  background-color: #151515;
   border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
@@ -439,17 +439,18 @@ html, body {
   width: 100%;
   color: var(--theme-white);
   scroll-behavior: smooth;
+  overflow-x: hidden;       /* remove if needed */
 }
 
 /* site wide blue gradient background */
 body {
-  background-image: linear-gradient(315deg, #09152b 0%, #122b54 74%);
+  /* background-image: linear-gradient(315deg, #09152b 0%, #122b54 74%);
   -webkit-background-size: cover !important;
   -moz-background-size: cover !important;
   -o-background-size: cover !important;
   background-size: cover !important;
-  background-repeat: no-repeat; 
-  /*background-color: #0e0e0e !important;*/
+  background-repeat: no-repeat;  */
+  background-color: #0e0e0e !important;
 }
 
 a {
@@ -564,7 +565,7 @@ a.link:hover, button.link:hover {
   width: -moz-max-content;
   border-radius: 6px;
   font-size: 14px;
-  background-color: var(--theme-primary-dark);
+  background-color: var(--theme-primary-dark) ;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
   color: #fff;
   text-align: center;
@@ -577,7 +578,7 @@ a.link:hover, button.link:hover {
   content: '';
   border-style: solid;
   border-width: 5px 5px 0px 5px; 
-  border-color: rgba(55, 64, 70, 0.9) transparent transparent transparent;
+  border-color: var(--theme-primary-dark) transparent transparent transparent;
   transition-duration: 0s; 
   transform-origin: top;   
   transform: translateX(-50%) scaleY(0);
@@ -590,12 +591,12 @@ a.link:hover, button.link:hover {
 }
 
 [data-tooltip]:hover:before {
-  transition-delay: 1.5s;
+  transition-delay: .5s;
   transform: translate(-50%, -5px) scale(1);
 }
 
 [data-tooltip]:hover:after {
-  transition-delay: 1.5s; 
+  transition-delay: .5s; 
   transition-duration: 0.2s;
   transform: translateX(-50%) scaleY(1);
 }
@@ -623,7 +624,6 @@ a.link:hover, button.link:hover {
 [data-tooltip-location="bottom"]:hover:after {
   transform: translateY(50%) scaleX(1);
 }
-
 
 /* 
  * Editable Content

@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from app import app, db
-from app.models import Course, User, FavCourse, Degree, Rating
+from app.models import Course, User, FavCourse, Degree, Rating, Semester, SemesterCourse
 from app.colors import *
 from app.decorators import has_access_token, is_current_user
 
@@ -8,6 +8,8 @@ import datetime
 from http import HTTPStatus
 
 from sqlalchemy.sql import func
+
+import enum
 
 
 # def get_that_json():
@@ -18,10 +20,15 @@ from sqlalchemy.sql import func
 
 
 #------------------------------------------------------------------------------
+# classes
 
-#http://127.0.0.1:5000/ROUTE
-#if post, do raw json in body
+class sortType(enum.Enum):
+    courseId = 1
+    credits = 2
+    program = 3
 
+
+#------------------------------------------------------------------------------
 
 # endpoint example, look at Theme.vue script for frontend example
 @app.route('/api/colors/primary', methods=['GET'])
@@ -51,6 +58,8 @@ def get_user(user_id):
 # courses
 
 @app.route('/api/courses/<string:CourseType>', methods=['GET'])
+# @has_access_token()
+# @is_current_user
 def get_dept_courses(CourseType):
     courses = db.session.query(Course).filter_by(courseIDType = CourseType)
     arr_courses = []
@@ -61,6 +70,8 @@ def get_dept_courses(CourseType):
   
 # use at your own risk, but works
 @app.route('/api/courses/all', methods=['GET'])
+# @has_access_token()
+# @is_current_user
 def get_all_courses():
     courses = db.session.query(Course).all()
     arr_courses = []
@@ -69,8 +80,91 @@ def get_all_courses():
     return jsonify(allCourses = arr_courses)
 
 
-# degrees
+@app.route('/api/courses/<int:page>/<int:per_page>', methods=['GET'])
+# @has_access_token()
+# @is_current_user
+def get_courses(page, per_page):
+    body = request.get_json()
+    
+    # find courses according to search parameter
+    query = db.session.query(Course).filter(
+        (Course.courseIDType.in_(body['programs'])
+        & (
+            Course.courseID.like('%' + body['keyword'] + '%')
+            | Course.courseDesc.like('%' + body['keyword'] + '%')
+            | Course.courseName.like('%' + body['keyword'] + '%')
+            | Course.prereqs.like('%' + body['keyword'] + '%')
+        ))
+    )
 
+    print(sortType.courseId)
+
+    # sort courses
+    if body['sortType'] == 1:   # courseId
+        # gets length, location, courseID
+        componentQuery = db.session.query(
+            func.length(Course.courseID).label('length'),
+            func.locate(" ", Course.courseID).label('loc'),
+            Course.courseID
+        ).subquery()
+
+        # gets courseNo
+        sortAttrQuery = db.session.query(
+            func.substring(
+                componentQuery.c.courseID,
+                componentQuery.c.loc,
+                componentQuery.c.length
+            ).label('courseNo'),
+            componentQuery.c.courseID.label('courseID')
+        ).subquery()
+
+        # joins original query with courseNo attribute
+        query = query.outerjoin(
+            sortAttrQuery,
+            Course.courseID == sortAttrQuery.c.courseID
+        )
+
+        if body['isAscending']:
+            query = query.order_by(sortAttrQuery.c.courseNo.asc())
+        else:
+            query = query.order_by(sortAttrQuery.c.courseNo.dsc())
+
+    elif body['sortType'] == 2: # credits
+        if body['isAscending']:
+            query = query.order_by(Course.creditHoursMin.asc())
+        else:
+            query = query.order_by(Course.creditHoursMin.desc())
+
+    elif body['sortType'] == 3: # program
+        if body['isAscending']:
+            query = query.order_by(Course.courseIDType.asc())
+        else:
+            query = query.order_by(Course.courseIDType.desc())
+
+    else:
+        return jsonify(msg = "invalid sorting option"), HTTPStatus.BAD_REQUEST
+
+
+    # retrieve results
+    record_query = query.paginate(page, per_page, True)
+    
+    numResults = record_query.total
+    numPages = record_query.pages
+    results = record_query.items
+
+    # # add page courses to results
+    courses = []
+    for result in results:
+        courses.append(result.as_dict())
+
+    return jsonify(
+        coursesForPage = courses,
+        numPages = numPages,
+        numResults = numResults,
+    )
+
+
+# degrees
 @app.route('/api/degrees/all', methods=['GET'])
 def get_all_degrees():
     the_degrees = db.session.query(Degree).all()
@@ -78,7 +172,7 @@ def get_all_degrees():
     for degree in the_degrees:
         arr_degrees.append(degree.as_dict())
     return jsonify(degrees = arr_degrees)
-
+    
 
 #------------------------------------------------------------------------------
 # favorites
@@ -104,7 +198,7 @@ def add_to_favorites(user_id):
     favorite = db.session.query(FavCourse).get((body['course_id'], user_id))
     course = db.session.query(Course).get(body['course_id'])
     if favorite or not course:    # duplicate entry
-        return jsonify(update = "fail")
+        return jsonify(msg = ""), HTTPStatus.BAD_REQUEST
     
     else:   # nonduplicate, update db
         newFav = FavCourse(
@@ -114,7 +208,7 @@ def add_to_favorites(user_id):
             )
         db.session.add(newFav)
         db.session.commit()
-        return jsonify(update = "success")
+        return ""
 
 
 @app.route('/api/user/<int:user_id>/favorites/remove', methods=['DELETE'])
@@ -131,10 +225,10 @@ def remove_from_favorites(user_id):
         db.session.delete(oldFav)
         db.session.commit()
         body = request.get_json()
-        return jsonify(update = "success")
+        return ""
     
     else:   # some error, may not exist
-        return jsonify(update = "fail")
+        return jsonify(update = "fail"), HTTPStatus.BAD_REQUEST
 
 
 #------------------------------------------------------------------------------
@@ -159,10 +253,10 @@ def add_rating(user_id):
         )
         db.session.add(newRat)
         db.session.commit()
-        return jsonify(update = "success")
+        return ""
     
     else:   # error, course may not exist
-        return jsonify(update = "fail")
+        return "", HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/courses/<string:course_id>/ratings', methods=['GET'])
@@ -219,11 +313,11 @@ def edit_rating(user_id, course_id):
         rating.ratingQuality = body['quality']
         rating.ratingDifficulty = body['difficulty']
         db.session.commit()
-        return jsonify(update = "success")
+        return ""
     
     else:   # error, course may not exist
-        return jsonify(update = "fail")
-
+        return "", HTTPStatus.BAD_REQUEST
+      
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', methods=['DELETE'])
 #or api/courses/<course_id>/ratings/<user_id>
@@ -238,10 +332,10 @@ def remove_rating(user_id, course_id):
     if rating:  # rating found, delete rating
         db.session.delete(rating)
         db.session.commit()
-        return jsonify(update = "success")
+        return ""
     
     else:   # error, rating may not exist
-        return jsonify(update = "fail")
+        return "", HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/users/<int:user_id>/ratings', methods=['GET'])
@@ -257,84 +351,127 @@ def get_user_ratings(user_id):
         arr_ratings.append(entry)
     return jsonify(ratedCourses = arr_ratings)
 
+  
+#------------------------------------------------------------------------------
+# semesters
 
-# #------------------------------------------------------------------------------
-# # semesters
+@app.route('/api/user/<int:user_id>/semesters', methods=['GET'])
+# @has_access_token()
+# @is_current_user
+def get_semesters(user_id):
+    the_semesters = db.session.query(Semester).filter_by(userID = user_id)
+    arr_semesters = []
+    for semester in the_semesters:
+        arr_semesters.append(semester.as_dict())
+    return jsonify(semesters = arr_semesters)
 
 
-# @app.route('/api/users/<int:user_id>/semesters', methods=['GET'])
-# # @has_access_token()
-# # @is_current_user
-# def get_semesters(user_id):
-#     the_semesters = db.session.query(Semesters).filter_by(userID = user_id)
-#     arr_semesters = []
-#     for semester in the_semesters:
-#         arr_courses.append(semester.as_dict())
-#     return jsonify(semesters = arr_semesters)
+@app.route('/api/user/<int:user_id>/semesters', methods=['POST'])
+# @has_access_token()
+# @is_current_user
+def add_semester(user_id):
+    body = request.get_json()
 
-# @app.route('/api/users/<int:user_id>/semesters', methods=['POST'])
-# # @has_access_token()
-# # @is_current_user
-# def add_semester(semester_id, user_id, semester_name):
-#     newSemester = Semester(
-#             semesterID = semester_id,
-#             userID = user_id,
-#             semesterName = semester_name
-#         )
-#     db.session.add(newSemester)
-#     db.session.commit()
+    # see if semester exists
+    sem = db.session.query(Semester).filter_by(
+        userID = user_id,
+        semesterName = body['semester_name']
+    ).first()
+    if not sem: # create new semester
+        newSemester = Semester(
+            userID = user_id,
+            semesterName = body['semester_name']
+        )
+        db.session.add(newSemester)
+        db.session.commit()
+        return jsonify(msg = "success")
+    
+    return jsonify(msg = "semester already exists"), HTTPStatus.BAD_REQUEST
 
-# #I have absolutely no idea if this works... it should take the value of newName given in the function and change it in the db... it should... idk I hope it does...
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>', methods=['PUT'])
-# # @has_access_token()
-# # @is_current_user
-# def updateSemester(semesterID_given, newName):
-#     new_name = session.query(Semesters).filter(Semesters.semesterID == semesterID_given).one()
-#     new_name.semesterName = newName
-#     db.session.commit()
 
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>', methods=['DELETE'])
-# # @has_access_token()
-# # @is_current_user
-# def remove_from_semesters(semester_id, user_id):
-#     oldSemester = db.session.query(Semesters).filter_by(
-#             semesterID = semester_id,
-#             userID = user_id
-#         )
-#     db.session.delete(oldSemester)
-#     db.session.commit()
+@app.route('/api/users/<int:user_id>/semesters/<int:semester_id>', methods=['PUT'])
+# @has_access_token()
+# @is_current_user
+def updateSemester(user_id, semester_id):
+    body = request.get_json()
 
-# #------------------------------------------------------------------------------
-# # semester courses
+    # checks to see if the values exist 
+    semester = db.session.query(Semester).get((semester_id, user_id))
+    if semester:    # update name to semester_name
+        semester.semesterName = body['semester_name']
+        db.session.commit()
+        return jsonify(msg = "success")
 
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses', methods=['GET'])
-# # @has_access_token()
-# # @is_current_user
-# def get_semester_courses(semester_id):
-#     the_semester_courses = db.session.query(SemesterCourses).filter_by(semesterID = semesterID)
-#     arr_semester_courses = []
-#     for semesterCourse in the_semester_courses:
-#         arr_semester_courses.append(semesterCourse.as_dict())
-#     return jsonify(semesterCourses = arr_semesters)
+    return jsonify(msg = "semester not found"), HTTPStatus.BAD_REQUEST
 
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', methods=['POST'])
-# # @has_access_token()
-# # @is_current_user
-# def add_semester_course(semester_id, course_id):
-#     newSemesterCourse = Semester(
-#             semesterID = semester_id,
-#             courseID = course_id
-#         )
-#     db.session.add(newSemesterCourse)
-#     db.session.commit()
 
-# @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', methods=['DELETE'])
-# # @has_access_token()
-# # @is_current_user
-# def remove_from_semesters(semester_id, course_id):
-#     oldSemesterCourse = db.session.query(SemesterCourses).filter_by(
-#             semesterID = semester_id,
-#             courseID = course_id
-#         )
-#     db.session.delete(oldSemesterCourse)
-#     db.session.commit()
+@app.route('/api/users/<int:user_id>/semesters/<int:semester_id>', methods=['DELETE'])
+# @has_access_token()
+# @is_current_user
+def remove_semester(user_id, semester_id):
+    # checks to see if the values exist 
+    oldSemester = db.session.query(Semester).get(
+        {'userID': user_id, 'semesterID': semester_id})
+    if oldSemester: # delete semester's courses & semester
+        db.session.query(SemesterCourse).filter_by(
+            semesterID = oldSemester.semesterID).delete()
+        db.session.delete(oldSemester)
+        db.session.commit()
+
+        return jsonify(msg = "success")
+    
+    return jsonify(msg = "semester not found"), HTTPStatus.BAD_REQUEST
+
+
+#------------------------------------------------------------------------------
+# semester courses
+
+@app.route('/api/users/<int:user_id>/semesters/<int:semester_id>/courses', methods=['GET'])
+# @has_access_token()
+# @is_current_user
+def get_semester_courses(user_id, semester_id):
+    # find semester with user_id and semester_id, join with SemesterCourse
+    the_semester_courses = db.session.query(Semester).filter_by(
+        semesterID = semester_id,
+        userID = user_id
+        ).join(
+            SemesterCourse, Semester.semesterID == SemesterCourse.semesterID
+        ).all()            
+    arr_semester_courses = []
+    for semesterCourse in the_semester_courses:
+        arr_semester_courses.append(semesterCourse.as_dict())
+    return jsonify(semesterCourses = arr_semester_courses)
+
+
+@app.route('/api/users/<int:user_id>/semesters/<int:semester_id>/courses/<string:course_id>', methods=['POST'])
+# @has_access_token()
+# @is_current_user
+def add_semester_course(user_id, semester_id, course_id):
+    # check if courseID and semesterID exist
+    semester = db.session.query(Semester).get((semester_id, user_id))
+    course = db.session.query(Course).get(course_id)
+    if semester and course: # add semester course
+        newSemesterCourse = SemesterCourse(
+                semesterID = semester_id,
+                courseID = course_id
+            )
+        db.session.add(newSemesterCourse)
+        db.session.commit()
+        return jsonify(update = "success")
+    
+    return jsonify(msg = "semester or course not found"), HTTPStatus.BAD_REQUEST
+
+
+@app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', methods=['DELETE'])
+# @has_access_token()
+# @is_current_user
+def remove_from_semester(user_id, semester_id, course_id):
+    # check if semester course exists
+    oldSemesterCourse = db.session.query(SemesterCourse).get(
+        {'semesterID': semester_id, 'courseID': course_id})
+    if oldSemesterCourse: # delete semester course
+        db.session.delete(oldSemesterCourse)
+        db.session.commit()
+        return jsonify(update = "success")
+    
+    return jsonify(msg = "semester course not found"), HTTPStatus.BAD_REQUEST

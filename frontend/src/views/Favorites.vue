@@ -31,7 +31,6 @@
 </template>
 
 <script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
@@ -40,15 +39,11 @@ import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 import axios from 'axios';
 
 export default {
-    name: 'favorites',
-    props: [],
     components: {
-        ThemeNavBar,
         CourseCard,
         PageSpinner,
         CourseInfoModal,
-        AddToSemesterModal,
-        FilterCoursesBar
+        AddToSemesterModal
     },
     created() {
         // loading test

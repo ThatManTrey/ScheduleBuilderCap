@@ -11,7 +11,7 @@
 # from apscheduler.schedulers.background import BackgroundScheduler
 
 # schedule helpers
-# import time
+# from time import sleep
 # import atexit
 # import datetime
 
@@ -404,7 +404,6 @@ def addCourse(CourseID, CourseName, CourseDesc, CourseType,
         CreditHours_Min, CreditHours_Max, ContactHours_Min, ContactHours_Max,
         Prereqs, GradeType, CourseID_Type, KentCore):
     insertRecord = True
-    print(CourseID)
 
     # see if record exists
     existing_course = db.session.query(Course).get([CourseID])
@@ -534,7 +533,6 @@ def getSiteData(link):
 
 
 #------------------------------------------------------------------------------
-
 # run it up
 
 scrape()

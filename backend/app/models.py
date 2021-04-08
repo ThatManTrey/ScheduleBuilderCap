@@ -27,7 +27,7 @@ class Course(Base):
 class Degree(Base):
     __tablename__ = 'Degrees'
     degreeID = Column(INTEGER(12), primary_key=True)
-    degreeName = Column(String(32))
+    degreeName = Column(String(128))
     degreeType = Column(String(16))
 
     def as_dict(self):

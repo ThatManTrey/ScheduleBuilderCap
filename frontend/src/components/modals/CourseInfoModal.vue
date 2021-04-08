@@ -1,7 +1,7 @@
 <template lang="html">
   <Modal
     :useLargeModal="true"
-    :useFooter="$store.state.isAuthenticated"
+    :useFooter="$store.state.auth.isAuthenticated"
     ref="courseInfoBaseModalRef"
   >
     <template v-slot:header v-if="course.course"
@@ -180,7 +180,7 @@
         </div>
         <div class="text-center">
           <button
-            v-if="$store.state.hasConfirmedEmail"
+            v-if="$store.state.auth.hasConfirmedEmail"
             type="button"
             class="btn btn-theme-primary-dark"
           >
@@ -190,7 +190,7 @@
       </div>
     </template>
 
-    <template v-if="$store.state.isAuthenticated" v-slot:footer>
+    <template v-if="$store.state.auth.isAuthenticated" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
           tabindex="0"
@@ -227,6 +227,7 @@
 import Modal from "./Modal.vue";
 import axios from "axios";
 import * as Toast from "../../toast.js";
+
 import { mapState } from "vuex";
 
 export default {
@@ -241,8 +242,6 @@ export default {
     };
   },
 
-  computed: mapState(["course"]),
-
   isAFavorite: {
     type: Boolean,
     default: true
@@ -252,6 +251,10 @@ export default {
     // loading test
     this.getRatings();
   },
+
+  computed: mapState({
+    course: state => state.courses.currentCourse
+  }),
 
   methods: {
     /* needed to open/close this modal from parent component */

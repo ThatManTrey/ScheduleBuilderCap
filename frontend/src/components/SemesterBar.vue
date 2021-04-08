@@ -33,6 +33,7 @@
 import MiniSemester from "../components/MiniSemester.vue";
 import AddSemesterModal from "../components/modals/AddSemesterModal.vue";
 import * as Toast from "../toast.js";
+
 export default {
   name: "semester-bar",
   data() {

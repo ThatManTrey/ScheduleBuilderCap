@@ -102,16 +102,10 @@
 import axios from "axios";
 import * as Toast from "../toast.js";
 import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   props: {
-    showSmallCard: {
-      type: Boolean,
-      default: false
-    },
-
-    computed: mapState(["course"]),
-
     /* true replaces the add semester button with a remove button (used on schedule page) */
     isRemovingCourse: {
       type: Boolean,
@@ -128,9 +122,13 @@ export default {
     }
   },
 
+  computed: mapGetters("courses", {
+    showSmallCard: "showSmallCard"
+  }),
+
   methods: {
     showCourseInfoModal(course) {
-      this.$store.commit("setCourse", { course: course });
+      this.$store.commit("courses/setCurrentCourse", { course: course });
       this.$emit("openCourseInfoModal");
     },
     showAddToSemesterModal(course) {
@@ -201,20 +199,20 @@ export default {
 <style scoped lang="scss">
 div.course-card {
   background-color: var(--theme-blacker);
-  transition: transform 0.2s;
+  //transition: transform 0.2s;
 }
 
 div.course-card:hover,
 div.course-card:focus-within {
   background-color: var(--theme-black);
 
-  /* shadow taken from dark mode gmail hover styling */
   box-shadow: inset 1px 0 0 rgb(255 255 255 / 20%),
     inset -1px 0 0 rgb(255 255 255 / 20%), 0 0 4px 0 rgb(95 99 104 / 60%),
     0 0 6px 2px rgb(95 99 104 / 60%);
   z-index: 1;
 
-  transform: scale(1.05);
+  // disabling since it messes with the tooltip
+  //transform: scale(1.05);
 }
 
 .course-desc {
@@ -259,12 +257,6 @@ span.course-badge {
   display: -webkit-box;
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;
-}
-
-i.fa-info-circle {
-  color: inherit;
-  position: relative;
-  top: 3px;
 }
 
 .link.small {

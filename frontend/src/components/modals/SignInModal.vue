@@ -278,7 +278,7 @@ export default {
 
       this.$store
         .dispatch({
-          type: "logIn",
+          type: "auth/logIn",
           email: this.emailField.email,
           password: this.passField.pass
         })
@@ -286,9 +286,9 @@ export default {
           this.isSubmittingForm = false;
           this.allowClosingModal();
 
-          if (this.$store.state.authError) {
+          if (this.$store.state.auth.authError) {
             this.isLoginSuccessful = false;
-            this.errorMessage = this.$store.state.authError;
+            this.errorMessage = this.$store.state.auth.authError;
           } else {
             this.isLoginSuccessful = true;
 

@@ -12,22 +12,23 @@ export default (to, from, next) => {
         headers: { Authorization: "Bearer " + confirmationToken }
       })
       .then(() => {
-        store.commit("confirmEmail", true);
+        store.commit("auth/confirmEmail", true);
         next("/home");
         Toast.showSuccessMessage("Your email has been confirmed successfully!");
       })
       .catch(error => {
-        if (!error.response) store.commit("setAuthError");
+        if (!error.response) store.commit("auth/setAuthError");
 
         if (error.response.status == HttpStatus.BAD_REQUEST)
           store.commit(
-            "setAuthError",
+            "auth/setAuthError",
             "You have already confirmed your email."
           );
-        else store.commit("setAuthError", "Invalid email confirmation link.");
+        else
+          store.commit("auth/setAuthError", "Invalid email confirmation link.");
 
         next("/home");
-        Toast.showErrorMessage(store.state.authError);
+        Toast.showErrorMessage(store.state.auth.authError);
       });
   } else {
     next("/home");
