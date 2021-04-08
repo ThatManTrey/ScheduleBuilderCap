@@ -38,7 +38,7 @@ class FavCourse(Base):
     __tablename__ = 'FavCourses'
     courseID = Column(String(32), primary_key=True, nullable=False)
     userID = Column(INTEGER(12), primary_key=True, nullable=False)
-    dateTime = Column(DateTime)
+    favoritedOn = Column(DateTime)
 
     def as_dict(self):
         return { col.name: getattr(self, col.name) for col in self.__table__.columns }
