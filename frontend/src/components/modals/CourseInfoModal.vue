@@ -1,11 +1,11 @@
 <template lang="html">
   <Modal
     :useLargeModal="true"
-    :useFooter="$store.state.isAuthenticated"
+    :useFooter="$store.state.auth.isAuthenticated"
     ref="courseInfoBaseModalRef"
   >
     <template v-slot:header v-if="course.course"
-      >{{course.course.courseID}} - {{course.course.courseName}}</template
+      >{{ course.course.courseID }} - {{ course.course.courseName }}</template
     >
 
     <template v-slot:body v-if="course.course">
@@ -13,32 +13,44 @@
         <div class="row">
           <h5><strong>Description</strong></h5>
           <p>
-            {{course.course.courseDesc}}
+            {{ course.course.courseDesc }}
           </p>
         </div>
         <div class="row">
-          <p>
-            <strong>Prerequisite</strong>: {{course.course.prereqs}}
-          </p>
-          <p>
-            <strong>Attributes</strong>: {{ }}
-          </p>
+          <p><strong>Prerequisite</strong>: {{ course.course.prereqs }}</p>
+          <p><strong>Attributes</strong>: {{}}</p>
         </div>
         <div class="row">
           <div class="col-6">
-            <p v-if="course.course.creditHoursMax == course.course.creditHoursMin">
-              <strong>Credits</strong>: <span id="creditHours">{{course.course.creditHoursMax}}</span> Credit
-              Hours
+            <p
+              v-if="
+                course.course.creditHoursMax == course.course.creditHoursMin
+              "
+            >
+              <strong>Credits</strong>:
+              <span id="creditHours">{{ course.course.creditHoursMax }}</span>
+              Credit Hours
             </p>
-            <p v-if="course.course.creditHoursMax != course.course.creditHoursMin">
-              <strong>Credits</strong>: <span id="creditHours">
-                {{course.course.creditHoursMin}}-{{course.course.creditHoursMax}}</span> Credit Hours
+            <p
+              v-if="
+                course.course.creditHoursMax != course.course.creditHoursMin
+              "
+            >
+              <strong>Credits</strong>:
+              <span id="creditHours">
+                {{ course.course.creditHoursMin }}-{{
+                  course.course.creditHoursMax
+                }}</span
+              >
+              Credit Hours
             </p>
-            <p><strong>Schedule Type</strong>: {{course.course.courseType}}</p>
+            <p>
+              <strong>Schedule Type</strong>: {{ course.course.courseType }}
+            </p>
           </div>
           <div class="col-6">
-            <p><strong>Contact Hours</strong>: {{ }} lecture</p>
-            <p><strong>Grade Mode</strong>: {{course.course.gradeType}}</p>
+            <p><strong>Contact Hours</strong>: {{}} lecture</p>
+            <p><strong>Grade Mode</strong>: {{ course.course.gradeType }}</p>
           </div>
         </div>
 
@@ -59,7 +71,7 @@
         </div>
         <div class="text-center">
           <button
-            v-if="$store.state.hasConfirmedEmail"
+            v-if="$store.state.auth.hasConfirmedEmail"
             type="button"
             class="btn btn-theme-primary-dark"
           >
@@ -69,7 +81,7 @@
       </div>
     </template>
 
-    <template v-if="$store.state.isAuthenticated" v-slot:footer>
+    <template v-if="$store.state.auth.isAuthenticated" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
           href="#"
@@ -93,15 +105,15 @@
 
 <script>
 import Modal from "./Modal.vue";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   components: {
     Modal
-  },    
-  computed: mapState([
-      'course'
-  ]),
+  },
+  computed: mapState({
+    course: state => state.courses.currentCourse
+  }),
 
   methods: {
     /* needed to open/close this modal from parent component */

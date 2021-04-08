@@ -1,8 +1,6 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <div class="container">
-      <FilterCoursesBar></FilterCoursesBar>
       <div class="row course-container">
         <div
           class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
@@ -23,21 +21,15 @@
 </template>
 
 <script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
 import CourseCard from '../components/CourseCard.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue'
-import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 
 export default {
-    name: 'favorites',
-    props: [],
     components: {
-        ThemeNavBar,
         CourseCard,
         CourseInfoModal,
-        AddToSemesterModal,
-        FilterCoursesBar
+        AddToSemesterModal
     },
 
 data () {

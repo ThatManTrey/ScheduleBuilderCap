@@ -1,7 +1,5 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
-
     <div class="container mt-3">
       <div class="row course-container">
         <h3 class="text-theme-whitest">Theme guide</h3>
@@ -296,7 +294,6 @@
 </template>
 
 <script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
 import Spinner from '../components/spinners/Spinner.vue';
 import * as Toast from '../toast.js';
 import axios from 'axios';
@@ -311,7 +308,6 @@ export default {
         };
     },
     components: {
-        ThemeNavBar,
         Spinner
     },
     methods: {

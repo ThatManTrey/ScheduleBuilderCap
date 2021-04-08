@@ -1,26 +1,35 @@
 <template lang="html">
-    <div class="semester">
-        <ul class="list-group">
-            <li class="list-group-item header">
-                <a @click="removeSemester()" 
-                @keyup.enter="removeSemester()" 
-                data-tooltip="Remove Semester"
-                data-tooltip-location="bottom">
-                <i class="fas fa-trash fa-sm padding"></i></a> 
-                <span id="semesterName" contenteditable="true">Spring 2021</span>
-                <span class="badge rounded-pill course-badge float-right">
-                    <button class="button-as-link" id="semesterCredits">16</button>
-                    </span></li>
+  <div class="semester">
+    <ul class="list-group">
+      <li class="list-group-item header">
+        <a
+          @click="removeSemester()"
+          @keyup.enter="removeSemester()"
+          data-tooltip="Remove Semester"
+          data-tooltip-location="bottom"
+        >
+          <i class="fas fa-trash fa-sm padding"></i
+        ></a>
+        <span id="semesterName" contenteditable="true">Spring 2021</span>
+        <span class="badge rounded-pill course-badge float-right">
+          <button class="button-as-link" id="semesterCredits">16</button>
+        </span>
+      </li>
 
-            <li class="list-group-item course" v-for="n in 4" :key="n">
-                <a @click="removeCourse()"
-                @keyup.enter="removeCourse()" 
-                class="fas fa-times-circle fa-md text-theme-warning-dark" id="remove"></a>
-                <span class="badge rounded-pill course-badge">
-                    <button class="button-as-link">MATH 13013</button></span>
-                <span id="courseName">Analytic Geometry...</span></li>
-        </ul>
-    </div>
+      <li class="list-group-item course" v-for="n in 4" :key="n">
+        <a
+          @click="removeCourse()"
+          @keyup.enter="removeCourse()"
+          class="fas fa-times-circle fa-md text-theme-warning-dark"
+          id="remove"
+        ></a>
+        <span class="badge rounded-pill course-badge">
+          <button class="button-as-link">MATH 13013</button></span
+        >
+        <span id="courseName">Analytic Geometry...</span>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script lang="js">
@@ -62,8 +71,8 @@ div.container {
 }
 
 .list-group {
-    width: 16rem;
- }
+  width: 16rem;
+}
 
 .list-group li {
   background-color: var(--theme-blacker);
@@ -77,9 +86,9 @@ div.container {
 }
 
 .list-group-item.header {
-    font-size: 12pt;
-    color: var(--theme-whitest);
-    background-color: var(--theme-blackest);
+  font-size: 12pt;
+  color: var(--theme-whitest);
+  background-color: var(--theme-blackest);
 }
 
 #courseName {
@@ -114,8 +123,7 @@ span.course-badge {
 }
 
 #remove {
-    padding-right: 0.5rem;
-    margin-left: -0.25rem;
+  padding-right: 0.5rem;
+  margin-left: -0.25rem;
 }
-
 </style>

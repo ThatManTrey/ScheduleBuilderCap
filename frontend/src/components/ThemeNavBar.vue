@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <nav class="navbar navbar-expand-lg" id="app-nav">
+    <nav class="navbar navbar-expand-md" id="app-nav">
       <div class="container-fluid">
         <!-- Put logo here -->
 
@@ -19,54 +19,48 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-lg-0">
-            <li class="nav-item col-6 col-md-4 col-lg-auto">
+          <ul class="navbar-nav flex-row flex-wrap me-auto mb-3 mb-md-0">
+            <li class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="Home"
                 v-bind:class="{ 'nav-active': isCurrentRoute('Home') }"
               >
-                <i class="fas fa-home"></i>Home
+                <i class="fas fa-home"></i><u>H</u>ome
               </router-link>
             </li>
 
-            <li
-              v-if="$store.state.isAuthenticated"
-              class="nav-item col-6 col-md-4 col-lg-auto"
-            >
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="schedule"
                 v-bind:class="{ 'nav-active': isCurrentRoute('Schedule') }"
               >
-                <i class="far fa-calendar "></i>My Schedule
+                <i class="far fa-calendar "></i><u>S</u>chedule
               </router-link>
             </li>
 
-            <li
-              v-if="$store.state.isAuthenticated"
-              class="nav-item col-6 col-md-4 col-lg-auto"
-            >
+            <li v-if="isLoggedIn" class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="favorites"
                 v-bind:class="{ 'nav-active': isCurrentRoute('Favorites') }"
               >
-                <i class="fas fa-bookmark "></i>Favorites
+                <i class="fas fa-bookmark "></i><u>F</u>avorites
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-md-4 col-lg-auto">
+            <li class="nav-item col-6 col-md-auto">
               <router-link
                 class="nav-link"
                 to="about"
                 v-bind:class="{ 'nav-active': isCurrentRoute('About') }"
               >
-                <i class="fas fa-info-circle "></i>About
+                <i class="fas fa-info-circle "></i><u>A</u>bout
               </router-link>
             </li>
 
-            <li class="nav-item col-6 col-md-4 col-lg-auto">
+            <!-- <li class="nav-item col-6 col-md-4 col-lg-auto">
               <router-link
                 class="nav-link"
                 to="theme"
@@ -74,7 +68,7 @@
               >
                 <i class="fas fa-question-circle"></i>Theme ref</router-link
               >
-            </li>
+            </li> -->
           </ul>
 
           <div class="d-flex">
@@ -82,9 +76,9 @@
               v-on:click="logout()"
               type="button"
               class="btn btn-theme-blacker"
-              v-if="$store.state.isAuthenticated"
+              v-if="isLoggedIn"
             >
-              Logout
+              <u>L</u>ogout
 
               <i class="fas fa-sign-out-alt ms-1"></i>
             </button>
@@ -92,17 +86,17 @@
               type="button"
               class="btn btn-theme-blacker me-3"
               @click="$refs.signInModal.openModal()"
-              v-if="!$store.state.isAuthenticated"
+              v-if="!isLoggedIn"
             >
-              Sign In
+              <u>S</u>ign In
             </button>
             <button
               type="button"
               class="btn btn-theme-primary-dark"
               @click="$refs.registerModal.openModal()"
-              v-if="!$store.state.isAuthenticated"
+              v-if="!isLoggedIn"
             >
-              Create An Account
+              <u>C</u>reate An Account
             </button>
           </div>
         </div>
@@ -125,6 +119,7 @@
 <script>
 import SignInModal from "./modals/SignInModal.vue";
 import RegisterModal from "./modals/RegisterModal.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "theme-nav-bar",
@@ -148,7 +143,7 @@ export default {
 
   methods: {
     isCurrentRoute(route) {
-      return this.currentRouteName === route;
+      return this.$route.name === route;
     },
 
     checkScroll() {
@@ -168,16 +163,14 @@ export default {
     },
 
     logout() {
-      this.$store.dispatch("logOut");
+      this.$store.dispatch("auth/logOut");
       if (!this.isCurrentRoute("Home")) this.$router.push("/home");
     }
   },
 
-  computed: {
-    currentRouteName() {
-      return this.$route.name;
-    }
-  },
+  computed: mapState({
+    isLoggedIn: state => state.auth.isAuthenticated
+  }),
 
   created() {
     this.SHOW_SCROLL_TOP_AFTER_PX = 200;
@@ -185,6 +178,31 @@ export default {
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }
+
+    window.addEventListener('keydown', (event) => {
+      switch(event.key){
+        case 'h':
+          if(!this.isCurrentRoute('Home')) this.$router.push('/home');
+          break;
+        case 's':
+          if(this.isLoggedIn) {
+            if(!this.isCurrentRoute('Schedule')) this.$router.push('/schedule');
+          } else this.$refs.signInModal.openModal();
+          break;
+        case 'f':
+          if(this.isLoggedIn && !this.isCurrentRoute('Favorites')) 
+            this.$router.push('/favorites');
+          break;
+        case 'a':
+          if(!this.isCurrentRoute('About')) this.$router.push('/about');
+          break;
+        case 'l':
+          if(this.isLoggedIn) this.logout();
+          break;
+        case 'c':
+          if(!this.isLoggedIn) this.$refs.registerModal.openModal();
+      }
+    });
   },
 
   destroyed() {
@@ -206,35 +224,29 @@ export default {
     rgba(255, 255, 255, 0.1),
     rgba(255, 255, 255, 0)
   );
-  background-color: #070707;
-}
-
-.nav-link i {
-  margin-right: 0.25rem;
-}
-
-i.fa-bookmark {
-  color: var(--theme-whitest);
+  background-color: #000;
 }
 
 .nav-link {
   color: var(--theme-white);
+
+  &:hover {
+    color: var(--theme-whitest);
+  }
+
+  i {
+    margin-right: 0.25rem;
+    color: var(--theme-light-gray);
+  }
 }
 
-.nav-link:hover {
+.nav-active,
+.nav-active i {
   color: var(--theme-whitest);
 }
 
-a.navbar-brand {
+.navbar-brand {
   color: var(--theme-whiter);
-}
-
-a.nav-active {
-  color: #d29241;
-}
-
-a.nav-active:hover {
-  color: #d29241;
 }
 
 .navbar-toggler i {
@@ -261,13 +273,17 @@ a.nav-active:hover {
   width: 100%;
   text-align: center;
   border-radius: 50%;
-  background-color: #3f256d;
+  background-color: var(--theme-darkest-gray);
+
+  &:hover {
+    background-color: var(--theme-primary-dark);
+  }
 }
 
 #scroll-to-top a i {
   position: relative;
   top: 7px;
-  color: var(--theme-whiter);
+  color: var(--theme-whitest);
 }
 
 .fade-enter-active,

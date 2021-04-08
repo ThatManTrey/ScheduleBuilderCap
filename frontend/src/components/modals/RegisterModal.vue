@@ -232,25 +232,25 @@ export default {
 
       this.$store
         .dispatch({
-          type: "register",
+          type: "auth/register",
           email: this.emailField.email,
           password: this.passField.pass
         })
         .then(() => {
-          if (this.$store.state.authError) {
+          if (this.$store.state.auth.authError) {
             this.isSubmittingForm = false;
             this.isRegisterSuccessful = false;
-            this.errorMessage = this.$store.state.authError;
+            this.errorMessage = this.$store.state.auth.authError;
             this.allowClosingModal();
           } else {
             this.$store
               .dispatch({
-                type: "logIn",
+                type: "auth/logIn",
                 email: this.emailField.email,
                 password: this.passField.pass
               })
               .then(() => {
-                if (this.$store.state.authError) {
+                if (this.$store.state.auth.authError) {
                   this.successMessage =
                     "Account created successfully! You can now log in.";
                 } else {
@@ -274,7 +274,6 @@ export default {
 </script>
 
 <style scoped>
-
 .input-container {
   display: flex;
   width: 100%;
@@ -296,5 +295,4 @@ export default {
 #userRegisterPass {
   width: 100%;
 }
-
 </style>
