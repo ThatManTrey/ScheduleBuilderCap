@@ -101,7 +101,6 @@
 <script>
 import axios from "axios";
 import * as Toast from "../toast.js";
-import { mapState } from "vuex";
 import { mapGetters } from "vuex";
 
 export default {

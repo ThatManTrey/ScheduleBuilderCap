@@ -34,8 +34,7 @@
 import CourseCard from '../components/CourseCard.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
-import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue'
-import FilterCoursesBar from '../components/FilterCoursesBar.vue';
+import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import axios from 'axios';
 
 export default {
