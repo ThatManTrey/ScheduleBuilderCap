@@ -30,16 +30,6 @@
                 </button>
               </span>
             </div>
-
-            <div v-if="showSmallCard" class="col-2 text-end">
-              <a
-                tabindex="0"
-                @keyup.enter="showCourseInfoModal(course)"
-                @click="showCourseInfoModal(course)"
-              >
-                <i class="fas fa-lg fa-info-circle"></i>
-              </a>
-            </div>
           </div>
 
           <div v-if="!showSmallCard" class="row mb-3">
@@ -50,8 +40,8 @@
         </div>
       </a>
 
-      <div class="row">
-        <div v-if="$store.state.isAuthenticated" class="col">
+      <div v-if="!showSmallCard" class="row">
+        <div v-if="isLoggedIn" class="col">
           <a
             tabindex="0"
             v-if="!isAFavorite"
@@ -72,7 +62,7 @@
           ></a>
         </div>
 
-        <div v-if="$store.state.isAuthenticated" class="col text-end">
+        <div v-if="isLoggedIn" class="col text-end">
           <a
             v-if="!isRemovingCourse"
             tabindex="0"
@@ -101,7 +91,7 @@
 <script>
 import axios from "axios";
 import * as Toast from "../toast.js";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
@@ -121,9 +111,14 @@ export default {
     }
   },
 
-  computed: mapGetters("courses", {
-    showSmallCard: "showSmallCard"
-  }),
+  computed: { 
+    ...mapGetters("courses", {
+      showSmallCard: "showSmallCard"
+    }),
+    ...mapState({
+      isLoggedIn: state => state.auth.isAuthenticated
+    })
+  },
 
   methods: {
     showCourseInfoModal(course) {
