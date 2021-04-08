@@ -303,6 +303,7 @@ export default {
         .catch(error => {
           // eslint-disable-next-line
           console.error(error);
+          this.displayErrorAdd();
         });
     },
 
@@ -317,15 +318,16 @@ export default {
         })
         .then(res => {
           console.log(res);
-          this.displayMessageREMOVE(res);
+          this.displaySuccess(res);
         })
         .catch(error => {
           // eslint-disable-next-line
           console.error(error);
+          this.displayErrorRemove();
         });
     },
 
-    displayMessageADD(res) {
+    displaySuccess(res) {
       if (res.status >= 200 || res.status < 300) {
         Toast.showSuccessMessage("Course added successfully!");
       } else {
@@ -333,12 +335,12 @@ export default {
       }
     },
 
-    displayMessageREMOVE(res) {
-      if (res.status >= 200 || res.status < 300) {
-        Toast.showSuccessMessage("Course removed successfully!");
-      } else {
-        Toast.showErrorMessage("Unable to remove course.");
-      }
+    displayErrorAdd() {
+      Toast.showErrorMessage("Unable to add course.");
+    },
+
+    displayErrorRemove () {
+      Toast.showErrorMessage("Unable to remove course.");
     }
   }
 };
