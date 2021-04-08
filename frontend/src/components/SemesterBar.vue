@@ -66,6 +66,7 @@ export default {
 
 <style scoped>
 .container {
+  display: none;
   width: 99%;
   position: fixed;
   bottom: 0;
