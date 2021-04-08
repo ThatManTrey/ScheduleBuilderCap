@@ -11,10 +11,20 @@
           >
             <i class="fas fa-trash fa-lg"></i>
           </a>
-          <h2 class="text-theme-whitest m-0">
-            <span contenteditable="true">Fall 2021</span>
-            (<span class="text-theme-secondary">16</span>)
-          </h2>
+          <div class="text-theme-whitest" style="display:inline">
+            <h2
+              class="m-0 semesterName"
+              contenteditable
+              @keyup.enter="getUserInput"
+              @keydown.enter="endUserInput"
+              @input="getUserInput"
+            >
+              Fall 2021
+            </h2>
+            <h2 class="creditHours">
+              (<span class="text-theme-secondary">16</span>)
+            </h2>
+          </div>
           <button
             class="btn btn-theme-primary-dark float-end"
             type="button"
@@ -58,6 +68,11 @@ import * as Toast from '../toast.js';
 
 export default {
     name: 'semester-accordion',
+    data() {
+      return {
+        semesterName: '',
+      };
+    },
     props: {
       targetName: String
     },
@@ -70,6 +85,13 @@ export default {
         },
         showAddToSemesterModal () {
             this.$emit("showAddToSemesterModal")
+        },
+        getUserInput(e) {
+            var src = e.target.innerText
+            this.semesterName = src
+        },
+        endUserInput() {
+          this.$el.querySelector('.semesterName').blur()
         },
 
         removeSemester() {
@@ -113,5 +135,9 @@ h2,
 i {
   display: inline-block;
   vertical-align: middle;
+}
+
+.creditHours {
+  padding-left: 1rem;
 }
 </style>
