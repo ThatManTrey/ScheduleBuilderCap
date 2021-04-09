@@ -42,6 +42,7 @@ export default {
             this.$emit("openCourseInfoModal");
         },
         showAddToSemesterModal() {
+            this.$store.commit("courses/setCurrentCourse", { course: this.course });
             this.$emit("openAddSemesterModal");
         },
     }

@@ -1,18 +1,20 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <PageSpinner
       v-if="!hasLoadedCourses"
       :showSpinner="!hasLoadedCourses"
     ></PageSpinner>
 
     <div class="container">
-      <FilterCoursesBar></FilterCoursesBar>
       <transition name="coursefade">
-        <div v-show="hasLoadedCourses" class="row mx-3">
+        <div 
+          v-show="hasLoadedCourses" 
+          v-if="courses.favCourses" 
+          class="row mx-3"
+        >
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-            v-for="(course, index) in courses.deptCourses"
+            v-for="(course, index) in courses.favCourses"
             :key="index"
           >
             <CourseCard
@@ -20,6 +22,12 @@
               @openCourseInfoModal="showCourseInfoModal"
               v-bind:course="course"
             ></CourseCard>
+          </div>
+          <div
+            class=" text-theme-light-gray noFavMessage"
+            v-if="!courses.favCourses.length"
+          >
+            <p>You haven't favorited any courses.</p>
           </div>
         </div>
       </transition>
@@ -35,6 +43,7 @@ import CourseCard from '../components/CourseCard.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
+import { mapState } from "vuex";
 import axios from 'axios';
 
 export default {
@@ -42,7 +51,7 @@ export default {
         CourseCard,
         PageSpinner,
         CourseInfoModal,
-        AddToSemesterModal
+        AddToSemesterModal,
     },
     created() {
         // loading test
@@ -57,6 +66,11 @@ export default {
       };
     },
 
+     computed: mapState({
+      userID: state => state.auth.userId,
+      currentCourse: state => state.courses.currentCourse
+     }),
+
       methods: {
         showCourseInfoModal () {
             this.$refs.courseInfoModalFavorites.openModal();
@@ -65,7 +79,7 @@ export default {
             this.$refs.addToSemesterModalFavorites.openModal();
         },
         getCourses() {
-          var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId
+          var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID
 
           //AJAX request
           axios.get(baseUrl + "/favorites")
@@ -82,4 +96,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+  padding-top: 3rem;
+}
+
+.noFavMessage {
+  padding-top: 10rem;
+  text-align: center;
+}
+</style>

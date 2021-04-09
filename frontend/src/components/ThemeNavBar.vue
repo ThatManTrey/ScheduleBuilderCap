@@ -179,28 +179,29 @@ export default {
       window.addEventListener("scroll", this.checkScroll);
     }
 
-    window.addEventListener('keydown', (event) => {
-      switch(event.key){
-        case 'h':
-          if(!this.isCurrentRoute('Home')) this.$router.push('/home');
+    window.addEventListener("keydown", event => {
+      switch (event.key) {
+        case "h":
+          if (!this.isCurrentRoute("Home")) this.$router.push("/home");
           break;
-        case 's':
-          if(this.isLoggedIn) {
-            if(!this.isCurrentRoute('Schedule')) this.$router.push('/schedule');
+        case "s":
+          if (this.isLoggedIn) {
+            if (!this.isCurrentRoute("Schedule"))
+              this.$router.push("/schedule");
           } else this.$refs.signInModal.openModal();
           break;
-        case 'f':
-          if(this.isLoggedIn && !this.isCurrentRoute('Favorites')) 
-            this.$router.push('/favorites');
+        case "f":
+          if (this.isLoggedIn && !this.isCurrentRoute("Favorites"))
+            this.$router.push("/favorites");
           break;
-        case 'a':
-          if(!this.isCurrentRoute('About')) this.$router.push('/about');
+        case "a":
+          if (!this.isCurrentRoute("About")) this.$router.push("/about");
           break;
-        case 'l':
-          if(this.isLoggedIn) this.logout();
+        case "l":
+          if (this.isLoggedIn) this.logout();
           break;
-        case 'c':
-          if(!this.isLoggedIn) this.$refs.registerModal.openModal();
+        case "c":
+          if (!this.isLoggedIn) this.$refs.registerModal.openModal();
       }
     });
   },

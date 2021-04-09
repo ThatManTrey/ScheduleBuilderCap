@@ -115,7 +115,9 @@ export default {
       showSmallCard: "showSmallCard"
     }),
     ...mapState({
-      isLoggedIn: state => state.auth.isAuthenticated
+      isLoggedIn: state => state.auth.isAuthenticated,
+      userID: state => state.auth.userId,
+      currentCourse: state => state.courses.currentCourse
     })
   },
 

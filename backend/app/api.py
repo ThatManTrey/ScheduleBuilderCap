@@ -97,8 +97,6 @@ def get_courses(page, per_page):
         ))
     )
 
-    print(sortType.courseId)
-
     # sort courses
     if body['sortType'] == 1:   # courseId
         # gets length, location, courseID
@@ -180,11 +178,22 @@ def get_all_degrees():
 @app.route('/api/users/<int:user_id>/favorites', methods=['GET'])
 # @has_access_token()
 # @is_current_user
-def get_favorite_courses(user_id):
-    courses = db.session.query(FavCourse).filter_by(userID = user_id)
+def get_favorites(user_id):
+    courses = db.session.query(
+        Course, FavCourse
+    ).join(
+        FavCourse,
+        Course.courseID == FavCourse.courseID
+    ).filter(
+        FavCourse.userID == user_id
+    ).all()
+    
     arr_courses = []
     for course in courses:
-        arr_courses.append(course.as_dict())
+        attributes = dict()
+        for attribute in course:
+            attributes.update(attribute.as_dict())
+        arr_courses.append(attributes)
     return jsonify(favCourses = arr_courses)
 
 
@@ -218,17 +227,23 @@ def remove_from_favorites(user_id):
     body = request.get_json()
 
     # find if record or course exists
-    oldFav = db.session.query(FavCourse).get(
-        {'userID': user_id, 'courseID': body['course_id']})
-    course = db.session.query(Course).get(body['course_id'])
-    if oldFav & course:  # exists
+    oldFav = db.session.query(
+        FavCourse
+    ).join(
+        Course,
+        Course.courseID == body['course_id']
+    ).filter(
+        (FavCourse.userID == user_id)
+        & (FavCourse.courseID == body['course_id'])
+    ).first()
+
+    if oldFav:  # exists
         db.session.delete(oldFav)
         db.session.commit()
         body = request.get_json()
         return ""
     
-    else:   # some error, may not exist
-        return jsonify(update = "fail"), HTTPStatus.BAD_REQUEST
+    return jsonify(msg = "favorite not found"), HTTPStatus.BAD_REQUEST
 
 
 #------------------------------------------------------------------------------
@@ -359,10 +374,24 @@ def get_user_ratings(user_id):
 # @has_access_token()
 # @is_current_user
 def get_semesters(user_id):
-    the_semesters = db.session.query(Semester).filter_by(userID = user_id)
+    the_semesters = db.session.query(
+        Course, SemesterCourse, Semester
+    ).join(
+        SemesterCourse,
+        SemesterCourse.courseID == Course.courseID
+    ).join(
+        Semester,
+        Semester.semesterID == SemesterCourse.semesterID
+    ).filter_by(
+        userID = user_id
+    ).all()
+
     arr_semesters = []
     for semester in the_semesters:
-        arr_semesters.append(semester.as_dict())
+        attributes = dict()
+        for attribute in semester:
+            attributes.update(attribute.as_dict())
+        arr_semesters.append(attributes)
     return jsonify(semesters = arr_semesters)
 
 
