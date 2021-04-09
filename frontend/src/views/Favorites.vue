@@ -19,6 +19,9 @@
               v-bind:course="course"
             ></CourseCard>
           </div>
+          <div class=" text-theme-light-gray noFavMessage" v-if="!courses.favCourses.length">
+            <p> You haven't favorited any courses.</p> 
+          </div>
         </div>
       </transition>
     </div>
@@ -87,7 +90,13 @@ export default {
 </script>
 
 <style scoped>
+
 .container {
   padding-top: 3rem;
+}
+
+.noFavMessage {
+  padding-top: 10rem;
+  text-align: center;
 }
 </style>
