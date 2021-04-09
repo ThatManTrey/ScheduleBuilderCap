@@ -221,17 +221,23 @@ def remove_from_favorites(user_id):
     body = request.get_json()
 
     # find if record or course exists
-    oldFav = db.session.query(FavCourse).get(
-        {'userID': user_id, 'courseID': body['course_id']})
-    course = db.session.query(Course).get(body['course_id'])
-    if oldFav & course:  # exists
+    oldFav = db.session.query(
+        FavCourse
+    ).join(
+        Course,
+        Course.courseID == body['course_id']
+    ).filter(
+        (FavCourse.userID == user_id)
+        & (FavCourse.courseID == body['course_id'])
+    ).first()
+
+    if oldFav:  # exists
         db.session.delete(oldFav)
         db.session.commit()
         body = request.get_json()
         return jsonify()
     
-    else:   # some error, may not exist
-        return jsonify(update = "fail"), HTTPStatus.BAD_REQUEST
+    return jsonify(msg = "favorite not found"), HTTPStatus.BAD_REQUEST
 
 
 #------------------------------------------------------------------------------
