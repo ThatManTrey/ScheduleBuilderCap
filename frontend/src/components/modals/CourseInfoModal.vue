@@ -189,26 +189,32 @@
 
     <template v-if="isLoggedIn" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
-        <a
+        <button
           tabindex="0"
           v-if="!isFavorited"
           @keyup.enter="addToFavorites(course)"
           @click="addToFavorites(course)"
           data-tooltip="Favorite Course"
+          data-tooltip-location="right"
+          class="button-as-link"
+          :disabled="isSendingFavorites"
           ><i class="far fa-bookmark fa-lg"></i
-        ></a>
-        <a
+        ></button>
+        <button
           tabindex="0"
           v-else
           @keyup.enter="removeFromFavorites(course)"
           @click="removeFromFavorites(course)"
           data-tooltip="Unfavorite Course"
+          class="button-as-link"
+          :disabled="isSendingFavorites"
           ><i class="fas fa-bookmark fa-lg"></i
-        ></a>
+        ></button>
         <a
           class="ms-auto"
           @click="openAddToSemesterModal"
           data-tooltip="Add to Semester"
+          data-tooltip-location="left"
         >
           <i class="fas fa-plus-circle fa-lg plus-add-icon"></i>
         </a>
@@ -247,7 +253,8 @@ export default {
   computed: { 
     ...mapState({
       course: state => state.courses.currentCourse,
-      isLoggedIn: state => state.auth.isAuthenticated
+      isLoggedIn: state => state.auth.isAuthenticated,
+      isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {
@@ -294,11 +301,11 @@ export default {
     },
 
     addToFavorites() {
-      this.$store.dispatch("favorites/addFavorite", this.course.course.courseID);
+      this.$store.dispatch("favorites/addFavorite", this.course.course);
     },
 
     removeFromFavorites() {
-      this.$store.dispatch("favorites/removeFavorite", this.course.course.courseID);
+      this.$store.dispatch("favorites/removeFavorite", this.course.course);
     },
   }
 };

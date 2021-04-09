@@ -32,7 +32,6 @@ const mutations = {
 
   setCurrentCourse(state, course) {
     state.currentCourse = course;
-    console.log("currentCourse: ", state.currentCourse)
   },
 
   setAllPrograms(state, allPrograms) {
@@ -52,7 +51,7 @@ const mutations = {
   },
 
   removeProgram(state, program) {
-    var index = state.searchRequest.programs.indexOf(program);
+    const index = state.searchRequest.programs.indexOf(program);
     if (index > -1) {
       state.searchRequest.programs.splice(index, 1);
       updateLocalStoragePrograms(state.searchRequest.programs);
