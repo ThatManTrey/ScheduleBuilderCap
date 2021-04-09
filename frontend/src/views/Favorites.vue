@@ -7,7 +7,11 @@
 
     <div class="container">
       <transition name="coursefade">
-        <div v-show="hasLoadedCourses" class="row mx-3">
+        <div 
+          v-show="hasLoadedCourses" 
+          v-if="courses.favCourses" 
+          class="row mx-3"
+        >
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in courses.favCourses"
