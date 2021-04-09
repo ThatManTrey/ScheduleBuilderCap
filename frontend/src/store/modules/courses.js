@@ -32,6 +32,7 @@ const mutations = {
 
   setCurrentCourse(state, course) {
     state.currentCourse = course;
+    console.log("currentCourse: ", state.currentCourse)
   },
 
   setAllPrograms(state, allPrograms) {

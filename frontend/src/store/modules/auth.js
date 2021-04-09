@@ -37,7 +37,7 @@ const mutations = {
 };
 
 const actions = {
-  logIn({ commit }, { email, password }) {
+  logIn({ commit, dispatch }, { email, password }) {
     return axios
       .post("/auth/login", {
         email: email,
@@ -51,7 +51,7 @@ const actions = {
         });
 
         // uncomment once these endpoints are fixed on the backend
-        //dispatch('favorites/getFavoriteCourses', { root: true });
+        dispatch("favorites/getFavoriteCourses", null, { root: true });
         //dispatch('semesters/getSemesters', { root: true });
 
         axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
@@ -95,7 +95,7 @@ const actions = {
   },
 
   // verify token on new session
-  verifyAccessToken({ commit }) {
+  verifyAccessToken({ commit, dispatch }) {
     return axios
       .get("/auth/verify/access")
       .then(function(response) {
@@ -106,7 +106,7 @@ const actions = {
         });
 
         // uncomment once these endpoints are fixed on the backend
-        //dispatch('favorites/getFavoriteCourses', { root: true });
+        dispatch("favorites/getFavoriteCourses", null, { root: true });
         //dispatch('semesters/getSemesters', { root: true });
       })
       .catch(function(error) {

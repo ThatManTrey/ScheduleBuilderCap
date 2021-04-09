@@ -2,23 +2,20 @@ import axios from "axios";
 import * as Toast from "../../toast";
 
 const state = () => ({
-  // array of favorite objects, container favId and course object
-  // could also make this a map where courseId is the key and favorite object is value
-  favorites: []
+  // array of courses that have been favorited
+  favoriteCourses: []
 });
 
 const mutations = {
-  setFavorites(state, favorites) {
-    state.favorites = favorites;
+  setFavorites(state, favoriteCourses) {
+    state.favoriteCourses = favoriteCourses;
   }
 };
 
 const getters = {
-  isFavorited: state => courseId => {
+  isCourseFavorited: state => courseId => {
     // replace with favorites.has(courseId) if Map is implemented
-    return state.favorites.filter(
-      favorite => favorite.course.courseID === courseId
-    );
+    return state.favoriteCourses.some(course => course.courseID === courseId);
   }
 };
 
@@ -28,7 +25,7 @@ const actions = {
     axios
       .get(url)
       .then(res => {
-        commit("setFavorites", res.data.favorites);
+        commit("setFavorites", res.data.favCourses);
       })
       .catch(error => {
         // eslint-disable-next-line
@@ -37,9 +34,8 @@ const actions = {
   },
 
   addFavorite({ dispatch, rootState }, courseId) {
-    var url = "users/" + rootState.auth.userId + "/favorites/add";
-    axios
-      .post(url, { courseId: courseId })
+    var url = "users/" + rootState.auth.userId + "/favorites/" + courseId;
+    axios.post(url)
       .then(() => {
         dispatch("getFavoriteCourses");
         Toast.showSuccessMessage("Favorite added successfully!");
@@ -52,12 +48,11 @@ const actions = {
   },
 
   removeFavorite({ dispatch, rootState }, courseId) {
-    var url = "users/" + rootState.auth.userId + "/favorites/remove";
-    axios
-      .delete(url, { courseId: courseId })
+    var url = "users/" + rootState.auth.userId + "/favorites/" + courseId;
+    axios.delete(url)
       .then(() => {
         dispatch("getFavoriteCourses");
-        Toast.showSuccessMessage("Favorite added successfully!");
+        Toast.showSuccessMessage("Favorite has been removed.");
       })
       .catch(error => {
         // eslint-disable-next-line

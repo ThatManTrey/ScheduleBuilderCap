@@ -197,53 +197,41 @@ def get_favorites(user_id):
     return jsonify(favCourses = arr_courses)
 
 
-@app.route('/api/users/<int:user_id>/favorites/add', methods=['POST'])
+@app.route('/api/users/<int:user_id>/favorites/<string:course_id>', methods=['POST'])
 # @has_access_token()
 # @is_current_user
-def add_to_favorites(user_id):
-    body = request.get_json()
-    
+def add_to_favorites(user_id, course_id):  
     # see if exists favorite or course exists
-    favorite = db.session.query(FavCourse).get((body['course_id'], user_id))
-    course = db.session.query(Course).get(body['course_id'])
+    favorite = db.session.query(FavCourse).get((course_id, user_id)) 
+    course = db.session.query(Course).get(course_id)
+
     if favorite or not course:    # duplicate entry
-        return jsonify(msg = ""), HTTPStatus.BAD_REQUEST
+        return "Favorite does not exist", HTTPStatus.BAD_REQUEST
     
     else:   # nonduplicate, update db
         newFav = FavCourse(
-                courseID = body['course_id'],
+                courseID = course_id,
                 userID = user_id,
                 favoritedOn = datetime.datetime.utcnow()   # get correct format
             )
         db.session.add(newFav)
         db.session.commit()
-        return ""
+        return "Favorite has been added"
 
 
-@app.route('/api/users/<int:user_id>/favorites/remove', methods=['DELETE'])
+@app.route('/api/users/<int:user_id>/favorites/<string:course_id>', methods=['DELETE'])
 # @has_access_token()
 # @is_current_user
-def remove_from_favorites(user_id):
-    body = request.get_json()
-
+def remove_from_favorites(user_id, course_id):
     # find if record or course exists
-    oldFav = db.session.query(
-        FavCourse
-    ).join(
-        Course,
-        Course.courseID == body['course_id']
-    ).filter(
-        (FavCourse.userID == user_id)
-        & (FavCourse.courseID == body['course_id'])
-    ).first()
+    oldFav = db.session.query(FavCourse).get((course_id, user_id))
 
     if oldFav:  # exists
         db.session.delete(oldFav)
         db.session.commit()
-        body = request.get_json()
-        return ""
+        return "Favorite has been deleted"
     
-    return jsonify(msg = "favorite not found"), HTTPStatus.BAD_REQUEST
+    return "Favorite does not exist", HTTPStatus.BAD_REQUEST
 
 
 #------------------------------------------------------------------------------

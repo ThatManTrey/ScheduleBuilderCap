@@ -1,20 +1,16 @@
 <template lang="html">
   <div>
-    <PageSpinner
+    <!-- <PageSpinner
       v-if="!hasLoadedCourses"
       :showSpinner="!hasLoadedCourses"
-    ></PageSpinner>
+    ></PageSpinner> -->
 
     <div class="container">
-      <transition name="coursefade">
-        <div
-          v-show="hasLoadedCourses"
-          v-if="courses.favCourses"
-          class="row mx-3"
-        >
+      <transition name="fade">
+        <div v-if="favCourses" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
-            v-for="(course, index) in courses.favCourses"
+            v-for="(course, index) in favCourses"
             :key="index"
           >
             <CourseCard
@@ -23,14 +19,11 @@
               v-bind:course="course"
             ></CourseCard>
           </div>
-          <div
-            class=" text-theme-light-gray noFavMessage"
-            v-if="!courses.favCourses.length"
-          >
-            <p>You haven't favorited any courses.</p>
-          </div>
         </div>
       </transition>
+      <!-- <div class=" text-theme-light-gray noFavMessage" v-else>
+        <p>You haven't favorited any courses.</p>
+      </div> -->
     </div>
 
     <CourseInfoModal ref="courseInfoModalFavorites"></CourseInfoModal>
@@ -40,59 +33,33 @@
 
 <script lang="js">
 import CourseCard from '../components/CourseCard.vue';
-import PageSpinner from '../components/spinners/PageSpinner.vue';
+//import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import { mapState } from "vuex";
-import axios from 'axios';
 
 export default {
     components: {
         CourseCard,
-        PageSpinner,
+        //PageSpinner,
         CourseInfoModal,
         AddToSemesterModal,
     },
-    created() {
-        // loading test
-        this.getCourses();
-    },
-
-    data () {
-      return {
-        isModalVisible: false,
-        courses: [],
-        hasLoadedCourses: false
-      };
-    },
 
      computed: mapState({
-      userID: state => state.auth.userId,
-      currentCourse: state => state.courses.currentCourse
+       favCourses: state => state.favorites.favoriteCourses,
      }),
 
       methods: {
         showCourseInfoModal () {
             this.$refs.courseInfoModalFavorites.openModal();
         },
+
         showAddToSemesterModal () {
             this.$refs.addToSemesterModalFavorites.openModal();
         },
-        getCourses() {
-          var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID
-
-          //AJAX request
-          axios.get(baseUrl + "/favorites")
-            .then((res) => {
-              this.courses = res.data;
-              this.hasLoadedCourses = true;
-            })
-            .catch((error) => {
-              // eslint-disable-next-line
-              console.error(error);
-            });
-        }
       },
+
 };
 </script>
 

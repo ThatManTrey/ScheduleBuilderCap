@@ -187,31 +187,28 @@
       </div>
     </template>
 
-    <template v-if="$store.state.auth.isAuthenticated" v-slot:footer>
+    <template v-if="isLoggedIn" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <a
           tabindex="0"
-          v-if="!isAFavorite"
+          v-if="!isFavorited"
           @keyup.enter="addToFavorites(course)"
           @click="addToFavorites(course)"
           data-tooltip="Favorite Course"
-          data-tooltip-location="bottom"
           ><i class="far fa-bookmark fa-lg"></i
         ></a>
         <a
           tabindex="0"
-          v-if="isAFavorite"
+          v-else
           @keyup.enter="removeFromFavorites(course)"
           @click="removeFromFavorites(course)"
           data-tooltip="Unfavorite Course"
-          data-tooltip-location="bottom"
           ><i class="fas fa-bookmark fa-lg"></i
         ></a>
         <a
           class="ms-auto"
           @click="openAddToSemesterModal"
           data-tooltip="Add to Semester"
-          data-tooltip-location="bottom"
         >
           <i class="fas fa-plus-circle fa-lg plus-add-icon"></i>
         </a>
@@ -223,14 +220,13 @@
 <script>
 import Modal from "./Modal.vue";
 import axios from "axios";
-import * as Toast from "../../toast.js";
-
 import { mapState } from "vuex";
 
 export default {
   components: {
     Modal
   },
+
   data() {
     return {
       ratings: [],
@@ -245,23 +241,31 @@ export default {
   },
 
   created() {
-    // loading test
     this.getRatings();
   },
 
-  computed: mapState({
-    userID: state => state.auth.userId,
-    course: state => state.courses.currentCourse
-  }),
+  computed: { 
+    ...mapState({
+      course: state => state.courses.currentCourse,
+      isLoggedIn: state => state.auth.isAuthenticated
+    }),
+
+    isFavorited() {
+      if(!this.course.course)
+        return false;
+      return this.$store.getters['favorites/isCourseFavorited'](this.course.course.courseID);
+    }
+  },
 
   methods: {
-    /* needed to open/close this modal from parent component */
     openModal() {
       this.$refs.courseInfoBaseModalRef.openModal();
     },
+
     closeModal() {
       this.$refs.courseInfoBaseModalRef.closeModal();
     },
+
     openAddToSemesterModal() {
       /* avoids nested modals */
       this.closeModal();
@@ -288,49 +292,14 @@ export default {
               console.error(error);
         });
     },
-    addToFavorites(course) {
-      var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID;
 
-      //AJAX request
-      axios
-        .post(baseUrl + "/favorites/add", {
-          course_id: course.course.courseID
-        })
-        .then(res => {
-          console.log(res);
-          this.displaySuccess(res);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.error(error);
-          Toast.showErrorMessage("Unable to add course.");
-        });
+    addToFavorites() {
+      this.$store.dispatch("favorites/addFavorite", this.course.course.courseID);
     },
 
-    removeFromFavorites(course) {
-      var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID;
-
-      //AJAX request
-      axios
-        .delete(baseUrl + "/favorites/remove", {
-          course_id: course.courseID
-        })
-        .then(res => {
-          console.log(res);
-          this.displaySuccess(res);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.error(error);
-          Toast.showErrorMessage("Unable to remove course.");
-        });
+    removeFromFavorites() {
+      this.$store.dispatch("favorites/removeFavorite", this.course.course.courseID);
     },
-
-    displaySuccess(res) {
-      if (res.status >= 200 || res.status < 300) {
-        Toast.showSuccessMessage("Course added successfully!");
-      }
-    }
   }
 };
 </script>

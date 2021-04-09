@@ -44,22 +44,19 @@
         <div v-if="isLoggedIn" class="col">
           <a
             tabindex="0"
-            v-if="!isAFavorite"
+            v-if="!isFavorited"
             @keyup.enter="addToFavorites()"
             @click="addToFavorites()"
             data-tooltip="Favorite Course"
-            data-tooltip-location="bottom"
             ><i class="far fa-bookmark fa-lg"></i
           ></a>
           <a
             tabindex="0"
-            v-if="isAFavorite"
+            v-else
             @keyup.enter="removeFromFavorites()"
             @click="removeFromFavorites()"
             data-tooltip="Unfavorite Course"
-            data-tooltip-location="bottom"
-            ><i class="fas fa-bookmark fa-lg"></i
-          ></a>
+            ><i class="fas fa-bookmark fa-lg"></i></a>
         </div>
 
         <div v-if="isLoggedIn" class="col text-end">
@@ -69,7 +66,6 @@
             @keyup.enter="showAddToSemesterModal()"
             @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
-            data-tooltip-location="bottom"
           >
             <i class="fas fa-plus-circle fa-lg"></i>
           </a>
@@ -79,7 +75,6 @@
             @keyup.enter="removeFromSemester()"
             @click="removeFromSemester()"
             data-tooltip="Remove from Semester"
-            data-tooltip-location="bottom"
             ><i class="fas fa-times-circle fa-lg"></i
           ></a>
         </div>
@@ -93,13 +88,8 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
-    // remove these with store stuff
+    // replace with semester getter
     isRemovingCourse: {
-      type: Boolean,
-      default: false
-    },
-
-    isAFavorite: {
       type: Boolean,
       default: false
     },
@@ -114,11 +104,16 @@ export default {
     ...mapGetters("courses", {
       showSmallCard: "showSmallCard"
     }),
+
     ...mapState({
       isLoggedIn: state => state.auth.isAuthenticated,
       userID: state => state.auth.userId,
       currentCourse: state => state.courses.currentCourse
-    })
+    }),
+
+    isFavorited() {
+      return this.$store.getters['favorites/isCourseFavorited'](this.course.courseID);
+    }
   },
 
   methods: {
