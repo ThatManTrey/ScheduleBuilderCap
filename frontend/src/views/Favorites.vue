@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <PageSpinner
       v-if="!hasLoadedCourses"
       :showSpinner="!hasLoadedCourses"
@@ -42,7 +41,7 @@ export default {
         CourseCard,
         PageSpinner,
         CourseInfoModal,
-        AddToSemesterModal
+        AddToSemesterModal,
     },
     created() {
         // loading test
