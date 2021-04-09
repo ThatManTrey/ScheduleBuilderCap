@@ -56,7 +56,6 @@
             >
               <strong> Contact Hours</strong>:
               <span id="creditHours"> {{ course.course.creditHoursMax }}</span>
-              Hours
             </p>
             <p
               v-if="
@@ -79,42 +78,42 @@
           <div class="col">
             Course Quality:
             <div class="avg-rating">
-              <h3 v-if="ratings.quality >= 1 || ratings.quality < 3">
+              <h3 v-if="ratings.quality >= 1 && ratings.quality < 3">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.quality >= 3 || ratings.quality < 5">
+              <h3 v-if="ratings.quality >= 3 && ratings.quality < 5">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.quality >= 5 || ratings.quality < 7">
+              <h3 v-if="ratings.quality >= 5 && ratings.quality < 7">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.quality >= 7 || ratings.quality < 9">
+              <h3 v-if="ratings.quality >= 7 && ratings.quality < 9">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.quality >= 9 || ratings.quality <= 10">
+              <h3 v-if="ratings.quality >= 9 && ratings.quality <= 10">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else>
+              <h3 v-if="!ratings.quality || ratings.quality < 1">
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
@@ -129,44 +128,42 @@
           <div class="col">
             Course Difficulty:
             <div class="avg-rating">
-              <h3 v-if="ratings.difficulty >= 1 || ratings.difficulty < 3">
+              <h3 v-if="ratings.difficulty >= 1 && ratings.difficulty < 3">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.difficulty >= 3 || ratings.difficulty < 5">
+              <h3 v-if="ratings.difficulty >= 3 && ratings.difficulty < 5">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.difficulty >= 5 || ratings.difficulty < 7">
+              <h3 v-if="ratings.difficulty >= 5 && ratings.difficulty < 7">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else-if="ratings.difficulty >= 7 || ratings.difficulty < 9">
+              <h3 v-if="ratings.difficulty >= 7 && ratings.difficulty < 9">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3
-                v-else-if="ratings.difficulty >= 9 || ratings.difficulty <= 10"
-              >
+              <h3 v-if="ratings.difficulty >= 9 && ratings.difficulty <= 10">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-else>
+              <h3 v-if="!ratings.difficulty || ratings.difficulty < 1">
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
@@ -253,6 +250,7 @@ export default {
   },
 
   computed: mapState({
+    userID: state => state.auth.userId,
     course: state => state.courses.currentCourse
   }),
 
@@ -292,7 +290,7 @@ export default {
     },
     addToFavorites(course) {
       var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+        process.env.VUE_APP_API_URL + "/user/" + this.userID;
 
       //AJAX request
       axios
@@ -312,7 +310,7 @@ export default {
 
     removeFromFavorites(course) {
       var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+        process.env.VUE_APP_API_URL + "/user/" + this.userID;
 
       //AJAX request
       axios

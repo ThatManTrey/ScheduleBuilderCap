@@ -324,11 +324,11 @@ export default {
 
 <style scoped lang="scss">
 .coursefade-enter-active {
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .coursefade-leave-active {
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .coursefade-enter,

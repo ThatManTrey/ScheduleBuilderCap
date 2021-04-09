@@ -111,12 +111,14 @@ export default {
     }
   },
 
-  computed: { 
+  computed: {
     ...mapGetters("courses", {
       showSmallCard: "showSmallCard"
     }),
     ...mapState({
-      isLoggedIn: state => state.auth.isAuthenticated
+      isLoggedIn: state => state.auth.isAuthenticated,
+      userID: state => state.auth.userId,
+      currentCourse: state => state.courses.currentCourse
     })
   },
 
@@ -134,13 +136,14 @@ export default {
     },
 
     addToFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+      this.$store.commit("courses/setCurrentCourse", { course: course });
+
+      var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID;
 
       //AJAX request
       axios
         .post(baseUrl + "/favorites/add", {
-          course_id: course.courseID
+          course_id: this.currentCourse.course.courseID
         })
         .then(res => {
           console.log(res);
@@ -148,18 +151,20 @@ export default {
         })
         .catch(error => {
           // eslint-disable-next-line
+          Toast.showErrorMessage("Unable to add course.")
           console.error(error);
         });
     },
 
     removeFromFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+      this.$store.commit("courses/setCurrentCourse", { course: course });
+
+      var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID;
 
       //AJAX request
       axios
         .delete(baseUrl + "/favorites/remove", {
-          course_id: course.courseID
+          course_id: this.currentCourse.course.courseID
         })
         .then(res => {
           console.log(res);
@@ -167,6 +172,7 @@ export default {
         })
         .catch(error => {
           // eslint-disable-next-line
+          Toast.showErrorMessage("Unable to remove course.");
           console.error(error);
         });
     },
@@ -174,17 +180,13 @@ export default {
     displayMessageADD(res) {
       if (res.status >= 200 || res.status < 300) {
         Toast.showSuccessMessage("Course added successfully!");
-      } else {
-        Toast.showErrorMessage("Unable to add course.");
-      }
+      } 
     },
 
     displayMessageREMOVE(res) {
       if (res.status >= 200 || res.status < 300) {
         Toast.showSuccessMessage("Course removed successfully!");
-      } else {
-        Toast.showErrorMessage("Unable to remove course.");
-      }
+      } 
     }
   }
 };
