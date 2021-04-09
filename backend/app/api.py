@@ -175,7 +175,7 @@ def get_all_degrees():
 #------------------------------------------------------------------------------
 # favorites
 
-@app.route('/api/user/<int:user_id>/favorites', methods=['GET'])
+@app.route('/api/users/<int:user_id>/favorites', methods=['GET'])
 # @has_access_token()
 # @is_current_user
 def get_favorites(user_id):
@@ -197,7 +197,7 @@ def get_favorites(user_id):
     return jsonify(favCourses = arr_courses)
 
 
-@app.route('/api/user/<int:user_id>/favorites/add', methods=['POST'])
+@app.route('/api/users/<int:user_id>/favorites/add', methods=['POST'])
 # @has_access_token()
 # @is_current_user
 def add_to_favorites(user_id):
@@ -220,7 +220,7 @@ def add_to_favorites(user_id):
         return ""
 
 
-@app.route('/api/user/<int:user_id>/favorites/remove', methods=['DELETE'])
+@app.route('/api/users/<int:user_id>/favorites/remove', methods=['DELETE'])
 # @has_access_token()
 # @is_current_user
 def remove_from_favorites(user_id):
@@ -370,7 +370,7 @@ def get_user_ratings(user_id):
 #------------------------------------------------------------------------------
 # semesters
 
-@app.route('/api/user/<int:user_id>/semesters', methods=['GET'])
+@app.route('/api/users/<int:user_id>/semesters', methods=['GET'])
 # @has_access_token()
 # @is_current_user
 def get_semesters(user_id):
@@ -395,7 +395,7 @@ def get_semesters(user_id):
     return jsonify(semesters = arr_semesters)
 
 
-@app.route('/api/user/<int:user_id>/semesters', methods=['POST'])
+@app.route('/api/users/<int:user_id>/semesters', methods=['POST'])
 # @has_access_token()
 # @is_current_user
 def add_semester(user_id):
