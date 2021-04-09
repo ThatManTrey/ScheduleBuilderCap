@@ -1,11 +1,12 @@
+import axios from "axios";
+
 const state = () => ({
-  // each semester object has 
+  // each semester object has
   //    semesterName
   //    semesterID
   //    array of courses
   semesters: []
 });
-
 
 const mutations = {
   setSemesters(state, semesters) {
@@ -16,14 +17,17 @@ const mutations = {
 const getters = {
   searchPrograms: state => courseId => {
     // i think this would work?
-    return state.semesters.filter(semester => semester.courses.includes(courseId));
+    return state.semesters.filter(semester =>
+      semester.courses.includes(courseId)
+    );
   }
 };
 
 const actions = {
-  getSemesters({ commit }) {
+  getSemesters({ commit, rootState }) {
     var url = "users/" + rootState.auth.userId + "/semesters";
-    axios.get(url)
+    axios
+      .get(url)
       .then(res => {
         commit("setSemesters", res.data.semesters);
       })
@@ -33,9 +37,10 @@ const actions = {
       });
   },
 
-  addSemester({ dispatch }, semesterName) {
+  addSemester({ dispatch, rootState }, semesterName) {
     var url = "users/" + rootState.auth.userId + "/semesters";
-    axios.post(url, { semester_name: semesterName })
+    axios
+      .post(url, { semester_name: semesterName })
       .then(() => {
         dispatch("getSemesters");
       })
@@ -45,9 +50,10 @@ const actions = {
       });
   },
 
-  removeSemester({ dispatch }, { semesterId }) {
+  removeSemester({ dispatch, rootState }, { semesterId }) {
     var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId;
-    axios.delete(url)
+    axios
+      .delete(url)
       .then(() => {
         dispatch("getSemesters");
       })
@@ -57,9 +63,10 @@ const actions = {
       });
   },
 
-  editSemesterName({ dispatch }, newName) {
+  editSemesterName({ dispatch, rootState }, { semesterId, newName }) {
     var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId;
-    axios.put(url, { semester_name: newName })
+    axios
+      .put(url, { semester_name: newName })
       .then(() => {
         dispatch("getSemesters");
       })
@@ -69,9 +76,16 @@ const actions = {
       });
   },
 
-  addCourseToSemester({ dispatch }, { semesterId, courseId }) {
-    var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId + "/courses/" + courseId;
-    axios.post(url)
+  addCourseToSemester({ dispatch, rootState }, { semesterId, courseId }) {
+    var url =
+      "users/" +
+      rootState.auth.userId +
+      "/semesters/" +
+      semesterId +
+      "/courses/" +
+      courseId;
+    axios
+      .post(url)
       .then(() => {
         dispatch("getSemesters");
       })
@@ -81,9 +95,16 @@ const actions = {
       });
   },
 
-  removeCourseFromSemester({ dispatch }, { semesterId, courseId }) {
-    var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId + "/courses/" + courseId;
-    axios.delete(url)
+  removeCourseFromSemester({ dispatch, rootState }, { semesterId, courseId }) {
+    var url =
+      "users/" +
+      rootState.auth.userId +
+      "/semesters/" +
+      semesterId +
+      "/courses/" +
+      courseId;
+    axios
+      .delete(url)
       .then(() => {
         dispatch("getSemesters");
       })
@@ -92,8 +113,7 @@ const actions = {
         console.error(error);
       });
   }
-
-}
+};
 
 export default {
   namespaced: true,
@@ -102,4 +122,3 @@ export default {
   actions,
   mutations
 };
-

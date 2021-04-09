@@ -103,14 +103,14 @@ export default {
       type: Boolean,
       default: false
     },
-    
+
     course: {
       type: Object
     }
   },
 
-  // add isScheduled and isFavorited 
-  computed: { 
+  // add isScheduled and isFavorited
+  computed: {
     ...mapGetters("courses", {
       showSmallCard: "showSmallCard"
     }),
@@ -123,12 +123,12 @@ export default {
 
   methods: {
     showCourseInfoModal() {
-      this.$store.commit("courses/setCurrentCourse", { course: course });
+      this.$store.commit("courses/setCurrentCourse", { course: this.course });
       this.$emit("openCourseInfoModal");
     },
 
     showAddToSemesterModal() {
-      this.$store.commit("courses/setCurrentCourse", { course: course });
+      this.$store.commit("courses/setCurrentCourse", { course: this.course });
       this.$emit("openAddSemesterModal");
     },
 
@@ -137,12 +137,12 @@ export default {
     },
 
     addToFavorites() {
-      this.$store.dispatch("favorites/addFavorite", course.courseID);
+      this.$store.dispatch("favorites/addFavorite", this.course.courseID);
     },
 
     removeFromFavorites() {
-      this.$store.dispatch("favorites/removeFavorite", course.courseID);
-    },
+      this.$store.dispatch("favorites/removeFavorite", this.course.courseID);
+    }
   }
 };
 </script>

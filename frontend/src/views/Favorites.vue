@@ -7,9 +7,9 @@
 
     <div class="container">
       <transition name="coursefade">
-        <div 
-          v-show="hasLoadedCourses" 
-          v-if="courses.favCourses" 
+        <div
+          v-show="hasLoadedCourses"
+          v-if="courses.favCourses"
           class="row mx-3"
         >
           <div
