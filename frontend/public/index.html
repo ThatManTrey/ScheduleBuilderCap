@@ -18,8 +18,11 @@
     </noscript>
     <div id="app">
       <div class="d-flex align-items-center">
-        <div class="spinner-grow" role="status">
+        <div class="spinner-border" role="status">
           <span class="sr-only">Loading...</span>
+        </div>
+        <div class="text-theme-secondary loading-text">
+          <h6>Loading...</h6>
         </div>
       </div>
     </div>
@@ -28,15 +31,27 @@
 </html>
 
 <style>
-.spinner-grow {
+.spinner-border {
   position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -30px;
   margin-top: -80px;
+  border-width: 4pt;
+  height: 2rem;
+  width: 2rem;
+  color: var(--theme-secondary);
+}
+
+.loading-text {
+  position: absolute;
+  top: 57%;
+  left: 49%;
+  margin-left: -30px;
+  margin-top: -80px;
   border-width: 6pt;
-  height: 4rem;
-  width: 4rem;
+  height: 2rem;
+  width: 2rem;
   color: var(--theme-secondary);
 }
 </style>
