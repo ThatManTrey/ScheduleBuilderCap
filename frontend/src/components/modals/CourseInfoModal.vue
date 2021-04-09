@@ -197,7 +197,6 @@
           data-tooltip="Favorite Course"
           data-tooltip-location="right"
           class="button-as-link"
-          :disabled="isSendingFavorites"
           ><i class="far fa-bookmark fa-lg"></i
         ></button>
         <button
@@ -207,7 +206,6 @@
           @click="removeFromFavorites(course)"
           data-tooltip="Unfavorite Course"
           class="button-as-link"
-          :disabled="isSendingFavorites"
           ><i class="fas fa-bookmark fa-lg"></i
         ></button>
         <a
@@ -254,7 +252,7 @@ export default {
     ...mapState({
       course: state => state.courses.currentCourse,
       isLoggedIn: state => state.auth.isAuthenticated,
-      isSendingFavorites: state => state.favorites.isSendingFavorite
+      //isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {

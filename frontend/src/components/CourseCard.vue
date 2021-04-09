@@ -48,7 +48,6 @@
             @keyup.enter="addToFavorites()"
             @click="addToFavorites()"
             data-tooltip="Favorite Course"
-            :disabled="isSendingFavorites"
             class="button-as-link"
             ><i class="far fa-bookmark fa-lg"></i
           ></button>
@@ -58,7 +57,6 @@
             @keyup.enter="removeFromFavorites()"
             @click="removeFromFavorites()"
             data-tooltip="Unfavorite Course"
-            :disabled="isSendingFavorites"
             class="button-as-link"
             ><i class="fas fa-bookmark fa-lg"></i></button>
         </div>
@@ -113,7 +111,7 @@ export default {
       isLoggedIn: state => state.auth.isAuthenticated,
       userID: state => state.auth.userId,
       currentCourse: state => state.courses.currentCourse,
-      isSendingFavorites: state => state.favorites.isSendingFavorite
+      //isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {

@@ -7,7 +7,7 @@
 
     <div class="container">
       <transition name="fade">
-        <div v-if="favCourses" class="row mx-3">
+        <div v-if="favCourses.length !== 0" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in favCourses"
@@ -20,10 +20,10 @@
             ></CourseCard>
           </div>
         </div>
-      </transition>
-      <!-- <div class=" text-theme-light-gray noFavMessage" v-else>
+      <div class=" text-theme-light-gray noFavMessage" v-else>
         <p>You haven't favorited any courses.</p>
-      </div> -->
+      </div>
+      </transition>
     </div>
 
     <CourseInfoModal ref="courseInfoModalFavorites"></CourseInfoModal>
