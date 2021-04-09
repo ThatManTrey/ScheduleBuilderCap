@@ -163,9 +163,9 @@ export default {
 
       //AJAX request
       axios
-        .delete(baseUrl + "/favorites/remove", {
+        .delete(baseUrl + "/favorites/remove", { data: {
           course_id: this.currentCourse.course.courseID
-        })
+        }})
         .then(res => {
           console.log(res);
           this.displayMessageREMOVE(res);
