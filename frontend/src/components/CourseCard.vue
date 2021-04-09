@@ -163,9 +163,11 @@ export default {
 
       //AJAX request
       axios
-        .delete(baseUrl + "/favorites/remove", { data: {
-          course_id: this.currentCourse.course.courseID
-        }})
+        .delete(baseUrl + "/favorites/remove", {
+          data: {
+            course_id: this.currentCourse.course.courseID
+          }
+        })
         .then(res => {
           console.log(res);
           this.displayMessageREMOVE(res);
@@ -180,13 +182,13 @@ export default {
     displayMessageADD(res) {
       if (res.status >= 200 || res.status < 300) {
         Toast.showSuccessMessage("Course added successfully!");
-      } 
+      }
     },
 
     displayMessageREMOVE(res) {
       if (res.status >= 200 || res.status < 300) {
         Toast.showSuccessMessage("Course removed successfully!");
-      } 
+      }
     }
   }
 };

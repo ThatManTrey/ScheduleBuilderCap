@@ -289,8 +289,7 @@ export default {
         });
     },
     addToFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.userID;
+      var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID;
 
       //AJAX request
       axios
@@ -309,8 +308,7 @@ export default {
     },
 
     removeFromFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.userID;
+      var baseUrl = process.env.VUE_APP_API_URL + "/user/" + this.userID;
 
       //AJAX request
       axios
@@ -331,8 +329,8 @@ export default {
     displaySuccess(res) {
       if (res.status >= 200 || res.status < 300) {
         Toast.showSuccessMessage("Course added successfully!");
-      } 
-    },
+      }
+    }
   }
 };
 </script>
