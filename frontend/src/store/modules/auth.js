@@ -9,7 +9,7 @@ const state = () => ({
   isAuthenticated: false,
   userId: null,
   hasConfirmedEmail: null,
-  authError: null,
+  authError: null
 });
 
 const mutations = {
@@ -33,7 +33,7 @@ const mutations = {
 
   confirmEmail(state, hasConfirmedEmail) {
     state.hasConfirmedEmail = hasConfirmedEmail;
-  },
+  }
 };
 
 const actions = {
