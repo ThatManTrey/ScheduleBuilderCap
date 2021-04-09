@@ -3,8 +3,8 @@
     <div class="card-body container-fluid text-theme-whiter">
       <a
         tabindex="0"
-        @keyup.enter="showCourseInfoModal(course)"
-        @click="showCourseInfoModal(course)"
+        @keyup.enter="showCourseInfoModal()"
+        @click="showCourseInfoModal()"
       >
         <div>
           <div class="row text-theme-whitest">
@@ -45,8 +45,8 @@
           <a
             tabindex="0"
             v-if="!isAFavorite"
-            @keyup.enter="addToFavorites(course)"
-            @click="addToFavorites(course)"
+            @keyup.enter="addToFavorites()"
+            @click="addToFavorites()"
             data-tooltip="Favorite Course"
             data-tooltip-location="bottom"
             ><i class="far fa-bookmark fa-lg"></i
@@ -54,8 +54,8 @@
           <a
             tabindex="0"
             v-if="isAFavorite"
-            @keyup.enter="removeFromFavorites(course)"
-            @click="removeFromFavorites(course)"
+            @keyup.enter="removeFromFavorites()"
+            @click="removeFromFavorites()"
             data-tooltip="Unfavorite Course"
             data-tooltip-location="bottom"
             ><i class="fas fa-bookmark fa-lg"></i
@@ -66,8 +66,8 @@
           <a
             v-if="!isRemovingCourse"
             tabindex="0"
-            @keyup.enter="showAddToSemesterModal(course)"
-            @click="showAddToSemesterModal(course)"
+            @keyup.enter="showAddToSemesterModal()"
+            @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
             data-tooltip-location="bottom"
           >
@@ -89,13 +89,11 @@
 </template>
 
 <script>
-import axios from "axios";
-import * as Toast from "../toast.js";
 import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
-    /* true replaces the add semester button with a remove button (used on schedule page) */
+    // remove these with store stuff
     isRemovingCourse: {
       type: Boolean,
       default: false
@@ -105,12 +103,13 @@ export default {
       type: Boolean,
       default: false
     },
-
+    
     course: {
       type: Object
     }
   },
 
+  // add isScheduled and isFavorited 
   computed: { 
     ...mapGetters("courses", {
       showSmallCard: "showSmallCard"
@@ -121,71 +120,27 @@ export default {
   },
 
   methods: {
-    showCourseInfoModal(course) {
+    showCourseInfoModal() {
       this.$store.commit("courses/setCurrentCourse", { course: course });
       this.$emit("openCourseInfoModal");
     },
-    showAddToSemesterModal(course) {
-      this.$store.commit("setCourse", { course: course });
+
+    showAddToSemesterModal() {
+      this.$store.commit("courses/setCurrentCourse", { course: course });
       this.$emit("openAddSemesterModal");
     },
+
     removeFromSemester() {
-      confirm("Are you sure you want to remove this course?");
+      //this.$store.dispatch("semesters/addFavorite", course.courseID);
     },
 
-    addToFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
-
-      //AJAX request
-      axios
-        .post(baseUrl + "/favorites/add", {
-          course_id: course.courseID
-        })
-        .then(res => {
-          console.log(res);
-          this.displayMessageADD(res);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
+    addToFavorites() {
+      this.$store.dispatch("favorites/addFavorite", course.courseID);
     },
 
-    removeFromFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
-
-      //AJAX request
-      axios
-        .delete(baseUrl + "/favorites/remove", {
-          course_id: course.courseID
-        })
-        .then(res => {
-          console.log(res);
-          this.displayMessageREMOVE(res);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
+    removeFromFavorites() {
+      this.$store.dispatch("favorites/removeFavorite", course.courseID);
     },
-
-    displayMessageADD(res) {
-      if (res.status >= 200 || res.status < 300) {
-        Toast.showSuccessMessage("Course added successfully!");
-      } else {
-        Toast.showErrorMessage("Unable to add course.");
-      }
-    },
-
-    displayMessageREMOVE(res) {
-      if (res.status >= 200 || res.status < 300) {
-        Toast.showSuccessMessage("Course removed successfully!");
-      } else {
-        Toast.showErrorMessage("Unable to remove course.");
-      }
-    }
   }
 };
 </script>

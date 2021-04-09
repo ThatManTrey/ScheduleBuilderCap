@@ -43,12 +43,16 @@ const actions = {
         email: email,
         password: password
       })
-      .then(function(response) {
+      .then(function (response) {
         commit({
           type: "authenticateUser",
           userId: response.data.userId,
           hasConfirmedEmail: response.data.hasConfirmedEmail
         });
+
+        // uncomment once these endpoints are fixed on the backend
+        //dispatch('favorites/getFavoriteCourses', { root: true });
+        //dispatch('semesters/getSemesters', { root: true });
 
         axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
           "csrf_access_token"
@@ -65,7 +69,7 @@ const actions = {
           }, 3000);
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         if (!error.response) commit("setAuthError");
         else if (error.response.status == StatusCodes.BAD_REQUEST)
           commit("setAuthError", "Incorrect username or password.");
@@ -79,10 +83,10 @@ const actions = {
         email: email,
         password: password
       })
-      .then(function() {
+      .then(function () {
         commit("setAuthError", null);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         if (!error.response) commit("setAuthError");
         else if (error.response.status === StatusCodes.BAD_REQUEST)
           commit("setAuthError", "That email address is not available.");
@@ -94,14 +98,18 @@ const actions = {
   verifyAccessToken({ commit }) {
     return axios
       .get("/auth/verify/access")
-      .then(function(response) {
+      .then(function (response) {
         commit({
           type: "authenticateUser",
           userId: response.data.userId,
           hasConfirmedEmail: response.data.hasConfirmedEmail
         });
+
+        // uncomment once these endpoints are fixed on the backend
+        //dispatch('favorites/getFavoriteCourses', { root: true });
+        //dispatch('semesters/getSemesters', { root: true });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         if (!error.response) commit("setAuthError");
       });
   },
@@ -109,7 +117,7 @@ const actions = {
   logOut({ commit }) {
     commit("unAuthenticateUser");
 
-    return axios.post("/auth/logout").catch(function() {
+    return axios.post("/auth/logout").catch(function () {
       commit("setAuthError");
     });
   }
@@ -118,10 +126,10 @@ const actions = {
 function resendConfirmationEmail() {
   axios
     .post("/auth/resend-confirm")
-    .then(function() {
+    .then(function () {
       Toast.showSuccessMessage("Confirmation email has been sent!");
     })
-    .catch(function() {
+    .catch(function () {
       Toast.showErrorMessage(
         "Error sending confirmation email. Please try again."
       );
