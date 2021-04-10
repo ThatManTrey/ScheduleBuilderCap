@@ -7,7 +7,7 @@
         class="form-control"
         placeholder="Search"
         @keyup.enter="searchCourses()"
-        :value="keyword"
+        v-model.trim="keyword"
       />
 
       <a
@@ -313,7 +313,7 @@
           placeholder="Search"
           ref="searchCourses"
           @keyup.enter="searchCourses()"
-          :value="keyword"
+          v-model.trim="keyword"
         />
       </transition>
 
@@ -343,12 +343,12 @@ import { mapState } from 'vuex';
 export default {
     data() {
         return {
-            isSearching: false
+            isSearching: false,
+            keyword: ""
         }
     },
 
     computed: mapState({
-      keyword: state => state.courses.searchRequest.keyword,
       isAscending: state => state.courses.searchRequest.sortOption.isAscending,
       programs: state => state.courses.searchRequest.programs
     }),
@@ -384,10 +384,12 @@ export default {
           }, 10);
         } else {
           this.$store.commit('courses/setSearchKeyword', "");
+          this.$store.dispatch('courses/getCourses');
         }
       },
 
       searchCourses() {
+        console.log(this.keyword);
         this.$store.commit('courses/setSearchKeyword', this.keyword);
         this.$store.dispatch('courses/getCourses');
       },

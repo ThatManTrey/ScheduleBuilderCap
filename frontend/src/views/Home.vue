@@ -7,7 +7,7 @@
         @openChangeProgramModal="$refs.changeProgramModalHome.openModal()"
       ></FilterCoursesBar>
 
-      <transition name="coursefade">
+      <transition name="coursefade" mode="out-in">
         <div v-if="showCard && !isLoadingCourses" class="row mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
@@ -21,9 +21,7 @@
             ></CourseCard>
           </div>
         </div>
-      </transition>
 
-      <transition name="coursefade">
         <div
           v-if="!showCard && !isLoadingCourses"
           class="row mt-3 mt-md-5 mb-3 mx-3 mx-xl-1"
@@ -58,7 +56,7 @@
         style="margin-bottom: 5rem;"
       >
         <div class="col-4 text-theme-white">
-          <h5>168 Results</h5>
+          <h5>{{ totalResults }} Results, {{ totalPages }} pages</h5>
         </div>
         <div class="col-8 d-flex justify-content-end">
           <nav class="course-pagination" aria-label="Course pagination">
@@ -271,7 +269,8 @@ export default {
         isLoadingCourses: state => state.courses.isLoadingCourses,
         viewOption: state => state.courses.searchRequest.viewOption,
         currentPage: state => state.courses.currentPage,
-        totalPages: state => state.courses.totalPages
+        totalPages: state => state.courses.totalPages,
+        totalResults: state => state.courses.totalResults
       }),
       ...mapGetters('courses', {
         showCard: 'showCard'
