@@ -197,8 +197,9 @@
           data-tooltip="Favorite Course"
           data-tooltip-location="right"
           class="button-as-link"
-          ><i class="far fa-bookmark fa-lg"></i
-        ></button>
+        >
+          <i class="far fa-bookmark fa-lg"></i>
+        </button>
         <button
           tabindex="0"
           v-else
@@ -206,8 +207,9 @@
           @click="removeFromFavorites(course)"
           data-tooltip="Unfavorite Course"
           class="button-as-link"
-          ><i class="fas fa-bookmark fa-lg"></i
-        ></button>
+        >
+          <i class="fas fa-bookmark fa-lg"></i>
+        </button>
         <a
           class="ms-auto"
           @click="openAddToSemesterModal"
@@ -248,17 +250,18 @@ export default {
     this.getRatings();
   },
 
-  computed: { 
+  computed: {
     ...mapState({
       course: state => state.courses.currentCourse,
-      isLoggedIn: state => state.auth.isAuthenticated,
+      isLoggedIn: state => state.auth.isAuthenticated
       //isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {
-      if(!this.course.course)
-        return false;
-      return this.$store.getters['favorites/isCourseFavorited'](this.course.course.courseID);
+      if (!this.course.course) return false;
+      return this.$store.getters["favorites/isCourseFavorited"](
+        this.course.course.courseID
+      );
     }
   },
 
@@ -304,7 +307,7 @@ export default {
 
     removeFromFavorites() {
       this.$store.dispatch("favorites/removeFavorite", this.course.course);
-    },
+    }
   }
 };
 </script>

@@ -25,7 +25,7 @@ const state = () => ({
 });
 
 const mutations = {
-  setAllCourses(state, { allCourses, totalPages, totalResults}) {
+  setAllCourses(state, { allCourses, totalPages, totalResults }) {
     state.allCourses = allCourses;
     state.isLoadingCourses = false;
     state.totalPages = totalPages;
@@ -122,10 +122,11 @@ const actions = {
   // change this to take pagination object once it's implemented
   getCourses({ commit, state }) {
     commit("setIsLoadingCourses", true);
-    let programString = convertProgramsToString( state.searchRequest.programs);
+    let programString = convertProgramsToString(state.searchRequest.programs);
     let url = "courses/" + state.currentPage + "/" + resultsPerPage;
 
-    axios.get(url, {
+    axios
+      .get(url, {
         params: {
           programs: programString,
           keyword: state.searchRequest.keyword,
@@ -228,12 +229,11 @@ function isValidViewOption(viewOption) {
 // takes array of program objects
 function convertProgramsToString(programs) {
   let string = "";
-  if(programs.length > 0){
-    for(let i = 0; i < programs.length; i++){
+  if (programs.length > 0) {
+    for (let i = 0; i < programs.length; i++) {
       string += programs[i].degreeType;
 
-      if(i !== programs.length - 1) 
-        string += " ";
+      if (i !== programs.length - 1) string += " ";
     }
   }
 

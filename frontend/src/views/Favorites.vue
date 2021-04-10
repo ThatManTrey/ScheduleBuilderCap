@@ -20,9 +20,9 @@
             ></CourseCard>
           </div>
         </div>
-      <div class=" text-theme-light-gray noFavMessage" v-else>
-        <p>You haven't favorited any courses.</p>
-      </div>
+        <div class=" text-theme-light-gray noFavMessage" v-else>
+          <p>You haven't favorited any courses.</p>
+        </div>
       </transition>
     </div>
 
