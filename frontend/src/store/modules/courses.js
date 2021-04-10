@@ -91,7 +91,7 @@ const mutations = {
 
   setPagination(state, newPage) {
     state.currentPage = newPage;
-    console.log("current page: ", newPage);
+
   }
 };
 

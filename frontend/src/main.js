@@ -1,6 +1,6 @@
-import "./assets/style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "./assets/style.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "vue-toast-notification/dist/theme-default.css";
 
@@ -22,7 +22,8 @@ Vue.use(VueCookies);
 
 Vue.use(VueToast, {
   position: "top",
-  duration: 10000
+  duration: 10000,
+  queue: true
 });
 
 Vue.prototype.$enums = enums;
@@ -70,7 +71,8 @@ store.dispatch("courses/getOptionsFromLocalStorage");
 // csrf token cookie isn't httponly, access token is
 if (Vue.$cookies.get("csrf_access_token")) {
   store.dispatch("auth/verifyAccessToken").then(function() {
-    if (store.state.auth.authError) console.log(store.state.auth.authError);
+    if (store.state.auth.authError) 
+      Toast.showErrorMessage("An unexpected error has occurred. Please login again.")
     // needed for validating POST, PUT, DELETE requests
     else
       axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(

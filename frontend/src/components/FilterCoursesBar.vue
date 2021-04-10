@@ -344,7 +344,8 @@ export default {
     data() {
         return {
             isSearching: false,
-            keyword: ""
+            keyword: "",
+            lastSearchKeyword: ""
         }
     },
 
@@ -356,7 +357,7 @@ export default {
     methods: {
       changeSort(sortType) {
         this.$store.commit('courses/setSortType', sortType);
-        this.$store.dispatch('courses/getCourses');
+        this.$store.dispatch('courses/updatePagination', 1);
       },
 
       isSortType(sortType) {
@@ -384,14 +385,21 @@ export default {
           }, 10);
         } else {
           this.$store.commit('courses/setSearchKeyword', "");
-          this.$store.dispatch('courses/getCourses');
+          this.keyword = "";
+
+          // search courses again if user searched previously
+          if(this.lastSearchKeyword.length > 0)
+            this.searchCourses();
+          
         }
       },
 
       searchCourses() {
-        console.log(this.keyword);
         this.$store.commit('courses/setSearchKeyword', this.keyword);
-        this.$store.dispatch('courses/getCourses');
+
+        this.lastSearchKeyword = this.keyword;
+
+        this.$store.dispatch('courses/updatePagination', 1);
       },
 
       getProgramDisplayName() {

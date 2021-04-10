@@ -462,6 +462,11 @@ i {
   color: var(--theme-whitest);
 }
 
+h1, h2, h3, h4 {
+  font-weight: 300;
+}
+
+
 /* scrollbar styling 
 
    taken directly from style 1 of a list of scrollbars 
