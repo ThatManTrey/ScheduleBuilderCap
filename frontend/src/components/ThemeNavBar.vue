@@ -218,7 +218,6 @@ export default {
 /* navbar */
 
 #app-nav {
-  font-family: "Source Sans Pro", sans-serif;
   z-index: 1;
   background-image: linear-gradient(
     180deg,

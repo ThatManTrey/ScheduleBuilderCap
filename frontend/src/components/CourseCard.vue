@@ -199,7 +199,6 @@ span.course-badge {
 }
 
 .course-card-title {
-  font-family: "Source Sans Pro";
   font-size: 17pt;
   min-height: 3.5rem;
   display: flex;
