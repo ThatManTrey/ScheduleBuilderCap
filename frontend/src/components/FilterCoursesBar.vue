@@ -421,7 +421,7 @@ export default {
           result += " Courses";
           return result;
         } else return "Multiple Programs Selected";
-      }
+      },
     },
 };
 </script>

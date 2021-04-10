@@ -286,6 +286,8 @@ export default {
     },
 
     created() {
+        // reset keyword if page has changed
+        this.$store.commit('courses/setSearchKeyword', "");
         this.$store.dispatch('courses/getCourses');
     },
 

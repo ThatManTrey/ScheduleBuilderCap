@@ -1,11 +1,11 @@
 <template lang="html">
-  <div>
+  <div class="d-flex flex-grow-1">
     <!-- <PageSpinner
       v-if="!hasLoadedCourses"
       :showSpinner="!hasLoadedCourses"
     ></PageSpinner> -->
 
-    <div class="container">
+    <div class="container d-flex flex-grow-1 justify-content-center align-items-center mb-3 mt-3">
       <transition name="fade">
         <div v-if="favCourses.length !== 0" class="row mx-3">
           <div
@@ -20,8 +20,10 @@
             ></CourseCard>
           </div>
         </div>
-        <div class=" text-theme-light-gray noFavMessage" v-else>
-          <p>You haven't favorited any courses.</p>
+
+        <div v-else id="no-fav-message">
+          <h4 class="text-theme-whitest mb-3">You haven't favorited any courses yet.</h4>
+          <p class="text-theme-light-gray">You can find some <router-link to="home">here</router-link>.</p>
         </div>
       </transition>
     </div>
@@ -68,8 +70,10 @@ export default {
   padding-top: 3rem;
 }
 
-.noFavMessage {
-  padding-top: 10rem;
+#no-fav-message {
+  position: fixed;
+  top: 45vh;
+  width: 100%;
   text-align: center;
 }
 </style>
