@@ -91,15 +91,6 @@ def get_courses(page, per_page):
     sort_type = int(request.args.get('sortType'))
     is_ascending = request.args.get('isAscending') == "true"
     
-    print("programs: ", programs)
-    print("type: ", type(programs))
-    print("keyword: ", keyword)
-    print("type: ", type(keyword))
-    print("sort_type: ", sort_type)
-    print("type: ", type(sort_type))
-    print("is_ascending: ", is_ascending)
-    print("type: ", type(is_ascending))
-    
     # find courses according to search parameter
     query = db.session.query(Course).filter(
         (Course.courseIDType.in_(programs)
