@@ -200,18 +200,20 @@ def add_to_favorites(user_id):
     # see if exists favorite or course exists
     favorite = db.session.query(FavCourse).get((body['course_id'], user_id))
     course = db.session.query(Course).get(body['course_id'])
-    if favorite or not course:    # duplicate entry
-        return jsonify(msg = ""), HTTPStatus.BAD_REQUEST
+    # see if the user adding the course to their favorites has a real user_id, primary key is user_id + course_id
+    real_user = db.session.query(User).get(user_id)
+    if favorite or not course or not real_user:    # duplicate entry
+        return jsonify(msg = "failed"), HTTPStatus.BAD_REQUEST
     
     else:   # nonduplicate, update db
         newFav = FavCourse(
                 courseID = body['course_id'],
                 userID = user_id,
-                dateTime = datetime.datetime.utcnow()   # get correct format
+                favoritedOn = datetime.datetime.utcnow()   # get correct format
             )
         db.session.add(newFav)
         db.session.commit()
-        return jsonify()
+        return jsonify(msg = "success")
 
 
 @app.route('/api/user/<int:user_id>/favorites/remove', methods=['DELETE'])
@@ -251,9 +253,10 @@ def remove_from_favorites(user_id):
 def add_rating(user_id):
     body = request.get_json()
 
-    # see if course exists
+    # see if course exists and if the user is a real user
     course = db.session.query(Course).get(body['course_id'])
-    if course:  # course found, add rating
+    real_user = db.session.query(User).get(user_id)
+    if course and real_user:  # course found, add rating
         newRat = Rating(
             courseID = body['course_id'],
             ratingQuality = body['quality'],
@@ -262,10 +265,10 @@ def add_rating(user_id):
         )
         db.session.add(newRat)
         db.session.commit()
-        return jsonify()
+        return jsonify(msg = "success")
     
     else:   # error, course may not exist
-        return jsonify(), HTTPStatus.BAD_REQUEST
+        return jsonify(msg = "fail"), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/courses/<string:course_id>/ratings', methods=['GET'])
@@ -400,7 +403,8 @@ def add_semester(user_id):
         userID = user_id,
         semesterName = body['semester_name']
     ).first()
-    if not sem: # create new semester
+    real_user = db.session.query(User).get(user_id)
+    if not sem and real_user: # create new semester
         newSemester = Semester(
             userID = user_id,
             semesterName = body['semester_name']
