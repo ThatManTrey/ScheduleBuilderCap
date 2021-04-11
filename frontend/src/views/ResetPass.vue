@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
-    <div class="container mt-5">
-      <div class="row justify-content-center">
+    <div class="myContainer">
+      <div class="row justify-content-center myRow">
         <div class="col-lg-4 col-md-6 col-sm-8 col-10">
           <h3 class="text-theme-whitest mb-3">
             Reset Your Password
@@ -145,3 +145,15 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.myContainer {
+  min-height: 30rem;
+  overflow: hidden;
+}
+
+.myRow {
+  min-height: 100%;
+  margin-top: 13%;
+}
+</style>

@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <div class="container" id="display-block">
       <div class="row">
         <nav
@@ -53,10 +52,14 @@
           </div>
           <div class="row about-block" id="contact-us">
             <h3 class="text-theme-whitest">Contact Us</h3>
-            <p class="text-theme-white" style="text-align:center">
-              Complete the form below and one of our representatives will be in
-              touch.
+            <p class="text-theme-white">
+              Any questions or issues? Send us an email at
+              <a href="mailto:ksucourseplanner@gmail.com"
+                >ksucourseplanner@gmail.com</a
+              >
+              and we'll get back to you soon.
             </p>
+            <!--
             <form method="#" action="#">
               <div class="mb-3 text-theme-white">
                 <label for="contactName" class="form-label">
@@ -104,25 +107,13 @@
                   Submit
                 </button>
               </div>
-            </form>
+            </form> -->
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
-
-export default {
-    name: 'about',
-    props: [],
-    components: {
-        ThemeNavBar,
-    },
-}
-</script>
 
 <style scoped>
 #sidenav {

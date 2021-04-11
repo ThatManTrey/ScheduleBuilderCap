@@ -14,6 +14,7 @@ import axios from "axios";
 import * as Toast from "./toast.js";
 import HttpStatus from "http-status-codes";
 
+import enums from "./enums.js";
 
 Vue.config.productionTip = false;
 
@@ -23,6 +24,8 @@ Vue.use(VueToast, {
   position: "top",
   duration: 10000
 });
+
+Vue.prototype.$enums = enums;
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 if (process.env.NODE_ENV === "production")
@@ -46,10 +49,10 @@ axios.interceptors.response.use(
   function(error) {
     if (error.response.status === HttpStatus.UNAUTHORIZED) {
       Toast.showErrorMessage("Your session has expired. Please login again.");
-      store.commit("unAuthenticateUser");
+      store.commit("auth/unAuthenticateUser");
       if (router.currentRoute.name != "Home") router.push("/home");
-      // access token has been refreshed, update CSRF header and retry request
     } else if (error.response.status === 470) {
+      // access token has been refreshed, update CSRF header and retry request
       // set new CSRF token for last request and all future requests
       var newCsrfToken = Vue.$cookies.get("csrf_access_token");
       error.config.headers["X-CSRF-TOKEN"] = newCsrfToken;
@@ -62,11 +65,12 @@ axios.interceptors.response.use(
   }
 );
 
+store.dispatch("courses/getOptionsFromLocalStorage");
+
 // csrf token cookie isn't httponly, access token is
-// assume if there's a csrf token there's an access token
 if (Vue.$cookies.get("csrf_access_token")) {
-  store.dispatch("verifyAccessToken").then(function() {
-    if (store.state.authError) console.log(store.state.authError);
+  store.dispatch("auth/verifyAccessToken").then(function() {
+    if (store.state.auth.authError) console.log(store.state.auth.authError);
     // needed for validating POST, PUT, DELETE requests
     else
       axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(

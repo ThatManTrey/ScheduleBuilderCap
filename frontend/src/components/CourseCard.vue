@@ -1,60 +1,73 @@
 <template lang="html">
   <div class="card justify-content-center course-card">
-    <a
-            tabindex="0"
-            @keyup.enter="showCourseInfoModal(course)"
-            @click="showCourseInfoModal(course)"
-            >
     <div class="card-body container-fluid text-theme-whiter">
-      <div class="row text-theme-whitest">
-        <h4 class="course-card-title m-1">{{ course.courseName }}</h4>
-      </div>
+      <a
+        tabindex="0"
+        @keyup.enter="showCourseInfoModal(course)"
+        @click="showCourseInfoModal(course)"
+      >
+        <div>
+          <div class="row text-theme-whitest">
+            <h4 class="course-card-title m-1">{{ course.courseName }}</h4>
+          </div>
 
-      <div class="row" :class="{ 'mb-2': !showSmallCard }">
-        <div class="col-10 p-0">
-          <span class="badge rounded-pill course-badge">
-            <button class="button-as-link">{{ course.courseID }}</button>
-          </span>
+          <div class="row" :class="{ 'mb-2': !showSmallCard }">
+            <div class="col-10 p-0">
+              <span class="badge rounded-pill course-badge">
+                <button class="button-as-link">{{ course.courseID }}</button>
+              </span>
 
-          <span class="badge rounded-pill course-badge">
-            <button class="button-as-link" v-if="course.creditHoursMax == course.creditHoursMin">{{ course.creditHoursMax }} Credits</button>
-            <button class="button-as-link" v-else >{{ course.creditHoursMin }}-{{ course.creditHoursMax }} Credits</button>
-          </span>
+              <span class="badge rounded-pill course-badge">
+                <button
+                  class="button-as-link"
+                  v-if="course.creditHoursMax == course.creditHoursMin"
+                >
+                  {{ course.creditHoursMax }} Credits
+                </button>
+                <button class="button-as-link" v-else>
+                  {{ course.creditHoursMin }}-{{ course.creditHoursMax }}
+                  Credits
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <div v-if="!showSmallCard" class="row mb-3">
+            <p class="card-text">
+              {{ course.courseDesc }}
+            </p>
+          </div>
         </div>
+      </a>
 
-        <div v-if="showSmallCard" class="col-2 text-end">
+      <div v-if="!showSmallCard" class="row">
+        <div v-if="isLoggedIn" class="col">
           <a
             tabindex="0"
-            @keyup.enter="showCourseInfoModal(course)"
-            @click="showCourseInfoModal(course)"
-          >
-            <i class="fas fa-lg fa-info-circle"></i>
-          </a>
-        </div>
-      </div>
-
-      <div v-if="!showSmallCard" class="row mb-3">
-        <p class="card-text">
-          {{ course.courseDesc }}
-        </p>
-      </div>
-
-      <div class="row">
-        <div v-if="$store.state.isAuthenticated" class="col">
-          <a
-            tabindex="0"
+            v-if="!isAFavorite"
+            @keyup.enter="addToFavorites(course)"
+            @click="addToFavorites(course)"
             data-tooltip="Favorite Course"
             data-tooltip-location="bottom"
             ><i class="far fa-bookmark fa-lg"></i
           ></a>
+          <a
+            tabindex="0"
+            v-if="isAFavorite"
+            @keyup.enter="removeFromFavorites(course)"
+            @click="removeFromFavorites(course)"
+            data-tooltip="Unfavorite Course"
+            data-tooltip-location="bottom"
+            ><i class="fas fa-bookmark fa-lg"></i
+          ></a>
         </div>
-        
-        <div v-if="$store.state.isAuthenticated" class="col text-end">
+
+        <div v-if="isLoggedIn" class="col text-end">
           <a
             v-if="!isRemovingCourse"
             tabindex="0"
-            @keyup.enter="showAddToSemesterModal()"
-            @click="showAddToSemesterModal()"
+            @keyup.enter="showAddToSemesterModal(course)"
+            @click="showAddToSemesterModal(course)"
             data-tooltip="Add to Semester"
             data-tooltip-location="bottom"
           >
@@ -72,20 +85,23 @@
         </div>
       </div>
     </div>
-    </a>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import * as Toast from "../toast.js";
+import { mapGetters, mapState } from "vuex";
+
 export default {
   props: {
-    showSmallCard: {
+    /* true replaces the add semester button with a remove button (used on schedule page) */
+    isRemovingCourse: {
       type: Boolean,
       default: false
     },
 
-    /* true replaces the add semester button with a remove button (used on schedule page) */
-    isRemovingCourse: {
+    isAFavorite: {
       type: Boolean,
       default: false
     },
@@ -95,16 +111,80 @@ export default {
     }
   },
 
+  computed: { 
+    ...mapGetters("courses", {
+      showSmallCard: "showSmallCard"
+    }),
+    ...mapState({
+      isLoggedIn: state => state.auth.isAuthenticated
+    })
+  },
+
   methods: {
-    showCourseInfoModal (course) {
-      this.$store.commit('setCourse', {course:course});
+    showCourseInfoModal(course) {
+      this.$store.commit("courses/setCurrentCourse", { course: course });
       this.$emit("openCourseInfoModal");
     },
-    showAddToSemesterModal() {
+    showAddToSemesterModal(course) {
+      this.$store.commit("setCourse", { course: course });
       this.$emit("openAddSemesterModal");
     },
     removeFromSemester() {
       confirm("Are you sure you want to remove this course?");
+    },
+
+    addToFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .post(baseUrl + "/favorites/add", {
+          course_id: course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displayMessageADD(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+
+    removeFromFavorites(course) {
+      var baseUrl =
+        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
+
+      //AJAX request
+      axios
+        .delete(baseUrl + "/favorites/remove", {
+          course_id: course.courseID
+        })
+        .then(res => {
+          console.log(res);
+          this.displayMessageREMOVE(res);
+        })
+        .catch(error => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+
+    displayMessageADD(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course added successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to add course.");
+      }
+    },
+
+    displayMessageREMOVE(res) {
+      if (res.status >= 200 || res.status < 300) {
+        Toast.showSuccessMessage("Course removed successfully!");
+      } else {
+        Toast.showErrorMessage("Unable to remove course.");
+      }
     }
   }
 };
@@ -113,20 +193,20 @@ export default {
 <style scoped lang="scss">
 div.course-card {
   background-color: var(--theme-blacker);
-  transition: transform 0.2s;
+  //transition: transform 0.2s;
 }
 
 div.course-card:hover,
 div.course-card:focus-within {
   background-color: var(--theme-black);
 
-  /* shadow taken from dark mode gmail hover styling */
   box-shadow: inset 1px 0 0 rgb(255 255 255 / 20%),
     inset -1px 0 0 rgb(255 255 255 / 20%), 0 0 4px 0 rgb(95 99 104 / 60%),
     0 0 6px 2px rgb(95 99 104 / 60%);
   z-index: 1;
 
-  transform: scale(1.05);
+  // disabling since it messes with the tooltip
+  //transform: scale(1.05);
 }
 
 .course-desc {
@@ -140,11 +220,11 @@ div.course-card:focus-within {
 */
 .card-text {
   overflow: hidden;
-   text-overflow: ellipsis;
-   display: -webkit-box;
-   -webkit-line-clamp: 5; /* number of lines to show */
-   -webkit-box-orient: vertical;
-   min-height: 7.5rem;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  min-height: 7.5rem;
 }
 
 span.course-badge {
@@ -161,22 +241,16 @@ span.course-badge {
 .course-card-title {
   font-family: "Source Sans Pro";
   font-size: 17pt;
-  min-height: 3.50rem;
+  min-height: 3.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
 
   overflow: hidden;
-   text-overflow: ellipsis;
-   display: -webkit-box;
-   -webkit-line-clamp: 2; /* number of lines to show */
-   -webkit-box-orient: vertical;
-}
-
-i.fa-info-circle {
-  color: inherit;
-  position: relative;
-  top: 3px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
 }
 
 .link.small {

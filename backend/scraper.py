@@ -11,7 +11,7 @@
 # from apscheduler.schedulers.background import BackgroundScheduler
 
 # schedule helpers
-# import time
+# from time import sleep
 # import atexit
 # import datetime
 
@@ -533,3 +533,6 @@ def getSiteData(link):
 
 
 #------------------------------------------------------------------------------
+# run it up
+
+scrape()

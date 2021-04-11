@@ -66,9 +66,9 @@
         </div>
 
         <div class="text-theme-white">
-            <label for="userSignInPass" class="form-label">
-              <h6>Password</h6>
-            </label>
+          <label for="userSignInPass" class="form-label">
+            <h6>Password</h6>
+          </label>
           <div class="input-container">
             <i class="fas fa-key fa-md text-theme-blacker" id="icon"></i>
             <input
@@ -82,7 +82,7 @@
               :disabled="isSubmittingForm"
               v-model="passField.pass"
             />
-            </div>
+          </div>
 
           <transition name="fade">
             <span v-if="passField.error" class="form-error-text">
@@ -122,7 +122,7 @@
             :disabled="isSubmittingForm"
             v-model.trim="resetPassEmailField.email"
           />
-          </div>
+        </div>
 
         <span v-if="resetPassEmailField.error" class="form-error-text">
           <i class="fas fa-times-circle text-theme-warning-light"></i>
@@ -278,7 +278,7 @@ export default {
 
       this.$store
         .dispatch({
-          type: "logIn",
+          type: "auth/logIn",
           email: this.emailField.email,
           password: this.passField.pass
         })
@@ -286,9 +286,9 @@ export default {
           this.isSubmittingForm = false;
           this.allowClosingModal();
 
-          if (this.$store.state.authError) {
+          if (this.$store.state.auth.authError) {
             this.isLoginSuccessful = false;
-            this.errorMessage = this.$store.state.authError;
+            this.errorMessage = this.$store.state.auth.authError;
           } else {
             this.isLoginSuccessful = true;
 
@@ -348,7 +348,6 @@ export default {
 </script>
 
 <style scoped>
-
 .input-container {
   display: flex;
   width: 100%;
@@ -374,5 +373,4 @@ export default {
 #userSignInPassHelp {
   margin-top: 1rem;
 }
-
 </style>

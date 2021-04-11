@@ -7,7 +7,7 @@
     ref="modalRef"
   >
     <div
-      class="modal-dialog"
+      class="modal-dialog modal-dialog-scrollable"
       :class="{
         'modal-lg': useLargeModal,
         'modal-dialog-centered': centerVertically

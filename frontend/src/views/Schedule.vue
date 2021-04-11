@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <ThemeNavBar></ThemeNavBar>
     <div class="container mt-3 mb-5">
       <div v-for="n in 4" :key="n" class="row">
         <SemesterAccordion
@@ -33,7 +32,6 @@
 </template>
 
 <script lang="js">
-import ThemeNavBar from '../components/ThemeNavBar.vue';
 import SemesterAccordion from '../components/SemesterAccordion.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
@@ -43,7 +41,6 @@ export default {
     name: 'schedule',
     props: [],
     components: {
-        ThemeNavBar,
         SemesterAccordion,
         CourseInfoModal,
         AddToSemesterModal,
