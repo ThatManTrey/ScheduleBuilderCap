@@ -29,6 +29,7 @@ const actions = {
     axios
       .get(url)
       .then(res => {
+        console.log("received semesters: ", res.data.semesters);
         commit("setSemesters", res.data.semesters);
       })
       .catch(error => {

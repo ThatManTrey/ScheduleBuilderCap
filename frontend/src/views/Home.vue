@@ -8,7 +8,10 @@
       ></FilterCoursesBar>
 
       <transition name="coursefade" mode="out-in">
-        <div v-if="showCard && !isLoadingCourses && totalResults > 0" class="row justify-content-center align-items-center flex-grow-1 mx-3">
+        <div
+          v-if="showCard && !isLoadingCourses && totalResults > 0"
+          class="row justify-content-center align-items-center flex-grow-1 mx-3"
+        >
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in allCourses"
@@ -47,12 +50,15 @@
           </table>
         </div>
 
-        <div class="row text-theme-white" v-if="!isLoadingCourses && totalPages === 0">
-          <h5 class="text-center mb-5" id="no-results-found">No results found. Try another keyword?</h5>
+        <div
+          class="row text-theme-white"
+          v-if="!isLoadingCourses && totalPages === 0"
+        >
+          <h5 class="text-center mb-5" id="no-results-found">
+            No results found. Try another keyword?
+          </h5>
         </div>
       </transition>
-
-      
 
       <!-- pagination buttons and total results -->
       <!-- SVG source: https://tablericons.com/ -->
