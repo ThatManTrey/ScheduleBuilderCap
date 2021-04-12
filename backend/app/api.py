@@ -62,21 +62,26 @@ def get_all_courses():
 
 @app.route('/api/courses/<int:page>/<int:per_page>', methods=['GET'])
 def get_courses(page, per_page):
-    body = request.get_json()
+    # had to convert this to params because axios doesn't let you send 
+    # a JSON body with get requests for some reason
+    programs = request.args.get('programs').split(" ")
+    keyword = request.args.get('keyword')
+    sort_type = int(request.args.get('sortType'))
+    is_ascending = request.args.get('isAscending') == "true"
     
     # find courses according to search parameter
     query = db.session.query(Course).filter(
-        (Course.courseIDType.in_(body['programs'])
+        (Course.courseIDType.in_(programs)
         & (
-            Course.courseID.like('%' + body['keyword'] + '%')
-            | Course.courseDesc.like('%' + body['keyword'] + '%')
-            | Course.courseName.like('%' + body['keyword'] + '%')
-            | Course.prereqs.like('%' + body['keyword'] + '%')
+            Course.courseID.like('%' + keyword + '%')
+            | Course.courseDesc.like('%' + keyword + '%')
+            | Course.courseName.like('%' + keyword + '%')
+            | Course.prereqs.like('%' + keyword + '%')
         ))
     )
 
     # sort courses
-    if body['sortType'] == 1:   # courseId
+    if sort_type == 1:   # courseId
         # gets length, location, courseID
         componentQuery = db.session.query(
             func.length(Course.courseID).label('length'),
@@ -100,19 +105,19 @@ def get_courses(page, per_page):
             Course.courseID == sortAttrQuery.c.courseID
         )
 
-        if body['isAscending']:
+        if is_ascending:
             query = query.order_by(sortAttrQuery.c.courseNo.asc())
         else:
             query = query.order_by(sortAttrQuery.c.courseNo.dsc())
 
-    elif body['sortType'] == 2: # credits
-        if body['isAscending']:
+    elif sort_type == 2: # credits
+        if is_ascending:
             query = query.order_by(Course.creditHoursMin.asc())
         else:
             query = query.order_by(Course.creditHoursMin.desc())
 
-    elif body['sortType'] == 3: # program
-        if body['isAscending']:
+    elif sort_type == 3: # program
+        if is_ascending:
             query = query.order_by(Course.courseIDType.asc())
         else:
             query = query.order_by(Course.courseIDType.desc())
