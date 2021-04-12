@@ -3,8 +3,8 @@
     <div class="card-body container-fluid text-theme-whiter">
       <a
         tabindex="0"
-        @keyup.enter="showCourseInfoModal(course)"
-        @click="showCourseInfoModal(course)"
+        @keyup.enter="showCourseInfoModal()"
+        @click="showCourseInfoModal()"
       >
         <div>
           <div class="row text-theme-whitest">
@@ -42,34 +42,35 @@
 
       <div v-if="!showSmallCard" class="row">
         <div v-if="isLoggedIn" class="col">
-          <a
+          <button
             tabindex="0"
-            v-if="!isAFavorite"
-            @keyup.enter="addToFavorites(course)"
-            @click="addToFavorites(course)"
+            v-if="!isFavorited"
+            @keyup.enter="addToFavorites()"
+            @click="addToFavorites()"
             data-tooltip="Favorite Course"
-            data-tooltip-location="bottom"
-            ><i class="far fa-bookmark fa-lg"></i
-          ></a>
-          <a
+            class="button-as-link"
+          >
+            <i class="far fa-bookmark fa-lg"></i>
+          </button>
+          <button
             tabindex="0"
-            v-if="isAFavorite"
-            @keyup.enter="removeFromFavorites(course)"
-            @click="removeFromFavorites(course)"
+            v-else
+            @keyup.enter="removeFromFavorites()"
+            @click="removeFromFavorites()"
             data-tooltip="Unfavorite Course"
-            data-tooltip-location="bottom"
-            ><i class="fas fa-bookmark fa-lg"></i
-          ></a>
+            class="button-as-link"
+          >
+            <i class="fas fa-bookmark fa-lg"></i>
+          </button>
         </div>
 
         <div v-if="isLoggedIn" class="col text-end">
           <a
             v-if="!isRemovingCourse"
             tabindex="0"
-            @keyup.enter="showAddToSemesterModal(course)"
-            @click="showAddToSemesterModal(course)"
+            @keyup.enter="showAddToSemesterModal()"
+            @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
-            data-tooltip-location="bottom"
           >
             <i class="fas fa-plus-circle fa-lg"></i>
           </a>
@@ -79,7 +80,6 @@
             @keyup.enter="removeFromSemester()"
             @click="removeFromSemester()"
             data-tooltip="Remove from Semester"
-            data-tooltip-location="bottom"
             ><i class="fas fa-times-circle fa-lg"></i
           ></a>
         </div>
@@ -89,19 +89,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import * as Toast from "../toast.js";
 import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
-    /* true replaces the add semester button with a remove button (used on schedule page) */
+    // replace with semester getter
     isRemovingCourse: {
-      type: Boolean,
-      default: false
-    },
-
-    isAFavorite: {
       type: Boolean,
       default: false
     },
@@ -111,80 +104,47 @@ export default {
     }
   },
 
-  computed: { 
+  // add isScheduled and isFavorited
+  computed: {
     ...mapGetters("courses", {
       showSmallCard: "showSmallCard"
     }),
+
     ...mapState({
-      isLoggedIn: state => state.auth.isAuthenticated
-    })
+      isLoggedIn: state => state.auth.isAuthenticated,
+      userID: state => state.auth.userId,
+      currentCourse: state => state.courses.currentCourse
+      //isSendingFavorites: state => state.favorites.isSendingFavorite
+    }),
+
+    isFavorited() {
+      return this.$store.getters["favorites/isCourseFavorited"](
+        this.course.courseID
+      );
+    }
   },
 
   methods: {
-    showCourseInfoModal(course) {
-      this.$store.commit("courses/setCurrentCourse", { course: course });
+    showCourseInfoModal() {
+      this.$store.commit("courses/setCurrentCourse", { course: this.course });
       this.$emit("openCourseInfoModal");
     },
-    showAddToSemesterModal(course) {
-      this.$store.commit("setCourse", { course: course });
+
+    showAddToSemesterModal() {
+      this.$store.commit("courses/setCurrentCourse", { course: this.course });
       this.$emit("openAddSemesterModal");
     },
+
     removeFromSemester() {
-      confirm("Are you sure you want to remove this course?");
+      //this.$store.dispatch("semesters/addFavorite", course.courseID);
     },
 
-    addToFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
-
-      //AJAX request
-      axios
-        .post(baseUrl + "/favorites/add", {
-          course_id: course.courseID
-        })
-        .then(res => {
-          console.log(res);
-          this.displayMessageADD(res);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
+    addToFavorites() {
+      this.$store.dispatch("favorites/addFavorite", this.course);
     },
 
-    removeFromFavorites(course) {
-      var baseUrl =
-        process.env.VUE_APP_API_URL + "/user/" + this.$store.state.userId;
-
-      //AJAX request
-      axios
-        .delete(baseUrl + "/favorites/remove", {
-          course_id: course.courseID
-        })
-        .then(res => {
-          console.log(res);
-          this.displayMessageREMOVE(res);
-        })
-        .catch(error => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
-    },
-
-    displayMessageADD(res) {
-      if (res.status >= 200 || res.status < 300) {
-        Toast.showSuccessMessage("Course added successfully!");
-      } else {
-        Toast.showErrorMessage("Unable to add course.");
-      }
-    },
-
-    displayMessageREMOVE(res) {
-      if (res.status >= 200 || res.status < 300) {
-        Toast.showSuccessMessage("Course removed successfully!");
-      } else {
-        Toast.showErrorMessage("Unable to remove course.");
-      }
+    removeFromFavorites() {
+      this.$store.dispatch("favorites/removeFavorite", this.course);
     }
   }
 };
@@ -239,7 +199,6 @@ span.course-badge {
 }
 
 .course-card-title {
-  font-family: "Source Sans Pro";
   font-size: 17pt;
   min-height: 3.5rem;
   display: flex;

@@ -9,7 +9,7 @@ const state = () => ({
   isAuthenticated: false,
   userId: null,
   hasConfirmedEmail: null,
-  authError: null,
+  authError: null
 });
 
 const mutations = {
@@ -33,11 +33,11 @@ const mutations = {
 
   confirmEmail(state, hasConfirmedEmail) {
     state.hasConfirmedEmail = hasConfirmedEmail;
-  },
+  }
 };
 
 const actions = {
-  logIn({ commit }, { email, password }) {
+  logIn({ commit, dispatch }, { email, password }) {
     return axios
       .post("/auth/login", {
         email: email,
@@ -49,6 +49,10 @@ const actions = {
           userId: response.data.userId,
           hasConfirmedEmail: response.data.hasConfirmedEmail
         });
+
+        // uncomment once these endpoints are fixed on the backend
+        dispatch("favorites/getFavoriteCourses", null, { root: true });
+        //dispatch('semesters/getSemesters', { root: true });
 
         axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
           "csrf_access_token"
@@ -91,7 +95,7 @@ const actions = {
   },
 
   // verify token on new session
-  verifyAccessToken({ commit }) {
+  verifyAccessToken({ commit, dispatch }) {
     return axios
       .get("/auth/verify/access")
       .then(function(response) {
@@ -100,6 +104,10 @@ const actions = {
           userId: response.data.userId,
           hasConfirmedEmail: response.data.hasConfirmedEmail
         });
+
+        // uncomment once these endpoints are fixed on the backend
+        dispatch("favorites/getFavoriteCourses", null, { root: true });
+        //dispatch('semesters/getSemesters', { root: true });
       })
       .catch(function(error) {
         if (!error.response) commit("setAuthError");

@@ -1,14 +1,14 @@
 <template lang="html">
-  <div>
+  <div class="d-flex flex-grow-1">
     <PageSpinner :showSpinner="isLoadingCourses"></PageSpinner>
 
-    <div class="container">
+    <div class="container d-flex flex-column flex-grow-1">
       <FilterCoursesBar
         @openChangeProgramModal="$refs.changeProgramModalHome.openModal()"
       ></FilterCoursesBar>
 
-      <transition name="coursefade">
-        <div v-if="showCard && !isLoadingCourses" class="row mx-3">
+      <transition name="coursefade" mode="out-in">
+        <div v-if="showCard && !isLoadingCourses && totalResults > 0" class="row justify-content-center align-items-center flex-grow-1 mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in allCourses"
@@ -21,12 +21,10 @@
             ></CourseCard>
           </div>
         </div>
-      </transition>
 
-      <transition name="coursefade">
         <div
-          v-if="!showCard && !isLoadingCourses"
-          class="row mt-3 mt-md-5 mb-3 mx-3 mx-xl-1"
+          v-if="!showCard && !isLoadingCourses && totalResults > 0"
+          class="row flex-grow-1 mt-3 mt-md-5 mb-3 mx-3 mx-xl-1"
           id="table-container"
         >
           <table class="table">
@@ -48,17 +46,23 @@
             </tbody>
           </table>
         </div>
+
+        <div class="row text-theme-white" v-if="!isLoadingCourses && totalPages === 0">
+          <h5 class="text-center mb-5" id="no-results-found">No results found. Try another keyword?</h5>
+        </div>
       </transition>
+
+      
 
       <!-- pagination buttons and total results -->
       <!-- SVG source: https://tablericons.com/ -->
       <div
-        v-if="!isLoadingCourses"
+        v-if="!isLoadingCourses && totalPages > 0"
         class="row mx-3 mt-3"
         style="margin-bottom: 5rem;"
       >
         <div class="col-4 text-theme-white">
-          <h5>168 Results</h5>
+          <h5>{{ totalResults }} Results</h5>
         </div>
         <div class="col-8 d-flex justify-content-end">
           <nav class="course-pagination" aria-label="Course pagination">
@@ -176,6 +180,7 @@
     <div
       class="side-button-container d-none d-md-flex"
       id="prev-page-side-button-container"
+      v-if="!isLoadingCourses && totalPages > 1"
     >
       <button
         class="button-as-link"
@@ -205,6 +210,7 @@
     <div
       class="side-button-container d-none d-md-flex"
       id="next-page-side-button-container"
+      v-if="!isLoadingCourses && totalPages > 1"
     >
       <button
         class="button-as-link"
@@ -271,7 +277,8 @@ export default {
         isLoadingCourses: state => state.courses.isLoadingCourses,
         viewOption: state => state.courses.searchRequest.viewOption,
         currentPage: state => state.courses.currentPage,
-        totalPages: state => state.courses.totalPages
+        totalPages: state => state.courses.totalPages,
+        totalResults: state => state.courses.totalResults
       }),
       ...mapGetters('courses', {
         showCard: 'showCard'
@@ -279,6 +286,8 @@ export default {
     },
 
     created() {
+        // reset keyword if page has changed
+        this.$store.commit('courses/setSearchKeyword', "");
         this.$store.dispatch('courses/getCourses');
     },
 
@@ -324,11 +333,11 @@ export default {
 
 <style scoped lang="scss">
 .coursefade-enter-active {
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .coursefade-leave-active {
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .coursefade-enter,
@@ -393,5 +402,11 @@ a {
   #table-container {
     overflow-x: scroll;
   }
+}
+
+#no-results-found {
+  position: fixed;
+  top: 50vh;
+  right: 0;
 }
 </style>

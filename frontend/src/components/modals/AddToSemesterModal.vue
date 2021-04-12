@@ -97,7 +97,9 @@ export default {
     };
   },
 
-  computed: mapState(["course"]),
+  computed: mapState({
+    course: state => state.courses.currentCourse
+  }),
 
   components: {
     Modal

@@ -16,3 +16,14 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+
+#app {
+  display: flex;
+  min-height: 100vh;
+  max-width: 100vw;
+  flex-direction: column;
+}
+
+</style>
