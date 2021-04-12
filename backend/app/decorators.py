@@ -68,7 +68,7 @@ def has_reset_pass_token():
                 return "User with that ID does not exist", HTTPStatus.NOT_FOUND
 
             # finally verify the token with the user's current hashed password
-            verified_token = jwt.decode(token, user.userPass, algorithms="HS256")
+            jwt.decode(token, user.userPass, algorithms="HS256")
             return fn(*args, **kwargs)
 
         return decorator

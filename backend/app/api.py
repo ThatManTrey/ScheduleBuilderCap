@@ -156,7 +156,7 @@ def get_all_degrees():
     return jsonify(degrees = arr_degrees)
     
 
-#----fdsa--------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # favorites
 
 @app.route( '/api/users/<int:user_id>/favorites', endpoint='get_favorites', methods=['GET'])
