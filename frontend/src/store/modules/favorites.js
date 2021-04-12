@@ -2,7 +2,7 @@ import axios from "axios";
 import * as Toast from "../../toast";
 
 const state = () => ({
-  favoriteCourses: [],
+  favoriteCourses: []
   //isSendingFavorite: false  // disables button until response is received (prevents button spam)
 });
 
@@ -21,10 +21,11 @@ const mutations = {
   },
 
   removeFavorite(state, courseId) {
-    const index = state.favoriteCourses.findIndex(course => course.courseID === courseId);
-    if (index > -1)
-      state.favoriteCourses.splice(index, 1);
-  },
+    const index = state.favoriteCourses.findIndex(
+      course => course.courseID === courseId
+    );
+    if (index > -1) state.favoriteCourses.splice(index, 1);
+  }
 
   // setIsSendingFavorite(state, isSending) {
   //   state.isSendingFavorite = isSending;
@@ -40,7 +41,8 @@ const getters = {
 const actions = {
   getFavoriteCourses({ commit, rootState }) {
     var url = "users/" + rootState.auth.userId + "/favorites";
-    axios.get(url)
+    axios
+      .get(url)
       .then(res => {
         commit("setFavorites", res.data.favCourses);
       })
@@ -54,8 +56,10 @@ const actions = {
     //commit("setIsSendingFavorite", true);
     commit("addFavorite", course);
 
-    var url = "users/" + rootState.auth.userId + "/favorites/" + course.courseID;
-    axios.post(url)
+    var url =
+      "users/" + rootState.auth.userId + "/favorites/" + course.courseID;
+    axios
+      .post(url)
       .then(() => {
         Toast.showSuccessMessage("Favorite added successfully!");
         //commit("setIsSendingFavorite", false);
@@ -75,8 +79,10 @@ const actions = {
     //commit("setIsSendingFavorite", true);
     commit("removeFavorite", course.courseID);
 
-    var url = "users/" + rootState.auth.userId + "/favorites/" + course.courseID;
-    axios.delete(url)
+    var url =
+      "users/" + rootState.auth.userId + "/favorites/" + course.courseID;
+    axios
+      .delete(url)
       .then(() => {
         Toast.showSuccessMessage("Favorite has been removed.");
         //commit("setIsSendingFavorite", false);

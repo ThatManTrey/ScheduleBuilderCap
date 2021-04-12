@@ -7,7 +7,7 @@
         class="form-control"
         placeholder="Search"
         @keyup.enter="searchCourses()"
-        :value="keyword"
+        v-model.trim="keyword"
       />
 
       <a
@@ -313,7 +313,7 @@
           placeholder="Search"
           ref="searchCourses"
           @keyup.enter="searchCourses()"
-          :value="keyword"
+          v-model.trim="keyword"
         />
       </transition>
 
@@ -343,12 +343,13 @@ import { mapState } from 'vuex';
 export default {
     data() {
         return {
-            isSearching: false
+            isSearching: false,
+            keyword: "",
+            lastSearchKeyword: ""
         }
     },
 
     computed: mapState({
-      keyword: state => state.courses.searchRequest.keyword,
       isAscending: state => state.courses.searchRequest.sortOption.isAscending,
       programs: state => state.courses.searchRequest.programs
     }),
@@ -356,7 +357,7 @@ export default {
     methods: {
       changeSort(sortType) {
         this.$store.commit('courses/setSortType', sortType);
-        this.$store.dispatch('courses/getCourses');
+        this.$store.dispatch('courses/updatePagination', 1);
       },
 
       isSortType(sortType) {
@@ -384,12 +385,21 @@ export default {
           }, 10);
         } else {
           this.$store.commit('courses/setSearchKeyword', "");
+          this.keyword = "";
+
+          // search courses again if user searched previously
+          if(this.lastSearchKeyword.length > 0)
+            this.searchCourses();
+          
         }
       },
 
       searchCourses() {
         this.$store.commit('courses/setSearchKeyword', this.keyword);
-        this.$store.dispatch('courses/getCourses');
+
+        this.lastSearchKeyword = this.keyword;
+
+        this.$store.dispatch('courses/updatePagination', 1);
       },
 
       getProgramDisplayName() {
@@ -411,7 +421,7 @@ export default {
           result += " Courses";
           return result;
         } else return "Multiple Programs Selected";
-      }
+      },
     },
 };
 </script>

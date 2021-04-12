@@ -49,8 +49,9 @@
             @click="addToFavorites()"
             data-tooltip="Favorite Course"
             class="button-as-link"
-            ><i class="far fa-bookmark fa-lg"></i
-          ></button>
+          >
+            <i class="far fa-bookmark fa-lg"></i>
+          </button>
           <button
             tabindex="0"
             v-else
@@ -58,7 +59,9 @@
             @click="removeFromFavorites()"
             data-tooltip="Unfavorite Course"
             class="button-as-link"
-            ><i class="fas fa-bookmark fa-lg"></i></button>
+          >
+            <i class="fas fa-bookmark fa-lg"></i>
+          </button>
         </div>
 
         <div v-if="isLoggedIn" class="col text-end">
@@ -110,12 +113,14 @@ export default {
     ...mapState({
       isLoggedIn: state => state.auth.isAuthenticated,
       userID: state => state.auth.userId,
-      currentCourse: state => state.courses.currentCourse,
+      currentCourse: state => state.courses.currentCourse
       //isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {
-      return this.$store.getters['favorites/isCourseFavorited'](this.course.courseID);
+      return this.$store.getters["favorites/isCourseFavorited"](
+        this.course.courseID
+      );
     }
   },
 
@@ -194,7 +199,6 @@ span.course-badge {
 }
 
 .course-card-title {
-  font-family: "Source Sans Pro";
   font-size: 17pt;
   min-height: 3.5rem;
   display: flex;

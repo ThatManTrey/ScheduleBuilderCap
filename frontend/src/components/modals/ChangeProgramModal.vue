@@ -131,12 +131,12 @@ export default {
 
     addProgram(program) {
       this.$store.commit("courses/addProgram", program);
-      this.$store.dispatch("courses/getCourses");
+      this.$store.dispatch('courses/updatePagination', 1);
     },
 
     removeProgram(program) {
       this.$store.commit("courses/removeProgram", program);
-      this.$store.dispatch("courses/getCourses");
+      this.$store.dispatch('courses/updatePagination', 1);
     }
   },
 

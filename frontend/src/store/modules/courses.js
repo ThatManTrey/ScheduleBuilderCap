@@ -1,7 +1,7 @@
 import axios from "axios";
 import enums from "../../enums";
 
-// const resultsPerPage =
+const resultsPerPage = 24;
 
 const state = () => ({
   allCourses: [],
@@ -12,7 +12,7 @@ const state = () => ({
   allPrograms: [],
   viewOption: enums.ViewOptions.normalCard,
   searchRequest: {
-    programs: [],
+    programs: ["CS"],
     sortOption: {
       type: enums.SortTypes.courseId,
       isAscending: true
@@ -20,14 +20,17 @@ const state = () => ({
     keyword: ""
   },
   currentPage: 1,
-  totalPages: 5,
-  totalResults: 100
+  totalPages: Number,
+  totalResults: Number
 });
 
 const mutations = {
-  setAllCourses(state, allCourses) {
+  setAllCourses(state, { allCourses, totalPages, totalResults }) {
     state.allCourses = allCourses;
     state.isLoadingCourses = false;
+    state.totalPages = totalPages;
+    state.totalResults = totalResults;
+    console.log("allCourses: ", allCourses);
   },
 
   setCurrentCourse(state, course) {
@@ -89,7 +92,7 @@ const mutations = {
 
   setPagination(state, newPage) {
     state.currentPage = newPage;
-    console.log("current page: ", newPage);
+
   }
 };
 
@@ -118,17 +121,31 @@ const getters = {
 
 const actions = {
   // change this to take pagination object once it's implemented
-  getCourses({ commit }) {
+  getCourses({ commit, state }) {
     commit("setIsLoadingCourses", true);
+    let programString = convertProgramsToString(state.searchRequest.programs);
+    let url = "courses/" + state.currentPage + "/" + resultsPerPage;
+
     axios
-      .get("courses/cs")
+      .get(url, {
+        params: {
+          programs: programString,
+          keyword: state.searchRequest.keyword,
+          sortType: state.searchRequest.sortOption.type,
+          isAscending: state.searchRequest.sortOption.isAscending
+        }
+      })
       .then(res => {
         // check if the result's page is the same as current page before commit
-        commit("setAllCourses", res.data.deptCourses);
+        commit("setAllCourses", {
+          allCourses: res.data.coursesForPage,
+          totalPages: res.data.numPages,
+          totalResults: res.data.numResults
+        });
       })
       .catch(error => {
         // eslint-disable-next-line
-                console.error(error);
+        console.error(error);
       });
   },
 
@@ -208,4 +225,18 @@ function isValidViewOption(viewOption) {
     viewOption === enums.ViewOptions.smallCard ||
     viewOption === enums.ViewOptions.table
   );
+}
+
+// takes array of program objects
+function convertProgramsToString(programs) {
+  let string = "";
+  if (programs.length > 0) {
+    for (let i = 0; i < programs.length; i++) {
+      string += programs[i].degreeType;
+
+      if (i !== programs.length - 1) string += " ";
+    }
+  }
+
+  return string;
 }
