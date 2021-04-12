@@ -154,7 +154,7 @@ def get_all_degrees():
 #----fdsa--------------------------------------------------------------------------
 # favorites
 
-@app.route( '/api/user/<int:user_id>/favorites', endpoint='get_favorites', methods=['GET'])
+@app.route( '/api/users/<int:user_id>/favorites', endpoint='get_favorites', methods=['GET'])
 @has_access_token()
 @is_current_user
 def get_favorites(user_id):
@@ -177,7 +177,7 @@ def get_favorites(user_id):
     return jsonify(favCourses = arr_courses)
 
 
-@app.route('/api/user/<int:user_id>/favorites/add', endpoint='add_to_favorites', methods=['POST'])
+@app.route('/api/users/<int:user_id>/favorites/add', endpoint='add_to_favorites', methods=['POST'])
 @has_access_token()
 @is_current_user
 def add_to_favorites(user_id):
@@ -211,7 +211,7 @@ def add_to_favorites(user_id):
         return jsonify(msg = "user not found"), HTTPStatus.BAD_REQUEST
 
 
-@app.route('/api/user/<int:user_id>/favorites/remove', endpoint='remove_from_favorites', methods=['DELETE'])
+@app.route('/api/users/<int:user_id>/favorites/remove', endpoint='remove_from_favorites', methods=['DELETE'])
 @has_access_token()
 @is_current_user
 def remove_from_favorites(user_id):
@@ -286,23 +286,26 @@ def get_course_rating(course_id):
         entry['ratingDifficulty'] = float(entry['ratingDifficulty'])
         arr_ratings.append(entry)
     
+    if the_ratings:
     # averages for course_id
-    the_averages = db.session.query(
-                func.avg(Rating.ratingQuality).label('quality'),
-                func.avg(Rating.ratingDifficulty).label('difficulty')
-            ).filter_by(
-                courseID = course_id
-            ).first()
-    quality = float(the_averages.quality)
-    difficulty = float(the_averages.difficulty)
-    
-    
-    return jsonify(
-        ratings = arr_ratings,
-        quality = quality,
-        difficulty = difficulty
-    )
+        the_averages = db.session.query(
+                    func.avg(Rating.ratingQuality).label('quality'),
+                    func.avg(Rating.ratingDifficulty).label('difficulty')
+                ).filter_by(
+                    courseID = course_id
+                ).first()
 
+        quality = float(the_averages.quality)
+        difficulty = float(the_averages.difficulty)
+
+        return jsonify(
+            ratings = arr_ratings,
+            quality = quality,
+            difficulty = difficulty
+        )
+
+    return jsonify(msg = "ratings not found")
+    
 
 # user
 
@@ -336,6 +339,7 @@ def remove_rating(user_id, course_id):
         courseID = course_id,
         userID = user_id
     ).first()
+
     if rating:  # rating found, delete rating
         db.session.delete(rating)
         db.session.commit()
@@ -349,6 +353,7 @@ def remove_rating(user_id, course_id):
 @is_current_user
 def get_user_ratings(user_id):
     ratings = db.session.query(Rating).filter_by(userID = user_id).all()
+    
     arr_ratings = []
     for rating in ratings:
         entry = rating.as_dict()
@@ -361,7 +366,7 @@ def get_user_ratings(user_id):
 #------------------------------------------------------------------------------
 # semesters
 
-@app.route('/api/user/<int:user_id>/semesters', endpoint='get_semesters', methods=['GET'])
+@app.route('/api/users/<int:user_id>/semesters', endpoint='get_semesters', methods=['GET'])
 @has_access_token()
 @is_current_user
 def get_semesters(user_id):
@@ -394,7 +399,7 @@ def get_semesters(user_id):
     return jsonify(semesters = arr_semesters)
 
 
-@app.route('/api/user/<int:user_id>/semesters', endpoint='add_semester', methods=['POST'])
+@app.route('/api/users/<int:user_id>/semesters', endpoint='add_semester', methods=['POST'])
 @has_access_token()
 @is_current_user
 def add_semester(user_id):
@@ -405,6 +410,7 @@ def add_semester(user_id):
         userID = user_id,
         semesterName = body['semester_name']
     ).first()
+
     real_user = db.session.query(User).get(user_id)
     if not sem and real_user: # create new semester
         newSemester = Semester(
@@ -413,9 +419,13 @@ def add_semester(user_id):
         )
         db.session.add(newSemester)
         db.session.commit()
-        return jsonify(msg = "success")
-    
-    return jsonify(msg = "semester already exists"), HTTPStatus.BAD_REQUEST
+        return jsonify()
+
+    elif sem:
+        return jsonify(msg = "semester already exists"), HTTPStatus.BAD_REQUEST
+
+    else:
+        return jsonify(msg = "user not found"), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>', endpoint='update_semester', methods=['PUT'])
