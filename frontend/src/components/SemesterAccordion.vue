@@ -3,23 +3,23 @@
     <div class="semester-accordion mb-3">
       <div class="semester-header">
         <div class="semester-title align-middle">
-          <a
+          <button
             @click="removeSemester()"
             @keyup.enter="removeSemester()"
             data-tooltip="Remove Semester"
-            data-tooltip-location="bottom"
+            class="button-as-link"
           >
             <i class="fas fa-trash fa-lg"></i>
-          </a>
-          <div class="text-theme-whitest" style="display:inline">
+          </button>
+          <div class="text-theme-whitest d-inline">
             <h2
-              class="m-0 semesterName"
+              class="m-0 edit-semester-name"
               contenteditable
               @keyup.enter="getUserInput"
               @keydown.enter="endUserInput"
               @input="getUserInput"
             >
-              Fall 2021
+              {{ semester.semesterName }}
             </h2>
             <h2 class="creditHours">
               (<span class="text-theme-secondary">16</span>)
@@ -66,25 +66,24 @@
 </template>
 
 <script lang="js">
-//import CourseCard from '../components/CourseCard.vue';
-import * as Toast from '../toast.js';
+import CourseCard from '../components/CourseCard.vue';
 
 export default {
     name: 'semester-accordion',
-
-    data() {
-      return {
-        semesterName: '',
-      };
-    },
 
     props: {
       targetName: String,
       semester: Object
     },
 
+    data() {
+      return {
+        semesterName: this.semester.semesterName,
+      };
+    },
+
     components: {
-      //CourseCard,
+      CourseCard,
     },
 
     methods: {
@@ -97,28 +96,40 @@ export default {
         },
 
         getUserInput(e) {
-            var src = e.target.innerText
-            this.semesterName = src
+            const input = e.target.innerText;
+
+            if(input.length < 1)
+                e.target.innerText = this.semester.semesterName;
+            else if(input.length > 64)    // semester name max size in db
+                e.target.innerText = this.semester.semesterName;
+            else
+                this.semesterName = input;   
         },
 
-        endUserInput() {
-          this.$el.querySelector('.semesterName').blur()
+        endUserInput(e) {
+            // remove focus from semester name
+            e.srcElement.blur();
+
+            // remove whitespace from both sides of semester name name
+            this.semesterName = this.semesterName.trim();
+            e.target.innerText = this.semesterName;
+
+            if(this.semesterName !== this.semester.semesterName) 
+                this.$store.dispatch("semesters/editSemesterName", {
+                    semesterId: this.semester.semesterId,
+                    newName: this.semesterName
+                })    
         },
 
         removeSemester() {
-          var removePromptResult = confirm(
+          var removeSemester = confirm(
             "Are you sure you want to remove this semester and all its courses?"
-          );
-          if (removePromptResult === true) {
-            Toast.showSuccessMessage(
-              "Semester was removed successfully."
-            );
-          }
+          ); 
+          
+          if (removeSemester) 
+            this.$store.dispatch("semesters/removeSemester", this.semester.semesterId);
+          
         }
-    },
-
-    created() {
-      console.log(this.semester);
     }
 }
 </script>
@@ -154,5 +165,13 @@ i {
 
 .creditHours {
   padding-left: 1rem;
+}
+
+.edit-semester-name {
+    cursor: pointer;
+
+    &:active, &:focus {
+        cursor: text;
+    }
 }
 </style>

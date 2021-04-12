@@ -40,7 +40,8 @@ const actions = {
 
   addSemester({ dispatch, rootState }, semesterName) {
     var url = "users/" + rootState.auth.userId + "/semesters";
-    axios
+
+    return axios
       .post(url, { semester_name: semesterName })
       .then(() => {
         dispatch("getSemesters");
@@ -51,7 +52,7 @@ const actions = {
       });
   },
 
-  removeSemester({ dispatch, rootState }, { semesterId }) {
+  removeSemester({ dispatch, rootState }, semesterId) {
     var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId;
     axios
       .delete(url)
@@ -85,6 +86,7 @@ const actions = {
       semesterId +
       "/courses/" +
       courseId;
+
     axios
       .post(url)
       .then(() => {
@@ -104,6 +106,7 @@ const actions = {
       semesterId +
       "/courses/" +
       courseId;
+
     axios
       .delete(url)
       .then(() => {
