@@ -270,8 +270,6 @@ def add_rating(user_id):
 
 
 @app.route('/api/courses/<string:course_id>/ratings', endpoint='get_course_rating', methods=['GET'])
-@has_access_token()
-@is_current_user()
 def get_course_rating(course_id):
     # notice float casting;
     # you cannot jsonify Decimal values from SQL
@@ -405,14 +403,8 @@ def get_semesters(user_id):
 def add_semester(user_id):
     body = request.get_json()
 
-    # see if semester exists
-    sem = db.session.query(Semester).filter_by(
-        userID = user_id,
-        semesterName = body['semester_name']
-    ).first()
-
     real_user = db.session.query(User).get(user_id)
-    if not sem and real_user: # create new semester
+    if real_user: # create new semester
         newSemester = Semester(
             userID = user_id,
             semesterName = body['semester_name']
@@ -421,11 +413,7 @@ def add_semester(user_id):
         db.session.commit()
         return jsonify()
 
-    elif sem:
-        return jsonify(msg = "semester already exists"), HTTPStatus.BAD_REQUEST
-
-    else:
-        return jsonify(msg = "user not found"), HTTPStatus.BAD_REQUEST
+    return jsonify(msg = "user not found"), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>', endpoint='update_semester', methods=['PUT'])

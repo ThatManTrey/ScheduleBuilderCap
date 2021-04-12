@@ -1,9 +1,10 @@
 <template lang="html">
   <div>
     <div class="container mt-3 mb-5">
-      <div v-for="n in 4" :key="n" class="row">
+      <div v-for="(semester, index) in semesters" :key="index" class="row">
         <SemesterAccordion
-          :targetName="'example' + n"
+          :targetName="'semester' + index"
+          :semester="semester"
           @showCourseInfoModal="showCourseInfoModal"
           @showAddToSemesterModal="showAddToSemesterModal"
         ></SemesterAccordion>
@@ -36,16 +37,22 @@ import SemesterAccordion from '../components/SemesterAccordion.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
+import { mapState } from 'vuex';
 
 export default {
     name: 'schedule',
-    props: [],
+
+    computed: mapState({
+      semesters: state => state.semesters.semesters,
+    }),
+
     components: {
         SemesterAccordion,
         CourseInfoModal,
         AddToSemesterModal,
         AddSemesterModal
     },
+
     methods: {
       showCourseInfoModal () {
             this.$refs.courseInfoModalSchedule.openModal();
@@ -56,7 +63,7 @@ export default {
         showAddSemesterModal () {
             this.$refs.addSemesterModalSchedule.openModal();
         },
-    }
+    },
 }
 </script>
 

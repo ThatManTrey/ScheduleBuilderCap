@@ -15,15 +15,17 @@
               id="newSemesterName2"
               class="form-control"
               placeholder="Enter a semester name..."
+              v-model.trim="semesterName"
+              @keyup.enter="addSemester()"
             />
+            <span></span>
           </div>
         </div>
         <div class="row">
           <div class="col mt-2 mx-auto">
             <button
-              type="submit"
-              class="btn btn-theme-confirm btn-sm"
-              style="width: 100%;"
+              class="btn btn-theme-confirm btn-sm w-100"
+              @click="addSemester()"
             >
               Add Semester
             </button>
@@ -42,13 +44,28 @@ export default {
     Modal
   },
 
+  data() {
+    return {
+      semesterName: ""
+    };
+  },
+
   methods: {
-    /* needed to open/close this modal from parent component */
     openModal() {
       this.$refs.addSemesterBaseModalRef.openModal();
     },
+
     closeModal() {
       this.$refs.addSemesterBaseModalRef.closeModal();
+    },
+
+    addSemester() {
+      if (this.semesterName > 2) {
+        console.log("add semester");
+
+        this.$store.dispatch("semesters/addSemester", this.semesterName);
+        this.closeModal();
+      }
     }
   }
 };

@@ -44,7 +44,7 @@
 
     <div class="semester-body collapse show mb-3" :id="targetName">
       <div class="container">
-        <div class="row">
+        <div v-if="semester.semesterCourses.length > 0" class="row">
           <div
             v-for="n in 4"
             :key="n"
@@ -57,53 +57,68 @@
             ></CourseCard>
           </div>
         </div>
+        <div class="row" v-else>
+          <h5>You haven't added any courses yet.</h5>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="js">
-import CourseCard from '../components/CourseCard.vue';
+//import CourseCard from '../components/CourseCard.vue';
 import * as Toast from '../toast.js';
 
 export default {
     name: 'semester-accordion',
+
     data() {
       return {
         semesterName: '',
       };
     },
+
     props: {
-      targetName: String
+      targetName: String,
+      semester: Object
     },
+
     components: {
-      CourseCard,
+      //CourseCard,
     },
+
     methods: {
         showCourseInfoModal () {
             this.$emit("showCourseInfoModal");
         },
+
         showAddToSemesterModal () {
             this.$emit("showAddToSemesterModal")
         },
+
         getUserInput(e) {
             var src = e.target.innerText
             this.semesterName = src
         },
+
         endUserInput() {
           this.$el.querySelector('.semesterName').blur()
         },
 
         removeSemester() {
-      var removePromptResult = confirm(
-        "Are you sure you want to remove this semester and all its courses?"
-      );
-      if (removePromptResult === true) {
-        Toast.showSuccessMessage(
-          "Semester was removed successfully."
-        );
-      }
+          var removePromptResult = confirm(
+            "Are you sure you want to remove this semester and all its courses?"
+          );
+          if (removePromptResult === true) {
+            Toast.showSuccessMessage(
+              "Semester was removed successfully."
+            );
+          }
+        }
     },
+
+    created() {
+      console.log(this.semester);
     }
 }
 </script>
