@@ -68,17 +68,26 @@ def get_courses(page, per_page):
     keyword = request.args.get('keyword')
     sort_type = int(request.args.get('sortType'))
     is_ascending = request.args.get('isAscending') == "true"
-    
+
     # find courses according to search parameter
-    query = db.session.query(Course).filter(
-        (Course.courseIDType.in_(programs)
-        & (
+    if programs == ['']:    # programs selected
+        query = db.session.query(Course).filter(
             Course.courseID.like('%' + keyword + '%')
             | Course.courseDesc.like('%' + keyword + '%')
             | Course.courseName.like('%' + keyword + '%')
             | Course.prereqs.like('%' + keyword + '%')
-        ))
-    )
+        )
+
+    else:
+        query = db.session.query(Course).filter(
+            (Course.courseIDType.in_(programs)
+            & (
+                Course.courseID.like('%' + keyword + '%')
+                | Course.courseDesc.like('%' + keyword + '%')
+                | Course.courseName.like('%' + keyword + '%')
+                | Course.prereqs.like('%' + keyword + '%')
+            ))
+        )
 
     # sort courses
     if sort_type == 1:   # courseId
