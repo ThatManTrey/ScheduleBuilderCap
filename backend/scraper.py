@@ -127,19 +127,28 @@ def getCourseData(course):
 
         # prereqs
         attribute = attribute.find_next('p', class_="noindent")
-        attribute.find('strong').clear()
-        Prereqs = attribute.text.strip()
+        
+        # need to see if prereq section exists
+        if attribute.find('strong').text == "Prerequisite: ":
+            attribute.find('strong').clear()
+            Prereqs = attribute.text.strip()
+            attribute = attribute.find_next('p', class_="noindent")
+        
+        else:
+            Prereqs = "None"
 
     else:   # prereq is inside description (edge case)
         CourseDesc = descText[:lastIndex+1].strip()
         Prereqs = descText[lastIndex+len(". Prerequisite: "):].strip()
-    
-    
-    # course type
-    attribute = attribute.find_next('p', class_="noindent")
-    if attribute.find('strong').text == "Corequisite: ":
-        attribute = attribute.find_next('p', class_="noindent")
 
+    # coreqs (edge case)
+    if attribute.find('strong').text == "Corequisite: ":
+        attribute.find('strong').clear()
+        Prereqs = Prereqs + ' Corequisites are ' + attribute.text.replace(u'\xa0', ' ').strip()
+        attribute = attribute.find_next('p', class_="noindent")
+    
+
+    # course type (attribute found in previous section)
     attribute.find('strong').clear()
     CourseType = attribute.text.replace(u'\xa0', ' ').strip()
 
