@@ -80,17 +80,20 @@ def getCourses():
 
 
 # takes in html class "courseblock" inside html class "sc_sccoursedescs"
-# http://catalog.kent.edu/coursesaz/acct/
+# http://catalog.kent.edu/coursesaz/aern/
 def getCourseData(course):
     # get all <p> tags
     attribute = course.find('p', class_="noindent")
     
     # CourseName, CourseID, CourseID_Type, CreditHours_Min, CreditHours_Max
+    titleText = attribute.find('strong').text
+    titleText = titleText.replace(u'\xa0', ' ') #&nbsp;
+    titleText = titleText.split(' ')
+    
     # CourseID, CourseID_Type
-    titleText = attribute.find('strong').text.split(" ")
-    CourseIDParts = titleText[0].split(u'\xa0')  #&nbsp;
-    CourseID = CourseIDParts[0] + " " + CourseIDParts[1]
-    CourseID_Type = CourseIDParts[0]
+    CourseID = titleText[0] + ' ' + titleText[1]
+    CourseID_Type = titleText[0]
+
     # CreditHours_Min, CreditHours_Max
     CreditHours = titleText[len(titleText)-3]
     CredMinandMax = CreditHours.split('-')
@@ -100,43 +103,48 @@ def getCourseData(course):
     else:   # not a range
         CreditHours_Min = CredMinandMax[0]
         CreditHours_Max = CredMinandMax[0]
+
     # CourseName
     CourseName = ""
     for word in range(2, len(titleText)-3): # cuz "3 Credit Hours"
-        if word != u'\xa0':
-            if word == 2:
-                CourseName = CourseName + titleText[word]
-            else:
-                CourseName = CourseName + " " + titleText[word]
-    attribute = attribute.find_next('p', class_="noindent")
+        if word == 2:
+            CourseName = CourseName + titleText[word]
+        else:
+            CourseName = CourseName + ' ' + titleText[word]
     
-    # description & prereqs
-    theText = attribute.text
+
+    # !description & prereqs
+    attribute = attribute.find_next('p', class_="noindent")
+    descText = attribute.text
+    descText = descText.replace(u'\xa0', ' ') #&nbsp;
     Prereqs = ""
+
     # find prereq
-    lastIndex = theText.find("Prerequisite: ")
-    if lastIndex != -1: # prereq is inside description (edge case)
-        CourseDesc = theText[:lastIndex].strip()
-        Prereqs = theText[lastIndex+len("Prerequisite: "):theText.find("Schedule Type: ")].strip()
-    else:   # prereq is in own <p>
-        CourseDesc = theText.strip()
-        while attribute.find('strong').text != "Prerequisite: ":
-            attribute = attribute.find_next('p', class_="noindent")
+    lastIndex = descText.find(". Prerequisite: ")
+    if lastIndex == -1:   # prereq is in its own <p>
+        # description
+        CourseDesc = descText.strip()
+
+        # prereqs
+        attribute = attribute.find_next('p', class_="noindent")
         attribute.find('strong').clear()
         Prereqs = attribute.text.strip()
+
+    else:   # prereq is inside description (edge case)
+        CourseDesc = descText[:lastIndex+1].strip()
+        Prereqs = descText[lastIndex+len(". Prerequisite: "):].strip()
     
+
     # course type
-    # use this while loop to get next attribute
-    while attribute.find('strong').text != "Schedule Type: ":
-        attribute = attribute.find_next('p', class_="noindent")
+    attribute = attribute.find_next('p', class_="noindent")
     attribute.find('strong').clear()
     CourseType = attribute.text.strip()
 
-    # contact hours
-    while attribute.find('strong').text != "Contact Hours: ":
-        attribute = attribute.find_next('p', class_="noindent")
+
+    # !contact hours (edge case needed: x lecture, y lab. see CS 10051)
+    attribute = attribute.find_next('p', class_="noindent")
     attribute.find('strong').clear()
-    ContactHours = attribute.text[0].strip()
+    ContactHours = attribute.text.strip().split(' ')[0]
     ConMinandMax = ContactHours.split('-')
     if len(ConMinandMax) > 1:  # range
         ContactHours_Min = ConMinandMax[0]
@@ -145,18 +153,20 @@ def getCourseData(course):
         ContactHours_Min = ConMinandMax[0]
         ContactHours_Max = ConMinandMax[0]
 
+
     # grade type
-    while attribute.find('strong').text != "Grade Mode: ":
-        attribute = attribute.find_next('p', class_="noindent")
+    attribute = attribute.find_next('p', class_="noindent")
     attribute.find('strong').clear()
     GradeType = attribute.text.strip()
 
-    # attributes (optional)
+
+    # !attributes (optional)
     Attributes = None
     attribute = attribute.find_next('p', class_="noindent")
     if attribute.find('strong').text == "Attributes: ":
         attribute.find('strong').clear()
         Attributes = attribute.text.strip()
+
 
     # insert into db
     addCourse(CourseID, CourseName, CourseDesc, CourseType,
@@ -461,7 +471,8 @@ def addProgram(ProgramName, ProgramType):
 
     # see if record exists
     existing_program = db.session.query(Degree).filter_by(
-        degreeName = ProgramName
+        degreeName = ProgramName,
+        degreeType = ProgramType
     ).first()
     
     # if so, check if it needs updated
