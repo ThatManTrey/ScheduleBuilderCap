@@ -115,65 +115,79 @@ def getCourseData(course):
 
     # !description & prereqs
     attribute = attribute.find_next('p', class_="noindent")
-    descText = attribute.text
+
+    # see if </p> was left out
+    if attribute.find('p', class_="noindent"):  # left out, <p> inside description
+        # only take parent text, go to child <p>
+        descText = attribute.find(text=True, recursive=False)
+        attribute = attribute.find('p', class_="noindent")
+    else:
+        # take element text
+        descText = attribute.text
+        attribute = attribute.find_next('p', class_="noindent")
+
     descText = descText.replace(u'\xa0', ' ') #&nbsp;
     Prereqs = ""
 
-    # find prereq
+    # find prereq, if exists
     lastIndex = descText.find(". Prerequisite: ")
-    if lastIndex == -1:   # prereq is in its own <p>
+    if lastIndex == -1:   # prereq is not inside description
         # description
         CourseDesc = descText.strip()
-
-        # prereqs
-        attribute = attribute.find_next('p', class_="noindent")
         
-        # need to see if prereq section exists
-        if attribute.find('strong').text == "Prerequisite: ":
+        # if prereq section exists
+        if attribute.find('strong').text == "Prerequisite: ":   # prereqs exist
             attribute.find('strong').clear()
             Prereqs = attribute.text.strip()
             attribute = attribute.find_next('p', class_="noindent")
         
-        else:
-            Prereqs = "None"
+        else:   # prereqs not listed
+            Prereqs = 'None.'
 
-    else:   # prereq is inside description (edge case)
+    else:   # prereq is inside description (edge case
         CourseDesc = descText[:lastIndex+1].strip()
         Prereqs = descText[lastIndex+len(". Prerequisite: "):].strip()
 
-    # coreqs (edge case)
+    # coreqs (edge case), go to next
     if attribute.find('strong').text == "Corequisite: ":
         attribute.find('strong').clear()
         Prereqs = Prereqs + ' Corequisites are ' + attribute.text.replace(u'\xa0', ' ').strip()
         attribute = attribute.find_next('p', class_="noindent")
     
 
-    # course type (attribute found in previous section)
-    attribute.find('strong').clear()
-    CourseType = attribute.text.replace(u'\xa0', ' ').strip()
+    # course type (current attribute found in previous section)
+    CourseType = ''
+    if attribute.find('strong').text == "Schedule Type: ":
+        attribute.find('strong').clear()
+        CourseType = attribute.text.replace(u'\xa0', ' ').strip()
 
 
     # !contact hours (edge case needed: x lecture, y lab. see CS 10051)
     attribute = attribute.find_next('p', class_="noindent")
-    attribute.find('strong').clear()
-    ContactHours = attribute.text.replace(u'\xa0', ' ').strip().split(' ')[0]
-    ConMinandMax = ContactHours.split('-')
-    if len(ConMinandMax) > 1:  # range
-        ContactHours_Min = ConMinandMax[0]
-        ContactHours_Max = ConMinandMax[1]
-    else:   # not a range
-        ContactHours_Min = ConMinandMax[0]
-        ContactHours_Max = ConMinandMax[0]
+    ContactHours_Max = 0
+    ContactHours_Min = 0
+    if attribute.find('strong').text == "Contact Hours: ":
+        attribute.find('strong').clear()
+        ContactHours = attribute.text.replace(u'\xa0', ' ').strip().split(' ')[0]
+        ConMinandMax = ContactHours.split('-')
+        if len(ConMinandMax) > 1:  # range
+            ContactHours_Min = ConMinandMax[0]
+            ContactHours_Max = ConMinandMax[1]
+        else:   # not a range
+            ContactHours_Min = ConMinandMax[0]
+            ContactHours_Max = ConMinandMax[0]
 
 
     # grade type
     attribute = attribute.find_next('p', class_="noindent")
-    attribute.find('strong').clear()
-    GradeType = attribute.text.replace(u'\xa0', ' ').strip()
+    GradeType = ''
+    if attribute.find('strong').text == "Grade Mode: ":
+        attribute.find('strong').clear()
+        GradeType = attribute.text.replace(u'\xa0', ' ').strip()
 
 
     # !attributes (optional)
-    Attributes = None
+    Attributes = ''
     attribute = attribute.find_next('p', class_="noindent")
     if attribute.find('strong').text == "Attributes: ":
         attribute.find('strong').clear()
@@ -551,7 +565,7 @@ def addCore(CourseID, CoreAttr):
 def getSiteData(link):
     response = requests.get(link)   # get page
     page = response.text # get html
-    parsedPage = BeautifulSoup(page, 'html.parser').encode_contents(formatter='html')   # parse html
+    parsedPage = BeautifulSoup(page, 'html.parser')   # parse html
     return parsedPage
 
 
