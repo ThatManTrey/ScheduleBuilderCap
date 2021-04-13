@@ -134,17 +134,20 @@ def getCourseData(course):
         CourseDesc = descText[:lastIndex+1].strip()
         Prereqs = descText[lastIndex+len(". Prerequisite: "):].strip()
     
-
+    
     # course type
     attribute = attribute.find_next('p', class_="noindent")
+    if attribute.find('strong').text == "Corequisite: ":
+        attribute = attribute.find_next('p', class_="noindent")
+
     attribute.find('strong').clear()
-    CourseType = attribute.text.strip()
+    CourseType = attribute.text.replace(u'\xa0', ' ').strip()
 
 
     # !contact hours (edge case needed: x lecture, y lab. see CS 10051)
     attribute = attribute.find_next('p', class_="noindent")
     attribute.find('strong').clear()
-    ContactHours = attribute.text.strip().split(' ')[0]
+    ContactHours = attribute.text.replace(u'\xa0', ' ').strip().split(' ')[0]
     ConMinandMax = ContactHours.split('-')
     if len(ConMinandMax) > 1:  # range
         ContactHours_Min = ConMinandMax[0]
@@ -157,7 +160,7 @@ def getCourseData(course):
     # grade type
     attribute = attribute.find_next('p', class_="noindent")
     attribute.find('strong').clear()
-    GradeType = attribute.text.strip()
+    GradeType = attribute.text.replace(u'\xa0', ' ').strip()
 
 
     # !attributes (optional)
@@ -165,7 +168,7 @@ def getCourseData(course):
     attribute = attribute.find_next('p', class_="noindent")
     if attribute.find('strong').text == "Attributes: ":
         attribute.find('strong').clear()
-        Attributes = attribute.text.strip()
+        Attributes = attribute.text.replace(u'\xa0', ' ').strip()
 
 
     # insert into db
@@ -407,7 +410,7 @@ def addCoreToCourses(courseList, core):
 
 
 #------------------------------------------------------------------------------
-# database shit
+# database stuff
 
 # adds course record
 def addCourse(CourseID, CourseName, CourseDesc, CourseType,
@@ -539,7 +542,7 @@ def addCore(CourseID, CoreAttr):
 def getSiteData(link):
     response = requests.get(link)   # get page
     page = response.text # get html
-    parsedPage = BeautifulSoup(page, 'html.parser')   # parse html
+    parsedPage = BeautifulSoup(page, 'html.parser').encode_contents(formatter='html')   # parse html
     return parsedPage
 
 
