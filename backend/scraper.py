@@ -107,10 +107,8 @@ def getCourseData(course):
     # CourseName
     CourseName = ""
     for word in range(2, len(titleText)-3): # cuz "3 Credit Hours"
-        if word == 2:
-            CourseName = CourseName + titleText[word]
-        else:
-            CourseName = CourseName + ' ' + titleText[word]
+        CourseName = CourseName + ' ' + titleText[word]
+    CourseName = CourseName.strip()
     
 
     # !description & prereqs
