@@ -111,7 +111,7 @@ def getCourseData(course):
     CourseName = CourseName.strip()
     
 
-    # !description & prereqs
+    # description & prereqs
     attribute = attribute.find_next('p', class_="noindent")
 
     # get description text, eliminate other tags and &nbsp;
