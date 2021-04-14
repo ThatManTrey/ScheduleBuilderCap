@@ -179,7 +179,7 @@ def getCourseData(course):
         GradeType = attribute.text.replace(u'\xa0', ' ').strip()
 
 
-    # !attributes (optional)
+    # attributes (optional)
     Attributes = ''
     attribute = attribute.find_next('p', class_="noindent")
     if attribute.find('strong').text == "Attributes: ":
