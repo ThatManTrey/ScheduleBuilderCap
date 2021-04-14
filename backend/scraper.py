@@ -115,7 +115,7 @@ def getCourseData(course):
     attribute = attribute.find_next('p', class_="noindent")
 
     # see if </p> was left out
-    if attribute.find('p', class_="noindent"):  # left out, <p> inside description
+    if attribute.find('p', class_="noindent", recursive=False):  # left out, <p> inside description
         # only take parent text, go to child <p>
         descText = attribute.find(text=True, recursive=False)
         attribute = attribute.find('p', class_="noindent")
@@ -142,7 +142,7 @@ def getCourseData(course):
         else:   # prereqs not listed
             Prereqs = 'None.'
 
-    else:   # prereq is inside description (edge case
+    else:   # prereq is inside description (edge case)
         CourseDesc = descText[:lastIndex+1].strip()
         Prereqs = descText[lastIndex+len(". Prerequisite: "):].strip()
 
