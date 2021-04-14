@@ -1,5 +1,4 @@
 # Beautiful Soup: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
-# APScheduler: https://apscheduler.readthedocs.io/en/stable/#
 # $$$ means not tested
 
 # todo: needs refactored to reduce coupling
