@@ -1,12 +1,14 @@
 import axios from "axios";
 
+
 const state = () => ({
   // each semester object has
   //    semesterName
-  //    semesterID
-  //    array of courses
+  //    semesterId 
+  //    semesterCourses - array of courses scheduled
   semesters: []
 });
+
 
 const mutations = {
   setSemesters(state, semesters) {
@@ -14,14 +16,33 @@ const mutations = {
   }
 };
 
+
 const getters = {
-  searchPrograms: state => courseId => {
-    // i think this would work?
-    return state.semesters.filter(semester =>
-      semester.courses.includes(courseId)
-    );
-  }
+  isCourseScheduled: state => courseId => {
+    let courseFound = false;
+
+    state.semesters.forEach(semester => {
+      if(hasCourseWithId(semester, courseId))
+        courseFound = true;   
+    });
+
+    return courseFound;
+  },
+
+  getSemesterIdForCourse: state => courseId => {
+    let semesterId = null;
+
+    state.semesters.forEach(semester => {
+      if(hasCourseWithId(semester, courseId)) {
+        semesterId = semester.semesterId;
+        return;
+      }
+    });
+
+    return semesterId;
+  },
 };
+
 
 const actions = {
   getSemesters({ commit, rootState }) {
@@ -29,7 +50,6 @@ const actions = {
     axios
       .get(url)
       .then(res => {
-        console.log("received semesters: ", res.data.semesters);
         commit("setSemesters", res.data.semesters);
       })
       .catch(error => {
@@ -98,7 +118,9 @@ const actions = {
       });
   },
 
-  removeCourseFromSemester({ dispatch, rootState }, { semesterId, courseId }) {
+  removeCourseFromSemester({ dispatch, rootState, getters }, courseId) {
+    const semesterId = getters.getSemesterIdForCourse(courseId);
+
     var url =
       "users/" +
       rootState.auth.userId +
@@ -119,6 +141,7 @@ const actions = {
   }
 };
 
+
 export default {
   namespaced: true,
   state,
@@ -126,3 +149,8 @@ export default {
   actions,
   mutations
 };
+
+
+function hasCourseWithId(semester, courseId){
+  return semester.semesterCourses.some(course => course.courseID === courseId);
+}

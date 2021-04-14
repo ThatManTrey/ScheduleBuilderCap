@@ -9,20 +9,17 @@
             data-tooltip="Remove Semester"
             class="button-as-link"
           >
-            <i class="fas fa-trash fa-lg"></i>
+            <i class="fas fa-trash"></i>
           </button>
           <div class="text-theme-whitest d-inline">
             <h2
-              class="m-0 edit-semester-name"
+              class="m-0"
               contenteditable
               @keyup.enter="getUserInput"
               @keydown.enter="endUserInput"
               @input="getUserInput"
             >
               {{ semester.semesterName }}
-            </h2>
-            <h2 class="creditHours">
-              (<span class="text-theme-secondary">16</span>)
             </h2>
           </div>
           <button
@@ -42,18 +39,19 @@
       </div>
     </div>
 
-    <div class="semester-body collapse show mb-3" :id="targetName">
+    <div class="semester-body collapse mb-3" :class="{ 'show': hasCourses }" :id="targetName">
       <div class="container">
         <div v-if="semester.semesterCourses.length > 0" class="row">
           <div
-            v-for="n in 4"
-            :key="n"
+            v-for="(course, index) in semester.semesterCourses"
+            :key="index"
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
           >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
               :isRemovingCourse="true"
+              :course="course"
             ></CourseCard>
           </div>
         </div>
@@ -80,6 +78,12 @@ export default {
       return {
         semesterName: this.semester.semesterName,
       };
+    },
+
+    computed: {
+      hasCourses() {
+        return this.semester.semesterCourses.length > 0;
+      }
     },
 
     components: {
@@ -110,7 +114,7 @@ export default {
             // remove focus from semester name
             e.srcElement.blur();
 
-            // remove whitespace from both sides of semester name name
+            // remove whitespace from both sides of semester name
             this.semesterName = this.semesterName.trim();
             e.target.innerText = this.semesterName;
 
@@ -161,10 +165,6 @@ h2,
 i {
   display: inline-block;
   vertical-align: middle;
-}
-
-.creditHours {
-  padding-left: 1rem;
 }
 
 .edit-semester-name {

@@ -66,7 +66,7 @@
 
         <div v-if="isLoggedIn" class="col text-end">
           <a
-            v-if="!isRemovingCourse"
+            v-if="!isScheduled"
             tabindex="0"
             @keyup.enter="showAddToSemesterModal()"
             @click="showAddToSemesterModal()"
@@ -75,7 +75,7 @@
             <i class="fas fa-plus-circle fa-lg"></i>
           </a>
           <a
-            v-if="isRemovingCourse"
+            v-if="isScheduled"
             tabindex="0"
             @keyup.enter="removeFromSemester()"
             @click="removeFromSemester()"
@@ -93,18 +93,11 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
-    // replace with semester getter
-    isRemovingCourse: {
-      type: Boolean,
-      default: false
-    },
-
     course: {
       type: Object
     }
   },
 
-  // add isScheduled and isFavorited
   computed: {
     ...mapGetters("courses", {
       showSmallCard: "showSmallCard"
@@ -114,11 +107,16 @@ export default {
       isLoggedIn: state => state.auth.isAuthenticated,
       userID: state => state.auth.userId,
       currentCourse: state => state.courses.currentCourse
-      //isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {
       return this.$store.getters["favorites/isCourseFavorited"](
+        this.course.courseID
+      );
+    },
+    
+    isScheduled() {
+      return this.$store.getters["semesters/isCourseScheduled"](
         this.course.courseID
       );
     }
@@ -136,7 +134,7 @@ export default {
     },
 
     removeFromSemester() {
-      //this.$store.dispatch("semesters/addFavorite", course.courseID);
+      this.$store.dispatch("semesters/removeCourseFromSemester", this.course.courseID);
     },
 
     addToFavorites() {

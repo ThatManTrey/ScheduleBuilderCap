@@ -7,102 +7,105 @@
   >
     <template v-slot:header>Add Course to Semester</template>
     <template v-slot:body v-if="course.course">
-      <div>
-        <h6 class="text-center">
-          Select the semester you would like to add
-          {{ course.course.courseID }} to:
-        </h6>
-        <div class="list-group mt-3">
-          <!-- list of semesters -->
-          <div
-            tabindex="0"
-            class="list-group-item add-course"
-            @click="addCourse()"
-            @keyup.enter="addCourse()"
-            v-for="n in semesters"
-            :key="n"
-          >
-            <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
-            <a
-              tabindex="0"
-              @keyup.enter.stop
-              @keyup.enter="removeSemester(n)"
-              @click.stop
-              @click="removeSemester(n)"
-            >
-              <i class="fas fa-trash"></i>
-            </a>
-            Semester {{ n }}
-            <span class="badge rounded-pill"> 1{{ n }} Credits</span>
-          </div>
+  <div>
+    <h6 class="text-center">
+      Select the semester you would like to add
+      {{ course.course.courseID }} to:
+    </h6>
+    <div class="list-group mt-3">
+      <!-- list of semesters -->
+      <div
+        tabindex="0"
+        class="list-group-item add-course"
+        @click="addCourse(semester.semesterId)"
+        @keyup.enter="addCourse(semester.semesterId)"
+        v-for="(semester, index) in semesters"
+        :key="index"
+      >
+        <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
+        <a
+          tabindex="0"
+          @keyup.enter.stop
+          @keyup.enter="removeSemester(semester)"
+          @click.stop
+          @click="removeSemester(semester)"
+        >
+          <i class="fas fa-trash"></i>
+        </a>
+        {{ semester.semesterName }}
+        <span class="badge rounded-pill"
+          >{{ semester.semesterCourses.length }} Courses</span
+        >
+      </div>
 
-          <!-- add a new semester -->
-          <div class="list-group-item">
-            <div v-show="isAddingSemester" class="container-fluid">
-              <div class="row">
-                <div class="col-12">
-                  <input
-                    type="text"
-                    id="newSemesterName1"
-                    class="form-control"
-                    placeholder="Enter a semester name..."
-                  />
-                </div>
-                <div class="col-12 mt-2">
-                  <button
-                    type="submit"
-                    class="btn btn-theme-confirm btn-sm"
-                    id="add-semeste-btn"
-                    @click="test"
-                  >
-                    Add Semester
-                  </button>
-                  <a
-                    tabindex="0"
-                    @keyup.enter="isAddingSemester = false"
-                    @click="isAddingSemester = false"
-                  >
-                    <i class="fas fa-times" id="cancel-add"></i>
-                  </a>
-                </div>
-              </div>
+      <!-- add a new semester -->
+      <div class="list-group-item">
+        <div v-show="isAddingSemester" class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <input
+                type="text"
+                id="newSemesterName1"
+                class="form-control"
+                placeholder="Enter a semester name..."
+                v-model.trim="semesterName"
+              />
             </div>
-            <div v-show="!isAddingSemester" id="add-semester-link">
+            <div class="col-12 mt-2">
+              <button
+                type="submit"
+                class="btn btn-theme-confirm btn-sm"
+                id="add-semeste-btn"
+                @click="addSemester()"
+              >
+                Add Semester
+              </button>
               <a
                 tabindex="0"
-                @keyup.enter="isAddingSemester = true"
-                @click="isAddingSemester = true"
+                @keyup.enter="isAddingSemester = false"
+                @click="isAddingSemester = false"
               >
-                <i class="fas fa-plus-circle plus-add-icon"></i>
-                <span> Add Semester</span>
+                <i class="fas fa-times" id="cancel-add"></i>
               </a>
             </div>
           </div>
         </div>
+        <div v-show="!isAddingSemester" id="add-semester-link">
+          <a
+            tabindex="0"
+            @keyup.enter="isAddingSemester = true"
+            @click="isAddingSemester = true"
+          >
+            <i class="fas fa-plus-circle plus-add-icon"></i>
+            <span> Add Semester</span>
+          </a>
+        </div>
       </div>
-    </template>
+    </div>
+  </div>
+</template>
   </Modal>
 </template>
 
 <script>
 import Modal from "./Modal.vue";
-import * as Toast from "../../toast.js";
 import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       isAddingSemester: false,
-      semesters: 0
+      semesterName: "",
     };
   },
 
   computed: mapState({
-    course: state => state.courses.currentCourse
+    course: (state) => state.courses.currentCourse,
+    semesters: (state) => state.semesters.semesters,
   }),
 
   components: {
-    Modal
+    Modal,
   },
 
   methods: {
@@ -110,31 +113,47 @@ export default {
     openModal() {
       this.$refs.addToSemesterBaseModalRef.openModal();
     },
+
     closeModal() {
       this.$refs.addToSemesterBaseModalRef.closeModal();
     },
-    test() {
+
+    addSemester() {
       this.isAddingSemester = false;
-      this.semesters++;
+
+      if (this.semesterName.length === 0) {
+        const semesterNumber = this.$store.state.semesters.semesters.length + 1;
+        this.semesterName = "Semester " + semesterNumber;
+      } else if (this.semesterName.length > 64) {
+        this.semesterName = this.semesterName.slice(0, 64);
+      }
+
+      this.$store
+        .dispatch("semesters/addSemester", this.semesterName)
+        .then(() => {
+          this.semesterName = "";
+        });
     },
-    removeSemester(n) {
-      var removePromptResult = confirm(
-        "Are you sure you want to remove semester " +
-          n +
+
+    removeSemester(semester) {
+      var removeSemester = confirm(
+        "Are you sure you want to remove " +
+          semester.semesterName +
           " and all its courses?"
       );
-      if (removePromptResult === true) {
-        Toast.showSuccessMessage(
-          "Semester " + n + " was removed successfully."
-        );
+      if (removeSemester) {
+        this.$store.dispatch("semesters/removeSemester", semester.semesterId);
       }
     },
 
-    addCourse() {
-      Toast.showSuccessMessage("Course added successfully.");
+    addCourse(semesterId) {
+      this.$store.dispatch("semesters/addCourseToSemester", {
+        semesterId: semesterId,
+        courseId: this.course.course.courseID,
+      });
       this.closeModal();
-    }
-  }
+    },
+  },
 };
 </script>
 

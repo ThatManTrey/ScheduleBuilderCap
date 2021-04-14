@@ -24,11 +24,6 @@
           v-model.trim="semesterName"
           @keyup.enter="addSemester()"
         />
-
-        <span v-if="validationError" class="form-error-text mb-2">
-          <i class="fas fa-times-circle text-theme-warning-light"></i>
-          {{ validationError }}
-        </span>
       </div>
     </div>
     <div class="row">
@@ -53,15 +48,14 @@ import Spinner from "../spinners/Spinner";
 export default {
   components: {
     Modal,
-    Spinner
+    Spinner,
   },
 
   data() {
     return {
       semesterName: "",
       isLoading: false,
-      validationError: null
-    }
+    };
   },
 
   methods: {
@@ -74,21 +68,23 @@ export default {
     },
 
     addSemester() {
-      if (this.semesterName.length > 0 && this.semesterName.length < 64) {
-        this.isLoading = true;
-        this.validationError = null;
+      this.isLoading = true;
 
-        this.$store.dispatch("semesters/addSemester", this.semesterName).then(() =>  {
+      if (this.semesterName.length === 0) {
+        const semesterNumber = this.$store.state.semesters.semesters.length + 1;
+        this.semesterName = "Semester " + semesterNumber;
+      } else if (this.semesterName.length > 64) {
+        this.semesterName = this.semesterName.slice(0, 64);
+      }
+
+      this.$store
+        .dispatch("semesters/addSemester", this.semesterName)
+        .then(() => {
           this.isLoading = false;
           this.semesterName = "";
           this.closeModal();
-        });  
-      } else if(this.semesterName.length < 1) {
-        this.validationError = "Please a semester name.";
-      } else {
-        this.validationError = "Please enter a shorter semester name.";
-      }    
-    }
-  }
+        });
+    },
+  },
 };
 </script>

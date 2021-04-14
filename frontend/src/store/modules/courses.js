@@ -30,7 +30,6 @@ const mutations = {
     state.isLoadingCourses = false;
     state.totalPages = totalPages;
     state.totalResults = totalResults;
-    console.log("allCourses: ", allCourses);
   },
 
   setCurrentCourse(state, course) {
