@@ -115,16 +115,18 @@ def getCourseData(course):
     attribute = attribute.find_next('p', class_="noindent")
 
     # see if </p> was left out
-    if attribute.find('p', class_="noindent", recursive=False):  # left out, <p> inside description
-        # only take parent text, go to child <p>
-        descText = attribute.find(text=True, recursive=False)
-        attribute = attribute.find('p', class_="noindent")
-    else:
+    # if attribute.find('p', class_="noindent"):  # left out, <p> inside description
+    #     # only take parent text, go to child <p>
+    #     descText = attribute.find(text=True, recursive=False)
+    #     attribute = attribute.find('p', class_="noindent")
+    # else:
         # take element text
-        descText = attribute.text
-        attribute = attribute.find_next('p', class_="noindent")
 
+    descText = attribute.text
+    attribute = attribute.find_next('p', class_="noindent")
+    descText = descText[descText.find(attribute.text):]
     descText = descText.replace(u'\xa0', ' ') #&nbsp;
+
     Prereqs = ""
 
     # find prereq, if exists
