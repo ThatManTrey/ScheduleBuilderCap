@@ -30,7 +30,6 @@ const mutations = {
     state.isLoadingCourses = false;
     state.totalPages = totalPages;
     state.totalResults = totalResults;
-    console.log("allCourses: ", allCourses);
   },
 
   setCurrentCourse(state, course) {
@@ -92,7 +91,6 @@ const mutations = {
 
   setPagination(state, newPage) {
     state.currentPage = newPage;
-
   }
 };
 

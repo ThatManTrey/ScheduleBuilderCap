@@ -12,7 +12,7 @@ from app import app, db, mail
 from app.models import User
 from app import jwt as jwt_extended
 from app.emails import *
-from app.decorators import is_current_user, has_access_token, has_reset_pass_token, has_confirmation_token
+from app.decorators import has_access_token, has_reset_pass_token, has_confirmation_token
 
 
 #

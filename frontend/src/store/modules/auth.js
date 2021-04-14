@@ -50,9 +50,8 @@ const actions = {
           hasConfirmedEmail: response.data.hasConfirmedEmail
         });
 
-        // uncomment once these endpoints are fixed on the backend
         dispatch("favorites/getFavoriteCourses", null, { root: true });
-        //dispatch('semesters/getSemesters', { root: true });
+        dispatch("semesters/getSemesters", null, { root: true });
 
         axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
           "csrf_access_token"
@@ -105,9 +104,8 @@ const actions = {
           hasConfirmedEmail: response.data.hasConfirmedEmail
         });
 
-        // uncomment once these endpoints are fixed on the backend
         dispatch("favorites/getFavoriteCourses", null, { root: true });
-        //dispatch('semesters/getSemesters', { root: true });
+        dispatch("semesters/getSemesters", null, { root: true });
       })
       .catch(function(error) {
         if (!error.response) commit("setAuthError");

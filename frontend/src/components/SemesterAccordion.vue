@@ -3,26 +3,23 @@
     <div class="semester-accordion mb-3">
       <div class="semester-header">
         <div class="semester-title align-middle">
-          <a
+          <button
             @click="removeSemester()"
             @keyup.enter="removeSemester()"
             data-tooltip="Remove Semester"
-            data-tooltip-location="bottom"
+            class="button-as-link"
           >
-            <i class="fas fa-trash fa-lg"></i>
-          </a>
-          <div class="text-theme-whitest" style="display:inline">
+            <i class="fas fa-trash"></i>
+          </button>
+          <div class="text-theme-whitest d-inline">
             <h2
-              class="m-0 semesterName"
+              class="m-0"
               contenteditable
               @keyup.enter="getUserInput"
               @keydown.enter="endUserInput"
               @input="getUserInput"
             >
-              Fall 2021
-            </h2>
-            <h2 class="creditHours">
-              (<span class="text-theme-secondary">16</span>)
+              {{ semester.semesterName }}
             </h2>
           </div>
           <button
@@ -42,20 +39,24 @@
       </div>
     </div>
 
-    <div class="semester-body collapse show mb-3" :id="targetName">
+    <div class="semester-body collapse mb-3" :class="{ 'show': hasCourses }" :id="targetName">
       <div class="container">
-        <div class="row">
+        <div v-if="semester.semesterCourses.length > 0" class="row">
           <div
-            v-for="n in 4"
-            :key="n"
+            v-for="(course, index) in semester.semesterCourses"
+            :key="index"
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
           >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
               :isRemovingCourse="true"
+              :course="course"
             ></CourseCard>
           </div>
+        </div>
+        <div class="row" v-else>
+          <h5>You haven't added any courses yet.</h5>
         </div>
       </div>
     </div>
@@ -64,46 +65,75 @@
 
 <script lang="js">
 import CourseCard from '../components/CourseCard.vue';
-import * as Toast from '../toast.js';
 
 export default {
     name: 'semester-accordion',
+
+    props: {
+      targetName: String,
+      semester: Object
+    },
+
     data() {
       return {
-        semesterName: '',
+        semesterName: this.semester.semesterName,
       };
     },
-    props: {
-      targetName: String
+
+    computed: {
+      hasCourses() {
+        return this.semester.semesterCourses.length > 0;
+      }
     },
+
     components: {
       CourseCard,
     },
+
     methods: {
         showCourseInfoModal () {
             this.$emit("showCourseInfoModal");
         },
+
         showAddToSemesterModal () {
             this.$emit("showAddToSemesterModal")
         },
+
         getUserInput(e) {
-            var src = e.target.innerText
-            this.semesterName = src
+            const input = e.target.innerText;
+
+            if(input.length < 1)
+                e.target.innerText = this.semester.semesterName;
+            else if(input.length > 64)    // semester name max size in db
+                e.target.innerText = this.semester.semesterName;
+            else
+                this.semesterName = input;   
         },
-        endUserInput() {
-          this.$el.querySelector('.semesterName').blur()
+
+        endUserInput(e) {
+            // remove focus from semester name
+            e.srcElement.blur();
+
+            // remove whitespace from both sides of semester name
+            this.semesterName = this.semesterName.trim();
+            e.target.innerText = this.semesterName;
+
+            if(this.semesterName !== this.semester.semesterName) 
+                this.$store.dispatch("semesters/editSemesterName", {
+                    semesterId: this.semester.semesterId,
+                    newName: this.semesterName
+                })    
         },
 
         removeSemester() {
-      var removePromptResult = confirm(
-        "Are you sure you want to remove this semester and all its courses?"
-      );
-      if (removePromptResult === true) {
-        Toast.showSuccessMessage(
-          "Semester was removed successfully."
-        );
-      }
-    },
+          var removeSemester = confirm(
+            "Are you sure you want to remove this semester and all its courses?"
+          ); 
+          
+          if (removeSemester) 
+            this.$store.dispatch("semesters/removeSemester", this.semester.semesterId);
+          
+        }
     }
 }
 </script>
@@ -137,7 +167,11 @@ i {
   vertical-align: middle;
 }
 
-.creditHours {
-  padding-left: 1rem;
+.edit-semester-name {
+    cursor: pointer;
+
+    &:active, &:focus {
+        cursor: text;
+    }
 }
 </style>

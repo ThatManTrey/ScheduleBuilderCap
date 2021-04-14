@@ -1,12 +1,14 @@
 import axios from "axios";
 
+
 const state = () => ({
   // each semester object has
   //    semesterName
-  //    semesterID
-  //    array of courses
+  //    semesterId 
+  //    semesterCourses - array of courses scheduled
   semesters: []
 });
+
 
 const mutations = {
   setSemesters(state, semesters) {
@@ -14,14 +16,33 @@ const mutations = {
   }
 };
 
+
 const getters = {
-  searchPrograms: state => courseId => {
-    // i think this would work?
-    return state.semesters.filter(semester =>
-      semester.courses.includes(courseId)
-    );
-  }
+  isCourseScheduled: state => courseId => {
+    let courseFound = false;
+
+    state.semesters.forEach(semester => {
+      if(hasCourseWithId(semester, courseId))
+        courseFound = true;   
+    });
+
+    return courseFound;
+  },
+
+  getSemesterIdForCourse: state => courseId => {
+    let semesterId = null;
+
+    state.semesters.forEach(semester => {
+      if(hasCourseWithId(semester, courseId)) {
+        semesterId = semester.semesterId;
+        return;
+      }
+    });
+
+    return semesterId;
+  },
 };
+
 
 const actions = {
   getSemesters({ commit, rootState }) {
@@ -39,7 +60,8 @@ const actions = {
 
   addSemester({ dispatch, rootState }, semesterName) {
     var url = "users/" + rootState.auth.userId + "/semesters";
-    axios
+
+    return axios
       .post(url, { semester_name: semesterName })
       .then(() => {
         dispatch("getSemesters");
@@ -50,7 +72,7 @@ const actions = {
       });
   },
 
-  removeSemester({ dispatch, rootState }, { semesterId }) {
+  removeSemester({ dispatch, rootState }, semesterId) {
     var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId;
     axios
       .delete(url)
@@ -84,6 +106,7 @@ const actions = {
       semesterId +
       "/courses/" +
       courseId;
+
     axios
       .post(url)
       .then(() => {
@@ -95,7 +118,9 @@ const actions = {
       });
   },
 
-  removeCourseFromSemester({ dispatch, rootState }, { semesterId, courseId }) {
+  removeCourseFromSemester({ dispatch, rootState, getters }, courseId) {
+    const semesterId = getters.getSemesterIdForCourse(courseId);
+
     var url =
       "users/" +
       rootState.auth.userId +
@@ -103,6 +128,7 @@ const actions = {
       semesterId +
       "/courses/" +
       courseId;
+
     axios
       .delete(url)
       .then(() => {
@@ -115,6 +141,7 @@ const actions = {
   }
 };
 
+
 export default {
   namespaced: true,
   state,
@@ -122,3 +149,8 @@ export default {
   actions,
   mutations
 };
+
+
+function hasCourseWithId(semester, courseId){
+  return semester.semesterCourses.some(course => course.courseID === courseId);
+}

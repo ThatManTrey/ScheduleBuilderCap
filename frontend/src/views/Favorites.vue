@@ -5,9 +5,11 @@
       :showSpinner="!hasLoadedCourses"
     ></PageSpinner> -->
 
-    <div class="container d-flex flex-grow-1 justify-content-center align-items-center mb-3 mt-3">
+    <div
+      class="container d-flex flex-grow-1 justify-content-center align-items-center mb-3 mt-3"
+    >
       <transition name="fade">
-        <div v-if="favCourses.length !== 0" class="row mx-3">
+        <div v-if="favCourses.length !== 0" class="row w-100 justify-content-center align-items-center mx-3">
           <div
             class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in favCourses"
@@ -22,8 +24,12 @@
         </div>
 
         <div v-else id="no-fav-message">
-          <h4 class="text-theme-whitest mb-3">You haven't favorited any courses yet.</h4>
-          <p class="text-theme-light-gray">You can find some <router-link to="home">here</router-link>.</p>
+          <h4 class="text-theme-whitest mb-3">
+            You haven't favorited any courses yet.
+          </h4>
+          <p class="text-theme-light-gray">
+            You can find some <router-link to="home">here</router-link>.
+          </p>
         </div>
       </transition>
     </div>

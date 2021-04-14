@@ -390,7 +390,7 @@ export default {
           // search courses again if user searched previously
           if(this.lastSearchKeyword.length > 0)
             this.searchCourses();
-          
+
         }
       },
 

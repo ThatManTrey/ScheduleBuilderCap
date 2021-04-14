@@ -13,13 +13,18 @@ from app import app, db
 
 # decorator to check if user making the request is the same as
 #   the requested user to get information about
-# add @is_current_user to any endpoint that returns user information
+# add @is_current_user() to any endpoint that returns user information
 # endpoint must take <int:user_id> in params
-def is_current_user(function):
-    def wrapper(user_id):
-        if get_jwt_identity() != user_id:
-            return jsonify(msg="You cannot access another user's information."), HTTPStatus.FORBIDDEN
-        return function(user_id)
+def is_current_user():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            if kwargs['user_id'] != get_jwt_identity():
+                return jsonify(msg="You cannot access another user's information."), HTTPStatus.FORBIDDEN
+
+            return fn(*args, **kwargs)
+
+        return decorator
     return wrapper
 
 
@@ -63,7 +68,7 @@ def has_reset_pass_token():
                 return "User with that ID does not exist", HTTPStatus.NOT_FOUND
 
             # finally verify the token with the user's current hashed password
-            verified_token = jwt.decode(token, user.userPass, algorithms="HS256")
+            jwt.decode(token, user.userPass, algorithms="HS256")
             return fn(*args, **kwargs)
 
         return decorator

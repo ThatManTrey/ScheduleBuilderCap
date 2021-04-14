@@ -71,8 +71,10 @@ store.dispatch("courses/getOptionsFromLocalStorage");
 // csrf token cookie isn't httponly, access token is
 if (Vue.$cookies.get("csrf_access_token")) {
   store.dispatch("auth/verifyAccessToken").then(function() {
-    if (store.state.auth.authError) 
-      Toast.showErrorMessage("An unexpected error has occurred. Please login again.")
+    if (store.state.auth.authError)
+      Toast.showErrorMessage(
+        "An unexpected error has occurred. Please login again."
+      );
     // needed for validating POST, PUT, DELETE requests
     else
       axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
