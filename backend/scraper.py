@@ -114,14 +114,7 @@ def getCourseData(course):
     # !description & prereqs
     attribute = attribute.find_next('p', class_="noindent")
 
-    # see if </p> was left out
-    # if attribute.find('p', class_="noindent"):  # left out, <p> inside description
-    #     # only take parent text, go to child <p>
-    #     descText = attribute.find(text=True, recursive=False)
-    #     attribute = attribute.find('p', class_="noindent")
-    # else:
-        # take element text
-
+    # get description text, eliminate other tags and &nbsp;
     descText = attribute.text
     attribute = attribute.find_next('p', class_="noindent")
     descText = descText[:descText.find(attribute.text)]
