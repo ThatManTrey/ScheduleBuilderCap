@@ -124,7 +124,7 @@ def getCourseData(course):
 
     descText = attribute.text
     attribute = attribute.find_next('p', class_="noindent")
-    descText = descText[descText.find(attribute.text):]
+    descText = descText[:descText.find(attribute.text)]
     descText = descText.replace(u'\xa0', ' ') #&nbsp;
 
     Prereqs = ""
