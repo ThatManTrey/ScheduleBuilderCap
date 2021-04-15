@@ -13,31 +13,31 @@
     </template>
 
     <template v-slot:body>
-  <div class="container">
-    <div class="row">
-      <div class="col mx-auto">
-        <input
-          type="text"
-          id="newSemesterName2"
-          class="form-control"
-          placeholder="Enter a semester name..."
-          v-model.trim="semesterName"
-          @keyup.enter="addSemester()"
-        />
+      <div class="container">
+        <div class="row">
+          <div class="col mx-auto">
+            <input
+              type="text"
+              id="newSemesterName2"
+              class="form-control"
+              placeholder="Enter a semester name..."
+              v-model.trim="semesterName"
+              @keyup.enter="addSemester()"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col mt-2 mx-auto">
+            <button
+              class="btn btn-theme-confirm btn-sm w-100"
+              @click="addSemester()"
+            >
+              Add Semester
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col mt-2 mx-auto">
-        <button
-          class="btn btn-theme-confirm btn-sm w-100"
-          @click="addSemester()"
-        >
-          Add Semester
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
+    </template>
   </Modal>
 </template>
 
@@ -48,13 +48,13 @@ import Spinner from "../spinners/Spinner";
 export default {
   components: {
     Modal,
-    Spinner,
+    Spinner
   },
 
   data() {
     return {
       semesterName: "",
-      isLoading: false,
+      isLoading: false
     };
   },
 
@@ -84,7 +84,7 @@ export default {
           this.semesterName = "";
           this.closeModal();
         });
-    },
-  },
+    }
+  }
 };
 </script>

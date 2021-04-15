@@ -7,83 +7,83 @@
   >
     <template v-slot:header>Add Course to Semester</template>
     <template v-slot:body v-if="course.course">
-  <div>
-    <h6 class="text-center">
-      Select the semester you would like to add
-      {{ course.course.courseID }} to:
-    </h6>
-    <div class="list-group mt-3">
-      <!-- list of semesters -->
-      <div
-        tabindex="0"
-        class="list-group-item add-course"
-        @click="addCourse(semester.semesterId)"
-        @keyup.enter="addCourse(semester.semesterId)"
-        v-for="(semester, index) in semesters"
-        :key="index"
-      >
-        <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
-        <a
-          tabindex="0"
-          @keyup.enter.stop
-          @keyup.enter="removeSemester(semester)"
-          @click.stop
-          @click="removeSemester(semester)"
-        >
-          <i class="fas fa-trash"></i>
-        </a>
-        {{ semester.semesterName }}
-        <span class="badge rounded-pill"
-          >{{ semester.semesterCourses.length }} Courses</span
-        >
-      </div>
+      <div>
+        <h6 class="text-center">
+          Select the semester you would like to add
+          {{ course.course.courseID }} to:
+        </h6>
+        <div class="list-group mt-3">
+          <!-- list of semesters -->
+          <div
+            tabindex="0"
+            class="list-group-item add-course"
+            @click="addCourse(semester.semesterId)"
+            @keyup.enter="addCourse(semester.semesterId)"
+            v-for="(semester, index) in semesters"
+            :key="index"
+          >
+            <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
+            <a
+              tabindex="0"
+              @keyup.enter.stop
+              @keyup.enter="removeSemester(semester)"
+              @click.stop
+              @click="removeSemester(semester)"
+            >
+              <i class="fas fa-trash"></i>
+            </a>
+            {{ semester.semesterName }}
+            <span class="badge rounded-pill"
+              >{{ semester.semesterCourses.length }} Courses</span
+            >
+          </div>
 
-      <!-- add a new semester -->
-      <div class="list-group-item">
-        <div v-show="isAddingSemester" class="container-fluid">
-          <div class="row">
-            <div class="col-12">
-              <input
-                type="text"
-                id="newSemesterName1"
-                class="form-control"
-                placeholder="Enter a semester name..."
-                v-model.trim="semesterName"
-              />
+          <!-- add a new semester -->
+          <div class="list-group-item">
+            <div v-show="isAddingSemester" class="container-fluid">
+              <div class="row">
+                <div class="col-12">
+                  <input
+                    type="text"
+                    id="newSemesterName1"
+                    class="form-control"
+                    placeholder="Enter a semester name..."
+                    v-model.trim="semesterName"
+                  />
+                </div>
+                <div class="col-12 mt-2">
+                  <button
+                    type="submit"
+                    class="btn btn-theme-confirm btn-sm"
+                    id="add-semeste-btn"
+                    @click="addSemester()"
+                  >
+                    Add Semester
+                  </button>
+                  <a
+                    tabindex="0"
+                    @keyup.enter="isAddingSemester = false"
+                    @click="isAddingSemester = false"
+                  >
+                    <i class="fas fa-times" id="cancel-add"></i>
+                  </a>
+                </div>
+              </div>
             </div>
-            <div class="col-12 mt-2">
-              <button
-                type="submit"
-                class="btn btn-theme-confirm btn-sm"
-                id="add-semeste-btn"
-                @click="addSemester()"
-              >
-                Add Semester
-              </button>
+            <div v-show="!isAddingSemester" id="add-semester-link">
               <a
                 tabindex="0"
-                @keyup.enter="isAddingSemester = false"
-                @click="isAddingSemester = false"
+                @keyup.enter="isAddingSemester = true"
+                @click="isAddingSemester = true"
               >
-                <i class="fas fa-times" id="cancel-add"></i>
+                <i class="fas fa-plus-circle plus-add-icon"></i>
+                <span> Add Semester</span>
               </a>
             </div>
           </div>
         </div>
-        <div v-show="!isAddingSemester" id="add-semester-link">
-          <a
-            tabindex="0"
-            @keyup.enter="isAddingSemester = true"
-            @click="isAddingSemester = true"
-          >
-            <i class="fas fa-plus-circle plus-add-icon"></i>
-            <span> Add Semester</span>
-          </a>
-        </div>
       </div>
-    </div>
-  </div>
-</template>
+    </template>
   </Modal>
 </template>
 
@@ -95,17 +95,17 @@ export default {
   data() {
     return {
       isAddingSemester: false,
-      semesterName: "",
+      semesterName: ""
     };
   },
 
   computed: mapState({
-    course: (state) => state.courses.currentCourse,
-    semesters: (state) => state.semesters.semesters,
+    course: state => state.courses.currentCourse,
+    semesters: state => state.semesters.semesters
   }),
 
   components: {
-    Modal,
+    Modal
   },
 
   methods: {
@@ -149,11 +149,11 @@ export default {
     addCourse(semesterId) {
       this.$store.dispatch("semesters/addCourseToSemester", {
         semesterId: semesterId,
-        courseId: this.course.course.courseID,
+        courseId: this.course.course.courseID
       });
       this.closeModal();
-    },
-  },
+    }
+  }
 };
 </script>
 

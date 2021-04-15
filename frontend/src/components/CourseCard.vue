@@ -114,7 +114,7 @@ export default {
         this.course.courseID
       );
     },
-    
+
     isScheduled() {
       return this.$store.getters["semesters/isCourseScheduled"](
         this.course.courseID
@@ -134,7 +134,10 @@ export default {
     },
 
     removeFromSemester() {
-      this.$store.dispatch("semesters/removeCourseFromSemester", this.course.courseID);
+      this.$store.dispatch(
+        "semesters/removeCourseFromSemester",
+        this.course.courseID
+      );
     },
 
     addToFavorites() {

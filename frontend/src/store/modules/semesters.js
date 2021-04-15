@@ -1,14 +1,12 @@
 import axios from "axios";
 
-
 const state = () => ({
   // each semester object has
   //    semesterName
-  //    semesterId 
+  //    semesterId
   //    semesterCourses - array of courses scheduled
   semesters: []
 });
-
 
 const mutations = {
   setSemesters(state, semesters) {
@@ -16,14 +14,12 @@ const mutations = {
   }
 };
 
-
 const getters = {
   isCourseScheduled: state => courseId => {
     let courseFound = false;
 
     state.semesters.forEach(semester => {
-      if(hasCourseWithId(semester, courseId))
-        courseFound = true;   
+      if (hasCourseWithId(semester, courseId)) courseFound = true;
     });
 
     return courseFound;
@@ -33,16 +29,15 @@ const getters = {
     let semesterId = null;
 
     state.semesters.forEach(semester => {
-      if(hasCourseWithId(semester, courseId)) {
+      if (hasCourseWithId(semester, courseId)) {
         semesterId = semester.semesterId;
         return;
       }
     });
 
     return semesterId;
-  },
+  }
 };
-
 
 const actions = {
   getSemesters({ commit, rootState }) {
@@ -141,7 +136,6 @@ const actions = {
   }
 };
 
-
 export default {
   namespaced: true,
   state,
@@ -150,7 +144,6 @@ export default {
   mutations
 };
 
-
-function hasCourseWithId(semester, courseId){
+function hasCourseWithId(semester, courseId) {
   return semester.semesterCourses.some(course => course.courseID === courseId);
 }
