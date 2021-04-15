@@ -56,6 +56,7 @@
             >
               <strong> Contact Hours</strong>:
               <span id="creditHours"> {{ course.course.creditHoursMax }}</span>
+               Hours
             </p>
             <p
               v-if="
