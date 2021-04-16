@@ -32,9 +32,10 @@
         >
           <table class="table">
             <colgroup>
-              <col span="1" style="width: 10%;" />
-              <col span="1" style="width: 30%;" />
-              <col span="1" style="width: 55%;" />
+              <col span="1" style="width: 10%;" />   
+              <col span="1" style="width: 10%;" />  
+              <col span="1" style="width: 30%;" />  
+              <col span="1" style="width: 45%;" />
               <col span="1" style="width: 5%;" />
             </colgroup>
 

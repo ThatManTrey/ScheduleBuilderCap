@@ -10,6 +10,19 @@
     <td>
       <a class="course-info-link" @click="showCourseInfoModal()">
         <div class="cell-container">
+              <span  v-if="course.creditHoursMax === course.creditHoursMin">
+                {{ course.creditHoursMax }}
+              </span>
+              <span v-if="course.creditHoursMax !== course.creditHoursMin">
+                {{ course.creditHoursMin }} - {{ course.creditHoursMax }}
+              </span>
+              Credits
+        </div>
+      </a>
+    </td>
+    <td>
+      <a class="course-info-link" @click="showCourseInfoModal()">
+        <div class="cell-container">
           {{ course.courseName }}
         </div>
       </a>
