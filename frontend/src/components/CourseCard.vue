@@ -14,20 +14,18 @@
           <div class="row" :class="{ 'mb-2': !showSmallCard }">
             <div class="col-10 p-0">
               <span class="badge rounded-pill course-badge">
-                <button class="button-as-link">{{ course.courseID }}</button>
+                {{ course.courseID }}
               </span>
 
-              <span class="badge rounded-pill course-badge">
-                <button
-                  class="button-as-link"
-                  v-if="course.creditHoursMax == course.creditHoursMin"
-                >
-                  {{ course.creditHoursMax }} Credits
-                </button>
-                <button class="button-as-link" v-else>
-                  {{ course.creditHoursMin }}-{{ course.creditHoursMax }}
-                  Credits
-                </button>
+              <span
+                v-if="course.creditHoursMax == course.creditHoursMin"
+                class="badge rounded-pill course-badge"
+              >
+                {{ course.creditHoursMax }} Credits
+              </span>
+              <span v-else class="badge rounded-pill course-badge">
+                {{ course.creditHoursMin }} - {{ course.creditHoursMax }}
+                Credits
               </span>
             </div>
           </div>
@@ -45,7 +43,6 @@
           <button
             tabindex="0"
             v-if="!isFavorited"
-            @keyup.enter="addToFavorites()"
             @click="addToFavorites()"
             data-tooltip="Favorite Course"
             class="button-as-link"
@@ -55,7 +52,6 @@
           <button
             tabindex="0"
             v-else
-            @keyup.enter="removeFromFavorites()"
             @click="removeFromFavorites()"
             data-tooltip="Unfavorite Course"
             class="button-as-link"
@@ -65,23 +61,24 @@
         </div>
 
         <div v-if="isLoggedIn" class="col text-end">
-          <a
+          <button
             v-if="!isScheduled"
             tabindex="0"
-            @keyup.enter="showAddToSemesterModal()"
             @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
+            class="button-as-link"
           >
             <i class="fas fa-plus-circle fa-lg"></i>
-          </a>
-          <a
+          </button>
+          <button
             v-if="isScheduled"
             tabindex="0"
-            @keyup.enter="removeFromSemester()"
             @click="removeFromSemester()"
             data-tooltip="Remove from Semester"
-            ><i class="fas fa-times-circle fa-lg"></i
-          ></a>
+            class="button-as-link"
+          >
+            <i class="fas fa-times-circle fa-lg"></i>
+          </button>
         </div>
       </div>
     </div>

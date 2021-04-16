@@ -18,12 +18,12 @@
                 <td>{{ degree.degreeType }}</td>
                 <td>{{ degree.degreeName }}</td>
                 <td>
-                  <a
+                  <button
                     @click="removeProgram(degree)"
-                    tabindex="0"
-                    class="add-remove-link"
-                    ><i class="fas fa-times-circle fa-lg"></i
-                  ></a>
+                    class="add-remove-link button-as-link"
+                  >
+                    <i class="fas fa-times-circle fa-lg"></i>
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -57,6 +57,7 @@
                   class="form-control"
                   placeholder="Search Programs"
                   v-model.trim="keyword"
+                  ref="searchPrograms"
                 />
 
                 <div v-if="programs.length > 0" class="mt-3 px-3">
@@ -70,12 +71,12 @@
                         <td>{{ degree.degreeType }}</td>
                         <td>{{ degree.degreeName }}</td>
                         <td>
-                          <a
+                          <button
                             @click="addProgram(degree)"
-                            tabindex="0"
-                            class="add-remove-link"
-                            ><i class="fas fa-plus-circle fa-lg"></i
-                          ></a>
+                            class="add-remove-link button-as-link"
+                          >
+                            <i class="fas fa-plus-circle fa-lg"></i>
+                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -124,7 +125,16 @@ export default {
     /* needed to open/close this modal from parent component */
     openModal() {
       this.$refs.changeProgramModalRef.openModal();
+
+      if (this.openAccordion) {
+        console.log("got here");
+        // timeout is needed to wait for modal and accordion animation to finish
+        setTimeout(() => {
+          this.$refs.searchPrograms.focus();
+        }, 750);
+      }
     },
+
     closeModal() {
       this.$refs.changeProgramModalRef.closeModal();
     },

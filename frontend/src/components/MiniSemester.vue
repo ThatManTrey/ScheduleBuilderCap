@@ -32,7 +32,8 @@
           @click="removeCourse(course.courseID)"
           @keyup.enter="removeCourse(course.courseID)"
           id="remove"
-        ><i class="fas fa-times-circle fa-md"></i></a>
+          ><i class="fas fa-times-circle fa-md"></i
+        ></a>
         <span class="badge rounded-pill course-badge">
           <button class="button-as-link">{{ course.courseID }}</button></span
         >
@@ -183,5 +184,4 @@ span.course-badge {
   padding: 0.5rem;
   height: 2.6rem;
 }
-
 </style>

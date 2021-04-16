@@ -36,6 +36,7 @@
               placeholder="example@gmail.com"
               :disabled="isSubmittingForm"
               v-model.trim="emailField.email"
+              ref="registerEmailField"
             />
           </div>
 
@@ -184,7 +185,13 @@ export default {
   methods: {
     openModal() {
       this.$refs.registerBaseModalRef.openModal();
+
+      // timeout is needed to wait for modal opening to finish
+      setTimeout(() => {
+        this.$refs.registerEmailField.focus();
+      }, 500);
     },
+
     closeModal() {
       this.$refs.registerBaseModalRef.closeModal();
       Object.assign(this.$data, initialState());

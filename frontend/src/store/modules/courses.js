@@ -12,7 +12,7 @@ const state = () => ({
   allPrograms: [],
   viewOption: enums.ViewOptions.normalCard,
   searchRequest: {
-    programs: ["CS"],
+    programs: [],
     sortOption: {
       type: enums.SortTypes.courseId,
       isAscending: true

@@ -7,7 +7,7 @@
             @click="removeSemester()"
             @keyup.enter="removeSemester()"
             data-tooltip="Remove Semester"
-            class="button-as-link"
+            class="button-as-link remove-semester"
           >
             <i class="fas fa-trash"></i>
           </button>
@@ -104,14 +104,7 @@ export default {
         },
 
         getUserInput(e) {
-            const input = e.target.innerText;
-
-            if(input.length < 1)
-                e.target.innerText = this.semester.semesterName;
-            else if(input.length > 64)    // semester name max size in db
-                e.target.innerText = this.semester.semesterName;
-            else
-                this.semesterName = input;
+            this.semesterName = e.target.innerText;
         },
 
         endUserInput(e) {
@@ -120,7 +113,13 @@ export default {
 
             // remove whitespace from both sides of semester name
             this.semesterName = this.semesterName.trim();
-            e.target.innerText = this.semesterName;
+
+            if(this.semesterName < 1)
+                e.target.innerText = this.semester.semesterName;
+            else if(this.semesterName > 64)    // semester name max size in db
+                e.target.innerText = this.semester.semesterName;
+            else
+              e.target.innerText = this.semesterName;
 
             if(this.semesterName !== this.semester.semesterName)
                 this.$store.dispatch("semesters/editSemesterName", {
@@ -144,7 +143,7 @@ export default {
 
 <style scoped lang="scss">
 .semester-accordion {
-  min-width: 100%;
+  width: 100%;
 }
 
 .semester-title {
@@ -157,9 +156,9 @@ export default {
   width: 100%;
 }
 
-i.fa-trash {
+.remove-semester {
   position: relative;
-  top: 2px;
+  top: 4px;
   margin-right: 1rem;
   font-size: 1.2rem;
 }

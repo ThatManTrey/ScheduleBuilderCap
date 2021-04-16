@@ -56,7 +56,7 @@
             >
               <strong> Contact Hours</strong>:
               <span id="creditHours"> {{ course.course.creditHoursMax }}</span>
-               Hours
+              Hours
             </p>
             <p
               v-if="
@@ -191,9 +191,7 @@
     <template v-if="isLoggedIn" v-slot:footer>
       <div class="d-flex" id="course-info-footer">
         <button
-          tabindex="0"
           v-if="!isFavorited"
-          @keyup.enter="addToFavorites(course)"
           @click="addToFavorites(course)"
           data-tooltip="Favorite Course"
           data-tooltip-location="right"
@@ -202,23 +200,31 @@
           <i class="far fa-bookmark fa-lg"></i>
         </button>
         <button
-          tabindex="0"
           v-else
-          @keyup.enter="removeFromFavorites(course)"
           @click="removeFromFavorites(course)"
           data-tooltip="Unfavorite Course"
           class="button-as-link"
         >
           <i class="fas fa-bookmark fa-lg"></i>
         </button>
-        <a
-          class="ms-auto"
+        <button
+          v-if="!isScheduled"
+          class="ms-auto button-as-link"
           @click="openAddToSemesterModal"
           data-tooltip="Add to Semester"
           data-tooltip-location="left"
         >
           <i class="fas fa-plus-circle fa-lg plus-add-icon"></i>
-        </a>
+        </button>
+        <button
+          v-if="isScheduled"
+          @click="removeFromSemester()"
+          data-tooltip="Remove from Semester"
+          data-tooltip-location="left"
+          class="ms-auto button-as-link"
+        >
+          <i class="fas fa-times-circle fa-lg"></i>
+        </button>
       </div>
     </template>
   </Modal>
@@ -261,6 +267,13 @@ export default {
     isFavorited() {
       if (!this.course.course) return false;
       return this.$store.getters["favorites/isCourseFavorited"](
+        this.course.course.courseID
+      );
+    },
+
+    isScheduled() {
+      if (!this.course.course) return false;
+      return this.$store.getters["semesters/isCourseScheduled"](
         this.course.course.courseID
       );
     }
@@ -308,6 +321,13 @@ export default {
 
     removeFromFavorites() {
       this.$store.dispatch("favorites/removeFavorite", this.course.course);
+    },
+
+    removeFromSemester() {
+      this.$store.dispatch(
+        "semesters/removeCourseFromSemester",
+        this.course.course.courseID
+      );
     }
   }
 };

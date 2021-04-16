@@ -45,40 +45,36 @@
                 <div class="col-12">
                   <input
                     type="text"
-                    id="newSemesterName1"
                     class="form-control"
                     placeholder="Enter a semester name..."
                     v-model.trim="semesterName"
+                    ref="newSemesterName"
+                    @keyup.enter="addSemester()"
                   />
                 </div>
                 <div class="col-12 mt-2">
                   <button
                     type="submit"
-                    class="btn btn-theme-confirm btn-sm"
+                    class="btn btn-theme-confirm btn-sm me-3"
                     id="add-semeste-btn"
                     @click="addSemester()"
                   >
                     Add Semester
                   </button>
-                  <a
-                    tabindex="0"
-                    @keyup.enter="isAddingSemester = false"
+                  <button
+                    class="button-as-link"
                     @click="isAddingSemester = false"
                   >
                     <i class="fas fa-times" id="cancel-add"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
             <div v-show="!isAddingSemester" id="add-semester-link">
-              <a
-                tabindex="0"
-                @keyup.enter="isAddingSemester = true"
-                @click="isAddingSemester = true"
-              >
+              <button class="button-as-link" @click="openAddSemesterInput">
                 <i class="fas fa-plus-circle plus-add-icon"></i>
                 <span> Add Semester</span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -116,6 +112,13 @@ export default {
 
     closeModal() {
       this.$refs.addToSemesterBaseModalRef.closeModal();
+    },
+
+    openAddSemesterInput() {
+      this.isAddingSemester = true;
+      setTimeout(() => {
+        this.$refs.newSemesterName.focus();
+      }, 10);
     },
 
     addSemester() {
@@ -205,7 +208,6 @@ span.badge {
 
 #cancel-add {
   position: relative;
-  margin-left: 1rem;
   top: 3px;
   font-size: 1.2rem;
 }

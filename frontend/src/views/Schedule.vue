@@ -26,8 +26,8 @@
             class="btn btn-theme-confirm"
             @click="showAddSemesterModal()"
           >
-            <i class="fas fa-plus-circle text-theme-blackest"></i> Add Another
-            Semester
+            <i class="fas fa-plus-circle text-theme-blackest"></i>
+            Add Semester
           </button>
         </div>
       </div>

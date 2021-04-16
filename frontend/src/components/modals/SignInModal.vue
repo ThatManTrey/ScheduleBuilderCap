@@ -54,6 +54,7 @@
               placeholder="example@gmail.com"
               :disabled="isSubmittingForm"
               v-model.trim="emailField.email"
+              ref="signInEmailField"
             />
           </div>
 
@@ -92,7 +93,12 @@
           </transition>
 
           <div id="userSignInPassHelp" class="form-text">
-            <a class="link" id="padding" @click="isResettingPassword = true"
+            <a
+              tabindex="0"
+              @keyup.enter="isResettingPassword = true"
+              class="link"
+              id="padding"
+              @click="isResettingPassword = true"
               >Forgot your password?</a
             >
           </div>
@@ -237,6 +243,11 @@ export default {
   methods: {
     openModal() {
       this.$refs.signInBaseModalRef.openModal();
+
+      // timeout is needed to wait for modal opening to finish
+      setTimeout(() => {
+        this.$refs.signInEmailField.focus();
+      }, 500);
     },
     closeModal() {
       this.$refs.signInBaseModalRef.closeModal();

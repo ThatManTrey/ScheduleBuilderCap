@@ -18,10 +18,10 @@
           <div class="col mx-auto">
             <input
               type="text"
-              id="newSemesterName2"
               class="form-control"
               placeholder="Enter a semester name..."
               v-model.trim="semesterName"
+              ref="newSemesterName2"
               @keyup.enter="addSemester()"
             />
           </div>
@@ -61,6 +61,11 @@ export default {
   methods: {
     openModal() {
       this.$refs.addSemesterBaseModalRef.openModal();
+
+      // timeout is needed to wait for modal opening to finish
+      setTimeout(() => {
+        this.$refs.newSemesterName2.focus();
+      }, 500);
     },
 
     closeModal() {

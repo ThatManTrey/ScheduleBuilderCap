@@ -1,31 +1,31 @@
 <template lang="html">
   <div>
-    
-      <footer class="container" v-if="isLoggedIn">
-        <button class="semesterBar-button" v-on:click="isOpen = !isOpen">
-          <i class="far fa-calendar "></i>
-        </button>
-        <transition name="toggle">
-          <div class="semesterBar-container" v-if="isOpen">
-            <span v-for="(semester, index) in semesters" :key="index">
-              <MiniSemester :semester="semester"></MiniSemester>
-            </span>
-            <div class="inline">
-              <a
-                tabindex="0"
-                @keyup.enter="showAddSemesterModal()"
-                @click="showAddSemesterModal()"
-                data-tooltip="Add a Semester"
-                data-tooltip-location="bottom"
-              >
-                <i class="fas fa-plus-circle fa-lg newSemester align-items-center"></i>
-              </a>
-            </div>
+    <footer class="container" v-if="isLoggedIn">
+      <button class="semesterBar-button" v-on:click="isOpen = !isOpen">
+        <i class="far fa-calendar "></i>
+      </button>
+      <transition name="toggle">
+        <div class="semesterBar-container" v-if="isOpen">
+          <span v-for="(semester, index) in semesters" :key="index">
+            <MiniSemester :semester="semester"></MiniSemester>
+          </span>
+          <div class="inline">
+            <a
+              tabindex="0"
+              @keyup.enter="showAddSemesterModal()"
+              @click="showAddSemesterModal()"
+              data-tooltip="Add a Semester"
+              data-tooltip-location="bottom"
+            >
+              <i
+                class="fas fa-plus-circle fa-lg newSemester align-items-center"
+              ></i>
+            </a>
           </div>
-          </transition>
-      </footer>
+        </div>
+      </transition>
+    </footer>
     <AddSemesterModal ref="addSemesterModalSchedule"></AddSemesterModal>
-    
   </div>
 </template>
 
@@ -123,12 +123,9 @@ export default {
 @keyframes slide {
   0% {
     margin-bottom: -18%;
-    
-    
   }
   100% {
     margin-bottom: 0%;
-  
   }
 }
 
@@ -147,7 +144,6 @@ export default {
   padding-left: 1.5rem;
   padding-right: 3rem;
 }
-
 
 @media only screen and (max-width: 1280px) {
   .container {

@@ -10,13 +10,13 @@
         v-model.trim="keyword"
       />
 
-      <a
-        class="d-block d-md-none filter-button"
+      <button
+        class="d-block d-md-none filter-button button-as-link"
         @click="openChangeProgramModal()"
         data-tooltip="Select Program"
       >
         <i class="fas fa-pencil-alt"></i>
-      </a>
+      </button>
 
       <div class="dropdown">
         <button
@@ -163,13 +163,13 @@
 
     <!-- filter bar for screens md and up -->
     <div class="col d-none d-md-flex align-items-center justify-content-end">
-      <a
+      <button
         @click="openChangeProgramModal()"
         data-tooltip="Select Program"
-        class="filter-button"
+        class="filter-button button-as-link"
       >
         <i class="fas fa-pencil-alt"></i>
-      </a>
+      </button>
 
       <div class="dropdown">
         <button
@@ -317,22 +317,22 @@
         />
       </transition>
 
-      <a
+      <button
         v-if="!isSearching"
         @click="toggleSearch()"
         data-tooltip="Search Courses"
-        class="filter-button"
+        class="filter-button button-as-link"
       >
         <i class="fas fa-search"></i>
-      </a>
-      <a
+      </button>
+      <button
         v-else
         @click="toggleSearch()"
         data-tooltip="Cancel Search"
-        class="filter-button"
+        class="filter-button button-as-link"
       >
         <i class="fas fa-times"></i>
-      </a>
+      </button>
     </div>
   </div>
 </template>
@@ -403,11 +403,11 @@ export default {
       },
 
       getProgramDisplayName() {
-        if (this.programs.length === 0)
+        if (this.programs.length === 0) {
           return "All Courses"
-        else if (this.programs.length === 1)
+        } else if (this.programs.length === 1) {
           return this.programs[0].degreeName + " Courses";
-        else if(this.programs.length <= 3) {
+        } else if(this.programs.length <= 3) {
           var result = "";
 
           for(var i = 0; i < this.programs.length; i++) {
