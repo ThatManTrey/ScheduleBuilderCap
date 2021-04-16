@@ -1,29 +1,33 @@
 import axios from "axios";
 
-
 const state = () => ({
   // each semester object has
   //    semesterName
-  //    semesterId 
+  //    semesterId
   //    semesterCourses - array of courses scheduled
   semesters: []
+  // is adding semester
+  // is loading semesters (set on inital app load)
 });
-
 
 const mutations = {
   setSemesters(state, semesters) {
     state.semesters = semesters;
   }
-};
 
+  // remove semester and add/remove course would also be clientside
+  // can't do add semester since adding a new semester would require a new id from the db
+};
 
 const getters = {
   isCourseScheduled: state => courseId => {
     let courseFound = false;
 
     state.semesters.forEach(semester => {
-      if(hasCourseWithId(semester, courseId))
-        courseFound = true;   
+      if (hasCourseWithId(semester, courseId)) {
+        courseFound = true;
+        return;
+      }
     });
 
     return courseFound;
@@ -33,16 +37,15 @@ const getters = {
     let semesterId = null;
 
     state.semesters.forEach(semester => {
-      if(hasCourseWithId(semester, courseId)) {
+      if (hasCourseWithId(semester, courseId)) {
         semesterId = semester.semesterId;
         return;
       }
     });
 
     return semesterId;
-  },
+  }
 };
-
 
 const actions = {
   getSemesters({ commit, rootState }) {
@@ -72,12 +75,12 @@ const actions = {
       });
   },
 
-  removeSemester({ dispatch, rootState }, semesterId) {
+  removeSemester({ rootState }, semesterId) {
     var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId;
     axios
       .delete(url)
       .then(() => {
-        dispatch("getSemesters");
+        //dispatch("getSemesters");
       })
       .catch(error => {
         // eslint-disable-next-line
@@ -98,7 +101,7 @@ const actions = {
       });
   },
 
-  addCourseToSemester({ dispatch, rootState }, { semesterId, courseId }) {
+  addCourseToSemester({ rootState }, { semesterId, courseId }) {
     var url =
       "users/" +
       rootState.auth.userId +
@@ -110,7 +113,7 @@ const actions = {
     axios
       .post(url)
       .then(() => {
-        dispatch("getSemesters");
+        //dispatch("getSemesters");
       })
       .catch(error => {
         // eslint-disable-next-line
@@ -118,7 +121,7 @@ const actions = {
       });
   },
 
-  removeCourseFromSemester({ dispatch, rootState, getters }, courseId) {
+  removeCourseFromSemester({ rootState, getters }, courseId) {
     const semesterId = getters.getSemesterIdForCourse(courseId);
 
     var url =
@@ -132,7 +135,7 @@ const actions = {
     axios
       .delete(url)
       .then(() => {
-        dispatch("getSemesters");
+        //dispatch("getSemesters");
       })
       .catch(error => {
         // eslint-disable-next-line
@@ -140,7 +143,6 @@ const actions = {
       });
   }
 };
-
 
 export default {
   namespaced: true,
@@ -150,7 +152,6 @@ export default {
   mutations
 };
 
-
-function hasCourseWithId(semester, courseId){
+function hasCourseWithId(semester, courseId) {
   return semester.semesterCourses.some(course => course.courseID === courseId);
 }

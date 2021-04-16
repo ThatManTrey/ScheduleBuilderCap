@@ -39,7 +39,11 @@
       </div>
     </div>
 
-    <div class="semester-body collapse mb-3" :class="{ 'show': hasCourses }" :id="targetName">
+    <div
+      class="semester-body collapse mb-3"
+      :class="{ show: hasCourses }"
+      :id="targetName"
+    >
       <div class="container">
         <div v-if="semester.semesterCourses.length > 0" class="row">
           <div
@@ -107,7 +111,7 @@ export default {
             else if(input.length > 64)    // semester name max size in db
                 e.target.innerText = this.semester.semesterName;
             else
-                this.semesterName = input;   
+                this.semesterName = input;
         },
 
         endUserInput(e) {
@@ -118,21 +122,21 @@ export default {
             this.semesterName = this.semesterName.trim();
             e.target.innerText = this.semesterName;
 
-            if(this.semesterName !== this.semester.semesterName) 
+            if(this.semesterName !== this.semester.semesterName)
                 this.$store.dispatch("semesters/editSemesterName", {
                     semesterId: this.semester.semesterId,
                     newName: this.semesterName
-                })    
+                })
         },
 
         removeSemester() {
           var removeSemester = confirm(
             "Are you sure you want to remove this semester and all its courses?"
-          ); 
-          
-          if (removeSemester) 
+          );
+
+          if (removeSemester)
             this.$store.dispatch("semesters/removeSemester", this.semester.semesterId);
-          
+
         }
     }
 }
@@ -168,10 +172,11 @@ i {
 }
 
 .edit-semester-name {
-    cursor: pointer;
+  cursor: pointer;
 
-    &:active, &:focus {
-        cursor: text;
-    }
+  &:active,
+  &:focus {
+    cursor: text;
+  }
 }
 </style>
