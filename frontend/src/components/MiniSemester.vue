@@ -103,10 +103,6 @@ export default {
         },
 
         removeCourse(courseID) {
-            var removeCourse = confirm(
-                "Are you sure you want to remove this course?"
-            );
-        if (removeCourse)
             this.$store.dispatch(
               "semesters/removeCourseFromSemester", courseID
             );
