@@ -1,7 +1,16 @@
 <template lang="html">
-  <div>
-    <div class="container mt-3 mb-5">
-      <div v-for="(semester, index) in semesters" :key="index" class="row">
+  <div class="d-flex flex-grow-1">
+    <PageSpinner :showSpinner="isLoading"></PageSpinner>
+
+    <div
+      v-if="!isLoading"
+      class="container mt-3 mb-5 d-flex flex-grow-1 flex-column"
+    >
+      <div
+        v-for="(semester, index) in semesters"
+        :key="index"
+        class="row align-items-center flex-grow-1 my-3"
+      >
         <SemesterAccordion
           :targetName="'semester' + index"
           :semester="semester"
@@ -10,7 +19,7 @@
         ></SemesterAccordion>
       </div>
 
-      <div class="row mt-3">
+      <div class="row align-items-center flex-grow-1 mt-3">
         <div class="col text-center">
           <button
             type="button"
@@ -37,6 +46,7 @@ import SemesterAccordion from '../components/SemesterAccordion.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
+import PageSpinner from '../components/spinners/PageSpinner.vue';
 import { mapState } from 'vuex';
 
 export default {
@@ -44,13 +54,15 @@ export default {
 
     computed: mapState({
       semesters: state => state.semesters.semesters,
+      isLoading: state => state.semesters.isLoadingSemesters
     }),
 
     components: {
         SemesterAccordion,
         CourseInfoModal,
         AddToSemesterModal,
-        AddSemesterModal
+        AddSemesterModal,
+        PageSpinner
     },
 
     methods: {

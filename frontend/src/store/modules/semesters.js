@@ -1,16 +1,43 @@
 import axios from "axios";
+import * as Toast from "../../toast";
 
 const state = () => ({
   // each semester object has
   //    semesterName
   //    semesterId
   //    semesterCourses - array of courses scheduled
-  semesters: []
+  semesters: [],
+  isLoadingSemesters: true
 });
 
 const mutations = {
   setSemesters(state, semesters) {
     state.semesters = semesters;
+  },
+
+  setIsLoadingSemesters(state, isLoading) {
+    state.isLoadingSemesters = isLoading;
+  },
+
+  removeSemester(state, semesterId) {
+    const index = state.semesters.findIndex(
+      semester => semester.semesterId === semesterId
+    );
+
+    if (index > -1) state.semesters.splice(index, 1);
+  },
+
+  removeCourse(state, { semesterId, courseId }) {
+    const semesterIndex = state.semesters.findIndex(
+      semester => semester.semesterId === semesterId
+    );
+
+    const courseIndex = state.semesters[
+      semesterIndex
+    ].semesterCourses.findIndex(course => course.courseID === courseId);
+
+    if (semesterIndex > -1 && courseIndex > -1)
+      state.semesters[semesterIndex].semesterCourses.splice(courseIndex, 1);
   }
 };
 
@@ -19,7 +46,10 @@ const getters = {
     let courseFound = false;
 
     state.semesters.forEach(semester => {
-      if (hasCourseWithId(semester, courseId)) courseFound = true;
+      if (hasCourseWithId(semester, courseId)) {
+        courseFound = true;
+        return;
+      }
     });
 
     return courseFound;
@@ -40,16 +70,20 @@ const getters = {
 };
 
 const actions = {
-  getSemesters({ commit, rootState }) {
+  getSemesters({ commit, rootState, state }) {
     var url = "users/" + rootState.auth.userId + "/semesters";
     axios
       .get(url)
       .then(res => {
         commit("setSemesters", res.data.semesters);
+
+        if (state.isLoadingSemesters) commit("setIsLoadingSemesters", false);
       })
       .catch(error => {
         // eslint-disable-next-line
         console.error(error);
+
+        if (state.isLoadingSemesters) commit("setIsLoadingSemesters", false);
       });
   },
 
@@ -67,16 +101,22 @@ const actions = {
       });
   },
 
-  removeSemester({ dispatch, rootState }, semesterId) {
+  removeSemester({ rootState, dispatch, commit }, semesterId) {
+    commit("removeSemester", semesterId);
+
     var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId;
     axios
       .delete(url)
       .then(() => {
-        dispatch("getSemesters");
+        Toast.showSuccessMessage("Semester removed successfully.");
       })
       .catch(error => {
         // eslint-disable-next-line
         console.error(error);
+        Toast.showSuccessMessage(
+          "An error occurred while trying to remove a semester."
+        );
+        dispatch("getSemesters");
       });
   },
 
@@ -93,7 +133,7 @@ const actions = {
       });
   },
 
-  addCourseToSemester({ dispatch, rootState }, { semesterId, courseId }) {
+  addCourseToSemester({ rootState, dispatch }, { semesterId, courseId }) {
     var url =
       "users/" +
       rootState.auth.userId +
@@ -113,8 +153,9 @@ const actions = {
       });
   },
 
-  removeCourseFromSemester({ dispatch, rootState, getters }, courseId) {
+  removeCourseFromSemester({ rootState, getters, dispatch, commit }, courseId) {
     const semesterId = getters.getSemesterIdForCourse(courseId);
+    commit("removeCourse", { semesterId: semesterId, courseId: courseId });
 
     var url =
       "users/" +
@@ -124,15 +165,14 @@ const actions = {
       "/courses/" +
       courseId;
 
-    axios
-      .delete(url)
-      .then(() => {
-        dispatch("getSemesters");
-      })
-      .catch(error => {
-        // eslint-disable-next-line
+    axios.delete(url).catch(error => {
+      // eslint-disable-next-line
         console.error(error);
-      });
+      Toast.showErrorMessage(
+        "An error occurred while trying to delete a course."
+      );
+      dispatch("getSemesters");
+    });
   }
 };
 

@@ -1,16 +1,14 @@
 <template lang="html">
   <div class="d-flex flex-grow-1">
-    <!-- <PageSpinner
-      v-if="!hasLoadedCourses"
-      :showSpinner="!hasLoadedCourses"
-    ></PageSpinner> -->
+    <PageSpinner :showSpinner="isLoading"></PageSpinner>
 
     <div
+      v-if="!isLoading"
       class="container d-flex flex-grow-1 justify-content-center align-items-center mb-3 mt-3"
     >
       <transition name="fade">
         <div
-          v-if="favCourses.length !== 0"
+          v-if="favCourses.length > 0"
           class="row w-100 justify-content-center align-items-center mx-3"
         >
           <div
@@ -44,7 +42,7 @@
 
 <script lang="js">
 import CourseCard from '../components/CourseCard.vue';
-//import PageSpinner from '../components/spinners/PageSpinner.vue';
+import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import { mapState } from "vuex";
@@ -52,13 +50,14 @@ import { mapState } from "vuex";
 export default {
     components: {
         CourseCard,
-        //PageSpinner,
+        PageSpinner,
         CourseInfoModal,
         AddToSemesterModal,
     },
 
      computed: mapState({
        favCourses: state => state.favorites.favoriteCourses,
+       isLoading: state => state.favorites.isLoadingFavorites
      }),
 
       methods: {
