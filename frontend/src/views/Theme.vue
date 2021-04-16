@@ -333,7 +333,7 @@ export default {
         this.getColors();
         setTimeout(() => {
             this.hasLoaded = true;
-        }, 5000);
+        }, 987230872347024307);
     },
 };
 </script>
