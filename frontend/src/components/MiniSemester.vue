@@ -10,58 +10,109 @@
         >
           <i class="fas fa-trash fa-sm padding"></i
         ></a>
-        <span id="semesterName" contenteditable="true">Spring 2021</span>
-        <span class="badge rounded-pill course-badge float-right">
+        <span
+          id="semesterName"
+          contenteditable
+          @keyup.enter="getUserInput"
+          @keydown.enter="endUserInput"
+          @input="getUserInput"
+          >{{ semester.semesterName }}</span
+        >
+        <!--<span class="badge rounded-pill course-badge float-right">
           <button class="button-as-link" id="semesterCredits">16</button>
-        </span>
+        </span>-->
       </li>
 
-      <li class="list-group-item course" v-for="n in 4" :key="n">
+      <li
+        class="list-group-item course"
+        v-for="(course, index) in semester.semesterCourses"
+        :key="index"
+      >
         <a
-          @click="removeCourse()"
-          @keyup.enter="removeCourse()"
-          class="fas fa-times-circle fa-md text-theme-warning-dark"
+          @click="removeCourse(course.courseID)"
+          @keyup.enter="removeCourse(course.courseID)"
           id="remove"
-        ></a>
+        ><i class="fas fa-times-circle fa-md"></i></a>
         <span class="badge rounded-pill course-badge">
-          <button class="button-as-link">MATH 13013</button></span
+          <button class="button-as-link">{{ course.courseID }}</button></span
         >
-        <span id="courseName">Analytic Geometry...</span>
+        <span class="courseName">{{ course.courseName }}</span>
+      </li>
+      <li v-if="semester.semesterCourses.length == 0" id="emptySemester">
+        <span class="text-theme-white">You haven't added any courses yet.</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="js">
-import * as Toast from '../toast.js';
 
 export default {
     name: 'miniSemester',
     props: {
-      targetName: String
+      targetName: String,
+      semester: Object,
+      course: Object
     },
+
+    data() {
+      return {
+        semesterName: this.semester.semesterName,
+      };
+    },
+
+    computed: {
+      hasCourses() {
+        return this.semester.semesterCourses.length > 0;
+      }
+    },
+
     methods: {
-        removeSemester() {
-            var removePromptResult = confirm(
-                "Are you sure you want to remove this semester and all its courses?"
-            );
-        if (removePromptResult === true) {
-            Toast.showSuccessMessage(
-                "Semester was removed successfully."
-            );
-        }
+      getUserInput(e) {
+            const input = e.target.innerText;
+
+            if(input.length < 1)
+                e.target.innerText = this.semester.semesterName;
+            else if(input.length > 64)    // semester name max size in db
+                e.target.innerText = this.semester.semesterName;
+            else
+                this.semesterName = input;
         },
-        removeCourse() {
-            var removePromptResult = confirm(
+
+        endUserInput(e) {
+            // remove focus from semester name
+            e.srcElement.blur();
+
+            // remove whitespace from both sides of semester name
+            this.semesterName = this.semesterName.trim();
+            e.target.innerText = this.semesterName;
+
+            if(this.semesterName !== this.semester.semesterName)
+                this.$store.dispatch("semesters/editSemesterName", {
+                    semesterId: this.semester.semesterId,
+                    newName: this.semesterName
+                })
+        },
+        removeSemester() {
+          var removeSemester = confirm(
+            "Are you sure you want to remove this semester and all its courses?"
+          );
+
+          if (removeSemester)
+            this.$store.dispatch("semesters/removeSemester", this.semester.semesterId);
+        },
+
+        removeCourse(courseID) {
+            var removeCourse = confirm(
                 "Are you sure you want to remove this course?"
             );
-        if (removePromptResult === true) {
-            Toast.showSuccessMessage(
-                "Course was removed successfully."
+        if (removeCourse)
+            this.$store.dispatch(
+              "semesters/removeCourseFromSemester", courseID
             );
         }
       },
-    }
+
 }
 </script>
 
@@ -83,6 +134,8 @@ div.container {
 .list-group li.course {
   height: 2.6rem;
   font-size: 10pt;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .list-group-item.header {
@@ -91,7 +144,7 @@ div.container {
   background-color: var(--theme-blackest);
 }
 
-#courseName {
+span.courseName {
   padding-left: 0.5rem;
 }
 
@@ -126,4 +179,13 @@ span.course-badge {
   padding-right: 0.5rem;
   margin-left: -0.25rem;
 }
+
+#emptySemester {
+  list-style-type: none;
+  font-size: 10pt;
+  text-align: center;
+  padding: 0.5rem;
+  height: 2.6rem;
+}
+
 </style>
