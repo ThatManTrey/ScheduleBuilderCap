@@ -1,8 +1,6 @@
 <template lang="html">
   <div class="d-flex flex-grow-1">
-    <PageSpinner
-      :showSpinner="isLoading"
-    ></PageSpinner>
+    <PageSpinner :showSpinner="isLoading"></PageSpinner>
 
     <div
       v-if="!isLoading"

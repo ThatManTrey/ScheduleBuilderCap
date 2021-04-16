@@ -40,25 +40,19 @@ const getters = {
 
 const actions = {
   getFavoriteCourses({ commit, rootState, state }) {
-    console.log("isloadingfav: ", state.isLoadingFavorites);
     var url = "users/" + rootState.auth.userId + "/favorites";
+
     axios
       .get(url)
       .then(res => {
         commit("setFavorites", res.data.favCourses);
-        if (state.isLoadingFavorites)
-          commit("setIsLoadingFavorites", false);
-
-        console.log("isloadingfav: ", state.isLoadingFavorites);
+        if (state.isLoadingFavorites) commit("setIsLoadingFavorites", false);
       })
       .catch(error => {
         // eslint-disable-next-line
         console.error(error);
 
-        if (state.isLoadingFavorites)
-          commit("setIsLoadingFavorites", false);
-
-        console.log("isloadingfav: ", state.isLoadingFavorites);
+        if (state.isLoadingFavorites) commit("setIsLoadingFavorites", false);
       });
   },
 

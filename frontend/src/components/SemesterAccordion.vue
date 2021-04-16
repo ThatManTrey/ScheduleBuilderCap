@@ -59,8 +59,8 @@
             ></CourseCard>
           </div>
         </div>
-        <div class="row" v-else>
-          <h5>You haven't added any courses yet.</h5>
+        <div class="row text-center" v-else>
+          <h5>You haven't added any courses to this semester yet.</h5>
         </div>
       </div>
     </div>
