@@ -26,7 +26,7 @@
                 to="Home"
                 v-bind:class="{ 'nav-active': isCurrentRoute('Home') }"
               >
-                <i class="fas fa-home"></i><u>H</u>ome
+                <i class="fas fa-home"></i>Home
               </router-link>
             </li>
 
@@ -36,7 +36,7 @@
                 to="schedule"
                 v-bind:class="{ 'nav-active': isCurrentRoute('Schedule') }"
               >
-                <i class="far fa-calendar "></i><u>S</u>chedule
+                <i class="far fa-calendar "></i>Schedule
               </router-link>
             </li>
 
@@ -46,7 +46,7 @@
                 to="favorites"
                 v-bind:class="{ 'nav-active': isCurrentRoute('Favorites') }"
               >
-                <i class="fas fa-bookmark "></i><u>F</u>avorites
+                <i class="fas fa-bookmark "></i>Favorites
               </router-link>
             </li>
 
@@ -56,7 +56,7 @@
                 to="about"
                 v-bind:class="{ 'nav-active': isCurrentRoute('About') }"
               >
-                <i class="fas fa-info-circle "></i><u>A</u>bout
+                <i class="fas fa-info-circle "></i>About
               </router-link>
             </li>
 
@@ -78,7 +78,7 @@
               class="btn btn-theme-blacker"
               v-if="isLoggedIn"
             >
-              <u>L</u>ogout
+              Logout
 
               <i class="fas fa-sign-out-alt ms-1"></i>
             </button>
@@ -88,7 +88,7 @@
               @click="$refs.signInModal.openModal()"
               v-if="!isLoggedIn"
             >
-              <u>S</u>ign In
+              Sign In
             </button>
             <button
               type="button"
@@ -96,7 +96,7 @@
               @click="$refs.registerModal.openModal()"
               v-if="!isLoggedIn"
             >
-              <u>C</u>reate An Account
+              Create An Account
             </button>
           </div>
         </div>
@@ -178,32 +178,6 @@ export default {
     if (this.useScrollToTopButton) {
       window.addEventListener("scroll", this.checkScroll);
     }
-
-    // window.addEventListener("keydown", event => {
-    //   switch (event.key) {
-    //     case "h":
-    //       if (!this.isCurrentRoute("Home")) this.$router.push("/home");
-    //       break;
-    //     case "s":
-    //       if (this.isLoggedIn) {
-    //         if (!this.isCurrentRoute("Schedule"))
-    //           this.$router.push("/schedule");
-    //       } else this.$refs.signInModal.openModal();
-    //       break;
-    //     case "f":
-    //       if (this.isLoggedIn && !this.isCurrentRoute("Favorites"))
-    //         this.$router.push("/favorites");
-    //       break;
-    //     case "a":
-    //       if (!this.isCurrentRoute("About")) this.$router.push("/about");
-    //       break;
-    //     case "l":
-    //       if (this.isLoggedIn) this.logout();
-    //       break;
-    //     case "c":
-    //       if (!this.isLoggedIn) this.$refs.registerModal.openModal();
-    //   }
-    // });
   },
 
   destroyed() {
