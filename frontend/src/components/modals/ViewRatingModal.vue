@@ -5,7 +5,10 @@
     >
     <template v-slot:body v-if="course.course">
       <div class="text-center mt-3">
-        <h6>You rated {{ course.course.courseID }} in terms of <strong>quality</strong>:</h6>
+        <h6>
+          You rated {{ course.course.courseID }} in terms of
+          <strong>quality</strong>:
+        </h6>
         <div class="avg-rating">
           <h3 v-if="ratings.quality <= 1">
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
@@ -49,26 +52,26 @@
             {{ ratings.quality }} / 5
           </p>
         </div>
-        <h6>You rated {{ course.course.courseID }} in terms of <strong>difficulty</strong>:</h6>
+        <h6>
+          You rated {{ course.course.courseID }} in terms of
+          <strong>difficulty</strong>:
+        </h6>
         <div class="avg-rating">
-              <h3 v-if="ratings.difficulty <= 1" class="text-theme-confirm">
-                Easy
-              </h3>
-              <h3
-                v-if="ratings.difficulty > 1 && ratings.difficulty <= 2"
-                class="text-theme-secondary"
-              >
-                Average
-              </h3>
-              <h3
-                v-if="ratings.difficulty > 2"
-                class="text-theme-warning-light"
-              >
-                Difficult
-              </h3>
-              <h3 v-if="!ratings.difficulty">
-                <p id="noRatings">error</p>
-              </h3>
+          <h3 v-if="ratings.difficulty <= 1" class="text-theme-confirm">
+            Easy
+          </h3>
+          <h3
+            v-if="ratings.difficulty > 1 && ratings.difficulty <= 2"
+            class="text-theme-secondary"
+          >
+            Average
+          </h3>
+          <h3 v-if="ratings.difficulty > 2" class="text-theme-warning-light">
+            Difficult
+          </h3>
+          <h3 v-if="!ratings.difficulty">
+            <p id="noRatings">error</p>
+          </h3>
         </div>
       </div>
     </template>
@@ -151,7 +154,6 @@ export default {
 </script>
 
 <style scoped>
-
 #ratings-footer {
   width: 100%;
   font-size: 1.15rem;
