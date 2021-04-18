@@ -5,7 +5,7 @@
     >
     <template v-slot:body v-if="course.course">
       <div class="text-center mt-3">
-        <h6>You rated {{ course.course.courseID }} in terms of quality:</h6>
+        <h6>You rated {{ course.course.courseID }} in terms of <strong>quality</strong>:</h6>
         <div class="avg-rating">
           <h3 v-if="ratings.quality <= 1">
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
@@ -49,7 +49,7 @@
             {{ ratings.quality }} / 5
           </p>
         </div>
-        <h6>You rated {{ course.course.courseID }} in terms of difficulty:</h6>
+        <h6>You rated {{ course.course.courseID }} in terms of <strong>difficulty</strong>:</h6>
         <div class="avg-rating">
               <h3 v-if="ratings.difficulty <= 1" class="text-theme-confirm">
                 Easy
@@ -67,7 +67,7 @@
                 Difficult
               </h3>
               <h3 v-if="!ratings.difficulty">
-                <p id="noRatings">This course has not been rated yet.</p>
+                <p id="noRatings">error</p>
               </h3>
         </div>
       </div>
@@ -136,6 +136,7 @@ export default {
 
     removeRating() {
       this.$store.dispatch("ratings/removeRating", this.course.course);
+      this.closeModal();
     },
 
     openAddRatingModal() {

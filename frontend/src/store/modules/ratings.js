@@ -5,7 +5,7 @@ const state = () => ({
   ratings: [],
   userRatedCourses: [],
   isLoadingRatings: true,
-  isRatedCourse: false
+  isRatedCourse: true
 });
 
 const mutations = {
