@@ -51,37 +51,24 @@
         </div>
         <h6>You rated {{ course.course.courseID }} in terms of difficulty:</h6>
         <div class="avg-rating">
-          <h3 v-if="ratings.difficulty <= 1">
-            <i class="fas fa-star fa-lg text-theme-secondary"></i>
-            <i class="far fa-star fa-lg text-theme-secondary"></i>
-            <i class="far fa-star fa-lg text-theme-secondary"></i>
-          </h3>
-          <h3 v-if="ratings.difficulty > 1 && ratings.difficulty <= 2">
-            <i class="fas fa-star fa-lg text-theme-secondary"></i>
-            <i class="fas fa-star fa-lg text-theme-secondary"></i>
-            <i class="far fa-star fa-lg text-theme-secondary"></i>
-          </h3>
-          <h3 v-if="ratings.difficulty > 2">
-            <i class="fas fa-star fa-lg text-theme-warning-light"></i>
-            <i class="fas fa-star fa-lg text-theme-warning-light"></i>
-            <i class="fas fa-star fa-lg text-theme-warning-light"></i>
-          </h3>
-          <h3 v-if="!ratings.difficulty">
-            <p id="noRatings">error</p>
-          </h3>
-          <p v-if="ratings.difficulty <= 1" id="easy">Easy</p>
-          <p
-            v-if="ratings.difficulty > 1 && ratings.difficulty <= 2"
-            id="average"
-          >
-            Average
-          </p>
-          <p
-            v-if="ratings.difficulty > 2 && ratings.difficulty <= 3"
-            id="difficult"
-          >
-            Difficult
-          </p>
+              <h3 v-if="ratings.difficulty <= 1" class="text-theme-confirm">
+                Easy
+              </h3>
+              <h3
+                v-if="ratings.difficulty > 1 && ratings.difficulty <= 2"
+                class="text-theme-secondary"
+              >
+                Average
+              </h3>
+              <h3
+                v-if="ratings.difficulty > 2"
+                class="text-theme-warning-light"
+              >
+                Difficult
+              </h3>
+              <h3 v-if="!ratings.difficulty">
+                <p id="noRatings">This course has not been rated yet.</p>
+              </h3>
         </div>
       </div>
     </template>

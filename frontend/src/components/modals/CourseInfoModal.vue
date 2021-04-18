@@ -127,7 +127,7 @@
           <div class="col">
             Course Difficulty:
             <div class="avg-rating">
-              <h3 v-if="ratings.difficulty <= 1" class="text-theme-success">
+              <h3 v-if="ratings.difficulty <= 1" class="text-theme-confirm">
                 Easy
               </h3>
               <h3

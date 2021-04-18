@@ -7,7 +7,7 @@
       <div class="text-center">
         <div class="row mt-4 mb-4">
           <h6>
-            How would you rate {{ course.course.courseID }} in terms of quality?
+            How would you rate {{ course.course.courseID }} in terms of <strong>quality</strong>?
           </h6>
           <div class="sliderContainer text-center">
             <input
@@ -27,7 +27,7 @@
         <div class="row mt-3 mb-4">
           <h6>
             How would you rate {{ course.course.courseID }} in terms of
-            difficulty?
+            <strong>difficulty</strong>?
           </h6>
           <div class="sliderContainer text-center">
             <input
@@ -39,7 +39,7 @@
               id="difficultySlider"
             />
             <p
-              class="displayVal text-theme-success"
+              class="displayVal text-theme-confirm"
               v-if="rating.difficulty == 1"
             >
               Easy
