@@ -246,10 +246,17 @@
 
     <CourseInfoModal
       @openAddSemesterModal="showAddToSemesterModal"
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal"
       ref="courseInfoModalHome"
     ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalHome"></AddToSemesterModal>
     <ChangeProgramModal ref="changeProgramModalHome"></ChangeProgramModal>
+    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <ViewRatingModal
+      @openAddRatingModal="showAddRatingModal"
+      ref="viewRatingModalHome"
+    ></ViewRatingModal>
   </div>
 </template>
 
@@ -262,6 +269,8 @@ import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import ChangeProgramModal from '../components/modals/ChangeProgramModal.vue';
 import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 import SemesterBar from '../components/SemesterBar.vue';
+import AddRatingModal from '../components/modals/AddRatingModal.vue';
+import ViewRatingModal from '../components/modals/ViewRatingModal.vue';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
@@ -275,7 +284,9 @@ export default {
         FilterCoursesBar,
         SemesterBar,
         ChangeProgramModal,
-        CourseTableRow
+        CourseTableRow,
+        AddRatingModal,
+        ViewRatingModal
     },
 
     computed: {
@@ -309,6 +320,14 @@ export default {
 
       showAddSemesterModal () {
         this.$refs.addSemesterModalHome.openModal();
+      },
+
+      showAddRatingModal () {
+        this.$refs.addRatingModalHome.openModal();
+      },
+
+      showViewRatingModal () {
+        this.$refs.viewRatingModalHome.openModal();
       },
 
       firstPage() {

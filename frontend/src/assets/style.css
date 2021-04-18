@@ -215,6 +215,8 @@ a .fa-trash, a .fa-times-circle  {
 
 a .fa-trash:hover,
 a .fa-trash:focus,
+a .fa-edit:hover,
+a .fa-edit:focus,
 a .fa-times-circle:hover,
 a .fa-times-circle:focus {
   color: var(--theme-warning-light);
