@@ -122,6 +122,7 @@ export default {
   methods: {
     showCourseInfoModal() {
       this.$store.commit("courses/setCurrentCourse", { course: this.course });
+      this.$store.dispatch("ratings/getCourseRatings",  {course: this.course});
       this.$emit("openCourseInfoModal");
     },
 

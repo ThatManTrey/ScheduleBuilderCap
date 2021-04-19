@@ -112,8 +112,8 @@ export default {
       .dispatch({
         type: "ratings/addRating",
         course: this.course,
-        quality: this.rating.quality,
-        difficulty: this.rating.difficulty
+        qualityVal: this.rating.quality,
+        difficultyVal: this.rating.difficulty
       })
       .then(() => {
         this.closeModal();

@@ -3,18 +3,26 @@ import * as Toast from "../../toast";
 
 const state = () => ({
   ratings: [],
+  currentQuality: "",
+  currentDifficulty: "",
   userRatedCourses: [],
   isLoadingRatings: true,
   isRatedCourse: false
 });
 
 const mutations = {
+  setIsLoadingRatings(state, isLoading) {
+    state.isLoadingRatings = isLoading;
+  },
+
   setUserRatings(state, userRatedCourses) {
     state.userRatedCourses = userRatedCourses;
   },
 
-  setCourseRatings(state, ratings) {
-    state.ratings = ratings;
+  setCourseRatings(state, result) {
+    state.ratings = result.ratings;
+    state.currentQuality = result.quality;
+    state.currentDifficulty = result.difficulty;
   },
 
   addRating(state, course) {
@@ -31,7 +39,7 @@ const mutations = {
 
 const getters = {
   isUserRatedCourse: state => courseId => {
-    return state.userRatedCourses.some(course => course.courseID === courseId);
+    return state.userRatedCourses.ratedCourses.some(course => course.courseID === courseId);
   }
 };
 
@@ -42,7 +50,7 @@ const actions = {
     axios
       .get(url)
       .then(res => {
-        commit("setUserRatings", res.data.userRatedCourses);
+        commit("setUserRatings", res.data);
         if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
       })
       .catch(error => {
@@ -51,14 +59,14 @@ const actions = {
       });
   },
 
-  getCourseRatings({ commit, state }, course) {
+  getCourseRatings({ commit, state }, {course}) {
     var baseUrl = process.env.VUE_APP_API_URL + "/courses/" + course.courseID;
 
     //AJAX request
     axios
       .get(baseUrl + "/ratings")
       .then(res => {
-        commit("setCourseRating", res.data.ratings);
+        commit("setCourseRatings", res.data);
         if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
       })
       .catch(error => {
@@ -67,15 +75,15 @@ const actions = {
       });
   },
 
-  addRating({ commit, rootState }, course, quality, difficulty) {
+  addRating({ commit, rootState }, {course, qualityVal, difficultyVal} ) {
     commit("addRating", course);
 
-    var url = "users/" + rootState.auth.userId + "/ratings/";
+    var url = "users/" + rootState.auth.userId + "/ratings";
     axios
       .post(url, {
         course_id: rootState.courses.currentCourse.course.courseID,
-        quality: quality,
-        difficulty: difficulty,
+        quality: qualityVal,
+        difficulty: difficultyVal,
         user_id: rootState.auth.userId
       })
       .then(() => {

@@ -52,6 +52,7 @@ const actions = {
 
         dispatch("favorites/getFavoriteCourses", null, { root: true });
         dispatch("semesters/getSemesters", null, { root: true });
+        dispatch("ratings/getUserRatedCourses", null, { root: true });
 
         axios.defaults.headers.common["X-CSRF-TOKEN"] = Vue.$cookies.get(
           "csrf_access_token"
@@ -106,6 +107,7 @@ const actions = {
 
         dispatch("favorites/getFavoriteCourses", null, { root: true });
         dispatch("semesters/getSemesters", null, { root: true });
+        dispatch("ratings/getUserRatedCourses", null, { root: true });
       })
       .catch(function(error) {
         if (!error.response) commit("setAuthError");
