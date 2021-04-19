@@ -79,7 +79,7 @@
           <hr class="bg-theme-darkest-gray" size="5" />
           <div class="col">
             Course Quality:
-            <div class="avg-rating">
+            <div class="avg-rating" v-if="!$store.state.ratings.isLoadingRatings">
               <h3 v-if="courseRatings.currentQuality <= 1">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
@@ -126,7 +126,7 @@
 
           <div class="col">
             Course Difficulty:
-            <div class="avg-rating">
+            <div class="avg-rating" v-if="!$store.state.ratings.isLoadingRatings">
               <h3 v-if="courseRatings.currentDifficulty <= 1" class="text-theme-confirm">
                 Easy
               </h3>
@@ -150,18 +150,18 @@
         </div>
         <div v-if="$store.state.auth.hasConfirmedEmail" class="text-center">
           <button
-            v-if="!$store.state.ratings.isRatedCourse"
+            v-if="!isRated"
             type="button"
             @click="openAddRatingModal"
             class="btn btn-theme-primary-dark"
           >
             Add My Rating
           </button>
-          <p v-if="$store.state.ratings.isRatedCourse">
+          <p v-if="isRated">
             You've already rated this course.
           </p>
           <button
-            v-if="$store.state.ratings.isRatedCourse"
+            v-if="isRated"
             type="button"
             @click="openViewRatingModal"
             class="btn btn-theme-secondary"

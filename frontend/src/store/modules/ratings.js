@@ -26,14 +26,14 @@ const mutations = {
   },
 
   addRating(state, course) {
-    state.userRatedCourses.push(course);
+    state.userRatedCourses.ratedCourses.push(course);
   },
 
   removeRating(state, courseId) {
-    const index = state.userRatedCourses.findIndex(
+    const index = state.userRatedCourses.ratedCourses.findIndex(
       course => course.courseID === courseId
     );
-    if (index > -1) state.userRatedCourses.splice(index, 1);
+    if (index > -1) state.userRatedCourses.ratedCourses.splice(index, 1);
   }
 };
 
@@ -87,12 +87,12 @@ const actions = {
         user_id: rootState.auth.userId
       })
       .then(() => {
-        Toast.showSuccessMessage("Rating added successfully!");
+        Toast.showSuccessMessage("Your rating added successfully!");
       })
       .catch(error => {
         // revert client side addition
         commit("removeRating", course.courseID);
-        Toast.showErrorMessage("Error adding rating.");
+        Toast.showErrorMessage("Error adding your rating.");
 
         // eslint-disable-next-line
           console.error(error);
@@ -106,12 +106,12 @@ const actions = {
     axios
       .delete(url)
       .then(() => {
-        Toast.showSuccessMessage("Rating has been removed.");
+        Toast.showSuccessMessage("Your rating has been removed.");
       })
       .catch(error => {
         // revert client-side removal
         commit("addRating", course);
-        Toast.showErrorMessage("Error removing rating.");
+        Toast.showErrorMessage("Error removing your rating.");
 
         // eslint-disable-next-line
           console.error(error);
