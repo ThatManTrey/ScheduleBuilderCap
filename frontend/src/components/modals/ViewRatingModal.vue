@@ -129,11 +129,6 @@ export default {
     userRating: state => state.ratings.currentUserRating
   }),
 
-  created() {
-    if (this.course.course)
-      this.$store.dispatch("ratings/getCourseRatings"), this.course.course;
-  },
-
   components: {
     Modal
   },
