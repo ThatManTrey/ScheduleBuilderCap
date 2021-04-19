@@ -18,27 +18,21 @@
               <i class="far fa-star fa-lg text-theme-secondary"></i>
               <i class="far fa-star fa-lg text-theme-secondary"></i>
             </h3>
-            <h3
-              v-if="userQuality > 1 && userQuality <= 2"
-            >
+            <h3 v-if="userQuality > 1 && userQuality <= 2">
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
               <i class="far fa-star fa-lg text-theme-secondary"></i>
               <i class="far fa-star fa-lg text-theme-secondary"></i>
               <i class="far fa-star fa-lg text-theme-secondary"></i>
             </h3>
-            <h3
-              v-if="userQuality > 2 && userQuality <= 3"
-            >
+            <h3 v-if="userQuality > 2 && userQuality <= 3">
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
               <i class="far fa-star fa-lg text-theme-secondary"></i>
               <i class="far fa-star fa-lg text-theme-secondary"></i>
             </h3>
-            <h3
-              v-if="userQuality > 3 && userQuality <= 4"
-            >
+            <h3 v-if="userQuality > 3 && userQuality <= 4">
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
               <i class="fas fa-star fa-lg text-theme-secondary"></i>
@@ -55,9 +49,7 @@
             <h3 v-if="!userQuality">
               <p id="noRatings">error</p>
             </h3>
-            <p v-if="userQuality" id="creditHours">
-              {{ userQuality }} / 5
-            </p>
+            <p v-if="userQuality" id="creditHours">{{ userQuality }} / 5</p>
           </div>
         </div>
         <div class="padding">
@@ -66,33 +58,24 @@
             <strong>difficulty</strong>:
           </h6>
           <div class="avg-rating" v-if="userDifficulty">
-            <h3
-              v-if="userDifficulty <= 1"
-              class="text-theme-confirm"
-            >
+            <h3 v-if="userDifficulty <= 1" class="text-theme-confirm">
               Easy
             </h3>
             <h3
-              v-if="
-                userDifficulty> 1 &&
-                  userDifficulty <= 2
-              "
+              v-if="userDifficulty > 1 && userDifficulty <= 2"
               class="text-theme-secondary"
             >
               Average
             </h3>
-            <h3
-              v-if="userDifficulty > 2"
-              class="text-theme-warning-light"
-            >
+            <h3 v-if="userDifficulty > 2" class="text-theme-warning-light">
               Difficult
             </h3>
             <h3 v-if="!userDifficulty">
               <p id="noRatings">error</p>
             </h3>
           </div>
+        </div>
       </div>
-    </div>
     </template>
 
     <template v-slot:footer v-if="course.course">
@@ -123,11 +106,12 @@ import Modal from "./Modal.vue";
 import { mapState } from "vuex";
 
 export default {
-
   computed: mapState({
     course: state => state.courses.currentCourse,
-    userQuality: state => state.ratings.currentUserRating.rating[0].ratingQuality,
-    userDifficulty: state => state.ratings.currentUserRating.rating[0].ratingDifficulty
+    userQuality: state =>
+      state.ratings.currentUserRating.rating[0].ratingQuality,
+    userDifficulty: state =>
+      state.ratings.currentUserRating.rating[0].ratingDifficulty
   }),
 
   components: {
