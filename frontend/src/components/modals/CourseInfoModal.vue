@@ -255,13 +255,7 @@ export default {
     return {
       ratings: [],
       hasLoadedRatings: false,
-      isAFavorite: null
     };
-  },
-
-  isAFavorite: {
-    type: Boolean,
-    default: true
   },
 
   computed: {
