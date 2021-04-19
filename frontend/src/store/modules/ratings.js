@@ -48,8 +48,6 @@ const actions = {
       .catch(error => {
         // eslint-disable-next-line
           console.error(error);
-
-        if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
       });
   },
 
@@ -75,9 +73,10 @@ const actions = {
     var url = "users/" + rootState.auth.userId + "/ratings/";
     axios
       .post(url, {
-        course_id: course.courseID,
+        course_id: rootState.courses.currentCourse.course.courseID,
         quality: quality,
-        difficulty: difficulty
+        difficulty: difficulty,
+        user_id: rootState.auth.userId
       })
       .then(() => {
         Toast.showSuccessMessage("Rating added successfully!");

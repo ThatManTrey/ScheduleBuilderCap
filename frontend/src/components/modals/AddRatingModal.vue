@@ -108,14 +108,17 @@ export default {
     },
 
     addRating() {
-      this.$store.dispatch(
-        "ratings/addRating",
-        this.course.course,
-        this.rating.quality,
-        this.rating.difficulty
-      );
+      this.$store
+      .dispatch({
+        type: "ratings/addRating",
+        course: this.course,
+        quality: this.rating.quality,
+        difficulty: this.rating.difficulty
+      })
+      .then(() => {
+        this.closeModal();
+      });
 
-      this.closeModal();
     }
   }
 };
