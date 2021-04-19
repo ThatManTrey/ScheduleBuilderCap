@@ -3,6 +3,7 @@ import * as Toast from "../../toast";
 
 const state = () => ({
   ratings: [],
+  currentUserRating: [],
   currentQuality: "",
   currentDifficulty: "",
   userRatedCourses: [],
@@ -25,6 +26,10 @@ const mutations = {
     state.currentDifficulty = result.difficulty;
   },
 
+  setCurrentUserRating(state, rating) {
+    state.currentUserRating = rating;
+  },
+
   addRating(state, course) {
     state.userRatedCourses.ratedCourses.push(course);
   },
@@ -39,7 +44,9 @@ const mutations = {
 
 const getters = {
   isUserRatedCourse: state => courseId => {
-    return state.userRatedCourses.ratedCourses.some(course => course.courseID === courseId);
+    return state.userRatedCourses.ratedCourses.some(
+      course => course.courseID === courseId
+    );
   }
 };
 
@@ -59,7 +66,23 @@ const actions = {
       });
   },
 
-  getCourseRatings({ commit, state }, {course}) {
+  getUserCourseRating({ rootState, commit, state }, { course }) {
+    var url = "users/" + rootState.auth.userId + "/ratings/" + course.courseID;
+
+    //AJAX request
+    axios
+      .get(url)
+      .then(res => {
+        commit("setCurrentUserRating", res.data);
+        if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
+      })
+      .catch(error => {
+        // eslint-disable-next-line
+              console.error(error);
+      });
+  },
+
+  getCourseRatings({ commit, state }, { course }) {
     var baseUrl = process.env.VUE_APP_API_URL + "/courses/" + course.courseID;
 
     //AJAX request
@@ -75,7 +98,7 @@ const actions = {
       });
   },
 
-  addRating({ commit, rootState }, {course, qualityVal, difficultyVal} ) {
+  addRating({ commit, rootState }, { course, qualityVal, difficultyVal }) {
     commit("addRating", course);
 
     var url = "users/" + rootState.auth.userId + "/ratings";

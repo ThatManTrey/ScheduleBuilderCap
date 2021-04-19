@@ -9,67 +9,82 @@
           You rated {{ course.course.courseID }} in terms of
           <strong>quality</strong>:
         </h6>
-        <div class="avg-rating">
-          <h3 v-if="ratings.quality <= 1">
+        <div class="avg-rating" v-if="userRating.ratingQuality">
+          <h3 v-if="userRating.ratingQuality <= 1">
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
           </h3>
-          <h3 v-if="ratings.quality > 1 && ratings.quality <= 2">
+          <h3
+            v-if="userRating.ratingQuality > 1 && userRating.ratingQuality <= 2"
+          >
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
           </h3>
-          <h3 v-if="ratings.quality > 2 && ratings.quality <= 3">
+          <h3
+            v-if="userRating.ratingQuality > 2 && userRating.ratingQuality <= 3"
+          >
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
           </h3>
-          <h3 v-if="ratings.quality > 3 && ratings.quality <= 4">
+          <h3
+            v-if="userRating.ratingQuality > 3 && userRating.ratingQuality <= 4"
+          >
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="far fa-star fa-lg text-theme-secondary"></i>
           </h3>
-          <h3 v-if="ratings.quality > 4">
+          <h3 v-if="userRating.ratingQuality > 4">
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
             <i class="fas fa-star fa-lg text-theme-secondary"></i>
           </h3>
-          <h3 v-if="!ratings.quality">
+          <h3 v-if="!userRating.ratingQuality">
             <p id="noRatings">error</p>
           </h3>
-          <p v-if="ratings.quality" id="creditHours">
-            {{ ratings.quality }} / 5
+          <p v-if="userRating.ratingQuality" id="creditHours">
+            {{ userRating.ratingQuality }} / 5
           </p>
         </div>
         <h6>
           You rated {{ course.course.courseID }} in terms of
           <strong>difficulty</strong>:
         </h6>
-        <div class="avg-rating">
-          <h3 v-if="ratings.difficulty <= 1" class="text-theme-confirm">
+        <div class="avg-rating" v-if="userRating.ratingDifficulty">
+          <h3
+            v-if="userRating.ratingDifficulty <= 1"
+            class="text-theme-confirm"
+          >
             Easy
           </h3>
           <h3
-            v-if="ratings.difficulty > 1 && ratings.difficulty <= 2"
+            v-if="
+              userRating.ratingDifficulty > 1 &&
+                userRating.ratingDifficulty <= 2
+            "
             class="text-theme-secondary"
           >
             Average
           </h3>
-          <h3 v-if="ratings.difficulty > 2" class="text-theme-warning-light">
+          <h3
+            v-if="userRating.ratingDifficulty > 2"
+            class="text-theme-warning-light"
+          >
             Difficult
           </h3>
-          <h3 v-if="!ratings.difficulty">
+          <h3 v-if="!userRating.ratingDifficulty">
             <p id="noRatings">error</p>
           </h3>
         </div>
@@ -110,7 +125,8 @@ export default {
   },
 
   computed: mapState({
-    course: state => state.courses.currentCourse
+    course: state => state.courses.currentCourse,
+    userRating: state => state.ratings.currentUserRating
   }),
 
   created() {

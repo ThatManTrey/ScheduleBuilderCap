@@ -109,16 +109,15 @@ export default {
 
     addRating() {
       this.$store
-      .dispatch({
-        type: "ratings/addRating",
-        course: this.course,
-        qualityVal: this.rating.quality,
-        difficultyVal: this.rating.difficulty
-      })
-      .then(() => {
-        this.closeModal();
-      });
-
+        .dispatch({
+          type: "ratings/addRating",
+          course: this.course,
+          qualityVal: this.rating.quality,
+          difficultyVal: this.rating.difficulty
+        })
+        .then(() => {
+          this.closeModal();
+        });
     }
   }
 };

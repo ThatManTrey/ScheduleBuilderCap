@@ -79,7 +79,10 @@
           <hr class="bg-theme-darkest-gray" size="5" />
           <div class="col">
             Course Quality:
-            <div class="avg-rating" v-if="!$store.state.ratings.isLoadingRatings">
+            <div
+              class="avg-rating"
+              v-if="!$store.state.ratings.isLoadingRatings"
+            >
               <h3 v-if="courseRatings.currentQuality <= 1">
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
@@ -87,21 +90,36 @@
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-if="courseRatings.currentQuality > 1 && courseRatings.currentQuality <= 2">
+              <h3
+                v-if="
+                  courseRatings.currentQuality > 1 &&
+                    courseRatings.currentQuality <= 2
+                "
+              >
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-if="courseRatings.currentQuality > 2 && courseRatings.currentQuality <= 3">
+              <h3
+                v-if="
+                  courseRatings.currentQuality > 2 &&
+                    courseRatings.currentQuality <= 3
+                "
+              >
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
                 <i class="far fa-star fa-lg text-theme-secondary"></i>
               </h3>
-              <h3 v-if="courseRatings.currentQuality > 3 && courseRatings.currentQuality <= 4">
+              <h3
+                v-if="
+                  courseRatings.currentQuality > 3 &&
+                    courseRatings.currentQuality <= 4
+                "
+              >
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
                 <i class="fas fa-star fa-lg text-theme-secondary"></i>
@@ -126,12 +144,21 @@
 
           <div class="col">
             Course Difficulty:
-            <div class="avg-rating" v-if="!$store.state.ratings.isLoadingRatings">
-              <h3 v-if="courseRatings.currentDifficulty <= 1" class="text-theme-confirm">
+            <div
+              class="avg-rating"
+              v-if="!$store.state.ratings.isLoadingRatings"
+            >
+              <h3
+                v-if="courseRatings.currentDifficulty <= 1"
+                class="text-theme-confirm"
+              >
                 Easy
               </h3>
               <h3
-                v-if="courseRatings.currentDifficulty > 1 && courseRatings.currentDifficulty <= 2"
+                v-if="
+                  courseRatings.currentDifficulty > 1 &&
+                    courseRatings.currentDifficulty <= 2
+                "
                 class="text-theme-secondary"
               >
                 Average

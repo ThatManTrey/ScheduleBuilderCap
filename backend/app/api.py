@@ -370,6 +370,25 @@ def get_user_ratings(user_id):
     return jsonify(ratedCourses = arr_ratings)
 
 
+@app.route('/api/users/<int:user_id>/ratings/<string:course_id>', endpoint='get_user_course_rating', methods=['GET'])
+@has_access_token()
+@is_current_user()
+def get_user_course_rating(user_id, course_id):
+    rating = db.session.query(Rating).filter_by(
+        courseID = course_id,
+        userID = user_id
+    ).first()
+
+    arr_ratings = []
+    if rating:  
+        entry = rating.as_dict()
+        entry['ratingQuality'] = float(entry['ratingQuality'])
+        entry['ratingDifficulty'] = float(entry['ratingDifficulty'])
+        arr_ratings.append(entry)
+        return jsonify(rating = arr_ratings)
+
+    return jsonify(msg = "rating not found"), HTTPStatus.BAD_REQUEST
+
 #------------------------------------------------------------------------------
 # semesters
 
