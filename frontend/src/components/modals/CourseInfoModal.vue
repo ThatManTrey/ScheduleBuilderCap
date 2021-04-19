@@ -214,6 +214,7 @@
           v-else
           @click="removeFromFavorites(course)"
           data-tooltip="Unfavorite Course"
+          data-tooltip-location="right"
           class="button-as-link"
         >
           <i class="fas fa-bookmark fa-lg"></i>
