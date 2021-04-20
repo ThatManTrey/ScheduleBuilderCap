@@ -20,6 +20,10 @@ const mutations = {
     state.userRatedCourses = userRatedCourses;
   },
 
+  setIsUserRatedCourse(state, isRatedCourse) {
+    state.isRatedCourse = isRatedCourse
+  },
+
   setCourseRatings(state, result) {
     state.ratings = result.ratings;
     state.currentQuality = result.quality;
@@ -30,8 +34,8 @@ const mutations = {
     state.currentUserRating = rating;
   },
 
-  addRating(state, course) {
-    state.userRatedCourses.ratedCourses.push(course);
+  addRating(state, rating) {
+    state.userRatedCourses.ratedCourses.push(rating);
   },
 
   removeRating(state, courseId) {
@@ -75,10 +79,13 @@ const actions = {
       .then(res => {
         commit("setCurrentUserRating", res.data);
         if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
+        if (!state.isRatedCourse) commit("setIsUserRatedCourse", true);
       })
       .catch(error => {
         // eslint-disable-next-line
               console.error(error);
+
+              if (state.isRatedCourse) commit("setIsUserRatedCourse", false);
       });
   },
 
@@ -99,7 +106,13 @@ const actions = {
   },
 
   addRating({ commit, rootState }, { course, qualityVal, difficultyVal }) {
-    commit("addRating", course);
+    var rating = {
+      courseID: rootState.courses.currentCourse.course.courseID,
+      ratingDifficulty: difficultyVal,
+      ratingQuality: qualityVal,
+      userID: rootState.auth.userId
+    }
+    commit("addRating", rating);
 
     var url = "users/" + rootState.auth.userId + "/ratings";
     axios
