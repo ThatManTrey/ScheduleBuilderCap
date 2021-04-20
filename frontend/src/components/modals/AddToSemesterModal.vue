@@ -215,10 +215,11 @@ span.badge {
 #add-semester-link {
   font-weight: 400;
   font-size: 0.9rem;
+  color: var(--theme-white);
 }
 
-#add-semester-link a:hover,
-#add-semester-link a:focus {
+#add-semester-link button:hover,
+#add-semester-link button:focus {
   color: var(--theme-confirm);
 }
 
