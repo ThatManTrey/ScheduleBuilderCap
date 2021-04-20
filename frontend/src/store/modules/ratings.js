@@ -70,7 +70,7 @@ const actions = {
       });
   },
 
-  getUserCourseRating({ rootState, commit, state }, { course }) {
+  getUserCourseRating({ rootState, commit,  }, { course }) {
     var url = "users/" + rootState.auth.userId + "/ratings/" + course.courseID;
 
     //AJAX request
@@ -78,14 +78,13 @@ const actions = {
       .get(url)
       .then(res => {
         commit("setCurrentUserRating", res.data);
-        if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
-        if (!state.isRatedCourse) commit("setIsUserRatedCourse", true);
+
       })
       .catch(error => {
         // eslint-disable-next-line
               if(error) {
                 console.error("No course rating available for the current user.")
-                if (state.isRatedCourse) commit("setIsUserRatedCourse", false);
+
               }
       });
   },
