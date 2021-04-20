@@ -24,7 +24,7 @@
   --theme-primary-dark: #5b3996;
   --theme-primary-light: #c6a5ff;
   --theme-secondary: #d18018;
-  --theme-warning-dark: #791a1a;
+  --theme-warning-dark: #6b2727;
   --theme-warning-light: #d54040;
   --theme-confirm: #02a191;
   --theme-success: #155d26;
@@ -426,7 +426,7 @@ div.v-toast__item--error {
 }
 
 div.v-toast__item--success {
-  background-color: var(--theme-success);
+  background-color: var(--theme-primary-dark);
 }
 
 /*

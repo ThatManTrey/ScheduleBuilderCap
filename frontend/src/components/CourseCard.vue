@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="card justify-content-center course-card">
-    <div class="card-body container-fluid text-theme-whiter">
+  <div class="card justify-content-center course-card w-100">
+    <div class="card-body container-fluid text-theme-whiter d-flex flex-column">
       <a
         tabindex="0"
         @keyup.enter="showCourseInfoModal()"
@@ -38,7 +38,7 @@
         </div>
       </a>
 
-      <div v-if="!showSmallCard" class="row">
+      <div v-if="!showSmallCard" class="row mt-auto">
         <div v-if="isLoggedIn" class="col">
           <button
             tabindex="0"
@@ -63,7 +63,6 @@
         <div v-if="isLoggedIn" class="col text-end">
           <button
             v-if="!isScheduled"
-            tabindex="0"
             @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
             class="button-as-link"
@@ -72,7 +71,6 @@
           </button>
           <button
             v-if="isScheduled"
-            tabindex="0"
             @click="removeFromSemester()"
             data-tooltip="Remove from Semester"
             class="button-as-link"
@@ -171,10 +169,6 @@ div.course-card:focus-within {
   //transform: scale(1.05);
 }
 
-.course-desc {
-  min-height: 5rem;
-}
-
 /*
   limiting text displayed,
   referenced from: 
@@ -186,7 +180,6 @@ div.course-card:focus-within {
   display: -webkit-box;
   -webkit-line-clamp: 5; /* number of lines to show */
   -webkit-box-orient: vertical;
-  min-height: 7.5rem;
 }
 
 span.course-badge {
@@ -196,17 +189,11 @@ span.course-badge {
   margin-top: 0.75rem;
 }
 
-.course-badge button {
-  font: inherit;
-}
-
 .course-card-title {
   font-size: 17pt;
-  min-height: 3.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

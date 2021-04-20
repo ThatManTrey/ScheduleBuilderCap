@@ -45,11 +45,14 @@
       :id="targetName"
     >
       <div class="container">
-        <div v-if="semester.semesterCourses.length > 0" class="row">
+        <div
+          v-if="semester.semesterCourses.length > 0"
+          class="row justify-content-center"
+        >
           <div
             v-for="(course, index) in semester.semesterCourses"
             :key="index"
-            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+            class="d-flex col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
           >
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"

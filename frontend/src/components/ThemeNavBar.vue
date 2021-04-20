@@ -1,11 +1,10 @@
 <template lang="html">
-  <div>
+  <header>
     <nav class="navbar navbar-expand-md" id="app-nav">
       <div class="container-fluid">
-        <!-- Put logo here -->
-
-        <a class="navbar-brand" href="#">KSU COURSE PLANNER</a>
-
+        <router-link class="navbar-brand" to="Home">
+          KSU COURSE PLANNER
+        </router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -113,7 +112,7 @@
         </a>
       </div>
     </transition>
-  </div>
+  </header>
 </template>
 
 <script>
