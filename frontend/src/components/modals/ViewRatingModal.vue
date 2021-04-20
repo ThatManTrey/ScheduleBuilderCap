@@ -109,9 +109,9 @@ export default {
   computed: mapState({
     course: state => state.courses.currentCourse,
     userQuality: state =>
-      state.ratings.currentUserRating.rating[0].ratingQuality,
+      state.ratings.currentUserRating.currentUserRatingQuality,
     userDifficulty: state =>
-      state.ratings.currentUserRating.rating[0].ratingDifficulty
+      state.ratings.currentUserRating.currentUserRatingDifficulty,
   }),
 
   components: {

@@ -3,7 +3,10 @@ import * as Toast from "../../toast";
 
 const state = () => ({
   ratings: [],
-  currentUserRating: [],
+  currentUserRating: {
+    currentUserRatingQuality: null,
+    currentUserRatingDifficulty: null
+  },
   currentQuality: "",
   currentDifficulty: "",
   userRatedCourses: [],
@@ -31,7 +34,8 @@ const mutations = {
   },
 
   setCurrentUserRating(state, rating) {
-    state.currentUserRating = rating;
+    state.currentUserRating.currentUserRatingQuality = rating.rating[0].ratingQuality;
+    state.currentUserRating.currentUserRatingDifficulty = rating.rating[0].ratingDifficulty;
   },
 
   addRating(state, rating) {
@@ -103,7 +107,7 @@ const actions = {
       });
   },
 
-  addRating({ commit, rootState }, { course, qualityVal, difficultyVal }) {
+  addRating({ dispatch, commit, rootState }, { course, qualityVal, difficultyVal }) {
     var rating = {
       courseID: rootState.courses.currentCourse.course.courseID,
       ratingDifficulty: difficultyVal,
@@ -122,6 +126,7 @@ const actions = {
       })
       .then(() => {
         Toast.showSuccessMessage("Your rating added successfully!");
+        dispatch("getUserCourseRating", {course: this.course});
       })
       .catch(error => {
         // revert client side addition
