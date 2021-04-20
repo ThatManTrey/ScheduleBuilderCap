@@ -1,82 +1,74 @@
 <template lang="html">
-  <div>
-    <footer class="container" v-if="isLoggedIn">
-      <button class="semesterBar-button" v-on:click="isOpen = !isOpen">
+    <div class="container-fluid p-0 d-lg-block d-none" id="" :class="{ 'slide': !isOpen }" v-if="isLoggedIn">
+      <button class="semesterBar-button" @click="isOpen = !isOpen">
         <i class="far fa-calendar "></i>
       </button>
-      <transition name="toggle">
-        <div class="semesterBar-container" v-if="isOpen">
-          <span v-for="(semester, index) in semesters" :key="index">
-            <MiniSemester :semester="semester"></MiniSemester>
-          </span>
-          <div class="inline">
-            <a
-              tabindex="0"
-              @keyup.enter="showAddSemesterModal()"
-              @click="showAddSemesterModal()"
-              data-tooltip="Add a Semester"
-              data-tooltip-location="bottom"
+        <div class="semesterBar-container">
+            <MiniSemester v-for="(semester, index) in semesters" :key="index" :semester="semester"></MiniSemester>  
+
+          <div v-if="semesters.length === 0" class="d-flex w-100 flex-column justify-content-center align-items-center">
+           <h3 class="mb-3">You don't have any semesters yet.</h3>
+            <button
+            class="mb-0 mx-5 button-as-link"
+            @click="showAddSemesterModal()"
             >
-              <i
-                class="fas fa-plus-circle fa-lg newSemester align-items-center"
-              ></i>
-            </a>
+            <span class="text-theme-lightest-gray">
+              <i class="fas fa-plus-circle"></i>
+              Add semester
+            </span>
+            </button>
+          </div>
+          <div v-else class="pe-4">
+            <button
+            class="mb-0 button-as-link"
+            @click="showAddSemesterModal()"
+            >
+            <span class="text-theme-white">
+              <i class="fas fa-plus-circle"></i>
+              Add semester
+            </span>
+            </button>
           </div>
         </div>
-      </transition>
-    </footer>
-    <AddSemesterModal ref="addSemesterModalSchedule"></AddSemesterModal>
-  </div>
+    </div>
 </template>
 
 <script>
 import MiniSemester from "../components/MiniSemester.vue";
-import AddSemesterModal from "../components/modals/AddSemesterModal.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "semester-bar",
   data() {
     return {
-      isOpen: false
+      isOpen: false,
     };
-  },
-
-  props: {
-    targetName: String
   },
 
   computed: {
     ...mapState({
-      isLoggedIn: state => state.auth.isAuthenticated,
-      semesters: state => state.semesters.semesters
-    })
+      isLoggedIn: (state) => state.auth.isAuthenticated,
+      semesters: (state) => state.semesters.semesters,
+    }),
   },
 
   methods: {
-    toggle: function() {
+    toggle: function () {
       this.isOpen = !this.isOpen;
     },
+
     showAddSemesterModal() {
-      this.$refs.addSemesterModalSchedule.openModal();
-    }
+      this.$emit("showAddSemesterModal");
+    },
   },
   components: {
     MiniSemester,
-    AddSemesterModal
-  }
+  },
 };
 </script>
 
 <style scoped>
-.container {
-  width: 99%;
-  display: block;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-}
+
 .semesterBar-button {
   cursor: pointer;
   display: block;
@@ -90,64 +82,37 @@ export default {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-top: solid 1pt var(--theme-primary-dark);
-  animation: slideup-mini 2s ease;
 }
-@keyframes slideup-mini {
-  from {
-    transform: translateY(100%);
-    opacity: 25%;
-  }
-  to {
-    transform: translateY(0%);
-    opacity: 100%;
-  }
-}
+
 .semesterBar-container {
   background: var(--theme-black);
   color: var(--theme-whiter);
+  min-height: 175px;
+  max-height: 175px;
   display: flex;
-  width: 110%;
-  min-height: 5rem;
-  max-height: 15rem;
   text-align: left;
-  margin-left: -1rem;
   border-top: solid 1pt var(--theme-primary-dark);
   border-top-right-radius: 10px;
   overflow-x: auto;
   overflow-y: auto;
   white-space: nowrap;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
-@keyframes slide {
-  0% {
-    margin-bottom: -18%;
-  }
-  100% {
-    margin-bottom: 0%;
-  }
+
+.container-fluid {
+  transition: 0.5s ease;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
 }
 
-.toggle-enter-active {
-  animation: slide 1s ease;
-}
-.toggle-leave-active {
-  animation: slide 1s reverse;
+.container-fluid.slide {
+  transform: translateY(175px);
+  z-index: 0;
 }
 
-.inline {
-  display: inline-block;
-  align-self: center;
-}
-.newSemester {
-  padding-left: 1.5rem;
-  padding-right: 3rem;
-}
-
-@media only screen and (max-width: 1280px) {
-  .container {
-    display: none;
-  }
-}
 </style>

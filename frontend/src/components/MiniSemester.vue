@@ -1,15 +1,15 @@
 <template lang="html">
-  <div class="semester">
+  <div class="semester me-4">
     <ul class="list-group">
       <li class="list-group-item header">
-        <a
+        <button
           @click="removeSemester()"
-          @keyup.enter="removeSemester()"
           data-tooltip="Remove Semester"
           data-tooltip-location="bottom"
+          class="button-as-link"
         >
           <i class="fas fa-trash fa-sm padding"></i
-        ></a>
+        ></button>
         <span
           id="semesterName"
           contenteditable
@@ -28,12 +28,12 @@
         v-for="(course, index) in semester.semesterCourses"
         :key="index"
       >
-        <a
+        <button
           @click="removeCourse(course.courseID)"
-          @keyup.enter="removeCourse(course.courseID)"
+          class="button-as-link"
           id="remove"
           ><i class="fas fa-times-circle fa-md"></i
-        ></a>
+        ></button>
         <span class="badge rounded-pill course-badge">
           <button class="button-as-link">{{ course.courseID }}</button></span
         >
@@ -118,10 +118,6 @@ div.container {
   padding: 10px;
 }
 
-.list-group {
-  width: 16rem;
-}
-
 .list-group li {
   background-color: var(--theme-blacker);
   color: var(--theme-whiter);
@@ -129,7 +125,6 @@ div.container {
 }
 
 .list-group li.course {
-  height: 2.6rem;
   font-size: 10pt;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -168,8 +163,10 @@ span.course-badge {
 }
 
 .semester {
-  display: inline-block;
-  margin-right: 1rem;
+  /* fix */
+  /* overflow-y: auto; */
+  width: 16rem;
+  display: block;
 }
 
 #remove {
@@ -182,6 +179,5 @@ span.course-badge {
   font-size: 10pt;
   text-align: center;
   padding: 0.5rem;
-  height: 2.6rem;
 }
 </style>

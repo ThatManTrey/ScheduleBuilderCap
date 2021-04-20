@@ -44,19 +44,16 @@
             <h6>Email Address</h6>
           </label>
 
-          <div class="input-container">
-            <i class="fas fa-envelope fa-md text-theme-blacker" id="icon"></i>
-            <input
-              type="email"
-              class="form-control"
-              :class="{ 'form-error': emailField.error }"
-              id="userSignInEmail"
-              placeholder="example@gmail.com"
-              :disabled="isSubmittingForm"
-              v-model.trim="emailField.email"
-              ref="signInEmailField"
-            />
-          </div>
+          <input
+            type="email"
+            class="form-control"
+            :class="{ 'form-error': emailField.error }"
+            id="userSignInEmail"
+            placeholder="example@gmail.com"
+            :disabled="isSubmittingForm"
+            v-model.trim="emailField.email"
+            ref="signInEmailField"
+          />
 
           <transition name="fade">
             <span v-if="emailField.error" class="form-error-text">
@@ -70,20 +67,18 @@
           <label for="userSignInPass" class="form-label">
             <h6>Password</h6>
           </label>
-          <div class="input-container">
-            <i class="fas fa-key fa-md text-theme-blacker" id="icon"></i>
-            <input
-              type="password"
-              class="form-control"
-              :class="{ 'form-error': passField.error }"
-              id="userSignInPass"
-              aria-describedby="userSignInPassHelp"
-              placeholder="Enter password..."
-              @keyup.enter="signIn()"
-              :disabled="isSubmittingForm"
-              v-model="passField.pass"
-            />
-          </div>
+
+          <input
+            type="password"
+            class="form-control"
+            :class="{ 'form-error': passField.error }"
+            id="userSignInPass"
+            aria-describedby="userSignInPassHelp"
+            placeholder="Enter password..."
+            @keyup.enter="signIn()"
+            :disabled="isSubmittingForm"
+            v-model="passField.pass"
+          />
 
           <transition name="fade">
             <span v-if="passField.error" class="form-error-text">
@@ -116,19 +111,16 @@
           <h6>Email Address</h6>
         </label>
 
-        <div class="input-container">
-          <i class="fas fa-envelope fa-md text-theme-blacker" id="icon"></i>
-          <input
-            type="email"
-            class="form-control"
-            :class="{ 'form-error': resetPassEmailField.error }"
-            id="userResetPassEmail"
-            placeholder="Enter email..."
-            @keyup.enter="resetPassword()"
-            :disabled="isSubmittingForm"
-            v-model.trim="resetPassEmailField.email"
-          />
-        </div>
+        <input
+          type="email"
+          class="form-control"
+          :class="{ 'form-error': resetPassEmailField.error }"
+          id="userResetPassEmail"
+          placeholder="Enter email..."
+          @keyup.enter="resetPassword()"
+          :disabled="isSubmittingForm"
+          v-model.trim="resetPassEmailField.email"
+        />
 
         <span v-if="resetPassEmailField.error" class="form-error-text">
           <i class="fas fa-times-circle text-theme-warning-light"></i>
