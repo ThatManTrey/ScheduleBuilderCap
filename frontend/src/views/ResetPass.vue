@@ -2,8 +2,8 @@
   <div>
     <div class="myContainer">
       <div class="row justify-content-center myRow">
-        <div class="col-lg-4 col-md-6 col-sm-8 col-10">
-          <h3 class="text-theme-whitest mb-3">
+        <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-5 col-sm-8 col-10">
+          <h3 class="text-theme-whitest mb-5 text-center">
             Reset Your Password
             <Spinner
               :showSpinner="isSubmittingForm"
@@ -13,10 +13,6 @@
 
           <form @submit.prevent="resetPassword">
             <div class="mb-3 text-theme-white">
-              <label for="resetPass" class="form-label">
-                <h6>Password</h6>
-              </label>
-
               <input
                 type="password"
                 class="form-control"
@@ -36,9 +32,6 @@
             </div>
 
             <div class="mb-3 text-theme-white">
-              <label for="resetPassVerify" class="form-label">
-                <h6>Retype Password</h6>
-              </label>
               <input
                 type="password"
                 class="form-control"
@@ -60,7 +53,7 @@
             <button
               type="submit"
               :disabled="isSubmittingForm"
-              class="btn btn-theme-primary-dark"
+              class="btn btn-theme-primary-dark w-100"
               role="submit"
             >
               Reset Password

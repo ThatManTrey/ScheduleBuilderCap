@@ -44,19 +44,16 @@
             <h6>Email Address</h6>
           </label>
 
-          <div class="input-container">
-            <i class="fas fa-envelope fa-md text-theme-blacker" id="icon"></i>
-            <input
-              type="email"
-              class="form-control"
-              :class="{ 'form-error': emailField.error }"
-              id="userSignInEmail"
-              placeholder="example@gmail.com"
-              :disabled="isSubmittingForm"
-              v-model.trim="emailField.email"
-              ref="signInEmailField"
-            />
-          </div>
+          <input
+            type="email"
+            class="form-control"
+            :class="{ 'form-error': emailField.error }"
+            id="userSignInEmail"
+            placeholder="example@gmail.com"
+            :disabled="isSubmittingForm"
+            v-model.trim="emailField.email"
+            ref="signInEmailField"
+          />
 
           <transition name="fade">
             <span v-if="emailField.error" class="form-error-text">
@@ -70,20 +67,18 @@
           <label for="userSignInPass" class="form-label">
             <h6>Password</h6>
           </label>
-          <div class="input-container">
-            <i class="fas fa-key fa-md text-theme-blacker" id="icon"></i>
-            <input
-              type="password"
-              class="form-control"
-              :class="{ 'form-error': passField.error }"
-              id="userSignInPass"
-              aria-describedby="userSignInPassHelp"
-              placeholder="Enter password..."
-              @keyup.enter="signIn()"
-              :disabled="isSubmittingForm"
-              v-model="passField.pass"
-            />
-          </div>
+
+          <input
+            type="password"
+            class="form-control"
+            :class="{ 'form-error': passField.error }"
+            id="userSignInPass"
+            aria-describedby="userSignInPassHelp"
+            placeholder="Enter password..."
+            @keyup.enter="signIn()"
+            :disabled="isSubmittingForm"
+            v-model="passField.pass"
+          />
 
           <transition name="fade">
             <span v-if="passField.error" class="form-error-text">
@@ -116,19 +111,16 @@
           <h6>Email Address</h6>
         </label>
 
-        <div class="input-container">
-          <i class="fas fa-envelope fa-md text-theme-blacker" id="icon"></i>
-          <input
-            type="email"
-            class="form-control"
-            :class="{ 'form-error': resetPassEmailField.error }"
-            id="userResetPassEmail"
-            placeholder="Enter email..."
-            @keyup.enter="resetPassword()"
-            :disabled="isSubmittingForm"
-            v-model.trim="resetPassEmailField.email"
-          />
-        </div>
+        <input
+          type="email"
+          class="form-control"
+          :class="{ 'form-error': resetPassEmailField.error }"
+          id="userResetPassEmail"
+          placeholder="Enter email..."
+          @keyup.enter="resetPassword()"
+          :disabled="isSubmittingForm"
+          v-model.trim="resetPassEmailField.email"
+        />
 
         <span v-if="resetPassEmailField.error" class="form-error-text">
           <i class="fas fa-times-circle text-theme-warning-light"></i>
@@ -195,22 +187,22 @@ function initialState() {
   return {
     emailField: {
       email: null,
-      error: null
+      error: null,
     },
     passField: {
       pass: null,
-      error: null
+      error: null,
     },
     resetPassEmailField: {
       email: null,
-      error: null
+      error: null,
     },
     isSubmittingForm: false,
     isLoginSuccessful: null,
     isResettingPassword: false,
     isPasswordResetSuccessful: null,
     errorMessage: "",
-    resetPassSuccessMessage: ""
+    resetPassSuccessMessage: "",
   };
 }
 
@@ -220,24 +212,24 @@ export default {
   },
 
   watch: {
-    "emailField.email": function() {
+    "emailField.email": function () {
       validateEmailField(this.emailField);
     },
 
-    "resetPassEmailField.email": function() {
+    "resetPassEmailField.email": function () {
       validateEmailField(this.resetPassEmailField);
     },
 
-    "passField.pass": function() {
+    "passField.pass": function () {
       validatePassField(this.passField, false);
-    }
+    },
   },
 
   components: {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert
+    ErrorAlert,
   },
 
   methods: {
@@ -291,7 +283,7 @@ export default {
         .dispatch({
           type: "auth/logIn",
           email: this.emailField.email,
-          password: this.passField.pass
+          password: this.passField.pass,
         })
         .then(() => {
           this.isSubmittingForm = false;
@@ -334,7 +326,7 @@ export default {
 
       axios
         .post("/auth/reset-pass-request", {
-          email: this.resetPassEmailField.email
+          email: this.resetPassEmailField.email,
         })
         .then(
           () => {
@@ -353,8 +345,8 @@ export default {
             this.allowClosingModal();
           }
         );
-    }
-  }
+    },
+  },
 };
 </script>
 
