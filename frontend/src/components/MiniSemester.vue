@@ -2,14 +2,14 @@
   <div class="semester">
     <ul class="list-group">
       <li class="list-group-item header">
-        <a
+        <button
           @click="removeSemester()"
-          @keyup.enter="removeSemester()"
           data-tooltip="Remove Semester"
           data-tooltip-location="bottom"
+          class="button-as-link"
         >
           <i class="fas fa-trash fa-sm padding"></i
-        ></a>
+        ></button>
         <span
           id="semesterName"
           contenteditable
@@ -28,12 +28,12 @@
         v-for="(course, index) in semester.semesterCourses"
         :key="index"
       >
-        <a
+        <button
           @click="removeCourse(course.courseID)"
-          @keyup.enter="removeCourse(course.courseID)"
+          class="button-as-link"
           id="remove"
           ><i class="fas fa-times-circle fa-md"></i
-        ></a>
+        ></button>
         <span class="badge rounded-pill course-badge">
           <button class="button-as-link">{{ course.courseID }}</button></span
         >

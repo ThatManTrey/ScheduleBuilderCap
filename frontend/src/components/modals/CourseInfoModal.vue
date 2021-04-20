@@ -254,7 +254,7 @@ export default {
   data() {
     return {
       ratings: [],
-      hasLoadedRatings: false,
+      hasLoadedRatings: false
     };
   },
 

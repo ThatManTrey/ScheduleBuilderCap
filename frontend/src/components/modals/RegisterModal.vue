@@ -123,27 +123,27 @@ import ErrorAlert from "../alerts/ErrorAlert.vue";
 import {
   validateEmailField,
   validatePassField,
-  validatePassVerifyField,
+  validatePassVerifyField
 } from "../../utils.js";
 
 function initialState() {
   return {
     emailField: {
       email: null,
-      error: null,
+      error: null
     },
     passField: {
       pass: null,
-      error: null,
+      error: null
     },
     passVerifyField: {
       pass: null,
-      error: null,
+      error: null
     },
     isSubmittingForm: false,
     isRegisterSuccessful: null,
     errorMessage: "An error occurred. Please try again.",
-    successMessage: "",
+    successMessage: ""
   };
 }
 
@@ -153,24 +153,24 @@ export default {
   },
 
   watch: {
-    "emailField.email": function () {
+    "emailField.email": function() {
       validateEmailField(this.emailField);
     },
 
-    "passField.pass": function () {
+    "passField.pass": function() {
       validatePassField(this.passField);
     },
 
-    "passVerifyField.pass": function () {
+    "passVerifyField.pass": function() {
       validatePassVerifyField(this.passVerifyField, this.passField);
-    },
+    }
   },
 
   components: {
     Modal,
     Spinner,
     SuccessAlert,
-    ErrorAlert,
+    ErrorAlert
   },
 
   methods: {
@@ -232,7 +232,7 @@ export default {
         .dispatch({
           type: "auth/register",
           email: this.emailField.email,
-          password: this.passField.pass,
+          password: this.passField.pass
         })
         .then(() => {
           if (this.$store.state.auth.authError) {
@@ -245,7 +245,7 @@ export default {
               .dispatch({
                 type: "auth/logIn",
                 email: this.emailField.email,
-                password: this.passField.pass,
+                password: this.passField.pass
               })
               .then(() => {
                 if (this.$store.state.auth.authError) {
@@ -266,7 +266,7 @@ export default {
               });
           }
         });
-    },
-  },
+    }
+  }
 };
 </script>

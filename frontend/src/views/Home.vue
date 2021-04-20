@@ -251,6 +251,7 @@
       ref="courseInfoModalHome"
     ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalHome"></AddToSemesterModal>
+    <AddSemesterModal ref="addSemesterModalHome"></AddSemesterModal>
     <ChangeProgramModal ref="changeProgramModalHome"></ChangeProgramModal>
     <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
     <ViewRatingModal
@@ -266,6 +267,7 @@ import CourseTableRow from '../components/CourseTableRow.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
+import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
 import ChangeProgramModal from '../components/modals/ChangeProgramModal.vue';
 import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 import SemesterBar from '../components/SemesterBar.vue';
@@ -286,7 +288,8 @@ export default {
         ChangeProgramModal,
         CourseTableRow,
         AddRatingModal,
-        ViewRatingModal
+        ViewRatingModal,
+        AddSemesterModal
     },
 
     computed: {
@@ -315,10 +318,12 @@ export default {
       },
 
       showAddToSemesterModal () {
+        
         this.$refs.addToSemesterModalHome.openModal();
       },
 
       showAddSemesterModal () {
+        console.log("got here");
         this.$refs.addSemesterModalHome.openModal();
       },
 

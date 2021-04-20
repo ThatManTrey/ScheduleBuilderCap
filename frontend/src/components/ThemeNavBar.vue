@@ -2,11 +2,8 @@
   <header>
     <nav class="navbar navbar-expand-md" id="app-nav">
       <div class="container-fluid">
-        <router-link
-                class="navbar-brand"
-                to="Home"
-              >
-                KSU COURSE PLANNER
+        <router-link class="navbar-brand" to="Home">
+          KSU COURSE PLANNER
         </router-link>
         <button
           class="navbar-toggler"
@@ -128,18 +125,18 @@ export default {
   props: {
     useScrollToTopButton: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
 
   components: {
     SignInModal,
-    RegisterModal,
+    RegisterModal
   },
 
   data() {
     return {
-      showScrollToTopButton: false,
+      showScrollToTopButton: false
     };
   },
 
@@ -167,11 +164,11 @@ export default {
     logout() {
       this.$store.dispatch("auth/logOut");
       if (!this.isCurrentRoute("Home")) this.$router.push("/home");
-    },
+    }
   },
 
   computed: mapState({
-    isLoggedIn: (state) => state.auth.isAuthenticated,
+    isLoggedIn: state => state.auth.isAuthenticated
   }),
 
   created() {
@@ -186,7 +183,7 @@ export default {
     if (this.useScrollToTopButton) {
       window.removeEventListener("scroll", this.checkScroll);
     }
-  },
+  }
 };
 </script>
 

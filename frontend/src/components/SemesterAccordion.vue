@@ -45,7 +45,10 @@
       :id="targetName"
     >
       <div class="container">
-        <div v-if="semester.semesterCourses.length > 0" class="row justify-content-center">
+        <div
+          v-if="semester.semesterCourses.length > 0"
+          class="row justify-content-center"
+        >
           <div
             v-for="(course, index) in semester.semesterCourses"
             :key="index"

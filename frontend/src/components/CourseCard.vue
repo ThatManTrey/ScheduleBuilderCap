@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="card justify-content-center course-card">
+  <div class="card justify-content-center course-card w-100">
     <div class="card-body container-fluid text-theme-whiter d-flex flex-column">
       <a
         tabindex="0"
