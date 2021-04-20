@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="semester">
+  <div class="semester me-4">
     <ul class="list-group">
       <li class="list-group-item header">
         <button
@@ -118,10 +118,6 @@ div.container {
   padding: 10px;
 }
 
-.list-group {
-  width: 16rem;
-}
-
 .list-group li {
   background-color: var(--theme-blacker);
   color: var(--theme-whiter);
@@ -129,7 +125,6 @@ div.container {
 }
 
 .list-group li.course {
-  height: 2.6rem;
   font-size: 10pt;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -168,8 +163,8 @@ span.course-badge {
 }
 
 .semester {
-  display: inline-block;
-  margin-right: 1rem;
+  overflow-y: auto;
+  width: 16rem;
 }
 
 #remove {
@@ -182,6 +177,5 @@ span.course-badge {
   font-size: 10pt;
   text-align: center;
   padding: 0.5rem;
-  height: 2.6rem;
 }
 </style>

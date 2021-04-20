@@ -5,16 +5,29 @@
         <i class="far fa-calendar "></i>
       </button>
         <div class="semesterBar-container">
-          <span v-for="(semester, index) in semesters" :key="index">
-            <MiniSemester :semester="semester"></MiniSemester>   
-          </span>
-          <div class="d-flex align-items-center">
+            <MiniSemester v-for="(semester, index) in semesters" :key="index" :semester="semester"></MiniSemester>  
+
+          <div v-if="semesters.length === 0" class="d-flex w-100 flex-column justify-content-center align-items-center">
+           <h3 class="mb-3">You don't have any semesters yet.</h3>
             <button
             class="mb-0 mx-5 button-as-link"
-            data-tooltip="Add Semester"
             @click="showAddSemesterModal()"
             >
-              <i class="fas fa-plus-circle fa-lg"></i>
+            <span class="text-theme-lightest-gray">
+              <i class="fas fa-plus-circle"></i>
+              Add semester
+            </span>
+            </button>
+          </div>
+          <div v-else>
+            <button
+            class="mb-0 button-as-link"
+            @click="showAddSemesterModal()"
+            >
+            <span class="text-theme-white">
+              <i class="fas fa-plus-circle"></i>
+              Add semester
+            </span>
             </button>
           </div>
         </div>
@@ -83,6 +96,8 @@ export default {
 .semesterBar-container {
   background: var(--theme-black);
   color: var(--theme-whiter);
+  min-height: 175px;
+  max-height: 175px;
   display: flex;
   text-align: left;
   border-top: solid 1pt var(--theme-primary-dark);
@@ -100,7 +115,7 @@ export default {
 }
 
 .slide {
-  transform: translateY(135px);
+  transform: translateY(175px);
 }
 
 </style>
