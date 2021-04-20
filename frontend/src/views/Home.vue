@@ -10,10 +10,10 @@
       <transition name="coursefade" mode="out-in">
         <div
           v-if="showCard && !isLoadingCourses && totalResults > 0"
-          class="row align-items-center flex-grow-1 mx-3"
+          class="row flex-grow-1 mx-3"
         >
           <div
-            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+            class="d-flex col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in allCourses"
             :key="index"
           >
