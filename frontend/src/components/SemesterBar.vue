@@ -1,36 +1,45 @@
 <template lang="html">
-    <div class="container-fluid p-0 d-lg-block d-none" id="" :class="{ 'slide': !isOpen }" v-if="isLoggedIn">
-      <button class="semesterBar-button" @click="isOpen = !isOpen">
-        <i class="far fa-calendar "></i>
-      </button>
-        <div class="semesterBar-container">
-            <MiniSemester v-for="(semester, index) in semesters" :key="index" :semester="semester"></MiniSemester>  
+  <div
+    class="container-fluid p-0 d-lg-block d-none"
+    id=""
+    :class="{ slide: !isOpen }"
+    v-if="isLoggedIn"
+  >
+    <button class="semesterBar-button" @click="isOpen = !isOpen">
+      <i class="far fa-calendar "></i>
+    </button>
+    <div class="semesterBar-container">
+      <MiniSemester
+        v-for="(semester, index) in semesters"
+        :key="index"
+        :semester="semester"
+      ></MiniSemester>
 
-          <div v-if="semesters.length === 0" class="d-flex w-100 flex-column justify-content-center align-items-center">
-           <h3 class="mb-3">You don't have any semesters yet.</h3>
-            <button
-            class="mb-0 mx-5 button-as-link"
-            @click="showAddSemesterModal()"
-            >
-            <span class="text-theme-lightest-gray">
-              <i class="fas fa-plus-circle"></i>
-              Add semester
-            </span>
-            </button>
-          </div>
-          <div v-else class="pe-4">
-            <button
-            class="mb-0 button-as-link"
-            @click="showAddSemesterModal()"
-            >
-            <span class="text-theme-white">
-              <i class="fas fa-plus-circle"></i>
-              Add semester
-            </span>
-            </button>
-          </div>
-        </div>
+      <div
+        v-if="semesters.length === 0"
+        class="d-flex w-100 flex-column justify-content-center align-items-center"
+      >
+        <h3 class="mb-3">You don't have any semesters yet.</h3>
+        <button
+          class="mb-0 mx-5 button-as-link"
+          @click="showAddSemesterModal()"
+        >
+          <span class="text-theme-lightest-gray">
+            <i class="fas fa-plus-circle"></i>
+            Add semester
+          </span>
+        </button>
+      </div>
+      <div v-else class="pe-4">
+        <button class="mb-0 button-as-link" @click="showAddSemesterModal()">
+          <span class="text-theme-white">
+            <i class="fas fa-plus-circle"></i>
+            Add semester
+          </span>
+        </button>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -41,34 +50,33 @@ export default {
   name: "semester-bar",
   data() {
     return {
-      isOpen: false,
+      isOpen: false
     };
   },
 
   computed: {
     ...mapState({
-      isLoggedIn: (state) => state.auth.isAuthenticated,
-      semesters: (state) => state.semesters.semesters,
-    }),
+      isLoggedIn: state => state.auth.isAuthenticated,
+      semesters: state => state.semesters.semesters
+    })
   },
 
   methods: {
-    toggle: function () {
+    toggle: function() {
       this.isOpen = !this.isOpen;
     },
 
     showAddSemesterModal() {
       this.$emit("showAddSemesterModal");
-    },
+    }
   },
   components: {
-    MiniSemester,
-  },
+    MiniSemester
+  }
 };
 </script>
 
 <style scoped>
-
 .semesterBar-button {
   cursor: pointer;
   display: block;
@@ -114,5 +122,4 @@ export default {
   transform: translateY(175px);
   z-index: 0;
 }
-
 </style>

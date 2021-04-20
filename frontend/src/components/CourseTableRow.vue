@@ -37,17 +37,17 @@
     <td>
       <div class="cell-container center p-1">
         <button
-            v-if="!isScheduled"
-            @click="showAddToSemesterModal()"
-            class="button-as-link"
-          >
-            <i class="fas fa-plus-circle fa-lg table-icon"></i>
-          </button>
+          v-if="!isScheduled"
+          @click="showAddToSemesterModal()"
+          class="button-as-link"
+        >
+          <i class="fas fa-plus-circle fa-lg table-icon"></i>
+        </button>
         <button
-            v-if="isScheduled"
-            @click="removeFromSemester()"
-            class="button-as-link"
-          >
+          v-if="isScheduled"
+          @click="removeFromSemester()"
+          class="button-as-link"
+        >
           <i class="fas fa-times-circle fa-lg table-icon"></i>
         </button>
       </div>

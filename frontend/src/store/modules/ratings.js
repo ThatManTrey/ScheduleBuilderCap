@@ -21,7 +21,7 @@ const mutations = {
   },
 
   setIsUserRatedCourse(state, isRatedCourse) {
-    state.isRatedCourse = isRatedCourse
+    state.isRatedCourse = isRatedCourse;
   },
 
   setCourseRatings(state, result) {
@@ -70,7 +70,7 @@ const actions = {
       });
   },
 
-  getUserCourseRating({ rootState, commit,  }, { course }) {
+  getUserCourseRating({ rootState, commit }, { course }) {
     var url = "users/" + rootState.auth.userId + "/ratings/" + course.courseID;
 
     //AJAX request
@@ -78,14 +78,12 @@ const actions = {
       .get(url)
       .then(res => {
         commit("setCurrentUserRating", res.data);
-
       })
       .catch(error => {
         // eslint-disable-next-line
               if(error) {
-                console.error("No course rating available for the current user.")
-
-              }
+          console.error("No course rating available for the current user.");
+        }
       });
   },
 
@@ -111,7 +109,7 @@ const actions = {
       ratingDifficulty: difficultyVal,
       ratingQuality: qualityVal,
       userID: rootState.auth.userId
-    }
+    };
     commit("addRating", rating);
 
     var url = "users/" + rootState.auth.userId + "/ratings";

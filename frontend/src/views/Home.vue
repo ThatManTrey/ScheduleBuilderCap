@@ -318,7 +318,7 @@ export default {
       },
 
       showAddToSemesterModal () {
-        
+
         this.$refs.addToSemesterModalHome.openModal();
       },
 

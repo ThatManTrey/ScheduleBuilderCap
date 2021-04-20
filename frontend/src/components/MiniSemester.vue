@@ -8,8 +8,8 @@
           data-tooltip-location="bottom"
           class="button-as-link"
         >
-          <i class="fas fa-trash fa-sm padding"></i
-        ></button>
+          <i class="fas fa-trash fa-sm padding"></i>
+        </button>
         <span
           id="semesterName"
           contenteditable
@@ -32,8 +32,9 @@
           @click="removeCourse(course.courseID)"
           class="button-as-link"
           id="remove"
-          ><i class="fas fa-times-circle fa-md"></i
-        ></button>
+        >
+          <i class="fas fa-times-circle fa-md"></i>
+        </button>
         <span class="badge rounded-pill course-badge">
           <button class="button-as-link">{{ course.courseID }}</button></span
         >
