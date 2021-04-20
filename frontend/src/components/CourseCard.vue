@@ -63,7 +63,6 @@
         <div v-if="isLoggedIn" class="col text-end">
           <button
             v-if="!isScheduled"
-            tabindex="0"
             @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
             class="button-as-link"
@@ -72,7 +71,6 @@
           </button>
           <button
             v-if="isScheduled"
-            tabindex="0"
             @click="removeFromSemester()"
             data-tooltip="Remove from Semester"
             class="button-as-link"
