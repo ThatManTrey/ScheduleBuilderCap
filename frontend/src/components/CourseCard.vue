@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="card justify-content-center course-card">
-    <div class="card-body container-fluid text-theme-whiter">
+  <div class="card justify-content-center course-card w-100">
+    <div class="card-body container-fluid text-theme-whiter d-flex flex-column">
       <a
         tabindex="0"
         @keyup.enter="showCourseInfoModal()"
@@ -14,20 +14,18 @@
           <div class="row" :class="{ 'mb-2': !showSmallCard }">
             <div class="col-10 p-0">
               <span class="badge rounded-pill course-badge">
-                <button class="button-as-link">{{ course.courseID }}</button>
+                {{ course.courseID }}
               </span>
 
-              <span class="badge rounded-pill course-badge">
-                <button
-                  class="button-as-link"
-                  v-if="course.creditHoursMax == course.creditHoursMin"
-                >
-                  {{ course.creditHoursMax }} Credits
-                </button>
-                <button class="button-as-link" v-else>
-                  {{ course.creditHoursMin }}-{{ course.creditHoursMax }}
-                  Credits
-                </button>
+              <span
+                v-if="course.creditHoursMax == course.creditHoursMin"
+                class="badge rounded-pill course-badge"
+              >
+                {{ course.creditHoursMax }} Credits
+              </span>
+              <span v-else class="badge rounded-pill course-badge">
+                {{ course.creditHoursMin }} - {{ course.creditHoursMax }}
+                Credits
               </span>
             </div>
           </div>
@@ -40,12 +38,11 @@
         </div>
       </a>
 
-      <div v-if="!showSmallCard" class="row">
+      <div v-if="!showSmallCard" class="row mt-auto">
         <div v-if="isLoggedIn" class="col">
           <button
             tabindex="0"
             v-if="!isFavorited"
-            @keyup.enter="addToFavorites()"
             @click="addToFavorites()"
             data-tooltip="Favorite Course"
             class="button-as-link"
@@ -55,7 +52,6 @@
           <button
             tabindex="0"
             v-else
-            @keyup.enter="removeFromFavorites()"
             @click="removeFromFavorites()"
             data-tooltip="Unfavorite Course"
             class="button-as-link"
@@ -65,23 +61,22 @@
         </div>
 
         <div v-if="isLoggedIn" class="col text-end">
-          <a
-            v-if="!isRemovingCourse"
-            tabindex="0"
-            @keyup.enter="showAddToSemesterModal()"
+          <button
+            v-if="!isScheduled"
             @click="showAddToSemesterModal()"
             data-tooltip="Add to Semester"
+            class="button-as-link"
           >
             <i class="fas fa-plus-circle fa-lg"></i>
-          </a>
-          <a
-            v-if="isRemovingCourse"
-            tabindex="0"
-            @keyup.enter="removeFromSemester()"
+          </button>
+          <button
+            v-if="isScheduled"
             @click="removeFromSemester()"
             data-tooltip="Remove from Semester"
-            ><i class="fas fa-times-circle fa-lg"></i
-          ></a>
+            class="button-as-link"
+          >
+            <i class="fas fa-times-circle fa-lg"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -93,18 +88,11 @@ import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
-    // replace with semester getter
-    isRemovingCourse: {
-      type: Boolean,
-      default: false
-    },
-
     course: {
       type: Object
     }
   },
 
-  // add isScheduled and isFavorited
   computed: {
     ...mapGetters("courses", {
       showSmallCard: "showSmallCard"
@@ -114,11 +102,16 @@ export default {
       isLoggedIn: state => state.auth.isAuthenticated,
       userID: state => state.auth.userId,
       currentCourse: state => state.courses.currentCourse
-      //isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {
       return this.$store.getters["favorites/isCourseFavorited"](
+        this.course.courseID
+      );
+    },
+
+    isScheduled() {
+      return this.$store.getters["semesters/isCourseScheduled"](
         this.course.courseID
       );
     }
@@ -127,6 +120,10 @@ export default {
   methods: {
     showCourseInfoModal() {
       this.$store.commit("courses/setCurrentCourse", { course: this.course });
+      this.$store.dispatch("ratings/getCourseRatings", { course: this.course });
+      this.$store.dispatch("ratings/getUserCourseRating", {
+        course: this.course
+      });
       this.$emit("openCourseInfoModal");
     },
 
@@ -136,7 +133,10 @@ export default {
     },
 
     removeFromSemester() {
-      //this.$store.dispatch("semesters/addFavorite", course.courseID);
+      this.$store.dispatch(
+        "semesters/removeCourseFromSemester",
+        this.course.courseID
+      );
     },
 
     addToFavorites() {
@@ -169,10 +169,6 @@ div.course-card:focus-within {
   //transform: scale(1.05);
 }
 
-.course-desc {
-  min-height: 5rem;
-}
-
 /*
   limiting text displayed,
   referenced from: 
@@ -184,7 +180,6 @@ div.course-card:focus-within {
   display: -webkit-box;
   -webkit-line-clamp: 5; /* number of lines to show */
   -webkit-box-orient: vertical;
-  min-height: 7.5rem;
 }
 
 span.course-badge {
@@ -194,17 +189,11 @@ span.course-badge {
   margin-top: 0.75rem;
 }
 
-.course-badge button {
-  font: inherit;
-}
-
 .course-card-title {
   font-size: 17pt;
-  min-height: 3.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

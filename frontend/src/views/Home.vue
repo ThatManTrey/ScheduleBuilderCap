@@ -8,9 +8,12 @@
       ></FilterCoursesBar>
 
       <transition name="coursefade" mode="out-in">
-        <div v-if="showCard && !isLoadingCourses && totalResults > 0" class="row justify-content-center align-items-center flex-grow-1 mx-3">
+        <div
+          v-if="showCard && !isLoadingCourses && totalResults > 0"
+          class="row flex-grow-1 mx-3"
+        >
           <div
-            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+            class="d-flex col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in allCourses"
             :key="index"
           >
@@ -30,8 +33,9 @@
           <table class="table">
             <colgroup>
               <col span="1" style="width: 10%;" />
+              <col span="1" style="width: 10%;" />
               <col span="1" style="width: 30%;" />
-              <col span="1" style="width: 55%;" />
+              <col span="1" style="width: 45%;" />
               <col span="1" style="width: 5%;" />
             </colgroup>
 
@@ -47,12 +51,15 @@
           </table>
         </div>
 
-        <div class="row text-theme-white" v-if="!isLoadingCourses && totalPages === 0">
-          <h5 class="text-center mb-5" id="no-results-found">No results found. Try another keyword?</h5>
+        <div
+          class="row text-theme-white"
+          v-if="!isLoadingCourses && totalPages === 0"
+        >
+          <h5 class="text-center mb-5" id="no-results-found">
+            No results found. Try another keyword?
+          </h5>
         </div>
       </transition>
-
-      
 
       <!-- pagination buttons and total results -->
       <!-- SVG source: https://tablericons.com/ -->
@@ -239,10 +246,18 @@
 
     <CourseInfoModal
       @openAddSemesterModal="showAddToSemesterModal"
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal"
       ref="courseInfoModalHome"
     ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalHome"></AddToSemesterModal>
+    <AddSemesterModal ref="addSemesterModalHome"></AddSemesterModal>
     <ChangeProgramModal ref="changeProgramModalHome"></ChangeProgramModal>
+    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <ViewRatingModal
+      @openAddRatingModal="showAddRatingModal"
+      ref="viewRatingModalHome"
+    ></ViewRatingModal>
   </div>
 </template>
 
@@ -252,9 +267,12 @@ import CourseTableRow from '../components/CourseTableRow.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
+import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
 import ChangeProgramModal from '../components/modals/ChangeProgramModal.vue';
 import FilterCoursesBar from '../components/FilterCoursesBar.vue';
 import SemesterBar from '../components/SemesterBar.vue';
+import AddRatingModal from '../components/modals/AddRatingModal.vue';
+import ViewRatingModal from '../components/modals/ViewRatingModal.vue';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
@@ -268,7 +286,10 @@ export default {
         FilterCoursesBar,
         SemesterBar,
         ChangeProgramModal,
-        CourseTableRow
+        CourseTableRow,
+        AddRatingModal,
+        ViewRatingModal,
+        AddSemesterModal
     },
 
     computed: {
@@ -297,11 +318,21 @@ export default {
       },
 
       showAddToSemesterModal () {
+
         this.$refs.addToSemesterModalHome.openModal();
       },
 
       showAddSemesterModal () {
+        console.log("got here");
         this.$refs.addSemesterModalHome.openModal();
+      },
+
+      showAddRatingModal () {
+        this.$refs.addRatingModalHome.openModal();
+      },
+
+      showViewRatingModal () {
+        this.$refs.viewRatingModalHome.openModal();
       },
 
       firstPage() {

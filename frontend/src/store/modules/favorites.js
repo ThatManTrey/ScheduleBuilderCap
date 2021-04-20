@@ -2,13 +2,17 @@ import axios from "axios";
 import * as Toast from "../../toast";
 
 const state = () => ({
-  favoriteCourses: []
-  //isSendingFavorite: false  // disables button until response is received (prevents button spam)
+  favoriteCourses: [],
+  isLoadingFavorites: true
 });
 
 const mutations = {
   setFavorites(state, favoriteCourses) {
     state.favoriteCourses = favoriteCourses;
+  },
+
+  setIsLoadingFavorites(state, isLoading) {
+    state.isLoadingFavorites = isLoading;
   },
 
   // these next two mutations need to exist for the favorite icon to change without getting a response first from the server
@@ -26,10 +30,6 @@ const mutations = {
     );
     if (index > -1) state.favoriteCourses.splice(index, 1);
   }
-
-  // setIsSendingFavorite(state, isSending) {
-  //   state.isSendingFavorite = isSending;
-  // }
 };
 
 const getters = {
@@ -39,21 +39,24 @@ const getters = {
 };
 
 const actions = {
-  getFavoriteCourses({ commit, rootState }) {
+  getFavoriteCourses({ commit, rootState, state }) {
     var url = "users/" + rootState.auth.userId + "/favorites";
+
     axios
       .get(url)
       .then(res => {
         commit("setFavorites", res.data.favCourses);
+        if (state.isLoadingFavorites) commit("setIsLoadingFavorites", false);
       })
       .catch(error => {
         // eslint-disable-next-line
         console.error(error);
+
+        if (state.isLoadingFavorites) commit("setIsLoadingFavorites", false);
       });
   },
 
   addFavorite({ commit, rootState }, course) {
-    //commit("setIsSendingFavorite", true);
     commit("addFavorite", course);
 
     var url =
@@ -62,13 +65,11 @@ const actions = {
       .post(url)
       .then(() => {
         Toast.showSuccessMessage("Favorite added successfully!");
-        //commit("setIsSendingFavorite", false);
       })
       .catch(error => {
         // revert client side addition
         commit("removeFavorite", course.courseID);
         Toast.showErrorMessage("Error adding favorite.");
-        //commit("setIsSendingFavorite", false);
 
         // eslint-disable-next-line
         console.error(error);
@@ -76,7 +77,6 @@ const actions = {
   },
 
   removeFavorite({ commit, rootState }, course) {
-    //commit("setIsSendingFavorite", true);
     commit("removeFavorite", course.courseID);
 
     var url =
@@ -85,13 +85,11 @@ const actions = {
       .delete(url)
       .then(() => {
         Toast.showSuccessMessage("Favorite has been removed.");
-        //commit("setIsSendingFavorite", false);
       })
       .catch(error => {
         // revert client-side removal
         commit("addFavorite", course);
         Toast.showErrorMessage("Error removing favorite.");
-        //commit("setIsSendingFavorite", false);
 
         // eslint-disable-next-line
         console.error(error);

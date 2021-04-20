@@ -27,7 +27,7 @@ def get_accent_colors():
 
 @app.route('/api/users/<int:user_id>', endpoint='get_user', methods=['GET'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def get_user(user_id):
     user = db.session.query(User).get(user_id)
     if user is None:
@@ -117,7 +117,7 @@ def get_courses(page, per_page):
         if is_ascending:
             query = query.order_by(sortAttrQuery.c.courseNo.asc())
         else:
-            query = query.order_by(sortAttrQuery.c.courseNo.dsc())
+            query = query.order_by(sortAttrQuery.c.courseNo.desc())
 
     elif sort_type == 2: # credits
         if is_ascending:
@@ -165,12 +165,12 @@ def get_all_degrees():
     return jsonify(degrees = arr_degrees)
     
 
-#----fdsa--------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # favorites
 
 @app.route( '/api/users/<int:user_id>/favorites', endpoint='get_favorites', methods=['GET'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def get_favorites(user_id):
     # get courses and add favoritedOn
     courses = db.session.query(
@@ -191,15 +191,13 @@ def get_favorites(user_id):
     return jsonify(favCourses = arr_courses)
 
 
-@app.route('/api/users/<int:user_id>/favorites/add', endpoint='add_to_favorites', methods=['POST'])
+@app.route('/api/users/<int:user_id>/favorites/<string:course_id>', endpoint='add_to_favorites', methods=['POST'])
 @has_access_token()
-@is_current_user
-def add_to_favorites(user_id):
-    body = request.get_json()
-    
+@is_current_user()
+def add_to_favorites(user_id, course_id):
     # see if exists favorite or course exists
-    favorite = db.session.query(FavCourse).get((body['course_id'], user_id))
-    course = db.session.query(Course).get(body['course_id'])
+    favorite = db.session.query(FavCourse).get((course_id, user_id))
+    course = db.session.query(Course).get(course_id)
     
     # see if the user adding the course to their favorites has a real user_id, primary key is user_id + course_id
     real_user = db.session.query(User).get(user_id)
@@ -207,7 +205,7 @@ def add_to_favorites(user_id):
     # nonduplicate, update db
     if not favorite and course and real_user:
         newFav = FavCourse(
-                courseID = body['course_id'],
+                courseID = course_id,
                 userID = user_id,
                 favoritedOn = datetime.datetime.utcnow()   # get correct format
             )
@@ -225,27 +223,24 @@ def add_to_favorites(user_id):
         return jsonify(msg = "user not found"), HTTPStatus.BAD_REQUEST
 
 
-@app.route('/api/users/<int:user_id>/favorites/remove', endpoint='remove_from_favorites', methods=['DELETE'])
+@app.route('/api/users/<int:user_id>/favorites/<string:course_id>', endpoint='remove_from_favorites', methods=['DELETE'])
 @has_access_token()
-@is_current_user
-def remove_from_favorites(user_id):
-    body = request.get_json()
-
+@is_current_user()
+def remove_from_favorites(user_id, course_id):
     # find if record or course exists
     oldFav = db.session.query(
         FavCourse
     ).join(
         Course,
-        Course.courseID == body['course_id']
+        Course.courseID == course_id
     ).filter(
         (FavCourse.userID == user_id)
-        & (FavCourse.courseID == body['course_id'])
+        & (FavCourse.courseID == course_id)
     ).first()
 
     if oldFav:  # exists
         db.session.delete(oldFav)
         db.session.commit()
-        body = request.get_json()
         return jsonify()
     
     return jsonify(msg = "favorite not found"), HTTPStatus.BAD_REQUEST
@@ -258,7 +253,7 @@ def remove_from_favorites(user_id):
 
 @app.route('/api/users/<int:user_id>/ratings', endpoint='add_rating', methods=['POST'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def add_rating(user_id):
     body = request.get_json()
 
@@ -284,8 +279,6 @@ def add_rating(user_id):
 
 
 @app.route('/api/courses/<string:course_id>/ratings', endpoint='get_course_rating', methods=['GET'])
-@has_access_token()
-@is_current_user
 def get_course_rating(course_id):
     # notice float casting;
     # you cannot jsonify Decimal values from SQL
@@ -325,7 +318,7 @@ def get_course_rating(course_id):
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', endpoint='edit_rating', methods=['PUT'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def edit_rating(user_id, course_id):
     body = request.get_json()
 
@@ -346,7 +339,7 @@ def edit_rating(user_id, course_id):
 
 @app.route('/api/users/<int:user_id>/ratings/<string:course_id>', endpoint='ramove_rating', methods=['DELETE'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def remove_rating(user_id, course_id):
     # see if rating exists
     rating = db.session.query(Rating).filter_by(
@@ -364,7 +357,7 @@ def remove_rating(user_id, course_id):
 
 @app.route('/api/users/<int:user_id>/ratings', endpoint='get_user_ratings', methods=['GET'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def get_user_ratings(user_id):
     ratings = db.session.query(Rating).filter_by(userID = user_id).all()
     
@@ -377,12 +370,31 @@ def get_user_ratings(user_id):
     return jsonify(ratedCourses = arr_ratings)
 
 
+@app.route('/api/users/<int:user_id>/ratings/<string:course_id>', endpoint='get_user_course_rating', methods=['GET'])
+@has_access_token()
+@is_current_user()
+def get_user_course_rating(user_id, course_id):
+    rating = db.session.query(Rating).filter_by(
+        courseID = course_id,
+        userID = user_id
+    ).first()
+
+    arr_ratings = []
+    if rating:  
+        entry = rating.as_dict()
+        entry['ratingQuality'] = float(entry['ratingQuality'])
+        entry['ratingDifficulty'] = float(entry['ratingDifficulty'])
+        arr_ratings.append(entry)
+        return jsonify(rating = arr_ratings)
+
+    return jsonify(msg = "rating not found"), HTTPStatus.BAD_REQUEST
+
 #------------------------------------------------------------------------------
 # semesters
 
 @app.route('/api/users/<int:user_id>/semesters', endpoint='get_semesters', methods=['GET'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def get_semesters(user_id):
     # get user semesters
     the_semesters = db.session.query(Semester).filter_by(
@@ -415,18 +427,12 @@ def get_semesters(user_id):
 
 @app.route('/api/users/<int:user_id>/semesters', endpoint='add_semester', methods=['POST'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def add_semester(user_id):
     body = request.get_json()
 
-    # see if semester exists
-    sem = db.session.query(Semester).filter_by(
-        userID = user_id,
-        semesterName = body['semester_name']
-    ).first()
-
     real_user = db.session.query(User).get(user_id)
-    if not sem and real_user: # create new semester
+    if real_user: # create new semester
         newSemester = Semester(
             userID = user_id,
             semesterName = body['semester_name']
@@ -435,16 +441,12 @@ def add_semester(user_id):
         db.session.commit()
         return jsonify()
 
-    elif sem:
-        return jsonify(msg = "semester already exists"), HTTPStatus.BAD_REQUEST
-
-    else:
-        return jsonify(msg = "user not found"), HTTPStatus.BAD_REQUEST
+    return jsonify(msg = "user not found"), HTTPStatus.BAD_REQUEST
 
 
 @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>', endpoint='update_semester', methods=['PUT'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def updateSemester(user_id, semester_id):
     body = request.get_json()
 
@@ -461,7 +463,7 @@ def updateSemester(user_id, semester_id):
 
 @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>', endpoint='remove_semester', methods=['DELETE'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def remove_semester(user_id, semester_id):
     # checks to see if the values exist 
     oldSemester = db.session.query(Semester).get(
@@ -483,7 +485,7 @@ def remove_semester(user_id, semester_id):
 
 @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>/courses', endpoint='get_semester_courses', methods=['GET'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def get_semester_courses(user_id, semester_id):
     # find semester with user_id and semester_id, join with SemesterCourse
     the_semester_courses = db.session.query(Semester).filter_by(
@@ -501,7 +503,7 @@ def get_semester_courses(user_id, semester_id):
 
 @app.route('/api/users/<int:user_id>/semesters/<int:semester_id>/courses/<string:course_id>', endpoint='add_semester_course', methods=['POST'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def add_semester_course(user_id, semester_id, course_id):
     # check if courseID and semesterID exist
     semester = db.session.query(Semester).get((semester_id, user_id))
@@ -525,7 +527,7 @@ def add_semester_course(user_id, semester_id, course_id):
 
 @app.route('/api/users/<int:user_id>/semesters/<string:semester_id>/courses/<string:course_id>', endpoint='remove_from_semester', methods=['DELETE'])
 @has_access_token()
-@is_current_user
+@is_current_user()
 def remove_from_semester(user_id, semester_id, course_id):
     # check if semester course exists
     oldSemesterCourse = db.session.query(SemesterCourse).get(

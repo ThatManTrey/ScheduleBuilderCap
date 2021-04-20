@@ -17,23 +17,25 @@
           <div
             tabindex="0"
             class="list-group-item add-course"
-            @click="addCourse()"
-            @keyup.enter="addCourse()"
-            v-for="n in semesters"
-            :key="n"
+            @click="addCourse(semester.semesterId)"
+            @keyup.enter="addCourse(semester.semesterId)"
+            v-for="(semester, index) in semesters"
+            :key="index"
           >
             <!-- @click.stop and @keyup.enter.stop prevents parent element's click from happening -->
             <a
               tabindex="0"
               @keyup.enter.stop
-              @keyup.enter="removeSemester(n)"
+              @keyup.enter="removeSemester(semester)"
               @click.stop
-              @click="removeSemester(n)"
+              @click="removeSemester(semester)"
             >
               <i class="fas fa-trash"></i>
             </a>
-            Semester {{ n }}
-            <span class="badge rounded-pill"> 1{{ n }} Credits</span>
+            {{ semester.semesterName }}
+            <span class="badge rounded-pill"
+              >{{ semester.semesterCourses.length }} Courses</span
+            >
           </div>
 
           <!-- add a new semester -->
@@ -43,39 +45,36 @@
                 <div class="col-12">
                   <input
                     type="text"
-                    id="newSemesterName1"
                     class="form-control"
                     placeholder="Enter a semester name..."
+                    v-model.trim="semesterName"
+                    ref="newSemesterName"
+                    @keyup.enter="addSemester()"
                   />
                 </div>
                 <div class="col-12 mt-2">
                   <button
                     type="submit"
-                    class="btn btn-theme-confirm btn-sm"
+                    class="btn btn-theme-confirm btn-sm me-3"
                     id="add-semeste-btn"
-                    @click="test"
+                    @click="addSemester()"
                   >
                     Add Semester
                   </button>
-                  <a
-                    tabindex="0"
-                    @keyup.enter="isAddingSemester = false"
+                  <button
+                    class="button-as-link"
                     @click="isAddingSemester = false"
                   >
                     <i class="fas fa-times" id="cancel-add"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
             <div v-show="!isAddingSemester" id="add-semester-link">
-              <a
-                tabindex="0"
-                @keyup.enter="isAddingSemester = true"
-                @click="isAddingSemester = true"
-              >
+              <button class="button-as-link" @click="openAddSemesterInput">
                 <i class="fas fa-plus-circle plus-add-icon"></i>
                 <span> Add Semester</span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -86,19 +85,19 @@
 
 <script>
 import Modal from "./Modal.vue";
-import * as Toast from "../../toast.js";
 import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       isAddingSemester: false,
-      semesters: 0
+      semesterName: ""
     };
   },
 
   computed: mapState({
-    course: state => state.courses.currentCourse
+    course: state => state.courses.currentCourse,
+    semesters: state => state.semesters.semesters
   }),
 
   components: {
@@ -110,28 +109,51 @@ export default {
     openModal() {
       this.$refs.addToSemesterBaseModalRef.openModal();
     },
+
     closeModal() {
       this.$refs.addToSemesterBaseModalRef.closeModal();
     },
-    test() {
-      this.isAddingSemester = false;
-      this.semesters++;
+
+    openAddSemesterInput() {
+      this.isAddingSemester = true;
+      setTimeout(() => {
+        this.$refs.newSemesterName.focus();
+      }, 10);
     },
-    removeSemester(n) {
-      var removePromptResult = confirm(
-        "Are you sure you want to remove semester " +
-          n +
+
+    addSemester() {
+      this.isAddingSemester = false;
+
+      if (this.semesterName.length === 0) {
+        const semesterNumber = this.$store.state.semesters.semesters.length + 1;
+        this.semesterName = "Semester " + semesterNumber;
+      } else if (this.semesterName.length > 64) {
+        this.semesterName = this.semesterName.slice(0, 64);
+      }
+
+      this.$store
+        .dispatch("semesters/addSemester", this.semesterName)
+        .then(() => {
+          this.semesterName = "";
+        });
+    },
+
+    removeSemester(semester) {
+      var removeSemester = confirm(
+        "Are you sure you want to remove " +
+          semester.semesterName +
           " and all its courses?"
       );
-      if (removePromptResult === true) {
-        Toast.showSuccessMessage(
-          "Semester " + n + " was removed successfully."
-        );
+      if (removeSemester) {
+        this.$store.dispatch("semesters/removeSemester", semester.semesterId);
       }
     },
 
-    addCourse() {
-      Toast.showSuccessMessage("Course added successfully.");
+    addCourse(semesterId) {
+      this.$store.dispatch("semesters/addCourseToSemester", {
+        semesterId: semesterId,
+        courseId: this.course.course.courseID
+      });
       this.closeModal();
     }
   }
@@ -186,7 +208,6 @@ span.badge {
 
 #cancel-add {
   position: relative;
-  margin-left: 1rem;
   top: 3px;
   font-size: 1.2rem;
 }
@@ -194,10 +215,11 @@ span.badge {
 #add-semester-link {
   font-weight: 400;
   font-size: 0.9rem;
+  color: var(--theme-white);
 }
 
-#add-semester-link a:hover,
-#add-semester-link a:focus {
+#add-semester-link button:hover,
+#add-semester-link button:focus {
   color: var(--theme-confirm);
 }
 

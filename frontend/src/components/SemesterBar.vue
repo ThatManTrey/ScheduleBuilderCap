@@ -1,38 +1,50 @@
 <template lang="html">
-  <div>
-    <footer class="container" v-if="$store.state.isAuthenticated">
-      <button class="semesterBar-button" v-on:click="isOpen = !isOpen">
-        <i class="far fa-calendar "></i>
-        <!-- My Schedule -->
-      </button>
-      <transition name="fade">
-        <div class="semesterBar-container slideIn" v-if="isOpen">
-          <span v-for="n in 4" :key="n">
-            <MiniSemester></MiniSemester>
-          </span>
-          <div class="inline">
-            <a
-              tabindex="0"
-              @keyup.enter="showAddSemesterModal()"
-              @click="showAddSemesterModal()"
-              data-tooltip="Add a Semester"
-              data-tooltip-location="bottom"
-            >
-              <i class="fas fa-plus-circle fa-lg newSemester"></i>
-            </a>
-          </div>
-        </div>
-      </transition>
-    </footer>
+  <div
+    class="container-fluid p-0 d-lg-block d-none"
+    id=""
+    :class="{ slide: !isOpen }"
+    v-if="isLoggedIn"
+  >
+    <button class="semesterBar-button" @click="isOpen = !isOpen">
+      <i class="far fa-calendar "></i>
+    </button>
+    <div class="semesterBar-container">
+      <MiniSemester
+        v-for="(semester, index) in semesters"
+        :key="index"
+        :semester="semester"
+      ></MiniSemester>
 
-    <AddSemesterModal ref="addSemesterModalSchedule"></AddSemesterModal>
+      <div
+        v-if="semesters.length === 0"
+        class="d-flex w-100 flex-column justify-content-center align-items-center"
+      >
+        <h3 class="mb-3">You don't have any semesters yet.</h3>
+        <button
+          class="mb-0 mx-5 button-as-link"
+          @click="showAddSemesterModal()"
+        >
+          <span class="text-theme-lightest-gray">
+            <i class="fas fa-plus-circle"></i>
+            Add semester
+          </span>
+        </button>
+      </div>
+      <div v-else class="pe-4">
+        <button class="mb-0 button-as-link" @click="showAddSemesterModal()">
+          <span class="text-theme-white">
+            <i class="fas fa-plus-circle"></i>
+            Add semester
+          </span>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import MiniSemester from "../components/MiniSemester.vue";
-import AddSemesterModal from "../components/modals/AddSemesterModal.vue";
-import * as Toast from "../toast.js";
+import { mapState } from "vuex";
 
 export default {
   name: "semester-bar",
@@ -41,38 +53,30 @@ export default {
       isOpen: false
     };
   },
-  removeSemester() {
-    var removePromptResult = confirm(
-      "Are you sure you want to remove this semester and all its courses?"
-    );
-    if (removePromptResult === true) {
-      Toast.showSuccessMessage("Semester was removed successfully.");
-    }
+
+  computed: {
+    ...mapState({
+      isLoggedIn: state => state.auth.isAuthenticated,
+      semesters: state => state.semesters.semesters
+    })
   },
 
   methods: {
     toggle: function() {
       this.isOpen = !this.isOpen;
     },
+
     showAddSemesterModal() {
-      this.$refs.addSemesterModalSchedule.openModal();
+      this.$emit("showAddSemesterModal");
     }
   },
   components: {
-    MiniSemester,
-    AddSemesterModal
+    MiniSemester
   }
 };
 </script>
 
 <style scoped>
-.container {
-  display: none;
-  width: 99%;
-  position: fixed;
-  bottom: 0;
-  z-index: 100;
-}
 .semesterBar-button {
   cursor: pointer;
   display: block;
@@ -86,80 +90,36 @@ export default {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-top: solid 1pt var(--theme-primary-dark);
-  animation: slideup-mini 5s ease;
 }
-@keyframes slideup-mini {
-  from {
-    margin-bottom: -100%;
-    opacity: 25%;
-  }
-  to {
-    margin-bottom: 0%;
-    opacity: 100%;
-  }
-}
+
 .semesterBar-container {
   background: var(--theme-black);
   color: var(--theme-whiter);
-  width: 110%;
-  min-height: 5rem;
+  min-height: 175px;
+  max-height: 175px;
+  display: flex;
   text-align: left;
-  margin-left: -1rem;
   border-top: solid 1pt var(--theme-primary-dark);
   border-top-right-radius: 10px;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto;
   white-space: nowrap;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
-@keyframes slideIn {
-  0% {
-    margin-bottom: -18%;
-    opacity: 100%;
-  }
-  100% {
-    margin-bottom: 0%;
-    opacity: 100%;
-  }
+
+.container-fluid {
+  transition: 0.5s ease;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
 }
-@keyframes slideOut {
-  0% {
-    margin-bottom: 0%;
-    opacity: 100%;
-  }
-  100% {
-    margin-bottom: -18.5%;
-    opacity: 100%;
-  }
-}
-.fade-enter-active,
-.fade-leave-active {
-  animation: slideIn 2s ease;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  animation: slideOut 2s ease;
-}
-.inline {
-  display: inline-block;
-}
-.newSemester {
-  position: absolute;
-  top: 6rem;
-  padding-left: 1.5rem;
-  padding-right: 3rem;
-}
-/* Tooltip Styling */
-[data-tooltip-location="bottom"]:before,
-[data-tooltip-location="bottom"]:after {
-  top: calc(100% + 95px);
-  left: 29px;
-  bottom: auto;
-}
-@media only screen and (max-width: 1280px) {
-  .container {
-    display: none;
-  }
+
+.container-fluid.slide {
+  transform: translateY(175px);
+  z-index: 0;
 }
 </style>

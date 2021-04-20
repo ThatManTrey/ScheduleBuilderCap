@@ -10,6 +10,19 @@
     <td>
       <a class="course-info-link" @click="showCourseInfoModal()">
         <div class="cell-container">
+          <span v-if="course.creditHoursMax === course.creditHoursMin">
+            {{ course.creditHoursMax }}
+          </span>
+          <span v-if="course.creditHoursMax !== course.creditHoursMin">
+            {{ course.creditHoursMin }} - {{ course.creditHoursMax }}
+          </span>
+          Credits
+        </div>
+      </a>
+    </td>
+    <td>
+      <a class="course-info-link" @click="showCourseInfoModal()">
+        <div class="cell-container">
           {{ course.courseName }}
         </div>
       </a>
@@ -23,9 +36,20 @@
     </td>
     <td>
       <div class="cell-container center p-1">
-        <a @click="showAddToSemesterModal()"
-          ><i class="fas fa-plus-circle text-theme-confirm"></i
-        ></a>
+        <button
+          v-if="!isScheduled"
+          @click="showAddToSemesterModal()"
+          class="button-as-link"
+        >
+          <i class="fas fa-plus-circle fa-lg table-icon"></i>
+        </button>
+        <button
+          v-if="isScheduled"
+          @click="removeFromSemester()"
+          class="button-as-link"
+        >
+          <i class="fas fa-times-circle fa-lg table-icon"></i>
+        </button>
       </div>
     </td>
   </tr>
@@ -36,15 +60,31 @@
 export default {
     props: ['course'],
 
+    computed: {
+      isScheduled() {
+        return this.$store.getters["semesters/isCourseScheduled"](
+          this.course.courseID
+        );
+      }
+    },
+
     methods: {
         showCourseInfoModal() {
             this.$store.commit("courses/setCurrentCourse", { course: this.course });
             this.$emit("openCourseInfoModal");
         },
+
         showAddToSemesterModal() {
             this.$store.commit("courses/setCurrentCourse", { course: this.course });
             this.$emit("openAddSemesterModal");
         },
+
+        removeFromSemester() {
+      this.$store.dispatch(
+        "semesters/removeCourseFromSemester",
+        this.course.courseID
+      );
+    },
     }
 }
 </script>
@@ -77,7 +117,7 @@ td {
   }
 }
 
-.fa-plus-circle {
+.table-icon {
   font-size: 1.5rem;
 }
 
