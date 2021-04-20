@@ -19,7 +19,7 @@
             </span>
             </button>
           </div>
-          <div v-else>
+          <div v-else class="pe-4">
             <button
             class="mb-0 button-as-link"
             @click="showAddSemesterModal()"
@@ -103,7 +103,7 @@ export default {
   border-top: solid 1pt var(--theme-primary-dark);
   border-top-right-radius: 10px;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: auto;
   white-space: nowrap;
   padding: 1rem 1.5rem;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);

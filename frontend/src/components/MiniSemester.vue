@@ -163,8 +163,10 @@ span.course-badge {
 }
 
 .semester {
-  overflow-y: auto;
+  /* fix */
+  /* overflow-y: auto; */
   width: 16rem;
+  display: block;
 }
 
 #remove {
