@@ -83,9 +83,10 @@ const actions = {
       })
       .catch(error => {
         // eslint-disable-next-line
-              console.error(error);
-
-              if (state.isRatedCourse) commit("setIsUserRatedCourse", false);
+              if(error) {
+                console.error("No course rating available for the current user.")
+                if (state.isRatedCourse) commit("setIsUserRatedCourse", false);
+              }
       });
   },
 
