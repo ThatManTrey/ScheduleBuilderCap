@@ -9,10 +9,10 @@
       <transition name="fade">
         <div
           v-if="favCourses.length > 0"
-          class="row w-100 justify-content-center align-items-center mx-3"
+          class="row w-100 justify-content-center mx-3"
         >
           <div
-            class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
+            class="d-flex col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3"
             v-for="(course, index) in favCourses"
             :key="index"
           >
