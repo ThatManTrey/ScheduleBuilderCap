@@ -1,6 +1,5 @@
 <template lang="html">
-  <footer id="semesterBar" class="d-lg-block d-none">
-    <div class="container-fluid p-0" :class="{ 'slide': !isOpen }" v-if="isLoggedIn">
+    <div class="container-fluid p-0 d-lg-block d-none" id="" :class="{ 'slide': !isOpen }" v-if="isLoggedIn">
       <button class="semesterBar-button" @click="isOpen = !isOpen">
         <i class="far fa-calendar "></i>
       </button>
@@ -32,7 +31,6 @@
           </div>
         </div>
     </div>
-  </footer>
 </template>
 
 <script>
@@ -70,13 +68,6 @@ export default {
 </script>
 
 <style scoped>
-#semesterBar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  width: 100%;
-}
 
 .semesterBar-button {
   cursor: pointer;
@@ -112,10 +103,16 @@ export default {
 
 .container-fluid {
   transition: 0.5s ease;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
 }
 
-.slide {
+.container-fluid.slide {
   transform: translateY(175px);
+  z-index: 0;
 }
 
 </style>
