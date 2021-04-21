@@ -362,7 +362,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .side-button-container {
   position: fixed;
   height: 50vh;
