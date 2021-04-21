@@ -510,21 +510,11 @@ a.link:hover, button.link:hover {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.75s;
+  transition: opacity 0.5s;
 }
 
 .fade-enter,
 .fade-leave-to {
-  opacity: 0;
-}
-
-.page-fade-enter-active,
-.page-fade-leave-active {
-  transition: opacity 1.5s;
-}
-
-.page-fade-enter,
-.page-fade-leave-to {
   opacity: 0;
 }
 
