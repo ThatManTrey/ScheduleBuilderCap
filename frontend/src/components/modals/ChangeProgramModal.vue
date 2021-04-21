@@ -127,7 +127,6 @@ export default {
       this.$refs.changeProgramModalRef.openModal();
 
       if (this.openAccordion) {
-        console.log("got here");
         // timeout is needed to wait for modal and accordion animation to finish
         setTimeout(() => {
           this.$refs.searchPrograms.focus();

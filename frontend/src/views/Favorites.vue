@@ -29,7 +29,8 @@
             You haven't favorited any courses yet.
           </h4>
           <p class="text-theme-light-gray">
-            You can find some <router-link to="home">here</router-link>.
+            You can find some
+            <router-link to="home" class="link">here</router-link>.
           </p>
         </div>
       </transition>

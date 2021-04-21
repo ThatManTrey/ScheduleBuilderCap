@@ -48,10 +48,7 @@ const actions = {
         commit("setFavorites", res.data.favCourses);
         if (state.isLoadingFavorites) commit("setIsLoadingFavorites", false);
       })
-      .catch(error => {
-        // eslint-disable-next-line
-        console.error(error);
-
+      .catch(() => {
         if (state.isLoadingFavorites) commit("setIsLoadingFavorites", false);
       });
   },
@@ -64,15 +61,13 @@ const actions = {
     axios
       .post(url)
       .then(() => {
-        Toast.showSuccessMessage("Favorite added successfully!");
+        const message = "Added " + course.courseID + " to your favorites!";
+        Toast.showSuccessMessage(message);
       })
-      .catch(error => {
+      .catch(() => {
         // revert client side addition
         commit("removeFavorite", course.courseID);
         Toast.showErrorMessage("Error adding favorite.");
-
-        // eslint-disable-next-line
-        console.error(error);
       });
   },
 
@@ -84,15 +79,13 @@ const actions = {
     axios
       .delete(url)
       .then(() => {
-        Toast.showSuccessMessage("Favorite has been removed.");
+        const message = "Removed " + course.courseID + " from your favorites.";
+        Toast.showSuccessMessage(message);
       })
-      .catch(error => {
+      .catch(() => {
         // revert client-side removal
         commit("addFavorite", course);
         Toast.showErrorMessage("Error removing favorite.");
-
-        // eslint-disable-next-line
-        console.error(error);
       });
   }
 };

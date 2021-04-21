@@ -140,10 +140,6 @@ const actions = {
           totalPages: res.data.numPages,
           totalResults: res.data.numResults
         });
-      })
-      .catch(error => {
-        // eslint-disable-next-line
-        console.error(error);
       });
   },
 

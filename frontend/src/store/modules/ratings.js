@@ -34,8 +34,10 @@ const mutations = {
   },
 
   setCurrentUserRating(state, rating) {
-    state.currentUserRating.currentUserRatingQuality = rating.rating[0].ratingQuality;
-    state.currentUserRating.currentUserRatingDifficulty = rating.rating[0].ratingDifficulty;
+    state.currentUserRating.currentUserRatingQuality =
+      rating.rating[0].ratingQuality;
+    state.currentUserRating.currentUserRatingDifficulty =
+      rating.rating[0].ratingDifficulty;
   },
 
   addRating(state, rating) {
@@ -62,33 +64,19 @@ const actions = {
   getUserRatedCourses({ commit, rootState, state }) {
     var url = "users/" + rootState.auth.userId + "/ratings";
 
-    axios
-      .get(url)
-      .then(res => {
-        commit("setUserRatings", res.data);
-        if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
-      })
-      .catch(error => {
-        // eslint-disable-next-line
-          console.error(error);
-      });
+    axios.get(url).then(res => {
+      commit("setUserRatings", res.data);
+      if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
+    });
   },
 
   getUserCourseRating({ rootState, commit }, { course }) {
     var url = "users/" + rootState.auth.userId + "/ratings/" + course.courseID;
 
     //AJAX request
-    axios
-      .get(url)
-      .then(res => {
-        commit("setCurrentUserRating", res.data);
-      })
-      .catch(error => {
-        // eslint-disable-next-line
-              if(error) {
-          console.error("No course rating available for the current user.");
-        }
-      });
+    axios.get(url).then(res => {
+      commit("setCurrentUserRating", res.data);
+    });
   },
 
   getCourseRatings({ commit, state }, { course }) {
@@ -101,13 +89,15 @@ const actions = {
         commit("setCourseRatings", res.data);
         if (state.isLoadingRatings) commit("setIsLoadingRatings", false);
       })
-      .catch(error => {
-        // eslint-disable-next-line
-              console.error(error);
+      .catch(() => {
+        Toast.showErrorMessage("Error getting course ratings.", 10000);
       });
   },
 
-  addRating({ dispatch, commit, rootState }, { course, qualityVal, difficultyVal }) {
+  addRating(
+    { dispatch, commit, rootState },
+    { course, qualityVal, difficultyVal }
+  ) {
     var rating = {
       courseID: rootState.courses.currentCourse.course.courseID,
       ratingDifficulty: difficultyVal,
@@ -125,16 +115,13 @@ const actions = {
         user_id: rootState.auth.userId
       })
       .then(() => {
-        Toast.showSuccessMessage("Your rating added successfully!");
-        dispatch("getUserCourseRating", {course: this.course});
+        Toast.showSuccessMessage("Your rating was added successfully!");
+        dispatch("getUserCourseRating", { course: this.course });
       })
-      .catch(error => {
+      .catch(() => {
         // revert client side addition
         commit("removeRating", course.courseID);
         Toast.showErrorMessage("Error adding your rating.");
-
-        // eslint-disable-next-line
-          console.error(error);
       });
   },
 
@@ -147,13 +134,10 @@ const actions = {
       .then(() => {
         Toast.showSuccessMessage("Your rating has been removed.");
       })
-      .catch(error => {
+      .catch(() => {
         // revert client-side removal
         commit("addRating", course);
         Toast.showErrorMessage("Error removing your rating.");
-
-        // eslint-disable-next-line
-          console.error(error);
       });
   }
 };

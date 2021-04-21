@@ -111,7 +111,7 @@ export default {
     userQuality: state =>
       state.ratings.currentUserRating.currentUserRatingQuality,
     userDifficulty: state =>
-      state.ratings.currentUserRating.currentUserRatingDifficulty,
+      state.ratings.currentUserRating.currentUserRatingDifficulty
   }),
 
   components: {

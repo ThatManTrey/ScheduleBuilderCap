@@ -9,56 +9,11 @@ from http import HTTPStatus
 
 from sqlalchemy.sql import func
 
-import enum
-
-
-#------------------------------------------------------------------------------
-
-# endpoint example, look at Theme.vue script for frontend example
-@app.route('/api/colors/primary', methods=['GET'])
-def get_primary_colors():
-    return jsonify(neutral_colors)
-
-
-@app.route('/api/colors/accent', methods=['GET'])
-def get_accent_colors():
-    return jsonify(accent_colors)
-
-
-@app.route('/api/users/<int:user_id>', endpoint='get_user', methods=['GET'])
-@has_access_token()
-@is_current_user()
-def get_user(user_id):
-    user = db.session.query(User).get(user_id)
-    if user is None:
-        return jsonify(msg="User with that ID does not exist."), HTTPStatus.BAD_REQUEST
-
-    return jsonify(userID=user.userID, userEmail=user.userEmail, hasConfirmedEmail=user.hasConfirmedEmail, createdOn=user.createdOn)
-
 
 #------------------------------------------------------------------------------
 # university catalog
 
 # courses
-
-@app.route('/api/courses/<string:CourseType>', methods=['GET'])
-def get_dept_courses(CourseType):
-    courses = db.session.query(Course).filter_by(courseIDType = CourseType)
-    arr_courses = []
-    for course in courses:
-        arr_courses.append(course.as_dict())
-    return jsonify(deptCourses = arr_courses)
-
-  
-# use at your own risk, but works
-@app.route('/api/courses/all', methods=['GET'])
-def get_all_courses():
-    courses = db.session.query(Course).all()
-    arr_courses = []
-    for course in courses:
-        arr_courses.append(course.as_dict())
-    return jsonify(allCourses = arr_courses)
-
 
 @app.route('/api/courses/<int:page>/<int:per_page>', methods=['GET'])
 def get_courses(page, per_page):

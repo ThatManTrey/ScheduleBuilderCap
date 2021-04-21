@@ -7,7 +7,7 @@
         @openChangeProgramModal="$refs.changeProgramModalHome.openModal()"
       ></FilterCoursesBar>
 
-      <transition name="coursefade" mode="out-in">
+      <transition name="fade" mode="out-in">
         <div
           v-if="showCard && !isLoadingCourses && totalResults > 0"
           class="row flex-grow-1 mx-3"
@@ -323,7 +323,6 @@ export default {
       },
 
       showAddSemesterModal () {
-        console.log("got here");
         this.$refs.addSemesterModalHome.openModal();
       },
 
@@ -363,19 +362,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.coursefade-enter-active {
-  transition: all 0.5s;
-}
-
-.coursefade-leave-active {
-  transition: all 0.5s;
-}
-
-.coursefade-enter,
-.coursefade-leave-to {
-  opacity: 0;
-}
-
 .side-button-container {
   position: fixed;
   height: 50vh;
