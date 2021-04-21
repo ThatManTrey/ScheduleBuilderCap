@@ -59,55 +59,6 @@
               >
               and we'll get back to you soon.
             </p>
-            <!--
-            <form method="#" action="#">
-              <div class="mb-3 text-theme-white">
-                <label for="contactName" class="form-label">
-                  <h6>Name:</h6>
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="contactName"
-                  aria-describedby="contactName"
-                />
-              </div>
-              <div class="mb-3 text-theme-white">
-                <label for="contactEmail" class="form-label">
-                  <h6>Email Address:</h6>
-                </label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="contactEmail"
-                  aria-describedby="contactEmail"
-                />
-              </div>
-              <div class="mb-3 text-theme-white">
-                <label for="contactMessage" class="form-label">
-                  <h6>Message:</h6>
-                </label>
-                <textarea
-                  type="text"
-                  class="form-control"
-                  id="contactMessage"
-                  aria-describedby="contactMessage"
-                  rows="3"
-                />
-              </div>
-              <div>
-                <button type="reset" class="btn btn-theme-black">
-                  Reset
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-theme-primary-dark"
-                  style="float:right"
-                >
-                  Submit
-                </button>
-              </div>
-            </form> -->
           </div>
         </div>
       </div>

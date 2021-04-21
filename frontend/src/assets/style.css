@@ -1,9 +1,5 @@
 /* Only put styles used on multiple pages here */
-
-/*
- *   Theme Colors
- *      inspired by https://uxdesign.cc/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129
- */
+/* This is a mess, please do not look at it */
 
 /* color scheme */
 
@@ -444,14 +440,7 @@ html, body {
   overflow-x: hidden;       /* remove if needed */
 }
 
-/* site wide blue gradient background */
 body {
-  /* background-image: linear-gradient(315deg, #09152b 0%, #122b54 74%);
-  -webkit-background-size: cover !important;
-  -moz-background-size: cover !important;
-  -o-background-size: cover !important;
-  background-size: cover !important;
-  background-repeat: no-repeat;  */
   background-color: #0e0e0e !important;
 }
 
