@@ -22,7 +22,6 @@ Vue.use(VueCookies);
 
 Vue.use(VueToast, {
   position: "top",
-  duration: 10000,
   queue: true
 });
 
@@ -49,7 +48,10 @@ axios.interceptors.response.use(
   },
   function(error) {
     if (error.response.status === HttpStatus.UNAUTHORIZED) {
-      Toast.showErrorMessage("Your session has expired. Please login again.");
+      Toast.showErrorMessage(
+        "Your session has expired. Please login again.",
+        10000
+      );
       store.commit("auth/unAuthenticateUser");
       if (router.currentRoute.name != "Home") router.push("/home");
     } else if (error.response.status === 470) {
@@ -73,7 +75,8 @@ if (Vue.$cookies.get("csrf_access_token")) {
   store.dispatch("auth/verifyAccessToken").then(function() {
     if (store.state.auth.authError)
       Toast.showErrorMessage(
-        "An unexpected error has occurred. Please login again."
+        "An unexpected error has occurred. Please login again.",
+        10000
       );
     // needed for validating POST, PUT, DELETE requests
     else

@@ -116,7 +116,7 @@ export default {
 
         if (!this.areFieldsValid()) {
           this.isSubmittingForm = false;
-          Toast.showErrorMessage("Please fix the errors below before continuing.");
+          Toast.showErrorMessage("Please fix the errors below before continuing.", 10000);
           return;
         }
 
@@ -131,7 +131,7 @@ export default {
           },
           () => {
             this.isSubmittingForm = false;
-            Toast.showErrorMessage("Error resetting password. Please try again.");
+            Toast.showErrorMessage("Error resetting password. Please try again.", 10000);
           }
         );
       }

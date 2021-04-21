@@ -79,10 +79,7 @@ const actions = {
 
         if (state.isLoadingSemesters) commit("setIsLoadingSemesters", false);
       })
-      .catch(error => {
-        // eslint-disable-next-line
-        console.error(error);
-
+      .catch(() => {
         if (state.isLoadingSemesters) commit("setIsLoadingSemesters", false);
       });
   },
@@ -90,15 +87,9 @@ const actions = {
   addSemester({ dispatch, rootState }, semesterName) {
     var url = "users/" + rootState.auth.userId + "/semesters";
 
-    return axios
-      .post(url, { semester_name: semesterName })
-      .then(() => {
-        dispatch("getSemesters");
-      })
-      .catch(error => {
-        // eslint-disable-next-line
-        console.error(error);
-      });
+    return axios.post(url, { semester_name: semesterName }).then(() => {
+      dispatch("getSemesters");
+    });
   },
 
   removeSemester({ rootState, dispatch, commit }, semesterId) {
@@ -110,11 +101,10 @@ const actions = {
       .then(() => {
         Toast.showSuccessMessage("Semester removed successfully.");
       })
-      .catch(error => {
-        // eslint-disable-next-line
-        console.error(error);
-        Toast.showSuccessMessage(
-          "An error occurred while trying to remove a semester."
+      .catch(() => {
+        Toast.showErrorMessage(
+          "An error occurred while trying to remove a semester.",
+          10000
         );
         dispatch("getSemesters");
       });
@@ -122,15 +112,9 @@ const actions = {
 
   editSemesterName({ dispatch, rootState }, { semesterId, newName }) {
     var url = "users/" + rootState.auth.userId + "/semesters/" + semesterId;
-    axios
-      .put(url, { semester_name: newName })
-      .then(() => {
-        dispatch("getSemesters");
-      })
-      .catch(error => {
-        // eslint-disable-next-line
-        console.error(error);
-      });
+    axios.put(url, { semester_name: newName }).then(() => {
+      dispatch("getSemesters");
+    });
   },
 
   addCourseToSemester({ rootState, dispatch }, { semesterId, courseId }) {
@@ -142,15 +126,9 @@ const actions = {
       "/courses/" +
       courseId;
 
-    axios
-      .post(url)
-      .then(() => {
-        dispatch("getSemesters");
-      })
-      .catch(error => {
-        // eslint-disable-next-line
-        console.error(error);
-      });
+    axios.post(url).then(() => {
+      dispatch("getSemesters");
+    });
   },
 
   removeCourseFromSemester({ rootState, getters, dispatch, commit }, courseId) {
@@ -165,11 +143,10 @@ const actions = {
       "/courses/" +
       courseId;
 
-    axios.delete(url).catch(error => {
-      // eslint-disable-next-line
-        console.error(error);
+    axios.delete(url).catch(() => {
       Toast.showErrorMessage(
-        "An error occurred while trying to delete a course."
+        "An error occurred while trying to delete a course.",
+        10000
       );
       dispatch("getSemesters");
     });

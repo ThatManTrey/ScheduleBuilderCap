@@ -323,7 +323,6 @@ export default {
       },
 
       showAddSemesterModal () {
-        console.log("got here");
         this.$refs.addSemesterModalHome.openModal();
       },
 

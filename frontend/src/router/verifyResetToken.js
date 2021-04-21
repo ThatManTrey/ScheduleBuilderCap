@@ -19,7 +19,8 @@ export default (to, from, next) => {
       .catch(() => {
         next("/home");
         Toast.showErrorMessage(
-          "Invalid or expired reset password link. Request another and try again."
+          "Invalid or expired reset password link. Request another and try again.",
+          10000
         );
       });
   } else {
