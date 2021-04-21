@@ -14,7 +14,7 @@ $ cd backend
 $ python -m venv venv
 $ .\venv\Scripts\Activate
 (venv)$ pip install -r packages.txt
-(venv)$ flask run
+(venv)$ python flask_app.py
 ``` 
 Unlike Vue, Flask won't automatically update when you change a file, so you'll have to manually close and restart the server.
 
