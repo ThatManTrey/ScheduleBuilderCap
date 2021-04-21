@@ -411,9 +411,9 @@ select:-webkit-autofill:focus {
   caret-color: var(--theme-white);
 } 
 
-/* input.form-control:-internal-autofill-selected {
+input.form-control:-internal-autofill-selected {
   background-color: var(--theme-blackest) !important;
-} */
+}
 
 /* override toast background color */
 
