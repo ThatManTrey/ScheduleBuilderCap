@@ -63,7 +63,8 @@ const actions = {
             Vue.$toast.open({
               message:
                 "You have not confirmed your account yet. Click here to send another email.",
-              type: "info",
+              type: "success",
+              duration: 10000,
               onClick: resendConfirmationEmail
             });
           }, 3000);
@@ -127,11 +128,12 @@ function resendConfirmationEmail() {
   axios
     .post("/auth/resend-confirm")
     .then(function() {
-      Toast.showSuccessMessage("Confirmation email has been sent!");
+      Toast.showSuccessMessage("Confirmation email has been sent!", 10000);
     })
     .catch(function() {
       Toast.showErrorMessage(
-        "Error sending confirmation email. Please try again."
+        "Error sending confirmation email. Please try again.",
+        10000
       );
     });
 }

@@ -58,16 +58,6 @@
                 <i class="fas fa-info-circle "></i>About
               </router-link>
             </li>
-
-            <!-- <li class="nav-item col-6 col-md-4 col-lg-auto">
-              <router-link
-                class="nav-link"
-                to="theme"
-                v-bind:class="{ 'nav-active': isCurrentRoute('Theme') }"
-              >
-                <i class="fas fa-question-circle"></i>Theme ref</router-link
-              >
-            </li> -->
           </ul>
 
           <div class="d-flex">

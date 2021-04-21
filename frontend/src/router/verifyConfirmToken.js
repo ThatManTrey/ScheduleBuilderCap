@@ -14,7 +14,10 @@ export default (to, from, next) => {
       .then(() => {
         store.commit("auth/confirmEmail", true);
         next("/home");
-        Toast.showSuccessMessage("Your email has been confirmed successfully!");
+        Toast.showSuccessMessage(
+          "Your email has been confirmed successfully!",
+          8000
+        );
       })
       .catch(error => {
         if (!error.response) store.commit("auth/setAuthError");

@@ -5,7 +5,6 @@ import Home from "../views/Home.vue";
 import About from "../views/About.vue";
 import Favorites from "../views/Favorites.vue";
 import Schedule from "../views/Schedule.vue";
-import Theme from "../views/Theme.vue";
 import ResetPass from "../views/ResetPass.vue";
 
 import VerifyAuth from "./verifyAuth.js";
@@ -51,11 +50,6 @@ const routes = [
     path: "/confirm",
     name: "Confirm",
     beforeEnter: verifyConfirmToken
-  },
-  {
-    path: "/theme",
-    name: "Theme",
-    component: Theme
   }
 ];
 

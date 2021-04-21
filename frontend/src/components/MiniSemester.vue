@@ -18,9 +18,6 @@
           @input="getUserInput"
           >{{ semester.semesterName }}</span
         >
-        <!--<span class="badge rounded-pill course-badge float-right">
-          <button class="button-as-link" id="semesterCredits">16</button>
-        </span>-->
       </li>
 
       <li

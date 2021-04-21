@@ -164,9 +164,6 @@ div.course-card:focus-within {
     inset -1px 0 0 rgb(255 255 255 / 20%), 0 0 4px 0 rgb(95 99 104 / 60%),
     0 0 6px 2px rgb(95 99 104 / 60%);
   z-index: 1;
-
-  // disabling since it messes with the tooltip
-  //transform: scale(1.05);
 }
 
 /*
