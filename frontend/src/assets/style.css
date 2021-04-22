@@ -205,16 +205,14 @@ button .fa-bookmark:hover, a .fa-bookmark:hover {
   color: rgba(198, 165, 255, var(--btn-transparency));
 }
 
-a .fa-trash, a .fa-times-circle  {
+button .fa-trash, button .fa-times-circle  {
   color: var(--theme-white);
 }
 
-a .fa-trash:hover,
-a .fa-trash:focus,
-a .fa-edit:hover,
-a .fa-edit:focus,
-a .fa-times-circle:hover,
-a .fa-times-circle:focus {
+button .fa-trash:hover,
+button .fa-trash:focus,
+button .fa-times-circle:hover,
+button .fa-times-circle:focus {
   color: var(--theme-warning-light);
 } 
 

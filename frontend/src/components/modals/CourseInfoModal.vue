@@ -55,7 +55,7 @@
               "
             >
               <strong> Contact Hours</strong>:
-              <span id="creditHours"> {{ course.course.creditHoursMax }}</span>
+              <span> {{ course.course.creditHoursMax }}</span>
               Hours
             </p>
             <p
@@ -64,7 +64,7 @@
               "
             >
               <strong> Contact Hours</strong>:
-              <span id="creditHours">
+              <span>
                 {{ course.course.contactHoursMin }}-{{
                   course.course.contactHoursMax
                 }}</span
@@ -136,9 +136,6 @@
               <h3 v-if="!courseRatings.currentQuality">
                 <p id="noRatings">This course has not been rated yet.</p>
               </h3>
-              <p v-if="courseRatings.currentQuality" id="creditHours">
-                {{ courseRatings.currentQuality }} / 5
-              </p>
             </div>
           </div>
 
@@ -191,7 +188,7 @@
             v-if="isRated"
             type="button"
             @click="openViewRatingModal"
-            class="btn btn-theme-secondary"
+            class="btn btn-theme-primary-dark"
           >
             View Rating
           </button>
@@ -348,12 +345,6 @@ strong {
 
 p {
   color: var(--theme-white);
-}
-
-#creditHours {
-  color: var(--theme-secondary);
-  font-weight: 700;
-  padding-top: 0.25rem;
 }
 
 #course-info-footer {
