@@ -67,15 +67,8 @@ export default {
     },
 
     methods: {
-      getUserInput(e) {
-            const input = e.target.innerText;
-
-            if(input.length < 1)
-                e.target.innerText = this.semester.semesterName;
-            else if(input.length > 64)    // semester name max size in db
-                e.target.innerText = this.semester.semesterName;
-            else
-                this.semesterName = input;
+        getUserInput(e) {
+            this.semesterName = e.target.innerText;
         },
 
         endUserInput(e) {
@@ -84,7 +77,13 @@ export default {
 
             // remove whitespace from both sides of semester name
             this.semesterName = this.semesterName.trim();
-            e.target.innerText = this.semesterName;
+
+            if(this.semesterName < 1)
+                e.target.innerText = this.semester.semesterName;
+            else if(this.semesterName > 64)    // semester name max size in db
+                e.target.innerText = this.semester.semesterName;
+            else
+              e.target.innerText = this.semesterName;
 
             if(this.semesterName !== this.semester.semesterName)
                 this.$store.dispatch("semesters/editSemesterName", {
@@ -92,6 +91,7 @@ export default {
                     newName: this.semesterName
                 })
         },
+
         removeSemester() {
           var removeSemester = confirm(
             "Are you sure you want to remove this semester and all its courses?"
