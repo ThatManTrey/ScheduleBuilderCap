@@ -46,7 +46,9 @@ const mutations = {
 
   addProgram(state, program) {
     // if program has not already been added
-    if (state.searchRequest.programs.indexOf(program) === -1) {
+    const index = state.searchRequest.programs.findIndex(p => p.degreeID === program.degreeID);
+
+    if (index === -1) {
       state.searchRequest.programs.push(program);
       updateLocalStoragePrograms(state.searchRequest.programs);
     }

@@ -49,7 +49,6 @@
             <h3 v-if="!userQuality">
               <p id="noRatings">error</p>
             </h3>
-            <p v-if="userQuality" id="creditHours">{{ userQuality }} / 5</p>
           </div>
         </div>
         <div class="padding">
@@ -80,22 +79,22 @@
 
     <template v-slot:footer v-if="course.course">
       <div class="d-flex justify-content-between" id="ratings-footer">
-        <a
+        <button
           @click="removeRating(course)"
-          @keyup.enter="removeRating(course)"
           data-tooltip="Remove Rating"
           data-tooltip-location="right"
+          class="button-as-link"
         >
           <i class="fas fa-trash fa-md"></i
-        ></a>
-        <a
+        ></button>
+        <button
           @click="editRating(course)"
-          @keyup.enter="editRating(course)"
           data-tooltip="Edit Rating"
           data-tooltip-location="left"
+          class="button-as-link"
         >
           <i class="fas fa-edit fa-md"></i
-        ></a>
+        ></button>
       </div>
     </template>
   </Modal>
@@ -185,5 +184,9 @@ export default {
   color: var(--theme-warning-light);
   font-weight: bold;
   font-size: 12pt;
+}
+
+.fa-edit:hover, .fa-edit:focus {
+  color: var(--theme-primary-light);
 }
 </style>
