@@ -34,7 +34,7 @@
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
               <button
-                class="accordion-button"
+                class="accordion-button d-flex justify-content-between"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseOne"
@@ -42,6 +42,7 @@
                 aria-controls="collapseOne"
               >
                 Search Courses
+                <i class="fas fa-chevron-down text-theme-light-gray"></i>
               </button>
             </h2>
             <div
@@ -200,5 +201,9 @@ td {
 .accordion-button {
   background-color: transparent;
   color: var(--theme-whitest);
+
+  &::after {
+    display: none;
+  }
 }
 </style>
