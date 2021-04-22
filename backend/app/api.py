@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from app import app, db
 from app.models import Course, User, FavCourse, Degree, Rating, Semester, SemesterCourse
-from app.colors import *
 from app.decorators import has_access_token, is_current_user
 
 import datetime
