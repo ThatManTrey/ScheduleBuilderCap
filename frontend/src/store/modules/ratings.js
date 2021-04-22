@@ -116,7 +116,7 @@ const actions = {
       })
       .then(() => {
         Toast.showSuccessMessage("Your rating was added successfully!");
-        dispatch("getUserCourseRating", { course: this.course });
+        dispatch("getUserCourseRating", { course: course });
       })
       .catch(() => {
         // revert client side addition
