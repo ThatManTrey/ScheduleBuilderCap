@@ -35,9 +35,9 @@ const mutations = {
 
   setCurrentUserRating(state, rating) {
     state.currentUserRating.currentUserRatingQuality =
-      rating.rating[0].ratingQuality;
+      rating.rating.ratingQuality;
     state.currentUserRating.currentUserRatingDifficulty =
-      rating.rating[0].ratingDifficulty;
+      rating.rating.ratingDifficulty;
   },
 
   addRating(state, rating) {
