@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <ThemeNavBar></ThemeNavBar>
-    <transition name="fade" mode="out-in">
+    <transition name="fade-short" mode="out-in">
       <router-view />
     </transition>
   </div>

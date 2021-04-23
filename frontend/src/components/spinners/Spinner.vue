@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="d-inline">
     <div class="d-inline" v-if="useAnimation">
-      <transition name="fade">
+      <transition name="fade-short">
         <div
           v-if="showSpinner"
           class="spinner-border"

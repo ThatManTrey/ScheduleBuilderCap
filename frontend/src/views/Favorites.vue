@@ -6,7 +6,7 @@
       v-if="!isLoading"
       class="container d-flex flex-grow-1 justify-content-center align-items-center mb-3 mt-3"
     >
-      <transition name="fade">
+      <transition name="fade-med">
         <div
           v-if="favCourses.length > 0"
           class="row w-100 justify-content-center mx-3"

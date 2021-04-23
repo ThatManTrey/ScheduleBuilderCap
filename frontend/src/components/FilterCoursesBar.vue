@@ -304,7 +304,7 @@
         </ul>
       </div>
 
-      <transition name="fade">
+      <transition name="fade-short">
         <input
           v-show="isSearching"
           type="text"

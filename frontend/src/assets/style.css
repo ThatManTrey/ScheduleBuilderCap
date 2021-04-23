@@ -506,13 +506,23 @@ a.link:hover, button.link:hover {
   cursor: pointer;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+.fade-short-enter-active,
+.fade-short-leave-active {
+  transition: opacity 0.25s;
 }
 
-.fade-enter,
-.fade-leave-to {
+.fade-short-enter,
+.fade-short-leave-to {
+  opacity: 0;
+}
+
+.fade-med-enter-active,
+.fade-med-leave-active {
+  transition: opacity 0.75s;
+}
+
+.fade-med-enter,
+.fade-med-leave-to {
   opacity: 0;
 }
 
