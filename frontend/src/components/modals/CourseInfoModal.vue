@@ -11,7 +11,12 @@
     <template v-slot:body v-if="course.course">
       <div class="container-fluid">
         <div class="row">
-          <h5><strong>Description</strong><span class="text-theme-white float-end">{{ courseProgramName }}</span></h5>
+          <h5>
+            <strong>Description</strong
+            ><span class="text-theme-white float-end">{{
+              courseProgramName
+            }}</span>
+          </h5>
           <p>
             {{ course.course.courseDesc }}
           </p>
@@ -284,7 +289,9 @@ export default {
     },
 
     courseProgramName() {
-      return this.$store.getters["courses/getProgramNameForCourse"](this.course.course.courseIDType);
+      return this.$store.getters["courses/getProgramNameForCourse"](
+        this.course.course.courseIDType
+      );
     }
   },
 
