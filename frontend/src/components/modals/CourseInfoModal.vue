@@ -11,7 +11,7 @@
     <template v-slot:body v-if="course.course">
       <div class="container-fluid">
         <div class="row">
-          <h5><strong>Description</strong></h5>
+          <h5><strong>Description</strong><span class="text-theme-white float-end">{{ courseProgramName }}</span></h5>
           <p>
             {{ course.course.courseDesc }}
           </p>
@@ -260,7 +260,6 @@ export default {
       course: state => state.courses.currentCourse,
       courseRatings: state => state.ratings,
       isLoggedIn: state => state.auth.isAuthenticated
-      //isSendingFavorites: state => state.favorites.isSendingFavorite
     }),
 
     isFavorited() {
@@ -282,6 +281,10 @@ export default {
       return this.$store.getters["semesters/isCourseScheduled"](
         this.course.course.courseID
       );
+    },
+
+    courseProgramName() {
+      return this.$store.getters["courses/getProgramNameForCourse"](this.course.course.courseIDType);
     }
   },
 

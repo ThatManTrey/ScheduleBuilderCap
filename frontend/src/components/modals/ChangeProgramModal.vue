@@ -41,7 +41,7 @@
                 aria-expanded="true"
                 aria-controls="collapseOne"
               >
-                Search Courses
+                Search Programs
                 <i class="fas fa-chevron-down text-theme-light-gray"></i>
               </button>
             </h2>

@@ -116,6 +116,11 @@ const getters = {
         keyword.toLowerCase()
       )
     );
+  },
+
+  getProgramNameForCourse: state => courseIDType => {
+    const program = state.allPrograms.find(program => program.degreeType === courseIDType);
+    return program.degreeName;
   }
 };
 
