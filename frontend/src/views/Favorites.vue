@@ -36,8 +36,17 @@
       </transition>
     </div>
 
-    <CourseInfoModal ref="courseInfoModalFavorites"></CourseInfoModal>
+    <CourseInfoModal
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal"
+      ref="courseInfoModalFavorites"
+    ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalFavorites"></AddToSemesterModal>
+    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <ViewRatingModal
+      @openAddRatingModal="showAddRatingModal"
+      ref="viewRatingModalHome"
+    ></ViewRatingModal>
   </div>
 </template>
 
@@ -46,6 +55,8 @@ import CourseCard from '../components/CourseCard.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
+import AddRatingModal from '../components/modals/AddRatingModal.vue';
+import ViewRatingModal from '../components/modals/ViewRatingModal.vue';
 import { mapState } from "vuex";
 
 export default {
@@ -53,24 +64,38 @@ export default {
         CourseCard,
         PageSpinner,
         CourseInfoModal,
+        AddRatingModal,
+        ViewRatingModal,
         AddToSemesterModal,
     },
 
      computed: mapState({
        favCourses: state => state.favorites.favoriteCourses,
+       course: state => state.courses.currentCourse,
        isLoading: state => state.favorites.isLoadingFavorites
      }),
 
       methods: {
         showCourseInfoModal () {
+          this.$store.dispatch("ratings/getCourseRatings", { course: this.course });
+          this.$store.dispatch("ratings/getUserCourseRating", {
+            course: this.course
+          });
             this.$refs.courseInfoModalFavorites.openModal();
         },
 
         showAddToSemesterModal () {
             this.$refs.addToSemesterModalFavorites.openModal();
         },
-      },
 
+        showAddRatingModal () {
+          this.$refs.addRatingModalHome.openModal();
+        },
+
+        showViewRatingModal () {
+          this.$refs.viewRatingModalHome.openModal();
+        }
+      },
 };
 </script>
 
