@@ -10,6 +10,7 @@
     </button>
     <div class="semesterBar-container">
       <MiniSemester
+        @openCourseInfoModal="showCourseInfoModal"
         v-for="(semester, index) in semesters"
         :key="index"
         :semester="semester"
@@ -39,11 +40,28 @@
         </button>
       </div>
     </div>
+
+    <CourseInfoModal
+      @openAddSemesterModal="showAddToSemesterModal"
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal"
+      :isRemovingCourse="true"
+      ref="courseInfoModalHome"
+    ></CourseInfoModal>
+
+    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <ViewRatingModal
+      @openAddRatingModal="showAddRatingModal"
+      ref="viewRatingModalHome"
+    ></ViewRatingModal>
   </div>
 </template>
 
 <script>
+import CourseInfoModal from "../components/modals/CourseInfoModal.vue";
 import MiniSemester from "../components/MiniSemester.vue";
+import AddRatingModal from "../components/modals/AddRatingModal.vue";
+import ViewRatingModal from "../components/modals/ViewRatingModal.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -68,10 +86,29 @@ export default {
 
     showAddSemesterModal() {
       this.$emit("showAddSemesterModal");
+    },
+
+    showCourseInfoModal() {
+      this.$refs.courseInfoModalHome.openModal();
+    },
+
+    showAddToSemesterModal() {
+      this.$refs.addToSemesterModalFavorites.openModal();
+    },
+
+    showAddRatingModal() {
+      this.$emit("showAddRatingModal");
+    },
+
+    showViewRatingModal() {
+      this.$emit("showViewRatingModal");
     }
   },
   components: {
-    MiniSemester
+    MiniSemester,
+    CourseInfoModal,
+    AddRatingModal,
+    ViewRatingModal
   }
 };
 </script>
