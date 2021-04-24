@@ -85,16 +85,16 @@
           data-tooltip-location="right"
           class="button-as-link"
         >
-          <i class="fas fa-trash fa-md"></i
-        ></button>
+          <i class="fas fa-trash fa-md"></i>
+        </button>
         <button
           @click="editRating(course)"
           data-tooltip="Edit Rating"
           data-tooltip-location="left"
           class="button-as-link"
         >
-          <i class="fas fa-edit fa-md"></i
-        ></button>
+          <i class="fas fa-edit fa-md"></i>
+        </button>
       </div>
     </template>
   </Modal>
@@ -186,7 +186,8 @@ export default {
   font-size: 12pt;
 }
 
-.fa-edit:hover, .fa-edit:focus {
+.fa-edit:hover,
+.fa-edit:focus {
   color: var(--theme-primary-light);
 }
 </style>
