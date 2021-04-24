@@ -36,10 +36,11 @@
       </transition>
     </div>
 
-    <CourseInfoModal 
+    <CourseInfoModal
       @openAddRatingModal="showAddRatingModal"
       @openViewRatingModal="showViewRatingModal"
-      ref="courseInfoModalFavorites"></CourseInfoModal>
+      ref="courseInfoModalFavorites"
+    ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalFavorites"></AddToSemesterModal>
     <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
     <ViewRatingModal
@@ -88,8 +89,8 @@ export default {
         },
 
         showAddRatingModal () {
-        this.$refs.addRatingModalHome.openModal();
-      },
+          this.$refs.addRatingModalHome.openModal();
+        },
 
         showViewRatingModal () {
           this.$refs.viewRatingModalHome.openModal();
