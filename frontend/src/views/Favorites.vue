@@ -42,10 +42,10 @@
       ref="courseInfoModalFavorites"
     ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalFavorites"></AddToSemesterModal>
-    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <AddRatingModal ref="addRatingModalFavorites"></AddRatingModal>
     <ViewRatingModal
       @openAddRatingModal="showAddRatingModal"
-      ref="viewRatingModalHome"
+      ref="viewRatingModalFavorites"
     ></ViewRatingModal>
   </div>
 </template>
@@ -89,11 +89,11 @@ export default {
         },
 
         showAddRatingModal () {
-          this.$refs.addRatingModalHome.openModal();
+          this.$refs.addRatingModalFavorites.openModal();
         },
 
         showViewRatingModal () {
-          this.$refs.viewRatingModalHome.openModal();
+          this.$refs.viewRatingModalFavorites.openModal();
         }
       },
 };

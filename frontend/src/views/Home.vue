@@ -244,7 +244,10 @@
 
     <SemesterBar 
       v-if="!isLoadingCourses" 
-      @showAddSemesterModal="showAddSemesterModal">
+      @showAddSemesterModal="showAddSemesterModal"
+      @showCourseInfoModal="showCourseInfoModal"
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal">
     </SemesterBar>
 
     <CourseInfoModal

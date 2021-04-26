@@ -42,10 +42,10 @@
     ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalSchedule"></AddToSemesterModal>
     <AddSemesterModal ref="addSemesterModalSchedule"></AddSemesterModal>
-    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <AddRatingModal ref="addRatingModalSchedule"></AddRatingModal>
     <ViewRatingModal
       @openAddRatingModal="showAddRatingModal"
-      ref="viewRatingModalHome"
+      ref="viewRatingModalSchedule"
     ></ViewRatingModal>
   </div>
 </template>
@@ -94,10 +94,10 @@ export default {
             this.$refs.addSemesterModalSchedule.openModal();
         },
         showAddRatingModal () {
-          this.$refs.addRatingModalHome.openModal();
+          this.$refs.addRatingModalSchedule.openModal();
         },
         showViewRatingModal () {
-          this.$refs.viewRatingModalHome.openModal();
+          this.$refs.viewRatingModalSchedule.openModal();
         },
     },
 }
