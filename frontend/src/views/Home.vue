@@ -242,12 +242,13 @@
       </button>
     </div>
 
-    <SemesterBar 
-      v-if="!isLoadingCourses" 
+    <SemesterBar
+      v-if="!isLoadingCourses"
       @showAddSemesterModal="showAddSemesterModal"
       @showCourseInfoModal="showCourseInfoModal"
       @openAddRatingModal="showAddRatingModal"
-      @openViewRatingModal="showViewRatingModal">
+      @openViewRatingModal="showViewRatingModal"
+    >
     </SemesterBar>
 
     <CourseInfoModal

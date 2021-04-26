@@ -1,62 +1,62 @@
 <template lang="html">
-<div>
-  <div
-    class="container-fluid p-0 d-lg-block d-none"
-    id=""
-    :class="{ slide: !isOpen }"
-    v-if="isLoggedIn"
-  >
-    <button class="semesterBar-button" @click="isOpen = !isOpen">
-      <i class="far fa-calendar "></i>
-    </button>
-    <div class="semesterBar-container">
-      <MiniSemester
-        @openCourseInfoModal="showCourseInfoModal"
-        v-for="(semester, index) in semesters"
-        :key="index"
-        :semester="semester"
-      ></MiniSemester>
+  <div>
+    <div
+      class="container-fluid p-0 d-lg-block d-none"
+      id=""
+      :class="{ slide: !isOpen }"
+      v-if="isLoggedIn"
+    >
+      <button class="semesterBar-button" @click="isOpen = !isOpen">
+        <i class="far fa-calendar "></i>
+      </button>
+      <div class="semesterBar-container">
+        <MiniSemester
+          @openCourseInfoModal="showCourseInfoModal"
+          v-for="(semester, index) in semesters"
+          :key="index"
+          :semester="semester"
+        ></MiniSemester>
 
-      <div
-        v-if="semesters.length === 0"
-        class="d-flex w-100 flex-column justify-content-center align-items-center"
-      >
-        <h3 class="mb-3">You don't have any semesters yet.</h3>
-        <button
-          class="mb-0 mx-5 button-as-link"
-          @click="showAddSemesterModal()"
+        <div
+          v-if="semesters.length === 0"
+          class="d-flex w-100 flex-column justify-content-center align-items-center"
         >
-          <span class="text-theme-lightest-gray">
-            <i class="fas fa-plus-circle"></i>
-            Add semester
-          </span>
-        </button>
-      </div>
-      <div v-else class="pe-4">
-        <button class="mb-0 button-as-link" @click="showAddSemesterModal()">
-          <span class="text-theme-white">
-            <i class="fas fa-plus-circle"></i>
-            Add semester
-          </span>
-        </button>
+          <h3 class="mb-3">You don't have any semesters yet.</h3>
+          <button
+            class="mb-0 mx-5 button-as-link"
+            @click="showAddSemesterModal()"
+          >
+            <span class="text-theme-lightest-gray">
+              <i class="fas fa-plus-circle"></i>
+              Add semester
+            </span>
+          </button>
+        </div>
+        <div v-else class="pe-4">
+          <button class="mb-0 button-as-link" @click="showAddSemesterModal()">
+            <span class="text-theme-white">
+              <i class="fas fa-plus-circle"></i>
+              Add semester
+            </span>
+          </button>
+        </div>
       </div>
     </div>
+
+    <CourseInfoModal
+      @openAddSemesterModal="showAddToSemesterModal"
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal"
+      :isRemovingCourse="true"
+      ref="courseInfoModalSembar"
+    ></CourseInfoModal>
+
+    <AddRatingModal ref="addRatingModalSembar"></AddRatingModal>
+    <ViewRatingModal
+      @openAddRatingModal="showAddRatingModal"
+      ref="viewRatingModalSembar"
+    ></ViewRatingModal>
   </div>
-
-  <CourseInfoModal
-    @openAddSemesterModal="showAddToSemesterModal"
-    @openAddRatingModal="showAddRatingModal"
-    @openViewRatingModal="showViewRatingModal"
-    :isRemovingCourse="true"
-    ref="courseInfoModalSembar"
-  ></CourseInfoModal>
-
-  <AddRatingModal ref="addRatingModalSembar"></AddRatingModal>
-  <ViewRatingModal
-    @openAddRatingModal="showAddRatingModal"
-    ref="viewRatingModalSembar"
-  ></ViewRatingModal>
-</div>
 </template>
 
 <script>
