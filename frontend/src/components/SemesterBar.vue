@@ -1,4 +1,5 @@
 <template lang="html">
+<div>
   <div
     class="container-fluid p-0 d-lg-block d-none"
     id=""
@@ -40,21 +41,22 @@
         </button>
       </div>
     </div>
-
-    <CourseInfoModal
-      @openAddSemesterModal="showAddToSemesterModal"
-      @openAddRatingModal="showAddRatingModal"
-      @openViewRatingModal="showViewRatingModal"
-      :isRemovingCourse="true"
-      ref="courseInfoModalHome"
-    ></CourseInfoModal>
-
-    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
-    <ViewRatingModal
-      @openAddRatingModal="showAddRatingModal"
-      ref="viewRatingModalHome"
-    ></ViewRatingModal>
   </div>
+
+  <CourseInfoModal
+    @openAddSemesterModal="showAddToSemesterModal"
+    @openAddRatingModal="showAddRatingModal"
+    @openViewRatingModal="showViewRatingModal"
+    :isRemovingCourse="true"
+    ref="courseInfoModalSembar"
+  ></CourseInfoModal>
+
+  <AddRatingModal ref="addRatingModalSembar"></AddRatingModal>
+  <ViewRatingModal
+    @openAddRatingModal="showAddRatingModal"
+    ref="viewRatingModalSembar"
+  ></ViewRatingModal>
+</div>
 </template>
 
 <script>
@@ -89,19 +91,19 @@ export default {
     },
 
     showCourseInfoModal() {
-      this.$refs.courseInfoModalHome.openModal();
+      this.$refs.courseInfoModalSembar.openModal();
     },
 
     showAddToSemesterModal() {
-      this.$refs.addToSemesterModalFavorites.openModal();
+      this.$refs.addToSemesterModalSembar.openModal();
     },
 
     showAddRatingModal() {
-      this.$emit("showAddRatingModal");
+      this.$refs.addRatingModalSembar.openModal();
     },
 
     showViewRatingModal() {
-      this.$emit("showViewRatingModal");
+      this.$refs.viewRatingModalSembar.openModal();
     }
   },
   components: {
