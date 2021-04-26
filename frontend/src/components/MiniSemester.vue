@@ -21,10 +21,7 @@
       </li>
 
       <li
-        class="list-group-item course"
-        tabindex="0"
-        @keyup.enter="showCourseInfoModal(course)"
-        @click="showCourseInfoModal(course)"
+        class="list-group-item course"     
         v-for="(course, index) in semester.semesterCourses"
         :key="index"
       >
@@ -35,10 +32,22 @@
         >
           <i class="fas fa-times-circle fa-md"></i>
         </button>
-        <span class="badge rounded-pill course-badge">
+        <span 
+          class="badge rounded-pill course-badge"
+          tabindex="0"
+          @keyup.enter="showCourseInfoModal(course)"
+          @click="showCourseInfoModal(course)"
+        >
           <button class="button-as-link">{{ course.courseID }}</button></span
         >
-        <span class="courseName">{{ course.courseName }}</span>
+        <span 
+          class="courseName" 
+          tabindex="0"
+          @keyup.enter="showCourseInfoModal(course)"
+          @click="showCourseInfoModal(course)"
+        >
+          {{ course.courseName }}
+        </span>
       </li>
 
       <li v-if="semester.semesterCourses.length == 0" id="emptySemester">
