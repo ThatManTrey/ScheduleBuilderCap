@@ -7,7 +7,7 @@
         @openChangeProgramModal="$refs.changeProgramModalHome.openModal()"
       ></FilterCoursesBar>
 
-      <transition name="fade" mode="out-in">
+      <transition name="fade-med" mode="out-in">
         <div
           v-if="showCard && !isLoadingCourses && totalResults > 0"
           class="row mx-3"
@@ -242,7 +242,14 @@
       </button>
     </div>
 
-    <SemesterBar @showAddSemesterModal="showAddSemesterModal"></SemesterBar>
+    <SemesterBar
+      v-if="!isLoadingCourses"
+      @showAddSemesterModal="showAddSemesterModal"
+      @showCourseInfoModal="showCourseInfoModal"
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal"
+    >
+    </SemesterBar>
 
     <CourseInfoModal
       @openAddSemesterModal="showAddToSemesterModal"

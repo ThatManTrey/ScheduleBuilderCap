@@ -8,7 +8,7 @@
     </template>
 
     <template v-slot:body>
-      <transition name="fade">
+      <transition name="fade-short">
         <SuccessAlert
           v-if="isRegisterSuccessful"
           :successMessage="successMessage"
@@ -37,7 +37,7 @@
             ref="registerEmailField"
           />
 
-          <transition name="fade">
+          <transition name="fade-short">
             <span v-if="emailField.error" class="form-error-text">
               <i class="fas fa-times-circle text-theme-warning-light"></i>
               {{ emailField.error }}
@@ -60,7 +60,7 @@
             v-model="passField.pass"
           />
 
-          <transition name="fade">
+          <transition name="fade-short">
             <span v-if="passField.error" class="form-error-text">
               <i class="fas fa-times-circle text-theme-warning-light"></i>
               {{ passField.error }}
@@ -84,7 +84,7 @@
             v-model="passVerifyField.pass"
           />
 
-          <transition name="fade">
+          <transition name="fade-short">
             <span v-if="passVerifyField.error" class="form-error-text">
               <i class="fas fa-times-circle text-theme-warning-light"></i>
               {{ passVerifyField.error }}

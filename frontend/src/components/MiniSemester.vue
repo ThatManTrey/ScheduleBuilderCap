@@ -14,14 +14,16 @@
           id="semesterName"
           contenteditable
           @keyup.enter="getUserInput"
-          @keydown.enter="endUserInput"
           @input="getUserInput"
+          @keydown.enter="endUserInputAfterEnter"
+          v-click-outside="endUserInputAfterClick"
+          ref="editableSemesterName"
           >{{ semester.semesterName }}</span
         >
       </li>
 
       <li
-        class="list-group-item course"
+        class="list-group-item course"     
         v-for="(course, index) in semester.semesterCourses"
         :key="index"
       >
@@ -32,11 +34,24 @@
         >
           <i class="fas fa-times-circle fa-md"></i>
         </button>
-        <span class="badge rounded-pill course-badge">
+        <span 
+          class="badge rounded-pill course-badge"
+          tabindex="0"
+          @keyup.enter="showCourseInfoModal(course)"
+          @click="showCourseInfoModal(course)"
+        >
           <button class="button-as-link">{{ course.courseID }}</button></span
         >
-        <span class="courseName">{{ course.courseName }}</span>
+        <span 
+          class="courseName" 
+          tabindex="0"
+          @keyup.enter="showCourseInfoModal(course)"
+          @click="showCourseInfoModal(course)"
+        >
+          {{ course.courseName }}
+        </span>
       </li>
+
       <li v-if="semester.semesterCourses.length == 0" id="emptySemester">
         <span class="text-theme-white">You haven't added any courses yet.</span>
       </li>
@@ -45,6 +60,7 @@
 </template>
 
 <script lang="js">
+import ClickOutside from 'vue-click-outside'
 
 export default {
     name: 'miniSemester',
@@ -67,29 +83,45 @@ export default {
     },
 
     methods: {
+        showCourseInfoModal(course) {
+          this.$store.commit("courses/setCurrentCourse", { course: course });
+          this.$store.dispatch("ratings/getCourseRatings", { course: course });
+          this.$store.dispatch("ratings/getUserCourseRating", {
+            course: course
+          });
+          this.$emit("openCourseInfoModal");
+        },
+
         getUserInput(e) {
             this.semesterName = e.target.innerText;
         },
 
         endUserInput(e) {
-            // remove focus from semester name
-            e.srcElement.blur();
-
             // remove whitespace from both sides of semester name
             this.semesterName = this.semesterName.trim();
 
             if(this.semesterName < 1)
-                e.target.innerText = this.semester.semesterName;
+                e.innerText = this.semester.semesterName;
             else if(this.semesterName > 64)    // semester name max size in db
-                e.target.innerText = this.semester.semesterName;
+                e.innerText = this.semester.semesterName;
             else
-              e.target.innerText = this.semesterName;
+              e.innerText = this.semesterName;
 
             if(this.semesterName !== this.semester.semesterName)
                 this.$store.dispatch("semesters/editSemesterName", {
                     semesterId: this.semester.semesterId,
                     newName: this.semesterName
                 })
+        },
+
+        endUserInputAfterClick() {
+          this.endUserInput(this.$refs.editableSemesterName);
+        },
+
+        endUserInputAfterEnter(e) {
+          // remove focus from semester name
+          e.srcElement.blur();
+          this.endUserInput(e.target);
         },
 
         removeSemester() {
@@ -107,6 +139,10 @@ export default {
             );
         }
       },
+
+      directives: {
+      ClickOutside
+    }
 
 }
 </script>
@@ -126,6 +162,11 @@ div.container {
   font-size: 10pt;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.list-group li.course:hover {
+  background-color: var(--theme-blackest);
+  cursor: pointer;
 }
 
 .list-group-item.header {

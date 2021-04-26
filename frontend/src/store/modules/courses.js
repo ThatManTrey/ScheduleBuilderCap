@@ -46,7 +46,9 @@ const mutations = {
 
   addProgram(state, program) {
     // if program has not already been added
-    const index = state.searchRequest.programs.findIndex(p => p.degreeID === program.degreeID);
+    const index = state.searchRequest.programs.findIndex(
+      p => p.degreeID === program.degreeID
+    );
 
     if (index === -1) {
       state.searchRequest.programs.push(program);
@@ -116,11 +118,17 @@ const getters = {
         keyword.toLowerCase()
       )
     );
+  },
+
+  getProgramNameForCourse: state => courseIDType => {
+    const program = state.allPrograms.find(
+      program => program.degreeType === courseIDType
+    );
+    return program.degreeName;
   }
 };
 
 const actions = {
-  // change this to take pagination object once it's implemented
   getCourses({ commit, state }) {
     commit("setIsLoadingCourses", true);
     let programString = convertProgramsToString(state.searchRequest.programs);
@@ -136,7 +144,6 @@ const actions = {
         }
       })
       .then(res => {
-        // check if the result's page is the same as current page before commit
         commit("setAllCourses", {
           allCourses: res.data.coursesForPage,
           totalPages: res.data.numPages,

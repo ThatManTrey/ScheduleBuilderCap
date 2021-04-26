@@ -95,7 +95,7 @@
     <SignInModal ref="signInModal"></SignInModal>
     <RegisterModal ref="registerModal"></RegisterModal>
 
-    <transition name="fade">
+    <transition name="fade-short">
       <div v-if="showScrollToTopButton" id="scroll-to-top">
         <a class="align-middle" @click="scrollToTop">
           <i class="fas fa-chevron-up fa-lg"></i>
@@ -249,12 +249,4 @@ export default {
   color: var(--theme-whitest);
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
 </style>

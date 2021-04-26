@@ -1,9 +1,26 @@
+# SQLAlchemy model objects for db access
+
+# see __tablename__ members for each class
+# to see the target table
+
+
+#------------------------------------------------------------------------------
+# modules
+
 from sqlalchemy import Column, DECIMAL, DateTime, String, text
 from sqlalchemy.dialects.mysql import INTEGER, TINYINT
 from sqlalchemy.ext.declarative import declarative_base
 
+
+#------------------------------------------------------------------------------
+# init
+
 Base = declarative_base()
 metadata = Base.metadata
+
+
+#------------------------------------------------------------------------------
+# models
 
 class Course(Base):
     __tablename__ = 'Courses'
