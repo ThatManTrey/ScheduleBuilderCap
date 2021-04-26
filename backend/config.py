@@ -41,6 +41,7 @@ class Config(object):
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {'pool_size' : 100, 'pool_recycle' : 280}
 
 
 class ProductionConfig(Config):
