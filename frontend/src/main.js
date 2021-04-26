@@ -91,6 +91,8 @@ if (Vue.$cookies.get("csrf_access_token")) {
 }
 
 function initalizeApp() {
+  store.dispatch("courses/getPrograms");
+
   new Vue({
     router,
     store,
