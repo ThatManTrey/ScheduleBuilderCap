@@ -57,6 +57,8 @@
             <CourseCard
               @openAddSemesterModal="showAddToSemesterModal"
               @openCourseInfoModal="showCourseInfoModal"
+              @openAddRatingModal="showAddRatingModal"
+              @openViewRatingModal="showViewRatingModal"
               :isRemovingCourse="true"
               :course="course"
             ></CourseCard>
@@ -67,11 +69,20 @@
         </div>
       </div>
     </div>
+
+    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <ViewRatingModal
+      @openAddRatingModal="showAddRatingModal"
+      ref="viewRatingModalHome"
+    ></ViewRatingModal>
   </div>
 </template>
 
 <script lang="js">
 import CourseCard from '../components/CourseCard.vue';
+import AddRatingModal from '../components/modals/AddRatingModal.vue';
+import ViewRatingModal from '../components/modals/ViewRatingModal.vue';
+import { mapState } from "vuex";
 
 export default {
     name: 'semester-accordion',
@@ -88,6 +99,10 @@ export default {
     },
 
     computed: {
+      ...mapState({
+        course: state => state.courses.currentCourse,
+      }),
+
       hasCourses() {
         return this.semester.semesterCourses.length > 0;
       }
@@ -95,6 +110,8 @@ export default {
 
     components: {
       CourseCard,
+      AddRatingModal,
+      ViewRatingModal
     },
 
     methods: {
@@ -104,6 +121,14 @@ export default {
 
         showAddToSemesterModal () {
             this.$emit("showAddToSemesterModal")
+        },
+
+        showAddRatingModal () {
+            this.$emit("showAddRatingModal")
+        },
+
+        showViewRatingModal () {
+            this.$emit("showViewRatingModal")
         },
 
         getUserInput(e) {

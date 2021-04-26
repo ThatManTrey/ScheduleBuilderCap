@@ -16,6 +16,8 @@
           :semester="semester"
           @showCourseInfoModal="showCourseInfoModal"
           @showAddToSemesterModal="showAddToSemesterModal"
+          @openAddRatingModal="showAddRatingModal"
+          @openViewRatingModal="showViewRatingModal"
         ></SemesterAccordion>
       </div>
 
@@ -34,10 +36,17 @@
     </div>
     <CourseInfoModal
       @openAddSemesterModal="showAddToSemesterModal"
+      @openAddRatingModal="showAddRatingModal"
+      @openViewRatingModal="showViewRatingModal"
       ref="courseInfoModalSchedule"
     ></CourseInfoModal>
     <AddToSemesterModal ref="addToSemesterModalSchedule"></AddToSemesterModal>
     <AddSemesterModal ref="addSemesterModalSchedule"></AddSemesterModal>
+    <AddRatingModal ref="addRatingModalHome"></AddRatingModal>
+    <ViewRatingModal
+      @openAddRatingModal="showAddRatingModal"
+      ref="viewRatingModalHome"
+    ></ViewRatingModal>
   </div>
 </template>
 
@@ -46,6 +55,8 @@ import SemesterAccordion from '../components/SemesterAccordion.vue';
 import CourseInfoModal from '../components/modals/CourseInfoModal.vue';
 import AddToSemesterModal from '../components/modals/AddToSemesterModal.vue';
 import AddSemesterModal from '../components/modals/AddSemesterModal.vue';
+import AddRatingModal from '../components/modals/AddRatingModal.vue';
+import ViewRatingModal from '../components/modals/ViewRatingModal.vue';
 import PageSpinner from '../components/spinners/PageSpinner.vue';
 import { mapState } from 'vuex';
 
@@ -54,7 +65,8 @@ export default {
 
     computed: mapState({
       semesters: state => state.semesters.semesters,
-      isLoading: state => state.semesters.isLoadingSemesters
+      isLoading: state => state.semesters.isLoadingSemesters,
+      course: state => state.courses.currentCourse,
     }),
 
     components: {
@@ -62,11 +74,17 @@ export default {
         CourseInfoModal,
         AddToSemesterModal,
         AddSemesterModal,
+        AddRatingModal,
+        ViewRatingModal,
         PageSpinner
     },
 
     methods: {
       showCourseInfoModal () {
+            this.$store.dispatch("ratings/getCourseRatings", { course: this.course });
+            this.$store.dispatch("ratings/getUserCourseRating", {
+              course: this.course
+            });
             this.$refs.courseInfoModalSchedule.openModal();
         },
         showAddToSemesterModal () {
@@ -74,6 +92,12 @@ export default {
         },
         showAddSemesterModal () {
             this.$refs.addSemesterModalSchedule.openModal();
+        },
+        showAddRatingModal () {
+          this.$refs.addRatingModalHome.openModal();
+        },
+        showViewRatingModal () {
+          this.$refs.viewRatingModalHome.openModal();
         },
     },
 }
