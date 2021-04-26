@@ -21,7 +21,7 @@
       </li>
 
       <li
-        class="list-group-item course"
+        class="list-group-item course"     
         v-for="(course, index) in semester.semesterCourses"
         :key="index"
       >
@@ -32,11 +32,24 @@
         >
           <i class="fas fa-times-circle fa-md"></i>
         </button>
-        <span class="badge rounded-pill course-badge">
+        <span 
+          class="badge rounded-pill course-badge"
+          tabindex="0"
+          @keyup.enter="showCourseInfoModal(course)"
+          @click="showCourseInfoModal(course)"
+        >
           <button class="button-as-link">{{ course.courseID }}</button></span
         >
-        <span class="courseName">{{ course.courseName }}</span>
+        <span 
+          class="courseName" 
+          tabindex="0"
+          @keyup.enter="showCourseInfoModal(course)"
+          @click="showCourseInfoModal(course)"
+        >
+          {{ course.courseName }}
+        </span>
       </li>
+
       <li v-if="semester.semesterCourses.length == 0" id="emptySemester">
         <span class="text-theme-white">You haven't added any courses yet.</span>
       </li>
@@ -67,6 +80,15 @@ export default {
     },
 
     methods: {
+        showCourseInfoModal(course) {
+          this.$store.commit("courses/setCurrentCourse", { course: course });
+          this.$store.dispatch("ratings/getCourseRatings", { course: course });
+          this.$store.dispatch("ratings/getUserCourseRating", {
+            course: course
+          });
+          this.$emit("openCourseInfoModal");
+        },
+
         getUserInput(e) {
             this.semesterName = e.target.innerText;
         },
@@ -126,6 +148,11 @@ div.container {
   font-size: 10pt;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.list-group li.course:hover {
+  background-color: var(--theme-blackest);
+  cursor: pointer;
 }
 
 .list-group-item.header {
