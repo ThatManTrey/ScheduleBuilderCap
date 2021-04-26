@@ -7,7 +7,7 @@
         @openChangeProgramModal="$refs.changeProgramModalHome.openModal()"
       ></FilterCoursesBar>
 
-      <transition name="fade" mode="out-in">
+      <transition name="fade-med" mode="out-in">
         <div
           v-if="showCard && !isLoadingCourses && totalResults > 0"
           class="row mx-3"
