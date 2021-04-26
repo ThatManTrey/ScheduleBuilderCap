@@ -142,12 +142,12 @@ export default {
             // remove whitespace from both sides of semester name
             this.semesterName = this.semesterName.trim();
 
-            if(this.semesterName < 1)
+                                            // semester name max size in db
+            if(this.semesterName.length < 1 || this.semesterName.length > 64) {
                 e.innerText = this.semester.semesterName;
-            else if(this.semesterName > 64)    // semester name max size in db
-                e.innerText = this.semester.semesterName;
-            else
-              e.innerText = this.semesterName;
+                this.semesterName = this.semester.semesterName;
+                return;
+            } else e.innerText = this.semesterName;
 
             if(this.semesterName !== this.semester.semesterName)
                 this.$store.dispatch("semesters/editSemesterName", {
