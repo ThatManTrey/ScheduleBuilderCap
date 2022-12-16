@@ -1,5 +1,11 @@
 # ScheduleBuilderCap
 
+https://ksucourseplanner.pythonanywhere.com/#/home
+
+![course-planner](https://user-images.githubusercontent.com/37001471/208016162-7698ed51-e169-4504-95bf-0037ed28051b.PNG)
+
+A more user friendly course catalog and scheduler for Kent State University students. Built with Flask, Vue.js, MySQL, and hosted on PythonAnywhere.
+
 ## Local Project Setup 
 
 ### Backend
